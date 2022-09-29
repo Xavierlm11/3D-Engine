@@ -9,12 +9,25 @@
 #include <stdio.h>
 #include "SDL/include/SDL.h"
 
+#include "MathGeoLib/include/Algorithm/Random/LCG.h"
+
+
 #if defined(IMGUI_IMPL_OPENGL_ES2)
 #include <SDL/include/SDL_opengles2.h>
 #else
 #include <SDL/include/SDL_opengl.h>
 #endif
 
+#include <string>
+#include <xstring>
+
+
+//
+//#ifdef _DEBUG
+//#pragma comment( lib, "Source/External/MathGeoLib/libx86/Debug/MathGeoLib.lib")
+//#else
+//#pragma comment (lib, "Source/External/MathGeoLib/libx86/Release/MathGeoLib.lib")
+//#endif
 
 ModuleImGui::ModuleImGui(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
@@ -104,8 +117,17 @@ bool ModuleImGui::Init()
     //ImFont* font = io.Fonts->AddFontFromFileTTF("c:\\Windows\\Fonts\\ArialUni.ttf", 18.0f, NULL, io.Fonts->GetGlyphRangesJapanese());
     //IM_ASSERT(font != NULL);
 
-    
+    //math::LCG();
+   /* LCG * lcgObject = new LCG();
 
+    u32 randNum = lcgObject->Int(1,2);*/
+
+    //int randNum = randomLCG.Int(1,3);
+    /*randNum.to_string();
+    LOG(randNum.to_string());
+    */
+    //std::string numberString = std::to_string(randNum);
+    //LOG("%i", randNum);
 	return ret;
 }
 
@@ -195,7 +217,6 @@ bool ModuleImGui::CleanUp()
     ImGui::DestroyContext();
 
     SDL_GL_DeleteContext(gl_context);
-  
 
 	return true;
 }

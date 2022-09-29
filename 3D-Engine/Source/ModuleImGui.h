@@ -15,6 +15,19 @@
 #endif
 
 
+//#ifdef _DEBUG
+//#pragma comment( lib, "Source/External/MathGeoLib/libx86/Debug/MathGeoLib.lib")
+//#else
+//#pragma comment (lib, "Source/External/MathGeoLib/libx86/Release/MathGeoLib.lib")
+//#endif
+
+
+
+#include "MathGeoLib/include/Algorithm/Random/LCG.h"
+
+#pragma comment( lib, "Source/External/MathGeoLib/libx86/Debug/MathGeoLib.lib")
+
+
 class ModuleImGui : public Module
 {
 public:
@@ -34,8 +47,12 @@ public:
 	//ImGuiIO io;
 	SDL_GLContext gl_context;
 
+
 	bool MenuBar();
 
 	bool close=true;
+
+	//LCG randomLCG;
+
 
 };

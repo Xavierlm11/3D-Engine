@@ -10,6 +10,9 @@
     <Filter Include="Files\ImGUI">
       <UniqueIdentifier>{ec5f6167-532a-4045-9703-3c55f0cdcae2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Files\MathGeoLib">
+      <UniqueIdentifier>{fbe6e5a1-92b5-4e96-9544-3360dfb6c973}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\log.cpp">
@@ -160,6 +163,9 @@
     </ClInclude>
     <ClInclude Include="Source\ModuleImGui.h">
       <Filter>Files\Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\External\MathGeoLib\include\Algorithm\Random\LCG.h">
+      <Filter>Files\MathGeoLib</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
