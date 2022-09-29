@@ -133,8 +133,8 @@ update_status ModuleImGui::Update(float dt)
     ImGui::NewFrame();
 
     // 1. Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear ImGui!).
-    if (show_demo_window)
-        ImGui::ShowDemoWindow(&show_demo_window);
+   /* if (show_demo_window)
+        ImGui::ShowDemoWindow(&show_demo_window);*/
 
     ImGuiIO& io = ImGui::GetIO(); (void)io;
 
@@ -171,8 +171,9 @@ update_status ModuleImGui::Update(float dt)
         ImGui::End();
     }
 
-    
-
+    MenuBar();
+    if (show_demo_window)
+        ImGui::ShowDemoWindow(&show_demo_window);
     // Rendering
     ImGui::Render();
     glViewport(0, 0, (int)io.DisplaySize.x, (int)io.DisplaySize.y);
@@ -194,8 +195,47 @@ bool ModuleImGui::CleanUp()
     ImGui::DestroyContext();
 
     SDL_GL_DeleteContext(gl_context);
-    SDL_DestroyWindow(App->window->window);
-    SDL_Quit();
+  
 
 	return true;
+}
+
+bool ModuleImGui::MenuBar()
+{
+    LOG("MenuBAR");
+  // ImGui::Begin("Menu bar", NULL, ImGuiWindowFlags_MenuBar);
+    /*if(ImGui::BeginMenuBar() )
+    {   
+
+    }*/
+    if (ImGui::BeginMainMenuBar())
+    {
+        if (ImGui::BeginMenu("File"))
+        {
+            if (ImGui::MenuItem("New"))
+            {
+                
+            }
+            ImGui::EndMenu();
+        }
+        if (ImGui::BeginMenu("Demo Window"))
+        {
+            //if (show_demo_window==true) show_demo_window = false;
+            // else show_demo_window = true;
+            ////if (ImGui::Checkbox)
+            ImGui::Checkbox("Demo Window", &show_demo_window);
+            ImGui::EndMenu();
+        }
+        if (ImGui::BeginMenu("Close"))
+        {
+            close = false;
+
+
+            ImGui::EndMenu();
+        }
+        
+        ImGui::EndMainMenuBar();
+    }
+
+     return true;
 }
