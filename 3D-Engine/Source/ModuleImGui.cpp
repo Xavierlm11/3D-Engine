@@ -22,12 +22,11 @@
 #include <xstring>
 
 
-//
-//#ifdef _DEBUG
-//#pragma comment( lib, "Source/External/MathGeoLib/libx86/Debug/MathGeoLib.lib")
-//#else
-//#pragma comment (lib, "Source/External/MathGeoLib/libx86/Release/MathGeoLib.lib")
-//#endif
+#ifdef _DEBUG
+#pragma comment( lib, "Source/External/MathGeoLib/libx86/Debug/MathGeoLib.lib")
+#else
+#pragma comment (lib, "Source/External/MathGeoLib/libx86/Release/MathGeoLib.lib")
+#endif
 
 ModuleImGui::ModuleImGui(Application* app, bool start_enabled) : Module(app, start_enabled)
 {

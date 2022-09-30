@@ -14,6 +14,8 @@
 #include <SDL/include/SDL_opengl.h>
 #endif
 
+#include "MathGeoLib/include/Algorithm/Random/LCG.h"
+
 
 //#ifdef _DEBUG
 //#pragma comment( lib, "Source/External/MathGeoLib/libx86/Debug/MathGeoLib.lib")
@@ -22,10 +24,6 @@
 //#endif
 
 
-
-#include "MathGeoLib/include/Algorithm/Random/LCG.h"
-
-#pragma comment( lib, "Source/External/MathGeoLib/libx86/Debug/MathGeoLib.lib")
 
 
 class ModuleImGui : public Module
@@ -52,7 +50,7 @@ public:
 
 	bool close=true;
 
-	//LCG randomLCG;
+	LCG randomLCG;
 
 
 };
