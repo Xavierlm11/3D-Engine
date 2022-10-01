@@ -194,15 +194,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Source\p2DynArray.h">
-      <Filter>Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\p2List.h">
-      <Filter>Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\p2Point.h">
-      <Filter>Files</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Primitive.h">
       <Filter>Files</Filter>
     </ClInclude>
