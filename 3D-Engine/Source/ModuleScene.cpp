@@ -54,6 +54,8 @@ bool ModuleScene::SaveScene() {
     json_value_free(user_data);*/
 
     ImVec4 backgroundColor = App->imGui->clear_color;
+    int screenWidth = SDL_GetWindowSurface(App->window->window)->w, screenHeight = SDL_GetWindowSurface(App->window->window)->h;
+
     JSON_Value* schema = json_parse_string("{\"name\":\"\"}");
     JSON_Value* scene_settings = json_parse_file("scene_settings.json");
 
@@ -63,6 +65,8 @@ bool ModuleScene::SaveScene() {
         json_object_set_number(json_object(scene_settings), "G", backgroundColor.y);
         json_object_set_number(json_object(scene_settings), "B", backgroundColor.z);
         json_object_set_number(json_object(scene_settings), "A", backgroundColor.w);
+        json_object_set_number(json_object(scene_settings), "screen_width", screenWidth);
+        json_object_set_number(json_object(scene_settings), "screen_height", screenHeight);
         json_serialize_to_file(scene_settings, "Settings/scene_settings.json");
     }
    
@@ -73,22 +77,31 @@ bool ModuleScene::SaveScene() {
 	return true;
 }
 
+///[REMEMBER TO CLEAN ALL THE INITIAL LOADSCENE CALLS WHEN THEY ARE NOT NECESSARY]
+
 bool ModuleScene::LoadScene() {
 
     JSON_Value* schema = json_parse_string("{\"name\":\"\"}");
     JSON_Value* scene_settings = json_parse_file("Settings/scene_settings.json");
     ImVec4 new_backgroundColor;
+    int new_screenWidth = 480, new_screenHeight = 480;
     float name = NULL;
     if (scene_settings == NULL || json_validate(schema, scene_settings) != JSONSuccess) {
-        LOG("AAAAAAAAAAAAAAVION");
         //scene_settings = json_value_init_object();
         new_backgroundColor.x = json_object_get_number(json_object(scene_settings), "R");
         new_backgroundColor.y = json_object_get_number(json_object(scene_settings), "G");
         new_backgroundColor.z = json_object_get_number(json_object(scene_settings), "B");
         new_backgroundColor.w = json_object_get_number(json_object(scene_settings), "A");
+
+        new_screenWidth = json_object_get_number(json_object(scene_settings), "screen_width");
+        new_screenHeight = json_object_get_number(json_object(scene_settings), "screen_height");
+        LOG("W::::::::::%i", new_screenWidth);
     }
-   
+    
     App->imGui->clear_color = new_backgroundColor;
+    /*App->window->screenWidth = new_screenWidth;
+    App->window->screenHeight = new_screenHeight;*/
+    SDL_SetWindowSize(App->window->window, new_screenWidth, new_screenHeight);
 
     json_value_free(schema);
     json_value_free(scene_settings);
