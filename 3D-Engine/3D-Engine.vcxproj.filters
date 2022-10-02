@@ -28,6 +28,9 @@
     <Filter Include="Files\MathGeoLib\Algorithm\Random">
       <UniqueIdentifier>{81818909-aaf3-4c10-ae12-e7114d71912a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Files\Parson">
+      <UniqueIdentifier>{4d393ecd-7976-46be-886e-d2e47f480f98}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\log.cpp">
@@ -192,8 +195,23 @@
     <ClCompile Include="Source\External\MathGeoLib\include\Algorithm\Random\LCG.cpp">
       <Filter>Files\MathGeoLib\Algorithm\Random</Filter>
     </ClCompile>
+    <ClCompile Include="Source\External\parson\parson.c">
+      <Filter>Files\Parson</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\ModuleScene.cpp">
+      <Filter>Files\Modules</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Source\p2DynArray.h">
+      <Filter>Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\p2List.h">
+      <Filter>Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\p2Point.h">
+      <Filter>Files</Filter>
+    </ClInclude>
     <ClInclude Include="Source\Primitive.h">
       <Filter>Files</Filter>
     </ClInclude>
@@ -445,6 +463,12 @@
     </ClInclude>
     <ClInclude Include="Source\External\MathGeoLib\include\Algorithm\Random\LCG.h">
       <Filter>Files\MathGeoLib\Algorithm\Random</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\External\parson\parson.h">
+      <Filter>Files\Parson</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ModuleScene.h">
+      <Filter>Files\Modules</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

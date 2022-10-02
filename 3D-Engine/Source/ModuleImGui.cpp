@@ -100,7 +100,7 @@ bool ModuleImGui::Init()
     // Setup Platform/Renderer backends
     ImGui_ImplSDL2_InitForOpenGL(App->window->window, gl_context);
     ImGui_ImplOpenGL3_Init(glsl_version);
-
+    App->scene->LoadScene();
     // Load Fonts
     // - If no fonts are loaded, dear imgui will use the default font. You can also load multiple fonts and use ImGui::PushFont()/PopFont() to select them.
     // - AddFontFromFileTTF() will return the ImFont* so you can store it if you need to select the font among multiple.
@@ -116,17 +116,16 @@ bool ModuleImGui::Init()
     //ImFont* font = io.Fonts->AddFontFromFileTTF("c:\\Windows\\Fonts\\ArialUni.ttf", 18.0f, NULL, io.Fonts->GetGlyphRangesJapanese());
     //IM_ASSERT(font != NULL);
 
-    //math::LCG();
-   /* LCG * lcgObject = new LCG();
+    ///////[RANDOM NUMBER GENERATOR]
+    /*int randNum = randomLCG.Int(1,3);
+    LOG("%i", randNum);*/
 
-    u32 randNum = lcgObject->Int(1,2);*/
 
-    //int randNum = randomLCG.Int(1,3);
     /*randNum.to_string();
     LOG(randNum.to_string());
     */
     //std::string numberString = std::to_string(randNum);
-    //LOG("%i", randNum);
+    
 	return ret;
 }
 
@@ -222,7 +221,7 @@ bool ModuleImGui::CleanUp()
 
 bool ModuleImGui::MenuBar()
 {
-    LOG("MenuBAR");
+    //LOG("MenuBAR");
   // ImGui::Begin("Menu bar", NULL, ImGuiWindowFlags_MenuBar);
     /*if(ImGui::BeginMenuBar() )
     {   
@@ -235,6 +234,16 @@ bool ModuleImGui::MenuBar()
             if (ImGui::MenuItem("New"))
             {
                 
+            }
+            if (ImGui::MenuItem("Save"))
+            {
+
+                App->scene->SaveScene();
+            }
+            if (ImGui::MenuItem("Load"))
+            {
+
+                App->scene->LoadScene();
             }
             ImGui::EndMenu();
         }
