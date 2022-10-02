@@ -1,7 +1,7 @@
 #pragma once
 #include "Module.h"
 #include "Globals.h"
-#include "p2List.h"
+
 #include "Primitive.h"
 
 // Recommended scale is 1.0f == 1 meter, no less than 0.2 objects
