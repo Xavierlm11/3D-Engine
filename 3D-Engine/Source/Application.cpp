@@ -38,7 +38,7 @@ Application::~Application()
 		delete  list_modules[i];
 		item++;
 	}*/
-	for (int i= list_modules.size()-1; i >=0; i++)
+	for (int i= list_modules.size()-1; i >=0; i--)
 	{
 		delete  list_modules[i];
 		list_modules[i] = nullptr;
