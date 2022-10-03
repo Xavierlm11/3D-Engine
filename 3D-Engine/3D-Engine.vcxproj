@@ -52,6 +52,7 @@
     <ClCompile Include="Source\External\MathGeoLib\include\Math\SSEMath.cpp" />
     <ClCompile Include="Source\External\MathGeoLib\include\Math\TransformOps.cpp" />
     <ClCompile Include="Source\External\MathGeoLib\include\Time\Clock.cpp" />
+    <ClCompile Include="Source\External\parson\parson.c" />
     <ClCompile Include="Source\glmath.cpp" />
     <ClCompile Include="Source\Light.cpp" />
     <ClCompile Include="Source\log.cpp" />
@@ -61,6 +62,7 @@
     <ClCompile Include="Source\ModuleInput.cpp" />
     <ClCompile Include="Source\ModulePhysics3D.cpp" />
     <ClCompile Include="Source\ModuleRenderer3D.cpp" />
+    <ClCompile Include="Source\ModuleScene.cpp" />
     <ClCompile Include="Source\ModuleSceneIntro.cpp" />
     <ClCompile Include="Source\ModuleWindow.cpp" />
     <ClCompile Include="Source\Primitive.cpp" />
@@ -138,6 +140,7 @@
     <ClInclude Include="Source\External\MathGeoLib\include\Math\sse_mathfun.h" />
     <ClInclude Include="Source\External\MathGeoLib\include\Math\TransformOps.h" />
     <ClInclude Include="Source\External\MathGeoLib\include\Time\Clock.h" />
+    <ClInclude Include="Source\External\parson\parson.h" />
     <ClInclude Include="Source\glmath.h" />
     <ClInclude Include="Source\Globals.h" />
     <ClInclude Include="Source\Light.h" />
@@ -147,8 +150,12 @@
     <ClInclude Include="Source\ModuleInput.h" />
     <ClInclude Include="Source\ModulePhysics3D.h" />
     <ClInclude Include="Source\ModuleRenderer3D.h" />
+    <ClInclude Include="Source\ModuleScene.h" />
     <ClInclude Include="Source\ModuleSceneIntro.h" />
     <ClInclude Include="Source\ModuleWindow.h" />
+    <ClInclude Include="Source\p2DynArray.h" />
+    <ClInclude Include="Source\p2List.h" />
+    <ClInclude Include="Source\p2Point.h" />
     <ClInclude Include="Source\Primitive.h" />
     <ClInclude Include="Source\Timer.h" />
   </ItemGroup>

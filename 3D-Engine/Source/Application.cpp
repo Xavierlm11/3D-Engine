@@ -9,6 +9,7 @@ Application::Application()
 	scene_intro = new ModuleSceneIntro(this);
 	renderer3D = new ModuleRenderer3D(this);
 	camera = new ModuleCamera3D(this);
+	scene = new ModuleScene(this);
 	imGui = new ModuleImGui(this);
 
 	// The order of calls is very important!
@@ -19,9 +20,11 @@ Application::Application()
 	AddModule(window);
 	AddModule(camera);
 	AddModule(input);
+
 	
 	
 	// Scenes
+	AddModule(scene);
 	AddModule(scene_intro);
 	AddModule(imGui);
 
