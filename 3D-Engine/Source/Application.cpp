@@ -96,6 +96,7 @@ void Application::PrepareUpdate()
 {
 	dt = (float)ms_timer.Read() / 1000.0f;
 	ms_timer.Start();
+	//fps[0]->Start()
 }
 
 // ---------------------------------------------
@@ -107,39 +108,21 @@ void Application::FinishUpdate()
 update_status Application::Update()
 {
 	update_status ret = UPDATE_CONTINUE;
+
 	PrepareUpdate();
-	/*
-	p2List_item<Module*>* item = list_modules.getFirst();
-	
-	while(item != NULL && ret == UPDATE_CONTINUE)
-	{
-		ret = item->data->PreUpdate(dt);
-		item = item->next;
-	}*/
+
 	for (int i = 0; i < list_modules.size() && ret == UPDATE_CONTINUE; i++)
 	{
 		ret = list_modules[i]->PreUpdate(dt);
 
 	}
-	/*item = list_modules.getFirst();
 
-	while(item != NULL && ret == UPDATE_CONTINUE)
-	{
-		ret = item->data->Update(dt);
-		item = item->next;
-	}*/
 	for (int i = 0; i < list_modules.size() && ret == UPDATE_CONTINUE; i++)
 	{
 		ret = list_modules[i]->Update(dt);
 
 	}
-	/*item = list_modules.getFirst();
 
-	while(item != NULL && ret == UPDATE_CONTINUE)
-	{
-		ret = item->data->PostUpdate(dt);
-		item = item->next;
-	}*/
 	for (int i = 0; i < list_modules.size() && ret == UPDATE_CONTINUE; i++)
 	{
 		ret = list_modules[i]->PostUpdate(dt);

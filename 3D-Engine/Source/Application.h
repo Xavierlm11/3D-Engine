@@ -33,8 +33,9 @@ private:
 
 	Timer	ms_timer;
 	float	dt;
-	//p2List<Module*> list_modules;
+	Timer lastSecFrameTime;
 	std::vector<Module*> list_modules;
+	std::vector<Timer*> fps;
 	
 public:
 

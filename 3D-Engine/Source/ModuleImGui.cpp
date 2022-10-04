@@ -266,5 +266,25 @@ bool ModuleImGui::MenuBar()
         ImGui::EndMainMenuBar();
     }
 
+    if (ImGui::Begin("Windowads")) {
+        ImGui::Text("Options");
+        if (ImGui::CollapsingHeader("winodw"))
+         { 
+            
+            ImGui::Text("App name:");
+            ImGui::SameLine();
+            ImGui::TextColored({255,0,0,1},"%s",TITLE);
+
+            ImGui::Text("Organization:");
+            ImGui::SameLine();
+            ImGui::TextColored({ 255,0,0,1 }, "%s", ORGANIZATION);
+         }
+            
+        
+                    
+        ImGui::End();
+
+        }
+   
      return true;
 }
