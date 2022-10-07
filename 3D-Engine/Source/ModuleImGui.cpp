@@ -268,7 +268,7 @@ bool ModuleImGui::MenuBar()
 
     if (ImGui::Begin("Windowads")) {
         ImGui::Text("Options");
-        if (ImGui::CollapsingHeader("winodw"))
+        if (ImGui::CollapsingHeader("APP"))
          { 
             
             ImGui::Text("App name:");
@@ -279,6 +279,34 @@ bool ModuleImGui::MenuBar()
             ImGui::SameLine();
             ImGui::TextColored({ 255,0,0,1 }, "%s", ORGANIZATION);
          }
+        if (ImGui::CollapsingHeader("Window"))
+        {
+
+            ImGui::Text("Brightness:");
+            ImGui::SameLine();
+            float brigth = SDL_GetWindowBrightness(App->window->window);
+            if (ImGui::SliderFloat("Brightness",&brigth,0,1 ))
+            {
+                SDL_SetWindowBrightness(App->window->window,brigth);
+            }
+            
+            ImGui::Text("Width:");
+            ImGui::SameLine();
+            float widht = App->window->screenWidth;
+            if (ImGui::SliderFloat("Width", &widht, 20, 1000))
+            {
+                SDL_SetWindowSize(App->window->window, widht, App->window->screenHeight);
+               // SDL_SetWindowBrightness(App->window->window, brigth);
+            }
+            ImGui::Text("Height:");
+            ImGui::SameLine();
+            float height = App->window->screenHeight;
+            if (ImGui::SliderFloat("Height", &height, 20, 1000))
+            {
+                SDL_SetWindowSize(App->window->window, App->window->screenWidth, height);
+                // SDL_SetWindowBrightness(App->window->window, brigth);
+            }
+        }
         if (ImGui::CollapsingHeader("Hardware"))
         {
             SDL_version compiled;
