@@ -279,12 +279,61 @@ bool ModuleImGui::MenuBar()
             ImGui::SameLine();
             ImGui::TextColored({ 255,0,0,1 }, "%s", ORGANIZATION);
          }
+        if (ImGui::CollapsingHeader("Hardware"))
+        {
+            SDL_version compiled;
+            SDL_version linked;
+
+            SDL_VERSION(&compiled);
+            SDL_GetVersion(&linked);
+
+            const GLubyte* vendor = glGetString(GL_VENDOR); // Returns the vendor
+            const GLubyte* renderer = glGetString(GL_RENDERER); // Returns a hint to the model
+           // const GLubyte* vram = glGetIntegerv(GL_GPU_MEMORY_INFO_CURRENT_AVAILABLE_VIDMEM_NVX); // Returns a hint to the model
             
+            //const GLubyte* version = glGetString(GL_VERSION); // Returns a hint to the model
+
+            
+
+            ImGui::Text("SDL Version: ");
+            ImGui::SameLine();
+            ImGui::TextColored({ 255,0,0,1 }, "%u.%u.%u", compiled.major, compiled.minor, compiled.patch);
+            ImGui::Separator();//--------------
+            ImGui::Text("CPUs:");
+            ImGui::SameLine();
+            ImGui::TextColored({ 255,0,0,1 }, "%d (cache %i Kb)", SDL_GetCPUCount(), SDL_GetCPUCacheLineSize());
+            ImGui::Text("System RAM:");
+            ImGui::SameLine();
+            ImGui::TextColored({ 255,0,0,1 }, "%f Gb", (float)SDL_GetSystemRAM());
+            ImGui::Text("Caps:");
+            ImGui::SameLine();
+            ImGui::TextColored({ 255,0,0,1 }, "%s", ORGANIZATION);
+            ImGui::Separator();//--------------
+            ImGui::Text("GPU:");
+            ImGui::SameLine();
+            ImGui::TextColored({ 255,0,0,1 }, "vendor %s device %s",vendor);
+            ImGui::Text("Brand:");
+            ImGui::SameLine();
+            ImGui::TextColored({ 255,0,0,1 }, "%s",renderer );
+            ImGui::Text("VRAM Budget:");
+            ImGui::SameLine();
+            ImGui::TextColored({ 255,0,0,1 }, "%i", 1);
+            ImGui::Text("VRAM Usage:");
+            ImGui::SameLine();
+            ImGui::TextColored({ 255,0,0,1 }, "%s", ORGANIZATION);
+            ImGui::Text("VRAM Avaliable:");
+            ImGui::SameLine();
+            ImGui::TextColored({ 255,0,0,1 }, "%s", ORGANIZATION);
+            ImGui::Text("VRAM Reserved:");
+            ImGui::SameLine();
+            ImGui::TextColored({ 255,0,0,1 }, "%s", ORGANIZATION);
+        }
         
                     
         ImGui::End();
 
-        }
+    }
+   
    
      return true;
 }
