@@ -23,9 +23,9 @@
 
 
 #ifdef _DEBUG
-#pragma comment( lib, "Source/External/MathGeoLib/libx86/Debug/MathGeoLib.lib")
+#pragma comment( lib, "Source/External/MathGeoLib/libx86/MGLDebug/MathGeoLib.lib")
 #else
-#pragma comment (lib, "Source/External/MathGeoLib/libx86/Release/MathGeoLib.lib")
+#pragma comment (lib, "Source/External/MathGeoLib/libx86/MGLRelease/MathGeoLib.lib")
 #endif
 
 ModuleImGui::ModuleImGui(Application* app, bool start_enabled) : Module(app, start_enabled)
