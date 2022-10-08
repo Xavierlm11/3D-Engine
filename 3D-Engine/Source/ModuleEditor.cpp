@@ -192,6 +192,7 @@ update_status ModuleEditor::Update(float dt)
     }
 
     MenuBar();
+    Console();
     if (show_demo_window)
         ImGui::ShowDemoWindow(&show_demo_window);
     // Rendering
@@ -358,13 +359,23 @@ bool ModuleEditor::MenuBar()
         }
         
                     
-        ImGui::End();
 
     }
+        ImGui::End();
    
 
    
      return true;
 }
 
-//void 
+void  ModuleEditor::Console()
+{
+    
+    if(ImGui::Begin("Console")) {
+
+        ImGui::Text(logs.begin());
+
+        
+    }
+    ImGui::End();
+}

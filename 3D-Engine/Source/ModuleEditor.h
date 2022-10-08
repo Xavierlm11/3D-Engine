@@ -41,9 +41,11 @@ public:
 
 	bool MenuBar();
 
+	void Console();
+
 	bool close=true;
 
 	LCG randomLCG;
 
-
+	ImGuiTextBuffer logs;
 };

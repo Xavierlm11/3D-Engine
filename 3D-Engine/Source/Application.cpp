@@ -158,5 +158,5 @@ void Application::AddModule(Module* mod)
 
 void Application::logs(const char* text)
 {
-
+	editor->logs.appendf(text);
 }

@@ -45,11 +45,13 @@ public:
 	bool Init();
 	update_status Update();
 	bool CleanUp();
-
+	void logs(const char* text);
 private:
 
 	void AddModule(Module* mod);
-	void logs(const char* text);
+	
 	void PrepareUpdate();
 	void FinishUpdate();
 };
+
+//extern Application* App;
