@@ -36,7 +36,7 @@ ModuleEditor::ModuleEditor(Application* app, bool start_enabled) : Module(app, s
 // Destructor
 ModuleEditor::~ModuleEditor()
 {
-
+    logs.clear();
 }
 
 // Called before render is available
@@ -217,6 +217,8 @@ bool ModuleEditor::CleanUp()
 
     SDL_GL_DeleteContext(gl_context);
 
+    logs.clear();
+
 	return true;
 }
 
@@ -366,6 +368,10 @@ bool ModuleEditor::MenuBar()
 
    
      return true;
+}
+void ModuleEditor::AddLogs(const char* text)
+{
+    logs.appendf(text);
 }
 
 void  ModuleEditor::Console()

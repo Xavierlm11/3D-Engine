@@ -3,6 +3,7 @@
 #include "Application.h"
 #include "ModuleEditor.h"
 
+//Application* App1;
 
 void log(const char file[], int line, const char* format, ...)
 {
@@ -16,9 +17,12 @@ void log(const char file[], int line, const char* format, ...)
 	va_end(ap);
 	sprintf_s(tmp_string2, 4096, "\n%s(%d) : %s", file, line, tmp_string);
 	OutputDebugString(tmp_string2);
-	/*if (App) {
-		sprintf_s(tmp_string2, 4096, "\n %s", tmp_string);
-		App->logs(tmp_string2);
-		
-	}*/
+	if (External != nullptr){
+		if (External->editor != nullptr)
+		{
+			sprintf_s(tmp_string2, 4096, "\n %s", tmp_string);
+			External->editor->AddLogs(tmp_string2);
+		}
+	}
+
 }

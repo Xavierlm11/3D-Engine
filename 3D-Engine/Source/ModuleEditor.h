@@ -41,6 +41,10 @@ public:
 
 	bool MenuBar();
 
+	void AddLogs(const char* text);
+
+	
+
 	void Console();
 
 	bool close=true;

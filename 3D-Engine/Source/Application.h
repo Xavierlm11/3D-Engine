@@ -20,6 +20,7 @@
 class Application
 {
 public:
+	
 	ModuleWindow* window;
 	ModuleInput* input;
 	
@@ -45,7 +46,7 @@ public:
 	bool Init();
 	update_status Update();
 	bool CleanUp();
-	void logs(const char* text);
+	//void logs(const char* text);
 private:
 
 	void AddModule(Module* mod);
@@ -53,5 +54,4 @@ private:
 	void PrepareUpdate();
 	void FinishUpdate();
 };
-
-//extern Application* App;
+extern Application* External;

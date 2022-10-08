@@ -1,8 +1,11 @@
 #include "Application.h"
 #include <list>
 
+extern Application* External = nullptr;
+
 Application::Application()
 {
+	External = this;
 	window = new ModuleWindow(this);
 	input = new ModuleInput(this);
 	
@@ -17,7 +20,9 @@ Application::Application()
 	// They will CleanUp() in reverse order
 
 	// Main Modules
+
 	AddModule(window);
+	
 	AddModule(camera);
 	AddModule(input);
 
@@ -26,10 +31,11 @@ Application::Application()
 	// Scenes
 	AddModule(scene);
 	AddModule(scene_intro);
-	AddModule(editor);
+	
 
 	// Renderer last!
 	AddModule(renderer3D);
+	AddModule(editor);
 }
 
 Application::~Application()
@@ -156,7 +162,3 @@ void Application::AddModule(Module* mod)
 	list_modules.push_back(mod);
 }
 
-void Application::logs(const char* text)
-{
-	editor->logs.appendf(text);
-}
