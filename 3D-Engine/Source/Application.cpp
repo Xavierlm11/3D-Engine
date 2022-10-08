@@ -10,7 +10,7 @@ Application::Application()
 	renderer3D = new ModuleRenderer3D(this);
 	camera = new ModuleCamera3D(this);
 	scene = new ModuleScene(this);
-	imGui = new ModuleImGui(this);
+	editor = new ModuleEditor(this);
 
 	// The order of calls is very important!
 	// Modules will Init() Start() and Update in this order
@@ -26,7 +26,7 @@ Application::Application()
 	// Scenes
 	AddModule(scene);
 	AddModule(scene_intro);
-	AddModule(imGui);
+	AddModule(editor);
 
 	// Renderer last!
 	AddModule(renderer3D);
@@ -154,4 +154,9 @@ bool Application::CleanUp()
 void Application::AddModule(Module* mod)
 {
 	list_modules.push_back(mod);
+}
+
+void Application::logs(const char* text)
+{
+
 }

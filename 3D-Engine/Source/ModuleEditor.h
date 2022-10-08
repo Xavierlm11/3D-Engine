@@ -19,12 +19,12 @@
 
 
 
-class ModuleImGui : public Module
+class ModuleEditor : public Module
 {
 public:
 
-	ModuleImGui(Application* app, bool start_enabled = true);
-	~ModuleImGui();
+	ModuleEditor(Application* app, bool start_enabled = true);
+	~ModuleEditor();
 
 	bool Init();
 	update_status Update(float dt);

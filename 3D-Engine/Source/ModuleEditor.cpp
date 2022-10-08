@@ -1,6 +1,6 @@
 #include "Globals.h"
 #include "Application.h"
-#include "ModuleImGui.h"
+#include "ModuleEditor.h"
 #include "ModuleWindow.h"
 
 #include "ImGui/imgui.h"
@@ -28,19 +28,19 @@
 #pragma comment (lib, "Source/External/MathGeoLib/libx86/MGLRelease/MathGeoLib.lib")
 #endif
 
-ModuleImGui::ModuleImGui(Application* app, bool start_enabled) : Module(app, start_enabled)
+ModuleEditor::ModuleEditor(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
 
 }
 
 // Destructor
-ModuleImGui::~ModuleImGui()
+ModuleEditor::~ModuleEditor()
 {
 
 }
 
 // Called before render is available
-bool ModuleImGui::Init()
+bool ModuleEditor::Init()
 {
 	LOG("Init ImGui Module");
 	
@@ -130,7 +130,7 @@ bool ModuleImGui::Init()
 }
 
 // Called every update
-update_status ModuleImGui::Update(float dt)
+update_status ModuleEditor::Update(float dt)
 {
     // Poll and handle events (inputs, window resize, etc.)
         // You can read the io.WantCaptureMouse, io.WantCaptureKeyboard flags to tell if dear imgui wants to use your inputs.
@@ -206,7 +206,7 @@ update_status ModuleImGui::Update(float dt)
 }
 
 // Called before quitting
-bool ModuleImGui::CleanUp()
+bool ModuleEditor::CleanUp()
 {
 	LOG("Quitting ImGui Module");
     // Cleanup
@@ -219,7 +219,7 @@ bool ModuleImGui::CleanUp()
 	return true;
 }
 
-bool ModuleImGui::MenuBar()
+bool ModuleEditor::MenuBar()
 {
     //LOG("MenuBAR");
   // ImGui::Begin("Menu bar", NULL, ImGuiWindowFlags_MenuBar);
@@ -362,6 +362,9 @@ bool ModuleImGui::MenuBar()
 
     }
    
+
    
      return true;
 }
+
+//void 

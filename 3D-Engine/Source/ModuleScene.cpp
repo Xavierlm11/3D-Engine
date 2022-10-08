@@ -53,7 +53,7 @@ bool ModuleScene::SaveScene() {
     json_value_free(schema);
     json_value_free(user_data);*/
 
-    ImVec4 backgroundColor = App->imGui->clear_color;
+    ImVec4 backgroundColor = App->editor->clear_color;
     int screenWidth = SDL_GetWindowSurface(App->window->window)->w, screenHeight = SDL_GetWindowSurface(App->window->window)->h;
 
     JSON_Value* schema = json_parse_string("{\"name\":\"\"}");
@@ -98,7 +98,7 @@ bool ModuleScene::LoadScene() {
         LOG("W::::::::::%i", new_screenWidth);
     }
     
-    App->imGui->clear_color = new_backgroundColor;
+    App->editor->clear_color = new_backgroundColor;
     /*App->window->screenWidth = new_screenWidth;
     App->window->screenHeight = new_screenHeight;*/
     SDL_SetWindowSize(App->window->window, new_screenWidth, new_screenHeight);

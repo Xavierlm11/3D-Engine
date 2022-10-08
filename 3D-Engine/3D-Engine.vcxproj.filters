@@ -96,9 +96,6 @@
     <ClCompile Include="Source\External\ImGui\imgui_widgets.cpp">
       <Filter>Files\ImGUI</Filter>
     </ClCompile>
-    <ClCompile Include="Source\ModuleImGui.cpp">
-      <Filter>Files\Modules</Filter>
-    </ClCompile>
     <ClCompile Include="Source\External\MathGeoLib\include\Time\Clock.cpp">
       <Filter>Files\MathGeoLib\Time</Filter>
     </ClCompile>
@@ -201,6 +198,9 @@
     <ClCompile Include="Source\ModuleScene.cpp">
       <Filter>Files\Modules</Filter>
     </ClCompile>
+    <ClCompile Include="Source\ModuleEditor.cpp">
+      <Filter>Files\Modules</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\p2DynArray.h">
@@ -280,9 +280,6 @@
     </ClInclude>
     <ClInclude Include="Source\External\ImGui\imstb_truetype.h">
       <Filter>Files\ImGUI</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\ModuleImGui.h">
-      <Filter>Files\Modules</Filter>
     </ClInclude>
     <ClInclude Include="Source\External\MathGeoLib\include\MathBuildConfig.h">
       <Filter>Files\MathGeoLib</Filter>
@@ -468,6 +465,9 @@
       <Filter>Files\Parson</Filter>
     </ClInclude>
     <ClInclude Include="Source\ModuleScene.h">
+      <Filter>Files\Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ModuleEditor.h">
       <Filter>Files\Modules</Filter>
     </ClInclude>
   </ItemGroup>
