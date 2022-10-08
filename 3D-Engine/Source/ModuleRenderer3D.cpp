@@ -1,12 +1,16 @@
 #include "Globals.h"
+#include "Glew/include/glew.h"
 #include "Application.h"
 #include "ModuleRenderer3D.h"
-#include "SDL\include\SDL_opengl.h"
+#include "SDL/include/SDL_opengl.h"
+
 #include <gl/GL.h>
 #include <gl/GLU.h>
 
 #pragma comment (lib, "glu32.lib")    /* link OpenGL Utility lib     */
 #pragma comment (lib, "opengl32.lib") /* link Microsoft OpenGL lib   */
+
+#pragma comment (lib, "Source/External/Glew/libx86/glew32.lib")
 
 ModuleRenderer3D::ModuleRenderer3D(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
@@ -24,14 +28,27 @@ bool ModuleRenderer3D::Init()
 	
 	//Create context
 	context = SDL_GL_CreateContext(App->window->window);
+
+	
 	if(context == NULL)
 	{
 		LOG("OpenGL context could not be created! SDL_Error: %s\n", SDL_GetError());
 		ret = false;
 	}
 	
+	GLenum err = glewInit();
+	LOG("Using Glew %s", glewGetString(GLEW_VERSION));
+	LOG("Vendor: %s", glGetString(GL_VENDOR));
+	LOG("Renderer: %s", glGetString(GL_RENDERER));
+	LOG("OpenGL version supported %s", glGetString(GL_VERSION));
+	LOG("GLSL: %s\n", glGetString(GL_SHADING_LANGUAGE_VERSION));
+
+
 	if(ret == true)
 	{
+		glMatrixMode(GL_PROJECTION);
+		glLoadIdentity();
+
 		//Use Vsync
 		if(VSYNC && SDL_GL_SetSwapInterval(1) < 0)
 			LOG("Warning: Unable to set VSync! SDL Error: %s\n", SDL_GetError());
@@ -66,6 +83,10 @@ bool ModuleRenderer3D::Init()
 		//Initialize clear color
 		glClearColor(0.f, 0.f, 0.f, 1.f);
 
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		
+
+
 		//Check for error
 		error = glGetError();
 		if(error != GL_NO_ERROR)
@@ -94,6 +115,8 @@ bool ModuleRenderer3D::Init()
 		lights[0].Active(true);
 		glEnable(GL_LIGHTING);
 		glEnable(GL_COLOR_MATERIAL);
+
+		glEnable(GL_TEXTURE_2D);
 	}
 
 	// Projection matrix for
