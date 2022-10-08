@@ -3,6 +3,8 @@
 #include "ModuleScene.h"
 
 #include "parson/parson.h"
+#include <gl/GL.h>
+#include <gl/GLU.h>
 
 ModuleScene::ModuleScene(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
