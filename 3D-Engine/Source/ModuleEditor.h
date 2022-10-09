@@ -48,8 +48,8 @@ public:
 	void Console();
 
 	bool close=true;
-
+	bool scroll = false;
 	LCG randomLCG;
-
+	int a=0;
 	ImGuiTextBuffer logs;
 };

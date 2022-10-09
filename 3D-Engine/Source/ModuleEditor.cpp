@@ -379,6 +379,7 @@ bool ModuleEditor::MenuBar()
 void ModuleEditor::AddLogs(const char* text)
 {
     logs.appendf(text);
+    scroll = true;
 }
 
 void  ModuleEditor::Console()
@@ -387,7 +388,7 @@ void  ModuleEditor::Console()
     if(ImGui::Begin("Console")) {
 
         ImGui::Text(logs.begin());
-
+        if (scroll) ImGui::SetScrollHereY(1.0f), scroll = false;
         
     }
     ImGui::End();
