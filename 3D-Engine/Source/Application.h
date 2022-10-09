@@ -45,7 +45,7 @@ public:
 	bool Init();
 	update_status Update();
 	bool CleanUp();
-	void logs(const char* text);
+	//void logs(const char* text);
 private:
 
 	void AddModule(Module* mod);
@@ -54,4 +54,4 @@ private:
 	void FinishUpdate();
 };
 
-extern Application* App;
+extern Application* External;
