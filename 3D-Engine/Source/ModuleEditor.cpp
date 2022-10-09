@@ -132,7 +132,7 @@ bool ModuleEditor::Init()
     LOG(randNum.to_string());
     */
     //std::string numberString = std::to_string(randNum);
-    
+    glViewport(0, 0, (int)io.DisplaySize.x, (int)io.DisplaySize.y);
 	return ret;
 }
 
@@ -202,13 +202,13 @@ update_status ModuleEditor::Update(float dt)
     Console();
     if (show_demo_window)
         ImGui::ShowDemoWindow(&show_demo_window);
-    // Rendering
-    ImGui::Render();
-    glViewport(0, 0, (int)io.DisplaySize.x, (int)io.DisplaySize.y);
-   // glClearColor(clear_color.x * clear_color.w, clear_color.y * clear_color.w, clear_color.z * clear_color.w, clear_color.w);
-   // glClear(GL_COLOR_BUFFER_BIT);
-    ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-    SDL_GL_SwapWindow(App->window->window);
+
+    if (show_rendering_window) {
+       
+        RenderingWindow();
+    }
+
+    
 
 	return UPDATE_CONTINUE;
 }
@@ -263,6 +263,11 @@ bool ModuleEditor::MenuBar()
             // else show_demo_window = true;
             ////if (ImGui::Checkbox)
             ImGui::Checkbox("Demo Window", &show_demo_window);
+            ImGui::EndMenu();
+        }
+        if (ImGui::BeginMenu("Scene View Window")) 
+        {
+            ImGui::Checkbox("Scene View Window", &show_rendering_window);
             ImGui::EndMenu();
         }
         if (ImGui::BeginMenu("Close"))
@@ -382,7 +387,7 @@ void ModuleEditor::AddLogs(const char* text)
     scroll = true;
 }
 
-void  ModuleEditor::Console()
+void ModuleEditor::Console()
 {
     
     if(ImGui::Begin("Console")) {
@@ -392,4 +397,22 @@ void  ModuleEditor::Console()
         
     }
     ImGui::End();
+}
+
+void ModuleEditor::RenderingWindow() {
+
+    ImGui::Begin("Scene View", &show_rendering_window); 
+    int renderX = ImGui::GetWindowPos().x;
+    int renderY = ImGui::GetWindowPos().y;
+    int renderW = ImGui::GetWindowWidth();
+    int renderH = ImGui::GetWindowHeight();
+    
+
+    Plane p(0, 1, 0, 0);
+    p.axis = true;
+    p.Render();
+    
+    ImGui::End();
+
+    App->renderer3D->OnResize(renderX, -renderY + 40, renderW, renderH);
 }

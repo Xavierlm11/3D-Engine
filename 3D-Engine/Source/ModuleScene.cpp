@@ -79,7 +79,7 @@ bool ModuleScene::SaveScene() {
 	return true;
 }
 
-///[REMEMBER TO CLEAN ALL THE INITIAL LOADSCENE CALLS WHEN THEY ARE NOT NECESSARY]
+///[REMEMBER TO CLEAN ALL THE INITIAL LOADSCENE CALLS WHEN THEY ARE NOT NECESSARY] (App->scene->Loadscene()...)
 
 bool ModuleScene::LoadScene() {
 

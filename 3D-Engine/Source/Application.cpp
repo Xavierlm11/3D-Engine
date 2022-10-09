@@ -26,14 +26,17 @@ Application::Application()
 	AddModule(camera);
 	AddModule(input);
 	
+	
+
 	// Scenes
 	AddModule(scene);
-	AddModule(scene_intro);
 	
+	AddModule(scene_intro);
+	AddModule(editor);
 
 	// Renderer last!
 	AddModule(renderer3D);
-	AddModule(editor);
+	
 }
 
 Application::~Application()

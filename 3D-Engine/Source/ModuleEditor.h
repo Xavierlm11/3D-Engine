@@ -32,6 +32,7 @@ public:
 
 	// Our state
 	bool show_demo_window = false;
+	bool show_rendering_window = false;
 	bool show_another_window = false;
 	ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 
@@ -44,9 +45,10 @@ public:
 	void AddLogs(const char* text);
 
 	
-
+private:
 	void Console();
-
+	void RenderingWindow();
+public:
 	bool close=true;
 	bool scroll = false;
 	LCG randomLCG;
