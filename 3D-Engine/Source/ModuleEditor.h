@@ -6,6 +6,7 @@
 #include "ImGui/imgui_impl_opengl3.h"
 #include <stdio.h>
 #include "SDL/include/SDL.h"
+#include <vector>
 
 #include <string.h>
 #if defined(IMGUI_IMPL_OPENGL_ES2)
@@ -53,5 +54,7 @@ public:
 	bool scroll = false;
 	LCG randomLCG;
 	int a=0;
-	ImGuiTextBuffer logs;
+	std::vector<std::string> login;
+	
+	//ImGuiTextBuffer logs;
 };

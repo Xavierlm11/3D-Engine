@@ -36,7 +36,9 @@ ModuleEditor::ModuleEditor(Application* app, bool start_enabled) : Module(app, s
 // Destructor
 ModuleEditor::~ModuleEditor()
 {
-    logs.clear();
+    //logs.clear();
+    login.clear();
+   
 }
 
 // Called before render is available
@@ -223,8 +225,8 @@ bool ModuleEditor::CleanUp()
     ImGui::DestroyContext();
 
     SDL_GL_DeleteContext(gl_context);
-
-    logs.clear();
+    login.clear();
+    //logs.clear();
 
 	return true;
 }
@@ -350,7 +352,7 @@ bool ModuleEditor::MenuBar()
             ImGui::TextColored({ 255,0,0,1 }, "%f Gb", (float)SDL_GetSystemRAM());
             ImGui::Text("Caps:");
             ImGui::SameLine();
-            ImGui::TextColored({ 255,0,0,1 }, "%s", ORGANIZATION);
+            ImGui::TextColored({ 255,0,0,1 },"%s %s", SDL_Has3DNow()?"3DNow":"", SDL_HasAltiVec() ? "AltiVec" : "");
             ImGui::Separator();//--------------
             ImGui::Text("GPU:");
             ImGui::SameLine();
@@ -383,20 +385,30 @@ bool ModuleEditor::MenuBar()
 }
 void ModuleEditor::AddLogs(const char* text)
 {
-    logs.appendf(text);
+   // logs.appendf(text);
+
+    login.push_back(text);
     scroll = true;
+
 }
 
 void ModuleEditor::Console()
 {
+    std::string* e = nullptr;
     
     if(ImGui::Begin("Console")) {
 
-        ImGui::Text(logs.begin());
-        if (scroll) ImGui::SetScrollHereY(1.0f), scroll = false;
-        
+       // ImGui::Text(logs.begin());
+        for (unsigned int i = 0; i < login.size();++i) {
+            e = &login[i];
+           
+            ImGui::Text(e->c_str());
+        }
+            if (scroll) ImGui::SetScrollHereY(1.0f), scroll = false;
     }
     ImGui::End();
+    LOG("%i", a);
+    a++;
 }
 
 void ModuleEditor::RenderingWindow() {
