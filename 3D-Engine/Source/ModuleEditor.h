@@ -51,7 +51,8 @@ public:
 
 	void AddLogs(const char* text);
 
-	
+	void OpenWeb(const char* url)const;
+
 private:
 
 	//Windows
@@ -64,6 +65,8 @@ private:
 	void BarFile();
 	void BarWindows();
 	void BarXXX();
+
+	
 
 
 public:

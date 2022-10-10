@@ -8,6 +8,7 @@
 #include "ImGui/imgui_impl_opengl3.h"
 #include <stdio.h>
 #include "SDL/include/SDL.h"
+//#include <shellapi.h>
 
 #include "MathGeoLib/include/Algorithm/Random/LCG.h"
 
@@ -251,6 +252,12 @@ void ModuleEditor::AddLogs(const char* text)
 
 }
 
+void ModuleEditor::OpenWeb(const char* url)const
+{
+	ShellExecuteA(NULL, "open", url, NULL, NULL, SW_SHOWNORMAL);
+
+}
+
 void ModuleEditor::ConsoleWindow()
 {
 	std::string* e = nullptr;
@@ -301,7 +308,22 @@ void ModuleEditor::ConfigWindow() {
 
 void ModuleEditor::AboutWindow() {
 
+	if (ImGui::Begin("About"))
+	{
+		ImGui::Text("App name:");
+		ImGui::SameLine();
+		ImGui::TextColored({ 0,255,232,1 }, "%s", TITLE);
 
+		
+		ImGui::Text("This engine will be the most revolutionary engine since the invention of the kebab");
+		if (ImGui::MenuItem("web")) {
+			
+			for(unsigned int i=0;i<=10;++i)OpenWeb("https://www.raylib.com/");
+			OpenWeb("https://youtu.be/SCpV7OmmR60");
+		}
+		ImGui::Text("Uwu texto prueba");
+	}
+	ImGui::End();
 }
 
 void ModuleEditor::Draw() {
@@ -489,3 +511,4 @@ void ModuleEditor::BarXXX() {
 
 	ImGui::End();
 }
+
