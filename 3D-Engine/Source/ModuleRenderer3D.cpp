@@ -12,6 +12,8 @@
 
 #pragma comment (lib, "Source/External/Glew/libx86/glew32.lib")
 
+
+
 ModuleRenderer3D::ModuleRenderer3D(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
 }
@@ -115,6 +117,24 @@ bool ModuleRenderer3D::Init()
 		glEnable(GL_COLOR_MATERIAL);
 
 		glEnable(GL_TEXTURE_2D);
+
+		/// <summary>
+		/// //////////////
+		/// </summary>
+		/// <returns></returns>
+		int w;
+		int h;
+
+		SDL_GetWindowSize(App->window->window, &w, &h);
+		//App->renderer3D->OnResize(0, 0, w, h);
+
+		glViewport(0, 0, w, h);
+		glMatrixMode(GL_PROJECTION);
+		glLoadIdentity();
+		ProjectionMatrix = perspective(60.0f, (float)w / (float)h, 0.125f, 512.0f);
+		glLoadMatrixf(&ProjectionMatrix);
+
+		glMatrixMode(GL_MODELVIEW);
 	}
 
 	// Projection matrix for
@@ -133,7 +153,7 @@ update_status ModuleRenderer3D::PreUpdate(float dt)
 	glClearColor(c.r, c.g, c.b, c.a);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glMatrixMode(GL_MODELVIEW);
-	//glLoadMatrixf(App->camera->GetOpenGLViewMatrix());
+	glLoadMatrixf((GLfloat*)App->camera->GetViewMatrixOpenGL());
 
 	glMatrixMode(GL_MODELVIEW);
 	glLoadMatrixf(App->camera->GetViewMatrix());
@@ -159,6 +179,9 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 	// glClearColor(clear_color.x * clear_color.w, clear_color.y * clear_color.w, clear_color.z * clear_color.w, clear_color.w);
 	// glClear(GL_COLOR_BUFFER_BIT);
 	//ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+	
+
+	Draw();
 
 	App->editor->Draw();
 
@@ -177,8 +200,35 @@ bool ModuleRenderer3D::CleanUp()
 }
 
 
+void ModuleRenderer3D::Draw() {
+	//Primitive::Plane p(0, 1, 0, 0);
+	//p.axis = true;
+	//p.Render();
+
+	//int renderX = ImGui::GetWindowPos().x;
+	//int renderY = ImGui::GetWindowPos().y;
+	//int renderW = ImGui::GetWindowWidth();
+	//int renderH = ImGui::GetWindowHeight();
+	//App->renderer3D->OnResize(renderX, -renderY + renderH, renderW, renderH);
+
+	int w;
+	int h;
+	
+	SDL_GetWindowSize(App->window->window, &w, &h);
+	//App->renderer3D->OnResize(0, 0, w, h);
+
+	glViewport(0, 0, w, h);
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	ProjectionMatrix = perspective(60.0f, (float)w / (float)h, 0.125f, 512.0f);
+	glLoadMatrixf(&ProjectionMatrix);
+
+	glMatrixMode(GL_MODELVIEW);
+}
+
 void ModuleRenderer3D::OnResize(int x, int y, int width, int height)
 {
+
 	glViewport(x, y, width, height);
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
@@ -186,10 +236,7 @@ void ModuleRenderer3D::OnResize(int x, int y, int width, int height)
 	glLoadMatrixf(&ProjectionMatrix);
 
 	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
-
-	Plane p(0, 1, 0, 0);
-	p.axis = true;
-	p.Render();
+	//glLoadIdentity();
 
 }
+

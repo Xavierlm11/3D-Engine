@@ -18,6 +18,7 @@ public:
 	bool CleanUp();
 
 	void OnResize(int x, int y, int width, int height);
+	void Draw();
 
 public:
 

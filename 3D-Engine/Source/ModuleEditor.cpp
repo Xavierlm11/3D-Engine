@@ -278,9 +278,9 @@ void ModuleEditor::Render3DWindow() {
 	
 
 
-	Plane p(0, 1, 0, 0);
+	/*Plane p(0, 1, 0, 0);
 	p.axis = true;
-	p.Render();
+	p.Render();*/
 
 	/*int renderX = ImGui::GetWindowPos().x;
 	int renderY = ImGui::GetWindowPos().y;
@@ -288,8 +288,8 @@ void ModuleEditor::Render3DWindow() {
 	int renderH = ImGui::GetWindowHeight();*/
 	//App->renderer3D->OnResize(renderX, -renderY + renderH, renderW, renderH);
 
-	SDL_GetWindowSize(App->window->window, &winWidth, &winHeight);
-	App->renderer3D->OnResize(0, 0, winWidth, winHeight);
+	//SDL_GetWindowSize(App->window->window, &winWidth, &winHeight);
+	//App->renderer3D->OnResize(0, 0, winWidth, winHeight);
 
 	ImGui::End();
 }

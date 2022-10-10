@@ -3,6 +3,9 @@
 #include "Globals.h"
 #include "glmath.h"
 
+#include "MathGeoLib/include/Math/float4x4.h"
+#include "MathGeoLib/include/Geometry/Frustum.h"
+
 class ModuleCamera3D : public Module
 {
 public:
@@ -17,10 +20,12 @@ public:
 	void LookAt(const vec3 &Spot);
 	void Move(const vec3 &Movement);
 	float* GetViewMatrix();
+	float4x4* GetViewMatrixOpenGL();
 
 private:
 
 	void CalculateViewMatrix();
+	void CalculateViewMatrixOpenGL();
 
 public:
 	
@@ -28,6 +33,7 @@ public:
 	Color background;
 
 private:
-
 	mat4x4 ViewMatrix, ViewMatrixInverse;
+	float4x4 ViewMatrixOpenGL;
+	Frustum camFrustrum;
 };
