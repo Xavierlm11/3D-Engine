@@ -155,6 +155,7 @@ bool Application::CleanUp()
 		ret = list_modules[i]->CleanUp();
 
 	}
+	External = nullptr;
 	return ret;
 }
 

@@ -426,5 +426,5 @@ void ModuleEditor::RenderingWindow() {
     
     ImGui::End();
 
-    App->renderer3D->OnResize(renderX, -renderY + 40, renderW, renderH);
+    App->renderer3D->OnResize(renderX, -renderY+ renderH, renderW, renderH);
 }
