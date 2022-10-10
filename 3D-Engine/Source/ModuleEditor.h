@@ -74,4 +74,7 @@ public:
 	std::vector<std::string> login;
 	
 	//ImGuiTextBuffer logs;
+private:
+	int winWidth;
+	int winHeight;
 };

@@ -288,10 +288,8 @@ void ModuleEditor::Render3DWindow() {
 	int renderH = ImGui::GetWindowHeight();*/
 	//App->renderer3D->OnResize(renderX, -renderY + renderH, renderW, renderH);
 
-	int w;
-	int h;
-	SDL_GetWindowSize(App->window->window, &w, &h);
-	App->renderer3D->OnResize(0, 0, w, h);
+	SDL_GetWindowSize(App->window->window, &winWidth, &winHeight);
+	App->renderer3D->OnResize(0, 0, winWidth, winHeight);
 
 	ImGui::End();
 }
