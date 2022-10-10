@@ -31,26 +31,43 @@ public:
 	update_status Update(float dt);
 	bool CleanUp();
 
+
 	// Our state
 	bool show_demo_window = false;
-	bool show_rendering_window = false;
 	bool show_another_window = false;
+	bool show_console_window = false;
+	bool show_render3d_window = false;
+	bool show_config_window = false;
+	bool show_about_window = false;
+
 	ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 
 	//ImGuiIO io;
 	SDL_GLContext gl_context;
 
+	void Draw();
 
-	bool MenuBar();
+	bool DrawMenuBar();
 
 	void AddLogs(const char* text);
 
 	
 private:
-	void Console();
-	void RenderingWindow();
+
+	//Windows
+	void ConsoleWindow();
+	void Render3DWindow();
+	void ConfigWindow();
+	void AboutWindow();
+
+	//Bar Options
+	void BarFile();
+	void BarWindows();
+	void BarXXX();
+
+
 public:
-	bool close=true;
+	bool close=false;
 	bool scroll = false;
 	LCG randomLCG;
 	int a=0;
