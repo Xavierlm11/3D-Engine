@@ -313,15 +313,51 @@ void ModuleEditor::AboutWindow() {
 		ImGui::Text("App name:");
 		ImGui::SameLine();
 		ImGui::TextColored({ 0,255,232,1 }, "%s", TITLE);
+		ImGui::Text("");
 
-		
-		ImGui::Text("This engine will be the most revolutionary engine since the invention of the kebab");
-		if (ImGui::MenuItem("web")) {
-			
-			for(unsigned int i=0;i<=10;++i)OpenWeb("https://www.raylib.com/");
+		ImGui::Text("By:");
+		if (ImGui::MenuItem("Xavier Casado Benitez"))
+		{
+			OpenWeb("https://github.com/Akage369");
+		}
+		if (ImGui::MenuItem("Xavier Lopez Martin"))
+		{
+			OpenWeb("https://github.com/Xavierlm11");
+		}
+		ImGui::Text("");
+
+		ImGui::TextWrapped("This engine will be the most revolutionary engine since the invention of the kebab");
+		ImGui::Text("");
+
+		if (ImGui::MenuItem("Github Repository")) {
+
+			for (unsigned int i = 0; i <= 10; ++i)OpenWeb("https://www.raylib.com/");
 			OpenWeb("https://youtu.be/SCpV7OmmR60");
 		}
-		ImGui::Text("Uwu texto prueba");
+		ImGui::Text("");
+
+		ImGui::Text("3rd Party Libreries Used:");
+		ImGui::Text("");
+
+		ImGui::Text("License:");
+		ImGui::SameLine();
+		ImGui::TextColored({ 0,255,232,1 }, "MIT License");
+		ImGui::Text("");
+
+		ImGui::Text("Copyright (c) 2022 Xavierlm11");
+		ImGui::Text("");
+		ImGui::TextWrapped("Permission is hereby granted, free of charge, to any person obtaining a copyof this software and associated documentation files(the 'Software'), to dealin the Software without restriction, including without limitation the rightsto use, copy, modify, merge, publish, distribute, sublicense, and /or sellcopies of the Software, and to permit persons to whom the Software isfurnished to do so, subject to the following conditions : ");
+		ImGui::Text("");
+		ImGui::TextWrapped({ "The above copyright notice and this permission notice shall be included in all"
+			"copies or substantial portions of the Software." });
+		ImGui::Text("");
+		ImGui::TextWrapped({"THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR"
+			"IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,"
+			"FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.IN NO EVENT SHALL THE"
+			"AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER"
+			"LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,"
+			"OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE"
+			"SOFTWARE."});
 	}
 	ImGui::End();
 }
