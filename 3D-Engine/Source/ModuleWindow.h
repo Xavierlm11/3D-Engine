@@ -20,6 +20,8 @@ public:
 
 	void SetTitle(const char* title);
 
+	void SetDefaultRes();//set default resolution
+
 public:
 	//The window we'll be rendering to
 	SDL_Window* window;

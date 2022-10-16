@@ -39,3 +39,8 @@ enum update_status
 #define VSYNC true
 #define TITLE "3D Engine"
 #define ORGANIZATION "CITM UPC"
+
+#define MIN_WIDTH 800
+#define MIN_HEIGHT 600
+#define MAX_WIDTH 7680
+#define MAX_HEIGHT 4800

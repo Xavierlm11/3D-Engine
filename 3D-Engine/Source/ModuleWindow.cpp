@@ -6,6 +6,8 @@ ModuleWindow::ModuleWindow(Application* app, bool start_enabled) : Module(app, s
 {
 	window = NULL;
 	screen_surface = NULL;
+	screenHeight = SCREEN_HEIGHT;
+	screenWidth = SCREEN_WIDTH;
 }
 
 // Destructor
@@ -99,3 +101,9 @@ void ModuleWindow::SetTitle(const char* title)
 {
 	SDL_SetWindowTitle(window, title);
 }
+
+void ModuleWindow::SetDefaultRes()
+{
+	SDL_SetWindowSize(window, SCREEN_WIDTH, SCREEN_HEIGHT);
+}
+

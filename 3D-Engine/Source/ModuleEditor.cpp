@@ -316,11 +316,11 @@ void ModuleEditor::AboutWindow() {
 		ImGui::Text("");
 
 		ImGui::Text("By:");
-		if (ImGui::MenuItem("Xavier Casado Benitez"))
+		if (ImGui::Button("Xavier Casado Benitez"))
 		{
 			OpenWeb("https://github.com/Akage369");
 		}
-		if (ImGui::MenuItem("Xavier Lopez Martin"))
+		if (ImGui::Button("Xavier Lopez Martin"))
 		{
 			OpenWeb("https://github.com/Xavierlm11");
 		}
@@ -329,11 +329,11 @@ void ModuleEditor::AboutWindow() {
 		ImGui::TextWrapped("This engine will be the most revolutionary engine since the invention of the kebab");
 		ImGui::Text("");
 
-		if (ImGui::MenuItem("Github Repository")) {
+		if (ImGui::Button("Github Repository")) {
 
 			for (unsigned int i = 0; i <= 10; ++i)OpenWeb("https://www.raylib.com/");
 			OpenWeb("https://youtu.be/SCpV7OmmR60");
-		}
+		}	
 		ImGui::Text("");
 
 		ImGui::Text("3rd Party Libreries Used:");
@@ -469,26 +469,32 @@ void ModuleEditor::BarXXX() {
 			ImGui::Text("Brightness:");
 			ImGui::SameLine();
 			float brigth = SDL_GetWindowBrightness(App->window->window);
-			if (ImGui::SliderFloat("Brightness", &brigth, 0, 1))
+			if (ImGui::SliderFloat("Brightness", &brigth, 0, 2))
 			{
 				SDL_SetWindowBrightness(App->window->window, brigth);
 			}
 
 			ImGui::Text("Width:");
 			ImGui::SameLine();
-			float widht = App->window->screenWidth;
-			if (ImGui::SliderFloat("Width", &widht, 20, 1000))
+			int widht = App->window->screenWidth;
+			if (ImGui::SliderInt("Width", (int*)&widht, MIN_WIDTH, MAX_WIDTH))
 			{
 				SDL_SetWindowSize(App->window->window, widht, App->window->screenHeight);
 				// SDL_SetWindowBrightness(App->window->window, brigth);
 			}
 			ImGui::Text("Height:");
 			ImGui::SameLine();
-			float height = App->window->screenHeight;
-			if (ImGui::SliderFloat("Height", &height, 20, 1000))
+			int height = App->window->screenHeight;
+			if (ImGui::SliderInt("Height", (int*)&height, MIN_HEIGHT, MAX_HEIGHT))
 			{
 				SDL_SetWindowSize(App->window->window, App->window->screenWidth, height);
 				// SDL_SetWindowBrightness(App->window->window, brigth);
+			}
+			if (ImGui::Button("Reset"))
+			{
+				SDL_SetWindowSize(App->window->window, SCREEN_WIDTH, SCREEN_HEIGHT);
+				SDL_SetWindowBrightness(App->window->window, 1);
+
 			}
 		}
 		if (ImGui::CollapsingHeader("Hardware"))
