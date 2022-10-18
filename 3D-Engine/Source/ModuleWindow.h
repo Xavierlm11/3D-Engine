@@ -21,7 +21,8 @@ public:
 	void SetTitle(const char* title);
 
 	void SetDefaultRes();//set default resolution
-
+	SDL_GLContext gl_context;
+	const char* glsl_version;
 public:
 	//The window we'll be rendering to
 	SDL_Window* window;

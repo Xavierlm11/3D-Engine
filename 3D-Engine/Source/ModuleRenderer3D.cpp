@@ -38,8 +38,10 @@ bool ModuleRenderer3D::Init()
 		ret = false;
 	}
 	
+	//Glew library
 	GLenum err = glewInit();
 	LOG("Using Glew %s", glewGetString(GLEW_VERSION));
+	//Current hardware and driver capabilities
 	LOG("Vendor: %s", glGetString(GL_VENDOR));
 	LOG("Renderer: %s", glGetString(GL_RENDERER));
 	LOG("OpenGL version supported %s", glGetString(GL_VERSION));
@@ -228,7 +230,6 @@ void ModuleRenderer3D::Draw() {
 
 void ModuleRenderer3D::OnResize(int x, int y, int width, int height)
 {
-
 	glViewport(x, y, width, height);
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
