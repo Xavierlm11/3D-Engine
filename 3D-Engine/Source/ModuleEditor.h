@@ -77,4 +77,5 @@ public:
 private:
 	int winWidth;
 	int winHeight;
+	int selectedRenderMode;
 };

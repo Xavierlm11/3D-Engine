@@ -9,6 +9,7 @@
 #include <stdio.h>
 #include "SDL/include/SDL.h"
 //#include <shellapi.h>
+#include "ModuleRenderer3D.h"
 
 #include "MathGeoLib/include/Algorithm/Random/LCG.h"
 
@@ -31,7 +32,7 @@
 
 ModuleEditor::ModuleEditor(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
-
+	selectedRenderMode = 0;
 }
 
 // Destructor
@@ -206,8 +207,8 @@ void ModuleEditor::ConsoleWindow()
 		if (scroll) ImGui::SetScrollHereY(1.0f), scroll = false;
 	}
 	
-	LOG("%i", a);
-	a++;
+	//LOG("%i", a);
+	//a++;
 
 	ImGui::End();
 }
@@ -216,11 +217,36 @@ void ModuleEditor::Render3DWindow() {
 
 	ImGui::Begin("Scene View", &show_render3d_window);
 	
+	//// Using the _simplified_ one-liner ListBox() api here
+	//// See "List boxes" section for examples of how to use the more flexible BeginListBox()/EndListBox() api.
+	//const char* items[] = { "Normal", "Wireframe" };
+	//static int item_current = 1;
+	//ImGui::ListBox("View Mode", &item_current, items, IM_ARRAYSIZE(items));
+	////ImGui::SameLine(); HelpMarker(
+	////	"Using the simplified one-liner ListBox API here.\nRefer to the \"List boxes\" section below for an explanation of how to use the more flexible and general BeginListBox/EndListBox API.");
 
+	//const char* viewModeItems[] = { "Normal", "Wireframe" };
+	//ImGui::ListBox("View Mode",0,viewModeItems, 2);
 
-	/*Plane p(0, 1, 0, 0);
-	p.axis = true;
-	p.Render();*/
+		const char* modes[] = { "Normal", "Wireframe"};
+
+		if (ImGui::Button("Select..."))
+			ImGui::OpenPopup("Render mode");
+		ImGui::SameLine();
+		ImGui::TextUnformatted(selectedRenderMode == -1 ? "<None>" : modes[selectedRenderMode]);
+		if (ImGui::BeginPopup("Render mode"))
+		{
+			for (int i = 0; i < IM_ARRAYSIZE(modes); i++) {
+				if (ImGui::Selectable(modes[i])) {
+					selectedRenderMode = i;
+					App->renderer3D->mode = (ModuleRenderer3D::RenderMode)selectedRenderMode;
+					
+				}
+			}
+				
+			ImGui::EndPopup();
+		}
+
 
 	/*int renderX = ImGui::GetWindowPos().x;
 	int renderY = ImGui::GetWindowPos().y;

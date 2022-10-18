@@ -9,6 +9,15 @@
 class ModuleRenderer3D : public Module
 {
 public:
+	enum class RenderMode
+	{
+
+		NORMAL,
+		WIREFRAME,
+		NONE,
+	};
+
+public:
 	ModuleRenderer3D(Application* app, bool start_enabled = true);
 	~ModuleRenderer3D();
 
@@ -19,6 +28,8 @@ public:
 
 	void OnResize(int x, int y, int width, int height);
 	void Draw();
+
+	RenderMode mode;
 
 public:
 

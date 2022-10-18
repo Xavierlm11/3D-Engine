@@ -12,10 +12,14 @@
 
 #pragma comment (lib, "Source/External/Glew/libx86/glew32.lib")
 
+#include "Primitive.h"
+
 
 
 ModuleRenderer3D::ModuleRenderer3D(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
+	context = nullptr;
+	mode = RenderMode::NORMAL;
 }
 
 // Destructor
@@ -41,6 +45,7 @@ bool ModuleRenderer3D::Init()
 	//Glew library
 	GLenum err = glewInit();
 	LOG("Using Glew %s", glewGetString(GLEW_VERSION));
+
 	//Current hardware and driver capabilities
 	LOG("Vendor: %s", glGetString(GL_VENDOR));
 	LOG("Renderer: %s", glGetString(GL_RENDERER));
@@ -157,7 +162,6 @@ update_status ModuleRenderer3D::PreUpdate(float dt)
 	glMatrixMode(GL_MODELVIEW);
 	glLoadMatrixf((GLfloat*)App->camera->GetViewMatrixOpenGL());
 
-	glMatrixMode(GL_MODELVIEW);
 	glLoadMatrixf(App->camera->GetViewMatrix());
 
 	// light 0 on cam pos
@@ -173,17 +177,34 @@ update_status ModuleRenderer3D::PreUpdate(float dt)
 update_status ModuleRenderer3D::PostUpdate(float dt)
 {
 	
+	PrimPlane p(0, 0, 0, 0);
+	p.axis = true;
 
-	// Rendering
-	//ImGui::Render();
+	//if (mode == RenderMode::NORMAL) {
+	//	PrimPlane p(0, 0, 0, 0);
+	//	p.axis = true;
+	//	p.Render();
 
+	//	Draw();
+	//}
+	//else if (mode == RenderMode::WIREFRAME) {
 
-	// glClearColor(clear_color.x * clear_color.w, clear_color.y * clear_color.w, clear_color.z * clear_color.w, clear_color.w);
-	// glClear(GL_COLOR_BUFFER_BIT);
-	//ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-	
+	//	Draw();
+	//}
+	switch(mode)
+	{
+	case RenderMode::NONE:
 
-	Draw();
+		break;
+	case RenderMode::NORMAL:
+		p.Render();
+		Draw();
+		break;
+	case RenderMode::WIREFRAME:
+		Draw();
+		break;
+	}
+
 
 	App->editor->Draw();
 
@@ -203,41 +224,27 @@ bool ModuleRenderer3D::CleanUp()
 
 
 void ModuleRenderer3D::Draw() {
-	//Primitive::Plane p(0, 1, 0, 0);
-	//p.axis = true;
-	//p.Render();
 
-	//int renderX = ImGui::GetWindowPos().x;
-	//int renderY = ImGui::GetWindowPos().y;
-	//int renderW = ImGui::GetWindowWidth();
-	//int renderH = ImGui::GetWindowHeight();
-	//App->renderer3D->OnResize(renderX, -renderY + renderH, renderW, renderH);
-
-	int w;
-	int h;
-	
+	int w, h;
 	SDL_GetWindowSize(App->window->window, &w, &h);
-	//App->renderer3D->OnResize(0, 0, w, h);
 
 	glViewport(0, 0, w, h);
-	glMatrixMode(GL_PROJECTION);
+
+	//glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 	ProjectionMatrix = perspective(60.0f, (float)w / (float)h, 0.125f, 512.0f);
 	glLoadMatrixf(&ProjectionMatrix);
 
-	glMatrixMode(GL_MODELVIEW);
+	//glMatrixMode(GL_MODELVIEW);
 }
 
 void ModuleRenderer3D::OnResize(int x, int y, int width, int height)
 {
 	glViewport(x, y, width, height);
-	glMatrixMode(GL_PROJECTION);
+
 	glLoadIdentity();
 	ProjectionMatrix = perspective(60.0f, (float)width / (float)height, 0.125f, 512.0f);
 	glLoadMatrixf(&ProjectionMatrix);
-
-	glMatrixMode(GL_MODELVIEW);
-	//glLoadIdentity();
 
 }
 
