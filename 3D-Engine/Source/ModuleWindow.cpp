@@ -6,8 +6,8 @@ ModuleWindow::ModuleWindow(Application* app, bool start_enabled) : Module(app, s
 {
 	window = NULL;
 	screen_surface = NULL;
-	screenHeight = SCREEN_HEIGHT;
-	screenWidth = SCREEN_WIDTH;
+	winHeight = SCREEN_HEIGHT;
+	winWidth = SCREEN_WIDTH;
 }
 
 // Destructor
@@ -127,7 +127,7 @@ bool ModuleWindow::Init()
 			flags |= SDL_WINDOW_FULLSCREEN_DESKTOP;
 		}
 
-		window = SDL_CreateWindow(TITLE, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, screenWidth, screenHeight, flags);
+		window = SDL_CreateWindow(TITLE, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, winWidth, winHeight, flags);
 	/*	int *a = 0;
 		int *b = 0;*/
 		

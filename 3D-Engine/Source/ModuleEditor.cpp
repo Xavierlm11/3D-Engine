@@ -435,23 +435,23 @@ void ModuleEditor::BarXXX() {
 
 			ImGui::Text("Width:");
 			ImGui::SameLine();
-			int widht = App->window->screenWidth;
-			if (ImGui::SliderInt("Width", (int*)&widht, MIN_WIDTH, MAX_WIDTH))
+			int width = App->window->winWidth;
+			if (ImGui::SliderInt("Width", (int*)&width, MIN_WIDTH, MAX_WIDTH))
 			{
-				SDL_SetWindowSize(App->window->window, widht, App->window->screenHeight);
+				//SDL_SetWindowSize(App->window->window, width, App->window->winHeight);
 				// SDL_SetWindowBrightness(App->window->window, brigth);
 			}
 			ImGui::Text("Height:");
 			ImGui::SameLine();
-			int height = App->window->screenHeight;
+			int height = App->window->winHeight;
 			if (ImGui::SliderInt("Height", (int*)&height, MIN_HEIGHT, MAX_HEIGHT))
 			{
-				SDL_SetWindowSize(App->window->window, App->window->screenWidth, height);
+				//SDL_SetWindowSize(App->window->window, App->window->winWidth, height);
 				// SDL_SetWindowBrightness(App->window->window, brigth);
 			}
 			if (ImGui::Button("Reset"))
 			{
-				SDL_SetWindowSize(App->window->window, SCREEN_WIDTH, SCREEN_HEIGHT);
+				//SDL_SetWindowSize(App->window->window, SCREEN_WIDTH, SCREEN_HEIGHT);
 				SDL_SetWindowBrightness(App->window->window, 1);
 
 			}

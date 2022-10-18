@@ -86,7 +86,7 @@ bool ModuleScene::LoadScene() {
     JSON_Value* schema = json_parse_string("{\"name\":\"\"}");
     JSON_Value* scene_settings = json_parse_file("Settings/scene_settings.json");
     ImVec4 new_backgroundColor;
-    int new_screenWidth = 480, new_screenHeight = 480;
+    int new_winWidth = 480, new_winHeight = 480;
     float name = NULL;
     if (scene_settings == NULL || json_validate(schema, scene_settings) != JSONSuccess) {
         //scene_settings = json_value_init_object();
@@ -95,15 +95,18 @@ bool ModuleScene::LoadScene() {
         new_backgroundColor.z = json_object_get_number(json_object(scene_settings), "B");
         new_backgroundColor.w = json_object_get_number(json_object(scene_settings), "A");
 
-        new_screenWidth = json_object_get_number(json_object(scene_settings), "screen_width");
-        new_screenHeight = json_object_get_number(json_object(scene_settings), "screen_height");
-        LOG("W::::::::::%i", new_screenWidth);
+        new_winWidth = json_object_get_number(json_object(scene_settings), "screen_width");
+        new_winHeight = json_object_get_number(json_object(scene_settings), "screen_height");
+        //LOG("W::::::::::%i", new_winWidth);
     }
     
     App->editor->clear_color = new_backgroundColor;
     /*App->window->screenWidth = new_screenWidth;
     App->window->screenHeight = new_screenHeight;*/
-    SDL_SetWindowSize(App->window->window, new_screenWidth, new_screenHeight);
+    SDL_SetWindowSize(App->window->window, new_winWidth, new_winHeight);
+
+    App->window->winWidth = new_winWidth;
+    App->window->winHeight = new_winHeight;
 
     json_value_free(schema);
     json_value_free(scene_settings);
