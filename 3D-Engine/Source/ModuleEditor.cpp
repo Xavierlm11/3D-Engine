@@ -38,6 +38,8 @@ ModuleEditor::ModuleEditor(Application* app, bool start_enabled) : Module(app, s
 	gl_lightingEnabled = true;
 	gl_colorMaterialEnabled = true;
 	gl_texture2dEnabled = true;
+	gl_lineSmoothEnabled = false;
+	gl_fogEnabled = false;
 
 }
 
@@ -197,6 +199,30 @@ update_status ModuleEditor::Update(float dt)
 		}
 	}
 
+	if (gl_lineSmoothEnabled == true) {
+		if (glIsEnabled(GL_LINE_SMOOTH) == false) {
+			glEnable(GL_LINE_SMOOTH);
+		}
+	}
+	else {
+		if (glIsEnabled(GL_LINE_SMOOTH) == true) {
+			glDisable(GL_LINE_SMOOTH);
+		}
+	}
+
+
+	if (gl_fogEnabled == true) {
+		if (glIsEnabled(GL_FOG) == false) {
+			glEnable(GL_FOG);
+		}
+	}
+	else {
+		if (glIsEnabled(GL_FOG) == true) {
+			glDisable(GL_FOG);
+		}
+	}
+
+
 
 
 	return UPDATE_CONTINUE;
@@ -313,6 +339,8 @@ void ModuleEditor::Render3DWindow() {
 			ImGui::Checkbox("Lighting", &gl_lightingEnabled);
 			ImGui::Checkbox("Color Material", &gl_colorMaterialEnabled);
 			ImGui::Checkbox("Texture 2D", &gl_texture2dEnabled);
+			ImGui::Checkbox("Line Smooth", &gl_lineSmoothEnabled);
+			ImGui::Checkbox("Fog", &gl_fogEnabled);
 			
 
 			ImGui::TreePop();
@@ -510,7 +538,9 @@ void ModuleEditor::BarXXX() {
 			int width = App->window->winWidth;
 			if (ImGui::SliderInt("Width", (int*)&width, MIN_WIDTH, MAX_WIDTH))
 			{
+				App->window->winWidth = width;
 				SDL_SetWindowSize(App->window->window, width, App->window->winHeight);
+				
 				SDL_SetWindowBrightness(App->window->window, brigth);
 			}
 			ImGui::Text("Height:");
@@ -518,6 +548,7 @@ void ModuleEditor::BarXXX() {
 			int height = App->window->winHeight;
 			if (ImGui::SliderInt("Height", (int*)&height, MIN_HEIGHT, MAX_HEIGHT))
 			{
+				App->window->winHeight = height;
 				SDL_SetWindowSize(App->window->window, App->window->winWidth, height);
 				SDL_SetWindowBrightness(App->window->window, brigth);
 			}

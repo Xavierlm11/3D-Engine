@@ -87,4 +87,6 @@ private:
 	bool gl_lightingEnabled;
 	bool gl_colorMaterialEnabled;
 	bool gl_texture2dEnabled;
+	bool gl_lineSmoothEnabled;
+	bool gl_fogEnabled;
 };
