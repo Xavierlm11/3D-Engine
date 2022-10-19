@@ -33,6 +33,12 @@
 ModuleEditor::ModuleEditor(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
 	selectedRenderMode = 0;
+	gl_depthTestEnabled = true;
+	gl_cullFaceEnabled = true;
+	gl_lightingEnabled = true;
+	gl_colorMaterialEnabled = true;
+	gl_texture2dEnabled = true;
+
 }
 
 // Destructor
@@ -136,7 +142,60 @@ update_status ModuleEditor::Update(float dt)
 	//    ImGui::End();
 	//}
 
+	if (gl_depthTestEnabled == true) {
+		if (glIsEnabled(GL_DEPTH_TEST) == false) {
+			glEnable(GL_DEPTH_TEST);
+		}
+	}
+	else {
+		if (glIsEnabled(GL_DEPTH_TEST) == true) {
+			glDisable(GL_DEPTH_TEST);
+		}
+	}
 
+	if (gl_cullFaceEnabled == true) {
+		if (glIsEnabled(GL_CULL_FACE) == false) {
+			glEnable(GL_CULL_FACE);
+		}
+	}
+	else {
+		if (glIsEnabled(GL_CULL_FACE) == true) {
+			glDisable(GL_CULL_FACE);
+		}
+	}
+
+	if (gl_lightingEnabled == true) {
+		if (glIsEnabled(GL_LIGHTING) == false) {
+			glEnable(GL_LIGHTING);
+		}
+	}
+	else {
+		if (glIsEnabled(GL_LIGHTING) == true) {
+			glDisable(GL_LIGHTING);
+		}
+	}
+
+	if (gl_colorMaterialEnabled == true) {
+		if (glIsEnabled(GL_COLOR_MATERIAL) == false) {
+			glEnable(GL_COLOR_MATERIAL);
+		}
+	}
+	else {
+		if (glIsEnabled(GL_COLOR_MATERIAL) == true) {
+			glDisable(GL_COLOR_MATERIAL);
+		}
+	}
+
+	if (gl_texture2dEnabled == true) {
+		if (glIsEnabled(GL_TEXTURE_2D) == false) {
+			glEnable(GL_TEXTURE_2D);
+		}
+	}
+	else {
+		if (glIsEnabled(GL_TEXTURE_2D) == true) {
+			glDisable(GL_TEXTURE_2D);
+		}
+	}
 
 
 
@@ -246,6 +305,19 @@ void ModuleEditor::Render3DWindow() {
 				
 			ImGui::EndPopup();
 		}
+
+		if (ImGui::TreeNode("Render Options"))
+		{
+			ImGui::Checkbox("Depth Test", &gl_depthTestEnabled);
+			ImGui::Checkbox("Cull Face", &gl_cullFaceEnabled);
+			ImGui::Checkbox("Lighting", &gl_lightingEnabled);
+			ImGui::Checkbox("Color Material", &gl_colorMaterialEnabled);
+			ImGui::Checkbox("Texture 2D", &gl_texture2dEnabled);
+			
+
+			ImGui::TreePop();
+		}
+
 
 
 	/*int renderX = ImGui::GetWindowPos().x;
@@ -438,20 +510,20 @@ void ModuleEditor::BarXXX() {
 			int width = App->window->winWidth;
 			if (ImGui::SliderInt("Width", (int*)&width, MIN_WIDTH, MAX_WIDTH))
 			{
-				//SDL_SetWindowSize(App->window->window, width, App->window->winHeight);
-				// SDL_SetWindowBrightness(App->window->window, brigth);
+				SDL_SetWindowSize(App->window->window, width, App->window->winHeight);
+				SDL_SetWindowBrightness(App->window->window, brigth);
 			}
 			ImGui::Text("Height:");
 			ImGui::SameLine();
 			int height = App->window->winHeight;
 			if (ImGui::SliderInt("Height", (int*)&height, MIN_HEIGHT, MAX_HEIGHT))
 			{
-				//SDL_SetWindowSize(App->window->window, App->window->winWidth, height);
-				// SDL_SetWindowBrightness(App->window->window, brigth);
+				SDL_SetWindowSize(App->window->window, App->window->winWidth, height);
+				SDL_SetWindowBrightness(App->window->window, brigth);
 			}
 			if (ImGui::Button("Reset"))
 			{
-				//SDL_SetWindowSize(App->window->window, SCREEN_WIDTH, SCREEN_HEIGHT);
+				SDL_SetWindowSize(App->window->window, SCREEN_WIDTH, SCREEN_HEIGHT);
 				SDL_SetWindowBrightness(App->window->window, 1);
 
 			}

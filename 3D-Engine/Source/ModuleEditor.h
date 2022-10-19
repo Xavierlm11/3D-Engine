@@ -63,6 +63,9 @@ private:
 	void BarWindows();
 	void BarXXX();
 
+	void CheckGLCapabilities();
+
+
 	
 
 
@@ -78,4 +81,10 @@ private:
 	int winWidth;
 	int winHeight;
 	int selectedRenderMode;
+
+	bool gl_depthTestEnabled;
+	bool gl_cullFaceEnabled;
+	bool gl_lightingEnabled;
+	bool gl_colorMaterialEnabled;
+	bool gl_texture2dEnabled;
 };
