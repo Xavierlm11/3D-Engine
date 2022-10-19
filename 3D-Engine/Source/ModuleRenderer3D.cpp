@@ -140,19 +140,21 @@ bool ModuleRenderer3D::Init()
 
 					//OnResize(0, 0, App->window->winWidth, App->window->winHeight);
 		}
-		int w;
-		int h;
+		//int w;
+		//int h;
 
-		SDL_GetWindowSize(App->window->window, &w, &h);
-		//App->renderer3D->OnResize(0, 0, w, h);
+		//SDL_GetWindowSize(App->window->window, &w, &h);
+		////App->renderer3D->OnResize(0, 0, w, h);
 
-		glViewport(0, 0, w, h);
-		glMatrixMode(GL_PROJECTION);
-		glLoadIdentity();
-		ProjectionMatrix = perspective(60.0f, (float)w / (float)h, 0.125f, 512.0f);
-		glLoadMatrixf(&ProjectionMatrix);
+		//glViewport(0, 0, w, h);
+		//glMatrixMode(GL_PROJECTION);
+		//glLoadIdentity();
+		//ProjectionMatrix = perspective(60.0f, (float)w / (float)h, 0.125f, 512.0f);
+		//glLoadMatrixf(&ProjectionMatrix);
 
-		glMatrixMode(GL_MODELVIEW);
+		//glMatrixMode(GL_MODELVIEW);
+
+		OnResize(0,0, App->window->winWidth, App->window->winHeight );
 
 	}
 
@@ -238,55 +240,40 @@ bool ModuleRenderer3D::CleanUp()
 
 void ModuleRenderer3D::Draw() {
 
-	int w, h;
-	SDL_GetWindowSize(App->window->window, &w, &h);
+	//int w, h;
+	//SDL_GetWindowSize(App->window->window, &w, &h);
 
-	glViewport(0, 0, w, h);
+	//glViewport(0, 0, w, h);
 
-	//glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
-	ProjectionMatrix = perspective(60.0f, (float)w / (float)h, 0.125f, 512.0f);
-	glLoadMatrixf(&ProjectionMatrix);
+	////glMatrixMode(GL_PROJECTION);
+	//glLoadIdentity();
+	//ProjectionMatrix = perspective(60.0f, (float)w / (float)h, 0.125f, 512.0f);
+	//glLoadMatrixf(&ProjectionMatrix);
 
 	//glMatrixMode(GL_MODELVIEW);
+
+	///////*App->window->winWidth = width;
+	//////App->window->winHeight = height;
+
+	//////glLoadIdentity();
+	//////ProjectionMatrix = perspective(60.0f, (float)width / (float)height, 0.125f, 512.0f);
+	//////glLoadMatrixf(&ProjectionMatrix);*/
+
 }
 
 void ModuleRenderer3D::OnResize(int x, int y, int width, int height)
 {
-	{
-		///*glViewport(x, y, width, height);
+		App->window->winWidth = width;
+		App->window->winHeight = height;
 
-		//App->window->winWidth = width;
-		//App->window->winHeight = height;
+		glViewport(x, y, width, height);
 
-		//glLoadIdentity();
-		//ProjectionMatrix = perspective(60.0f, (float)width / (float)height, 0.125f, 512.0f);
-		//glLoadMatrixf(&ProjectionMatrix);*/
+		glMatrixMode(GL_PROJECTION);
+		glLoadIdentity();
+		ProjectionMatrix = perspective(60.0f, (float)width / (float)height, 0.125f, 512.0f);
+		glLoadMatrixf(&ProjectionMatrix);
 
+		glMatrixMode(GL_MODELVIEW);
 
-
-
-		////App->renderer3D->OnResize(0, 0, w, h);
-
-		//glViewport(x, y, width, height);
-
-
-		//glMatrixMode(GL_PROJECTION);
-		//glLoadIdentity();
-		//ProjectionMatrix = perspective(60.0f, (float)width / (float)height, 0.125f, 512.0f);
-		//glLoadMatrixf(&ProjectionMatrix);
-
-		//glMatrixMode(GL_MODELVIEW);
-
-		////App->window->winWidth = width;
-		////App->window->winHeight = height;
-
-		//LOG("Width: %i. Height: %i)", width, height);
-	}
-	glViewport(x, y, width, height);
-
-	glLoadIdentity();
-	ProjectionMatrix = perspective(60.0f, (float)width / (float)height, 0.125f, 512.0f);
-	glLoadMatrixf(&ProjectionMatrix);
 }
 
