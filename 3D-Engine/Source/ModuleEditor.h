@@ -63,6 +63,12 @@ private:
 	void BarWindows();
 	void BarXXX();
 
+	void ConfigAppXXX();
+
+	void ConfigWindowXXX();
+
+	void ConfigHardwareXXX();
+
 	void CheckGLCapabilities();
 
 

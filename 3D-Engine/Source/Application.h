@@ -3,7 +3,7 @@
 #include <iostream>
 //#include <vector>
 #include <list>
-
+#include <string>
 
 #include "Globals.h"
 #include "Timer.h"
@@ -45,6 +45,9 @@ public:
 	bool Init();
 	update_status Update();
 	bool CleanUp();
+
+	std::string EngName=TITLE;//ENGINE NAME
+	std::string OrgName = ORGANIZATION;//ENGINE NAME
 	//void logs(const char* text);
 private:
 

@@ -255,7 +255,7 @@ bool ModuleEditor::DrawMenuBar()
 	{
 		BarFile();
 		BarWindows();
-		BarXXX();
+		
 
 		ImGui::EndMainMenuBar();
 	}
@@ -362,16 +362,18 @@ void ModuleEditor::Render3DWindow() {
 
 void ModuleEditor::ConfigWindow() {
 
-	
+	BarXXX();
 }
 
 void ModuleEditor::AboutWindow() {
 
-	if (ImGui::Begin("About"))
+	if (ImGui::Begin("About", &show_about_window))
 	{
+		static char AppName[30];
+		strcpy_s(AppName,30,App->EngName.c_str());
 		ImGui::Text("App name:");
 		ImGui::SameLine();
-		ImGui::TextColored({ 0,255,232,1 }, "%s", TITLE);
+		ImGui::TextColored({ 0,255,232,1 }, "%s", App->EngName.c_str());
 		ImGui::Text("");
 
 		ImGui::Text("By:");
@@ -509,104 +511,20 @@ void ModuleEditor::BarWindows() {
 	
 }
 void ModuleEditor::BarXXX() {
-	if (ImGui::Begin("Windowads")) {
+	if (ImGui::Begin("Configuration", &show_config_window)) {
 		ImGui::Text("Options");
 		if (ImGui::CollapsingHeader("APP"))
 		{
-
-			ImGui::Text("App name:");
-			ImGui::SameLine();
-			ImGui::TextColored({ 255,0,0,1 }, "%s", TITLE);
-
-			ImGui::Text("Organization:");
-			ImGui::SameLine();
-			ImGui::TextColored({ 255,0,0,1 }, "%s", ORGANIZATION);
+			ConfigAppXXX();
 		}
 		if (ImGui::CollapsingHeader("Window"))
 		{
 
-			ImGui::Text("Brightness:");
-			ImGui::SameLine();
-			float brigth = SDL_GetWindowBrightness(App->window->window);
-			if (ImGui::SliderFloat("Brightness", &brigth, 0, 2))
-			{
-				SDL_SetWindowBrightness(App->window->window, brigth);
-			}
-
-			ImGui::Text("Width:");
-			ImGui::SameLine();
-			int width = App->window->winWidth;
-			if (ImGui::SliderInt("Width", (int*)&width, MIN_WIDTH, MAX_WIDTH))
-			{
-				App->window->winWidth = width;
-				SDL_SetWindowSize(App->window->window, width, App->window->winHeight);
-				
-				SDL_SetWindowBrightness(App->window->window, brigth);
-			}
-			ImGui::Text("Height:");
-			ImGui::SameLine();
-			int height = App->window->winHeight;
-			if (ImGui::SliderInt("Height", (int*)&height, MIN_HEIGHT, MAX_HEIGHT))
-			{
-				App->window->winHeight = height;
-				SDL_SetWindowSize(App->window->window, App->window->winWidth, height);
-				SDL_SetWindowBrightness(App->window->window, brigth);
-			}
-			if (ImGui::Button("Reset"))
-			{
-				SDL_SetWindowSize(App->window->window, SCREEN_WIDTH, SCREEN_HEIGHT);
-				SDL_SetWindowBrightness(App->window->window, 1);
-
-			}
+			ConfigWindowXXX();
 		}
 		if (ImGui::CollapsingHeader("Hardware"))
 		{
-			SDL_version compiled;
-			SDL_version linked;
-
-			SDL_VERSION(&compiled);
-			SDL_GetVersion(&linked);
-
-			const GLubyte* vendor = glGetString(GL_VENDOR); // Returns the vendor
-			const GLubyte* renderer = glGetString(GL_RENDERER); // Returns a hint to the model
-		   // const GLubyte* vram = glGetIntegerv(GL_GPU_MEMORY_INFO_CURRENT_AVAILABLE_VIDMEM_NVX); // Returns a hint to the model
-
-			//const GLubyte* version = glGetString(GL_VERSION); // Returns a hint to the model
-
-
-
-			ImGui::Text("SDL Version: ");
-			ImGui::SameLine();
-			ImGui::TextColored({ 255,0,0,1 }, "%u.%u.%u", compiled.major, compiled.minor, compiled.patch);
-			ImGui::Separator();//--------------
-			ImGui::Text("CPUs:");
-			ImGui::SameLine();
-			ImGui::TextColored({ 255,0,0,1 }, "%d (cache %i Kb)", SDL_GetCPUCount(), SDL_GetCPUCacheLineSize());
-			ImGui::Text("System RAM:");
-			ImGui::SameLine();
-			ImGui::TextColored({ 255,0,0,1 }, "%f Gb", (float)SDL_GetSystemRAM());
-			ImGui::Text("Caps:");
-			ImGui::SameLine();
-			ImGui::TextColored({ 255,0,0,1 }, "%s %s", SDL_Has3DNow() ? "3DNow" : "", SDL_HasAltiVec() ? "AltiVec" : "");
-			ImGui::Separator();//--------------
-			ImGui::Text("GPU:");
-			ImGui::SameLine();
-			ImGui::TextColored({ 255,0,0,1 }, "vendor %s device %s", vendor);
-			ImGui::Text("Brand:");
-			ImGui::SameLine();
-			ImGui::TextColored({ 255,0,0,1 }, "%s", renderer);
-			ImGui::Text("VRAM Budget:");
-			ImGui::SameLine();
-			ImGui::TextColored({ 255,0,0,1 }, "%i", 1);
-			ImGui::Text("VRAM Usage:");
-			ImGui::SameLine();
-			ImGui::TextColored({ 255,0,0,1 }, "%s", ORGANIZATION);
-			ImGui::Text("VRAM Avaliable:");
-			ImGui::SameLine();
-			ImGui::TextColored({ 255,0,0,1 }, "%s", ORGANIZATION);
-			ImGui::Text("VRAM Reserved:");
-			ImGui::SameLine();
-			ImGui::TextColored({ 255,0,0,1 }, "%s", ORGANIZATION);
+			ConfigHardwareXXX();
 		}
 
 
@@ -614,5 +532,121 @@ void ModuleEditor::BarXXX() {
 	}
 
 	ImGui::End();
+}
+
+void ModuleEditor::ConfigAppXXX()
+{
+	static char AppName[30];
+	strcpy_s(AppName, 30, App->EngName.c_str());
+
+	static char OrgName[60];
+	strcpy_s(OrgName, 60, App->OrgName.c_str());
+
+	ImGui::Text("App name:");
+	ImGui::SameLine();
+	if (ImGui::InputText("", AppName, 30, ImGuiInputTextFlags_EnterReturnsTrue | ImGuiInputTextFlags_AutoSelectAll))
+	{
+
+		if (AppName != nullptr)
+		{
+			SDL_SetWindowTitle(App->window->window, AppName);
+		}
+	}
+	ImGui::Text("Organization:");
+	ImGui::SameLine();
+	if (ImGui::InputText("", OrgName, 60, ImGuiInputTextFlags_EnterReturnsTrue | ImGuiInputTextFlags_AutoSelectAll))
+	{
+
+		if (OrgName != nullptr)
+		{
+			SDL_SetWindowTitle(App->window->window, OrgName);
+		}
+	}
+	//ImGui::TextColored({ 255,0,0,1 }, "%s", ORGANIZATION);
+}
+
+void ModuleEditor::ConfigWindowXXX()
+{
+	ImGui::Text("Brightness:");
+	ImGui::SameLine();
+	float brigth = SDL_GetWindowBrightness(App->window->window);
+	if (ImGui::SliderFloat("Brightness", &brigth, 0, 2))
+	{
+		SDL_SetWindowBrightness(App->window->window, brigth);
+	}
+
+	ImGui::Text("Width:");
+	ImGui::SameLine();
+	int width = App->window->winWidth;
+	if (ImGui::SliderInt("Width", (int*)&width, MIN_WIDTH, MAX_WIDTH))
+	{
+		App->window->winWidth = width;
+		SDL_SetWindowSize(App->window->window, width, App->window->winHeight);
+
+		SDL_SetWindowBrightness(App->window->window, brigth);
+	}
+	ImGui::Text("Height:");
+	ImGui::SameLine();
+	int height = App->window->winHeight;
+	if (ImGui::SliderInt("Height", (int*)&height, MIN_HEIGHT, MAX_HEIGHT))
+	{
+		App->window->winHeight = height;
+		SDL_SetWindowSize(App->window->window, App->window->winWidth, height);
+		SDL_SetWindowBrightness(App->window->window, brigth);
+}
+	if (ImGui::Button("Reset"))
+	{
+		SDL_SetWindowSize(App->window->window, SCREEN_WIDTH, SCREEN_HEIGHT);
+		SDL_SetWindowBrightness(App->window->window, 1);
+
+	}
+}
+
+void ModuleEditor::ConfigHardwareXXX()
+{
+	SDL_version compiled;
+	SDL_version linked;
+
+	SDL_VERSION(&compiled);
+	SDL_GetVersion(&linked);
+
+	const GLubyte* vendor = glGetString(GL_VENDOR); // Returns the vendor
+	const GLubyte* renderer = glGetString(GL_RENDERER); // Returns a hint to the model
+														// const GLubyte* vram = glGetIntegerv(GL_GPU_MEMORY_INFO_CURRENT_AVAILABLE_VIDMEM_NVX); // Returns a hint to the model
+
+														//const GLubyte* version = glGetString(GL_VERSION); // Returns a hint to the model
+
+	ImGui::Text("SDL Version: ");
+	ImGui::SameLine();
+	ImGui::TextColored({ 255,0,0,1 }, "%u.%u.%u", compiled.major, compiled.minor, compiled.patch);
+	ImGui::Separator();//--------------
+	ImGui::Text("CPUs:");
+	ImGui::SameLine();
+	ImGui::TextColored({ 255,0,0,1 }, "%d (cache %i Kb)", SDL_GetCPUCount(), SDL_GetCPUCacheLineSize());
+	ImGui::Text("System RAM:");
+	ImGui::SameLine();
+	ImGui::TextColored({ 255,0,0,1 }, "%f Gb", (float)SDL_GetSystemRAM());
+	ImGui::Text("Caps:");
+	ImGui::SameLine();
+	ImGui::TextColored({ 255,0,0,1 }, "%s %s", SDL_Has3DNow() ? "3DNow" : "", SDL_HasAltiVec() ? "AltiVec" : "");
+	ImGui::Separator();//--------------
+	ImGui::Text("GPU:");
+	ImGui::SameLine();
+	ImGui::TextColored({ 255,0,0,1 }, "vendor %s device %s", vendor);
+	ImGui::Text("Brand:");
+	ImGui::SameLine();
+	ImGui::TextColored({ 255,0,0,1 }, "%s", renderer);
+	ImGui::Text("VRAM Budget:");
+	ImGui::SameLine();
+	ImGui::TextColored({ 255,0,0,1 }, "%i", 1);
+	ImGui::Text("VRAM Usage:");
+	ImGui::SameLine();
+	ImGui::TextColored({ 255,0,0,1 }, "%s", ORGANIZATION);
+	ImGui::Text("VRAM Avaliable:");
+	ImGui::SameLine();
+	ImGui::TextColored({ 255,0,0,1 }, "%s", ORGANIZATION);
+	ImGui::Text("VRAM Reserved:");
+	ImGui::SameLine();
+	ImGui::TextColored({ 255,0,0,1 }, "%s", ORGANIZATION);
 }
 
