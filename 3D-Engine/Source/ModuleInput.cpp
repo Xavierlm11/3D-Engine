@@ -114,11 +114,37 @@ update_status ModuleInput::PreUpdate(float dt)
 					App->renderer3D->OnResize(0, 0, e.window.data1, e.window.data2);//e.window.data1, e.window.data2);
 				}
 			}
+			
+			
+
 		}
 	}
 
 	if(quit == true || keyboard[SDL_SCANCODE_ESCAPE] == KEY_UP||App->editor->close==true)
-		return UPDATE_STOP;
+	{
+		/*if (ImGui::BeginPopup("Exit", true))
+		{
+			ImGui::TextWrapped("Are you sure you want to partirle piernas to Albert");
+			if (ImGui::Button("YES"))
+			{
+				return UPDATE_STOP;
+			}
+			ImGui::SameLine();
+			if (ImGui::Button("NO"))
+			{
+				a++;
+			}
+
+		}
+		ImGui::EndPopup();*/
+
+		CallClose = true;
+
+		//return UPDATE_STOP;
+
+	}
+
+	if(close)return UPDATE_STOP;
 
 	return UPDATE_CONTINUE;
 }

@@ -1,6 +1,7 @@
 #pragma once
 #include "Module.h"
 #include "Globals.h"
+#include <string>
 #include "ImGui/imgui.h"
 #include "ImGui/imgui_impl_sdl.h"
 #include "ImGui/imgui_impl_opengl3.h"
@@ -65,9 +66,21 @@ private:
 
 	void ConfigAppXXX();
 
+	void SetOrgName(const char* OrgName);
+
+	void SetAppName(const char*  AppName);
+
 	void ConfigWindowXXX();
 
 	void ConfigHardwareXXX();
+
+	void ConfigInputXXX();
+
+	void ConfigPathXXX();
+
+	void ConfigAudioXXX();
+
+	void CloseEngine();
 
 	void CheckGLCapabilities();
 
@@ -79,7 +92,7 @@ public:
 	bool close=false;
 	bool scroll = false;
 	LCG randomLCG;
-	int a=0;
+	
 	std::vector<std::string> login;
 	
 	//ImGuiTextBuffer logs;
@@ -95,4 +108,17 @@ private:
 	bool gl_texture2dEnabled;
 	bool gl_lineSmoothEnabled;
 	bool gl_fogEnabled;
+
+	const char* tdnow,
+		*altvec, 
+		*AVX,
+		*AVX2, 
+		*MMX, 
+		*RDTSC,
+		*SSE,
+		*SSE2,
+		*SSE3,
+		*SSE41,
+		*SSE42;
+	
 };

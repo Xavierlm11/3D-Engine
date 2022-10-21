@@ -22,6 +22,10 @@ public:
 	bool Init();
 	update_status PreUpdate(float dt);
 	bool CleanUp();
+	int a=0;
+
+	bool close=false;//to close the engine
+	bool CallClose = false;
 
 	KEY_STATE GetKey(int id) const
 	{
@@ -58,6 +62,8 @@ public:
 		return mouse_y_motion;
 	}
 
+	
+
 private:
 	KEY_STATE* keyboard;
 	KEY_STATE mouse_buttons[MAX_MOUSE_BUTTONS];
@@ -66,5 +72,6 @@ private:
 	int mouse_z;
 	int mouse_x_motion;
 	int mouse_y_motion;
+	
 	//int mouse_z_motion;
 };

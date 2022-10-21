@@ -79,6 +79,19 @@ bool ModuleEditor::Init()
 	ImGui_ImplSDL2_InitForOpenGL(App->window->window, App->window->gl_context);
 	ImGui_ImplOpenGL3_Init(App->window->glsl_version);
 
+	tdnow = SDL_Has3DNow() ? "3DNow," : " ";
+	//tdnow =  "3DNow,";
+	altvec = SDL_HasAltiVec() ? "AltiVec," : " ";
+	AVX = SDL_HasAVX() ? "AVX," : " ";
+	AVX2 = SDL_HasAVX2() ? "AVX2," : " ";
+	MMX = SDL_HasMMX() ? "MMX," : " ";
+	RDTSC = SDL_HasRDTSC() ? "RDTSC," : " ";
+	SSE = SDL_HasSSE() ? "SSE," : " ";
+	SSE2 = SDL_HasSSE2()? "SSE2," : " ";
+	SSE3 = SDL_HasSSE3() ? "SSE3," : " ";
+	SSE41 = SDL_HasSSE41() ? "SSE41," : " ";
+	SSE42 = SDL_HasSSE42() ? "SSE42," : " ";
+
 	return ret;
 }
 
@@ -106,8 +119,8 @@ update_status ModuleEditor::Update(float dt)
 	ImGui::NewFrame();
 
 	// 1. Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear ImGui!).
-   /* if (show_demo_window)
-		ImGui::ShowDemoWindow(&show_demo_window);*/
+    if (show_demo_window)
+		ImGui::ShowDemoWindow(&show_demo_window);
 
 	ImGuiIO& io = ImGui::GetIO(); (void)io;
 
@@ -131,6 +144,7 @@ update_status ModuleEditor::Update(float dt)
 		//ImGui::Text("counter = %d", counter);
 
 		//ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+		//
 		//ImGui::End();
 	}
 
@@ -222,7 +236,10 @@ update_status ModuleEditor::Update(float dt)
 		}
 	}
 
-
+	if (App->input->CallClose)
+	{
+		CloseEngine();
+	}
 
 
 	return UPDATE_CONTINUE;
@@ -369,11 +386,14 @@ void ModuleEditor::AboutWindow() {
 
 	if (ImGui::Begin("About", &show_about_window))
 	{
-		static char AppName[30];
-		strcpy_s(AppName,30,App->EngName.c_str());
+		
 		ImGui::Text("App name:");
 		ImGui::SameLine();
 		ImGui::TextColored({ 0,255,232,1 }, "%s", App->EngName.c_str());
+		ImGui::Text("Organization name:");
+		ImGui::SameLine();
+		ImGui::TextColored({ 0,255,232,1 }, "%s", App->OrgName.c_str());
+
 		ImGui::Text("");
 
 		ImGui::Text("By:");
@@ -392,8 +412,8 @@ void ModuleEditor::AboutWindow() {
 
 		if (ImGui::Button("Github Repository")) {
 
-			for (unsigned int i = 0; i <= 10; ++i)OpenWeb("https://www.raylib.com/");
-			OpenWeb("https://youtu.be/SCpV7OmmR60");
+			//for (unsigned int i = 0; i <= 10; ++i)OpenWeb("https://www.raylib.com/");
+			OpenWeb("https://youtu.be/OgZzUJud3Q4");
 		}	
 		ImGui::Text("");
 
@@ -513,92 +533,115 @@ void ModuleEditor::BarWindows() {
 void ModuleEditor::BarXXX() {
 	if (ImGui::Begin("Configuration", &show_config_window)) {
 		ImGui::Text("Options");
-		if (ImGui::CollapsingHeader("APP"))
-		{
+		
 			ConfigAppXXX();
-		}
-		if (ImGui::CollapsingHeader("Window"))
-		{
-
+		
 			ConfigWindowXXX();
-		}
-		if (ImGui::CollapsingHeader("Hardware"))
-		{
+		
 			ConfigHardwareXXX();
+
+			ConfigInputXXX();
+
+			ConfigPathXXX();
+
+			ConfigAudioXXX();
 		}
 
-
-
-	}
 
 	ImGui::End();
+
 }
 
 void ModuleEditor::ConfigAppXXX()
 {
-	static char AppName[30];
-	strcpy_s(AppName, 30, App->EngName.c_str());
-
-	static char OrgName[60];
-	strcpy_s(OrgName, 60, App->OrgName.c_str());
-
-	ImGui::Text("App name:");
-	ImGui::SameLine();
-	if (ImGui::InputText("", AppName, 30, ImGuiInputTextFlags_EnterReturnsTrue | ImGuiInputTextFlags_AutoSelectAll))
+	if (ImGui::CollapsingHeader("APP"))
 	{
+		static char AppName[150];
+		strcpy_s(AppName, 150, App->EngName.c_str());
 
-		if (AppName != nullptr)
+		ImGui::Text("App name:");
+		ImGui::SameLine();
+		if (ImGui::InputText(" ", AppName, 150, ImGuiInputTextFlags_EnterReturnsTrue | ImGuiInputTextFlags_AutoSelectAll))
 		{
-			SDL_SetWindowTitle(App->window->window, AppName);
+			SetAppName(AppName);
 		}
+
+		static char OrgName[150];
+		strcpy_s(OrgName, 150, App->OrgName.c_str());
+		ImGui::Text("Organization:");
+		ImGui::SameLine();
+		if (ImGui::InputText("  ", OrgName, 150, ImGuiInputTextFlags_EnterReturnsTrue | ImGuiInputTextFlags_AutoSelectAll))
+		{
+			SetOrgName(OrgName);
+		}
+
+		ImGui::Text("FPS:");
+		ImGui::SameLine();
+		ImGui::TextColored({ 255,0,0,1 }, "%.1f", ImGui::GetIO().Framerate);
+
+		ImGui::Text("MS:");
+		ImGui::SameLine();
+		ImGui::TextColored({ 255,0,0,1 }, "%.3f", 1000 / ImGui::GetIO().Framerate);
 	}
-	ImGui::Text("Organization:");
-	ImGui::SameLine();
-	if (ImGui::InputText("", OrgName, 60, ImGuiInputTextFlags_EnterReturnsTrue | ImGuiInputTextFlags_AutoSelectAll))
+}
+
+void ModuleEditor::SetOrgName(const char*  OrgName)
+{
+	if (OrgName != nullptr)
 	{
-
-		if (OrgName != nullptr)
-		{
-			SDL_SetWindowTitle(App->window->window, OrgName);
-		}
+		App->OrgName = OrgName;
+		SDL_SetWindowTitle(App->window->window, OrgName);
 	}
-	//ImGui::TextColored({ 255,0,0,1 }, "%s", ORGANIZATION);
+}
+
+void ModuleEditor::SetAppName(const char*  AppName)
+{
+	if (AppName != nullptr)
+	{
+		App->EngName = AppName;
+		SDL_SetWindowTitle(App->window->window, AppName);
+	}
 }
 
 void ModuleEditor::ConfigWindowXXX()
 {
-	ImGui::Text("Brightness:");
-	ImGui::SameLine();
-	float brigth = SDL_GetWindowBrightness(App->window->window);
-	if (ImGui::SliderFloat("Brightness", &brigth, 0, 2))
+	if (ImGui::CollapsingHeader("Window"))
 	{
-		SDL_SetWindowBrightness(App->window->window, brigth);
-	}
+		ImGui::Text("Brightness:");
+		ImGui::SameLine();
+		float brigth = SDL_GetWindowBrightness(App->window->window);
+		if (ImGui::SliderFloat(" ", &brigth, 0, 2))
+		{
+			SDL_SetWindowBrightness(App->window->window, brigth);
+		}
 
-	ImGui::Text("Width:");
-	ImGui::SameLine();
-	int width = App->window->winWidth;
-	if (ImGui::SliderInt("Width", (int*)&width, MIN_WIDTH, MAX_WIDTH))
-	{
-		App->window->winWidth = width;
-		SDL_SetWindowSize(App->window->window, width, App->window->winHeight);
+		ImGui::Text("Width:");
+		ImGui::SameLine();
+		ImGui::TextColored({ 255,0,0,1 }, "%ipx", App->window->winWidth);
+		/*int width = App->window->winWidth;
+		if (ImGui::SliderInt("Width", (int*)&width, MIN_WIDTH, MAX_WIDTH))
+		{
+			App->window->winWidth = width;
+			SDL_SetWindowSize(App->window->window, width, App->window->winHeight);
 
-		SDL_SetWindowBrightness(App->window->window, brigth);
-	}
-	ImGui::Text("Height:");
-	ImGui::SameLine();
-	int height = App->window->winHeight;
-	if (ImGui::SliderInt("Height", (int*)&height, MIN_HEIGHT, MAX_HEIGHT))
-	{
-		App->window->winHeight = height;
-		SDL_SetWindowSize(App->window->window, App->window->winWidth, height);
-		SDL_SetWindowBrightness(App->window->window, brigth);
-}
-	if (ImGui::Button("Reset"))
-	{
-		SDL_SetWindowSize(App->window->window, SCREEN_WIDTH, SCREEN_HEIGHT);
-		SDL_SetWindowBrightness(App->window->window, 1);
+		
+		}*/
+		ImGui::Text("Height:");
+		ImGui::SameLine();
+		ImGui::TextColored({ 255,0,0,1 }, "%ipx", App->window->winHeight);
+		/*int height = App->window->winHeight;
+		if (ImGui::SliderInt("Height", (int*)&height, MIN_HEIGHT, MAX_HEIGHT))
+		{
+			App->window->winHeight = height;
+			SDL_SetWindowSize(App->window->window, App->window->winWidth, height);
+			
+		}*/
+		if (ImGui::Button("Reset"))
+		{
+			SDL_SetWindowSize(App->window->window, SCREEN_WIDTH, SCREEN_HEIGHT);
+			SDL_SetWindowBrightness(App->window->window, 1);
 
+		}
 	}
 }
 
@@ -616,37 +659,98 @@ void ModuleEditor::ConfigHardwareXXX()
 
 														//const GLubyte* version = glGetString(GL_VERSION); // Returns a hint to the model
 
-	ImGui::Text("SDL Version: ");
-	ImGui::SameLine();
-	ImGui::TextColored({ 255,0,0,1 }, "%u.%u.%u", compiled.major, compiled.minor, compiled.patch);
-	ImGui::Separator();//--------------
-	ImGui::Text("CPUs:");
-	ImGui::SameLine();
-	ImGui::TextColored({ 255,0,0,1 }, "%d (cache %i Kb)", SDL_GetCPUCount(), SDL_GetCPUCacheLineSize());
-	ImGui::Text("System RAM:");
-	ImGui::SameLine();
-	ImGui::TextColored({ 255,0,0,1 }, "%f Gb", (float)SDL_GetSystemRAM());
-	ImGui::Text("Caps:");
-	ImGui::SameLine();
-	ImGui::TextColored({ 255,0,0,1 }, "%s %s", SDL_Has3DNow() ? "3DNow" : "", SDL_HasAltiVec() ? "AltiVec" : "");
-	ImGui::Separator();//--------------
-	ImGui::Text("GPU:");
-	ImGui::SameLine();
-	ImGui::TextColored({ 255,0,0,1 }, "vendor %s device %s", vendor);
-	ImGui::Text("Brand:");
-	ImGui::SameLine();
-	ImGui::TextColored({ 255,0,0,1 }, "%s", renderer);
-	ImGui::Text("VRAM Budget:");
-	ImGui::SameLine();
-	ImGui::TextColored({ 255,0,0,1 }, "%i", 1);
-	ImGui::Text("VRAM Usage:");
-	ImGui::SameLine();
-	ImGui::TextColored({ 255,0,0,1 }, "%s", ORGANIZATION);
-	ImGui::Text("VRAM Avaliable:");
-	ImGui::SameLine();
-	ImGui::TextColored({ 255,0,0,1 }, "%s", ORGANIZATION);
-	ImGui::Text("VRAM Reserved:");
-	ImGui::SameLine();
-	ImGui::TextColored({ 255,0,0,1 }, "%s", ORGANIZATION);
+	if (ImGui::CollapsingHeader("Hardware"))
+	{
+		
+
+		ImGui::Text("SDL Version: ");
+		ImGui::SameLine();
+		ImGui::TextColored({ 255,0,0,1 }, "%u.%u.%u", compiled.major, compiled.minor, compiled.patch);
+		ImGui::Separator();//--------------
+		ImGui::Text("CPUs:");
+		ImGui::SameLine();
+		ImGui::TextColored({ 255,0,0,1 }, "%d (cache %i Kb)", SDL_GetCPUCount(), SDL_GetCPUCacheLineSize());
+		ImGui::Text("System RAM:");
+		ImGui::SameLine();
+		ImGui::TextColored({ 255,0,0,1 }, "%.1f Gb", (float)SDL_GetSystemRAM() / 1024.f);
+		ImGui::Text("Caps:");
+		ImGui::SameLine();
+		//ImGui::PushStyleColor(ImGuiCol_Text, { 255,0,0,1 });
+		ImGui::TextWrapped(/*{ 255,0,0,1 },*/ "%s%s%s%s%s%s%s%s%s%s%s", tdnow, altvec, AVX, AVX2, MMX, RDTSC, SSE, SSE2, SSE3, SSE41, SSE42);
+		/*ImGui::SameLine();
+		ImGui::Text("%s%s%s%s%s%s",  RDTSC, SSE, SSE2, SSE3,SSE41, SSE42);*/
+		ImGui::Separator();//--------------
+		ImGui::Text("GPU:");
+		ImGui::SameLine();
+		ImGui::TextColored({ 255,0,0,1 }, "vendor %s device %s", vendor);
+		ImGui::Text("Brand:");
+		ImGui::SameLine();
+		ImGui::TextColored({ 255,0,0,1 }, "%s", renderer);
+		/*ImGui::Text("VRAM Budget:");
+		ImGui::SameLine();
+		ImGui::TextColored({ 255,0,0,1 }, "%i", 1);
+		ImGui::Text("VRAM Usage:");
+		ImGui::SameLine();
+		ImGui::TextColored({ 255,0,0,1 }, "%s", ORGANIZATION);
+		ImGui::Text("VRAM Avaliable:");
+		ImGui::SameLine();
+		ImGui::TextColored({ 255,0,0,1 }, "%s", ORGANIZATION);
+		ImGui::Text("VRAM Reserved:");
+		ImGui::SameLine();
+		ImGui::TextColored({ 255,0,0,1 }, "%s", ORGANIZATION);*/
+	}
 }
 
+void ModuleEditor::ConfigInputXXX()
+{
+	if (ImGui::CollapsingHeader("Input"))
+	{
+		ImGui::Text("Mouse position:");
+		ImGui::SameLine();
+		ImGui::TextColored({ 255,0,0,1 }, "X: %i Y:%i", App->input->GetMouseX(), App->input->GetMouseY());
+
+		ImGui::Text("Wheel Motion:");
+		ImGui::SameLine();
+		ImGui::TextColored({ 255,0,0,1 }, "%i", App->input->GetMouseZ());
+
+	}
+}
+
+void ModuleEditor::ConfigPathXXX()
+{
+	if (ImGui::CollapsingHeader("Path"))
+	{
+		ImGui::Text("Base path:");
+		ImGui::SameLine();
+		ImGui::TextColored({ 255,0,0,1 }, "%s", SDL_GetBasePath() );
+	}
+}
+
+void ModuleEditor::ConfigAudioXXX()
+{
+	if (ImGui::CollapsingHeader("Path"))
+	{
+		ImGui::Text("Work in progress");
+	}
+}
+
+void ModuleEditor::CloseEngine()
+{
+	if (ImGui::Begin("Exit"))
+	{
+		ImGui::TextWrapped("Are you sure you want to partirle piernas to Albert");
+		if (ImGui::Button("YES"))
+		{
+			OpenWeb("https://images.cdn.circlesix.co/image/1/700/0/uploads/posts/2018/09/63125b0ed58a7f29b69b20bb066fd184.jpg");
+			OpenWeb("https://youtu.be/OgZzUJud3Q4");
+			App->input->close = true;
+		}
+		ImGui::SameLine();
+		if (ImGui::Button("NO"))
+		{
+			App->input->CallClose = false;
+		}
+
+	}
+	ImGui::End();
+}
