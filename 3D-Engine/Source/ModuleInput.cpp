@@ -122,25 +122,10 @@ update_status ModuleInput::PreUpdate(float dt)
 
 	if(quit == true || keyboard[SDL_SCANCODE_ESCAPE] == KEY_UP||App->editor->close==true)
 	{
-		/*if (ImGui::BeginPopup("Exit", true))
-		{
-			ImGui::TextWrapped("Are you sure you want to partirle piernas to Albert");
-			if (ImGui::Button("YES"))
-			{
-				return UPDATE_STOP;
-			}
-			ImGui::SameLine();
-			if (ImGui::Button("NO"))
-			{
-				a++;
-			}
-
-		}
-		ImGui::EndPopup();*/
-
+		
+		App->editor->close = false;
 		CallClose = true;
 
-		//return UPDATE_STOP;
 
 	}
 

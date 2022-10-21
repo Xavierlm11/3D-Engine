@@ -5,6 +5,7 @@
 #include "parson/parson.h"
 #include <gl/GL.h>
 #include <gl/GLU.h>
+#include <string>
 
 ModuleScene::ModuleScene(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
@@ -57,7 +58,8 @@ bool ModuleScene::SaveScene() {
 
     ImVec4 backgroundColor = App->editor->clear_color;
     int screenWidth = SDL_GetWindowSurface(App->window->window)->w, screenHeight = SDL_GetWindowSurface(App->window->window)->h;
-
+    std::string AppName = App->EngName;
+    std::string OrgName = App->OrgName.c_str();
     JSON_Value* schema = json_parse_string("{\"name\":\"\"}");
     JSON_Value* scene_settings = json_parse_file("scene_settings.json");
 
@@ -69,6 +71,7 @@ bool ModuleScene::SaveScene() {
         json_object_set_number(json_object(scene_settings), "A", backgroundColor.w);
         json_object_set_number(json_object(scene_settings), "screen_width", screenWidth);
         json_object_set_number(json_object(scene_settings), "screen_height", screenHeight);
+      //  json_object_set_string(json_object(scene_settings), "Engine name", AppName);
         json_serialize_to_file(scene_settings, "Settings/scene_settings.json");
     }
    
