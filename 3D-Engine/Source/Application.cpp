@@ -6,6 +6,7 @@ extern Application* External = nullptr;
 Application::Application()
 {
 	External = this;
+	imp = new ModuleImport(this);
 	window = new ModuleWindow(this);
 	input = new ModuleInput(this);
 	
@@ -20,6 +21,8 @@ Application::Application()
 	// They will CleanUp() in reverse order
 
 	// Main Modules
+
+	AddModule(imp);
 
 	AddModule(window);
 	

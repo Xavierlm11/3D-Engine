@@ -8,6 +8,7 @@
 #include "Globals.h"
 #include "Timer.h"
 #include "Module.h"
+#include "ModuleImport.h"
 #include "ModuleWindow.h"
 #include "ModuleInput.h"
 
@@ -17,9 +18,11 @@
 #include "ModuleEditor.h"
 #include "ModuleScene.h"
 
+
 class Application
 {
 public:
+	ModuleImport* imp;
 	ModuleWindow* window;
 	ModuleInput* input;
 	

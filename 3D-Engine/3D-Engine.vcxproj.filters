@@ -31,6 +31,9 @@
     <Filter Include="Files\Parson">
       <UniqueIdentifier>{4d393ecd-7976-46be-886e-d2e47f480f98}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Files\Resources">
+      <UniqueIdentifier>{f5ba024a-0047-4146-80eb-41116b96e90c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\log.cpp">
@@ -200,6 +203,12 @@
     </ClCompile>
     <ClCompile Include="Source\ModuleEditor.cpp">
       <Filter>Files\Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\ModuleImport.cpp">
+      <Filter>Files\Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Mesh.cpp">
+      <Filter>Files\Resources</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -469,6 +478,12 @@
     </ClInclude>
     <ClInclude Include="Source\ModuleEditor.h">
       <Filter>Files\Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ModuleImport.h">
+      <Filter>Files\Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Mesh.h">
+      <Filter>Files\Resources</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
