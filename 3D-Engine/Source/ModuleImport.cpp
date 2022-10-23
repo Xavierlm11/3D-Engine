@@ -17,13 +17,13 @@ ModuleImport::~ModuleImport()
 
 }
 
-
-
 bool ModuleImport::Init()
 {
 	struct aiLogStream stream;
 	stream = aiGetPredefinedLogStream(aiDefaultLogStream_DEBUGGER, nullptr);
 	aiAttachLogStream(&stream);
+
+	
 
 	return true;
 }
@@ -40,15 +40,51 @@ bool ModuleImport::CleanUp()
 	return true;
 }
 
-void ModuleImport::LoadFile(const char* file_path) {
+const aiScene* ModuleImport::LoadFile(const char* file_path) {
 	const aiScene* scene = aiImportFile(file_path, aiProcessPreset_TargetRealtime_MaxQuality);
 	if (scene != nullptr && scene->HasMeshes()==true)
 	{
 		// Use scene->mNumMeshes to iterate on scene->mMeshes array
-		aiReleaseImport(scene);
+		LOG("File with path: %s loaded successfully!", file_path);
+		return scene;
 	}
 	else {
 		LOG("Error loading scene % s", file_path);
 	}
 		
+}
+
+void ModuleImport::ReleaseFile(const aiScene* scene) {
+	aiReleaseImport(scene);
+}
+
+MeshData ModuleImport::GetMeshData(aiMesh* mesh) {
+
+	MeshData meshData;
+
+	//copy vertices
+	meshData.num_vertices = mesh->mNumVertices;
+	meshData.vertices = new float[meshData.num_vertices * 3];
+	memcpy(meshData.vertices, mesh->mVertices, sizeof(float) * meshData.num_vertices * 3);
+	LOG("New mesh with %d vertices", meshData.num_vertices);
+
+	//copy faces
+	if (mesh->HasFaces())
+	{
+		meshData.num_indices = mesh->mNumFaces * 3;
+		meshData.indices = new uint[meshData.num_indices]; // assume each face is a triangle
+		for (uint i = 0; i < mesh->mNumFaces; ++i)
+		{
+			if (mesh->mFaces[i].mNumIndices != 3) {
+				LOG("WARNING, geometry face with != 3 indices!");
+			}
+			else {
+				memcpy(&meshData.indices[i * 3], mesh->mFaces[i].mIndices, 3 * sizeof(uint));
+			}
+		}
+	}
+
+	App->renderer3D->LoadModelBuffers(meshData);
+
+	return meshData;
 }

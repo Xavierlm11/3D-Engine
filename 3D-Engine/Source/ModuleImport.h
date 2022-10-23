@@ -2,7 +2,7 @@
 #include "Module.h"
 #include "Globals.h"
 #include "Mesh.h"
-
+#include "Assimp/include/scene.h"
 
 class ModuleImport : public Module
 {
@@ -13,8 +13,9 @@ public:
 	bool Init();
 	update_status PreUpdate(float dt);
 	bool CleanUp();
+	
 
-	void LoadFile(const char* path);
-
-	VertexDatas a;
+	const aiScene* LoadFile(const char* path);
+	MeshData GetMeshData(aiMesh* scene);
+	void ReleaseFile(const aiScene* scene);
 };

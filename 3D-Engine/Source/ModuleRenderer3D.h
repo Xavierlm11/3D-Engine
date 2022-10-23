@@ -3,6 +3,7 @@
 #include "Globals.h"
 #include "glmath.h"
 #include "Light.h"
+#include "Glew/include/glew.h"
 
 #define MAX_LIGHTS 8
 
@@ -27,6 +28,9 @@ public:
 	void DrawArrayCube();
 	void DrawArrayIndexCube();
 	void DrawDirectCube();
+
+	void LoadModelBuffers(MeshData mesh);
+	void DrawMesh(MeshData mesh);
 	update_status PostUpdate(float dt);
 	bool CleanUp();
 
@@ -34,6 +38,38 @@ public:
 	void Draw();
 
 	RenderMode mode;
+
+	bool buffersLoaded;
+
+	uint num_vertices;
+	uint my_id;
+
+	uint my_indices;
+	uint elementbuffer;
+	uint num_indices;
+	GLuint vertexbuffer;
+
+	float vertices[18] = 
+		{ 0.f, 0.f, 0.f,
+		5.f, 0.f, 0.f,
+		0.f, 5.f, 0.f,
+
+		5.f, 0.f, 0.f,
+		5.f, 5.f, 0.f,
+		0.f, 5.f, 0.f };
+
+	uint indices[6] =
+	{
+		0,
+		1,
+		2,
+
+		3,
+		4,
+		5
+	};
+
+	
 
 public:
 

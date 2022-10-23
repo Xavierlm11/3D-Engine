@@ -1,17 +1,17 @@
 #include "Mesh.h"
 
-VertexDatas::VertexDatas()
+MeshData::MeshData()
 {
-	//id_index = 0; // index in VRAM
-	//num_index = 0;
-	//index = nullptr;
+	id_indices = 0; // index in VRAM
+	num_indices = 0;
+	indices = nullptr;
 
-	//id_vertex = 0; // unique vertex in VRAM
-	//num_vertex = 0;
-	//vertex = nullptr;
+	id_vertices = 0; // unique vertex in VRAM
+	num_vertices = 0;
+	vertices = nullptr;
 }
 
-VertexDatas::~VertexDatas()
+MeshData::~MeshData()
 {}
 
 

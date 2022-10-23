@@ -15,4 +15,6 @@ public:
 	bool SaveScene();
 	bool LoadScene();
 
+	const aiScene* modelScene;
+	MeshData modelMesh;
 };

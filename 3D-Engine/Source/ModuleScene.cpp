@@ -20,6 +20,8 @@ bool ModuleScene::Start()
 	LOG("Loading scene");
 	bool ret = true;
 
+    modelScene = App->imp->LoadFile("Assets/BakerHouse.fbx");
+    modelMesh = App->imp->GetMeshData(modelScene->mMeshes[0]);
 	return ret;
 }
 

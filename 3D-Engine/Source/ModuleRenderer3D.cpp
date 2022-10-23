@@ -15,11 +15,11 @@
 #include "Primitive.h"
 
 
-
 ModuleRenderer3D::ModuleRenderer3D(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
 	context = nullptr;
 	mode = RenderMode::NORMAL;
+	buffersLoaded = false;
 }
 
 // Destructor
@@ -158,7 +158,51 @@ bool ModuleRenderer3D::Init()
 
 	}
 
+	/*///[VERTICES]
+	static const float vertices[] =
+	{ 0.f, 0.f, 0.f,
+		5.f, 0.f, 0.f,
+		0.f, 5.f, 0.f,
+
+		5.f, 0.f, 0.f,
+		5.f, 5.f, 0.f,
+		0.f, 5.f, 0.f };
+
+	num_vertices = 6;
+	indices =
+	{
+		0,
+		1,
+		2,
+
+		1,
+		3,
+		2
+	};
+
+
+	glGenBuffers(1, &vertexbuffer);
+	glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 	
+
+	glGenBuffers(1, &elementbuffer);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementbuffer);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint)* indices.size(), &indices[0], GL_STATIC_DRAW);*/
+
+	num_vertices = 6;
+
+	my_id = 0;
+	glGenBuffers(1, (GLuint*)&(my_id));
+	glBindBuffer(GL_ARRAY_BUFFER, my_id);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(float)* num_vertices * 3, vertices, GL_STATIC_DRAW);
+
+	num_indices = 6;
+
+	my_indices = 0;
+	glGenBuffers(1, (GLuint*)&(my_indices));
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, my_indices);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint)* num_indices, indices, GL_STATIC_DRAW);
 
 	return ret;
 }
@@ -191,9 +235,145 @@ update_status ModuleRenderer3D::Update(float dt)
 	//DrawArrayCube();
 	//DrawArrayIndexCube();
 	
+	/*glLineWidth(2.0f);
+	glBegin(GL_TRIANGLES);
+	glVertex3f(0.f, 0.f, 0.f);
+	glVertex3f(5.f, 0.f, 0.f);
+	glVertex3f(0.f, 5.f, 0.f);
+	glEnd();
+	glLineWidth(1.0f);*/
+
+	
 
 	return UPDATE_CONTINUE;
 }
+
+void ModuleRenderer3D::LoadModelBuffers(MeshData mesh) {
+	//glGenBuffers(1, (GLuint*)&(mesh.id_vertices));
+	//glBindBuffer(GL_ARRAY_BUFFER, mesh.id_vertices);
+	//glBufferData(GL_ARRAY_BUFFER, sizeof(float) * mesh.num_vertices * 3, &mesh.vertices[0], GL_STATIC_DRAW);
+
+	//glGenBuffers(1, (GLuint*)&(mesh.id_indices));
+	//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh.id_indices);
+	//glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * mesh.num_indices * 3, &mesh.indices[0], GL_STATIC_DRAW);
+	//
+	//buffersLoaded = true;
+}
+
+void ModuleRenderer3D::DrawMesh(MeshData mesh) {
+
+	{
+		//if (buffersLoaded == true) {
+
+		//	//glGenBuffers(1, (GLuint*)&(mesh.id_vertices));
+		//	//glBindBuffer(GL_ARRAY_BUFFER, mesh.id_vertices);
+		//	//glBufferData(GL_ARRAY_BUFFER, sizeof(float) * mesh.num_vertices * 3, &mesh.vertices[0], GL_STATIC_DRAW);
+		//	//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+
+		//	//glGenBuffers(1, (GLuint*)&(mesh.id_indices));
+		//	//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh.id_indices);
+		//	//glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * mesh.num_indices * 3, &mesh.indices[0], GL_STATIC_DRAW);
+		//	//glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+		//	/*glEnableClientState(GL_VERTEX_ARRAY);
+		//	glBindBuffer(GL_ARRAY_BUFFER, mesh.id_vertices);
+		//	glVertexPointer(3, GL_FLOAT, 0, NULL);
+
+		//	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh.id_indices);
+
+		//	glDrawElements(GL_TRIANGLES, mesh.num_indices, GL_UNSIGNED_INT, NULL);
+
+		//	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+		//	glBindBuffer(GL_ARRAY_BUFFER, 0);
+		//	glDisableClientState(GL_VERTEX_ARRAY);*/
+
+
+		//}
+
+		////glLineWidth(2.0f);
+		////glBegin(GL_TRIANGLES);
+		////glVertex3f(0.f, 0.f, 0.f);
+		////glVertex3f(5.f, 0.f, 0.f);
+		////glVertex3f(0.f, 5.f, 0.f);
+		////
+		////glEnd();
+		////glLineWidth(1.0f);
+
+
+
+		/////[DRAW]
+		//glEnableVertexAttribArray(0);
+		//glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
+		//glVertexAttribPointer(
+		//	0,                  // attribute 0. No particular reason for 0, but must match the layout in the shader.
+		//	3,                  // size
+		//	GL_FLOAT,           // type
+		//	GL_FALSE,           // normalized?
+		//	0,                  // stride
+		//	(void*)0            // array buffer offset
+		//);
+		//// Draw the triangle !
+		////glDrawArrays(GL_TRIANGLES, 0, 3); // Starting from vertex 0; 3 vertices total -> 1 triangle
+		//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementbuffer);
+		//glDrawElements(GL_TRIANGLES,      // mode
+		//	indices.size(),    // count
+		//	GL_UNSIGNED_INT,   // type
+		//	(void*)0);
+		//glDisableVertexAttribArray(0);
+
+
+		///*glEnableClientState(GL_ELEMENT_ARRAY_BUFFER);
+		//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementbuffer);
+		//glDrawElements(GL_TRIANGLES, num_indices, GL_UNSIGNED_INT, nullptr);
+		//glDisableClientState(GL_ELEMENT_ARRAY_BUFFER);*/
+
+		////glEnableClientState(GL_VERTEX_ARRAY);
+		////glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, my_indices);
+		////glDrawElements(GL_TRIANGLES,  num_indices, GL_UNSIGNED_INT, nullptr);
+		////glDisableClientState(GL_VERTEX_ARRAY);
+
+
+
+
+
+		///*glEnableClientState(GL_VERTEX_ARRAY);
+		//glBindBuffer(GL_ARRAY_BUFFER, my_id);
+		//glVertexPointer(3, GL_FLOAT, 0, NULL);
+		//glDrawArrays(GL_TRIANGLES, 0, num_vertices);
+		//glDisableClientState(GL_VERTEX_ARRAY);*/
+
+		////glBindBuffer(GL_ARRAY_BUFFER, my_id);
+		////glVertexPointer(3, GL_FLOAT, 0, NULL);
+		////// … bind and use other buffers
+		////glDrawArrays(GL_TRIANGLES, 0, mesh.num_vertices);
+		////glDisableClientState(GL_VERTEX_ARRAY);
+	}
+
+
+	/*uint indices[] =
+	{
+		0,
+		1,
+		2,
+
+		1,
+		3,
+		2
+	};*/
+
+
+
+	glEnableClientState(GL_VERTEX_ARRAY);
+	//glBindBuffer(GL_ARRAY_BUFFER, my_indices);
+	
+
+	//glDrawArrays(GL_TRIANGLES, 0, num_vertices);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, my_indices);
+	glVertexPointer(3, GL_FLOAT, 0, NULL);
+	glDrawElements(GL_TRIANGLES, num_indices, GL_UNSIGNED_INT, NULL);
+	glDisableClientState(GL_VERTEX_ARRAY);
+}
+
 // PostUpdate present buffer to screen
 update_status ModuleRenderer3D::PostUpdate(float dt)
 {
@@ -221,6 +401,7 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 		break;
 	case RenderMode::NORMAL:
 		p.Render();
+		DrawMesh(App->scene->modelMesh);
 		Draw();
 		break;
 	case RenderMode::WIREFRAME:
