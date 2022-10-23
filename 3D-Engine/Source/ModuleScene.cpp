@@ -34,6 +34,8 @@ bool ModuleScene::CleanUp()
 // Update
 update_status ModuleScene::Update(float dt)
 {
+   
+
 
 	return UPDATE_CONTINUE;
 }
@@ -58,8 +60,8 @@ bool ModuleScene::SaveScene() {
 
     ImVec4 backgroundColor = App->editor->clear_color;
     int screenWidth = SDL_GetWindowSurface(App->window->window)->w, screenHeight = SDL_GetWindowSurface(App->window->window)->h;
-    std::string AppName = App->EngName;
-    std::string OrgName = App->OrgName.c_str();
+    const char* AppName = App->EngName.c_str();
+    const char* OrgName = App->OrgName.c_str();
     JSON_Value* schema = json_parse_string("{\"name\":\"\"}");
     JSON_Value* scene_settings = json_parse_file("scene_settings.json");
 
@@ -71,7 +73,8 @@ bool ModuleScene::SaveScene() {
         json_object_set_number(json_object(scene_settings), "A", backgroundColor.w);
         json_object_set_number(json_object(scene_settings), "screen_width", screenWidth);
         json_object_set_number(json_object(scene_settings), "screen_height", screenHeight);
-      //  json_object_set_string(json_object(scene_settings), "Engine name", AppName);
+        json_object_set_string(json_object(scene_settings), "Engine_name", AppName);
+        json_object_set_string(json_object(scene_settings), "Org_name", AppName);
         json_serialize_to_file(scene_settings, "Settings/scene_settings.json");
     }
    
@@ -91,12 +94,18 @@ bool ModuleScene::LoadScene() {
     ImVec4 new_backgroundColor;
     int new_winWidth = 480, new_winHeight = 480;
     float name = NULL;
+    const char* AppName = "DefaultName";
+    const char* OrgName = "DefaultName";
+
     if (scene_settings == NULL || json_validate(schema, scene_settings) != JSONSuccess) {
         //scene_settings = json_value_init_object();
         new_backgroundColor.x = json_object_get_number(json_object(scene_settings), "R");
         new_backgroundColor.y = json_object_get_number(json_object(scene_settings), "G");
         new_backgroundColor.z = json_object_get_number(json_object(scene_settings), "B");
         new_backgroundColor.w = json_object_get_number(json_object(scene_settings), "A");
+
+        AppName = json_object_get_string(json_object(scene_settings), "Engine_name");
+        OrgName = json_object_get_string(json_object(scene_settings), "Org_name");
 
         new_winWidth = json_object_get_number(json_object(scene_settings), "screen_width");
         new_winHeight = json_object_get_number(json_object(scene_settings), "screen_height");
@@ -111,6 +120,11 @@ bool ModuleScene::LoadScene() {
     App->window->winWidth = new_winWidth;
     App->window->winHeight = new_winHeight;
 
+    //App->EngName = AppName;
+    //App->OrgName = OrgName;
+
+    App->editor->SetAppName(AppName);
+    App->editor->SetOrgName(OrgName);
     json_value_free(schema);
     json_value_free(scene_settings);
 

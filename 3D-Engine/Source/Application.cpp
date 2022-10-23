@@ -169,3 +169,8 @@ void Application::AddModule(Module* mod)
 	list_modules.push_back(mod);
 }
 
+void Application::SetName(const char* name)
+{
+	/*std::string str(name);
+	EngName =str; */
+}

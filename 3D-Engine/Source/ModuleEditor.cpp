@@ -590,7 +590,7 @@ void ModuleEditor::SetOrgName(const char*  OrgName)
 	if (OrgName != nullptr)
 	{
 		App->OrgName = OrgName;
-		SDL_SetWindowTitle(App->window->window, OrgName);
+		
 	}
 }
 
@@ -741,8 +741,8 @@ void ModuleEditor::CloseEngine()
 		ImGui::TextWrapped("Are you sure you want to partirle piernas to Albert");
 		if (ImGui::Button("YES"))
 		{
-			OpenWeb("https://images.cdn.circlesix.co/image/1/700/0/uploads/posts/2018/09/63125b0ed58a7f29b69b20bb066fd184.jpg");
-			OpenWeb("https://youtu.be/OgZzUJud3Q4");
+			/*OpenWeb("https://images.cdn.circlesix.co/image/1/700/0/uploads/posts/2018/09/63125b0ed58a7f29b69b20bb066fd184.jpg");
+			OpenWeb("https://youtu.be/OgZzUJud3Q4");*/
 			App->input->close = true;
 		}
 		ImGui::SameLine();

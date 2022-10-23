@@ -52,9 +52,11 @@ public:
 	std::string EngName=TITLE;//ENGINE NAME
 	std::string OrgName = ORGANIZATION;//ENGINE NAME
 	//void logs(const char* text);
+	void SetName(const char* name);
 private:
 
 	void AddModule(Module* mod);
+
 	
 	void PrepareUpdate();
 	void FinishUpdate();

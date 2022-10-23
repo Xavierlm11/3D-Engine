@@ -51,6 +51,9 @@ public:
 
 	void OpenWeb(const char* url)const;
 
+	void SetOrgName(const char* OrgName);
+
+	void SetAppName(const char*  AppName);
 private:
 
 	//Windows
@@ -66,9 +69,6 @@ private:
 
 	void ConfigAppXXX();
 
-	void SetOrgName(const char* OrgName);
-
-	void SetAppName(const char*  AppName);
 
 	void ConfigWindowXXX();
 
