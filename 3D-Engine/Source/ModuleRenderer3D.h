@@ -29,8 +29,8 @@ public:
 	void DrawArrayIndexCube();
 	void DrawDirectCube();
 
-	void LoadModelBuffers(MeshData mesh);
-	void DrawMesh(MeshData mesh);
+	void LoadModelBuffers(MeshData* mesh);
+	void DrawMesh(MeshData* mesh);
 	update_status PostUpdate(float dt);
 	bool CleanUp();
 
@@ -87,7 +87,7 @@ public:
 		
 	};
 
-	
+	bool hasLoadedMesh;
 
 public:
 

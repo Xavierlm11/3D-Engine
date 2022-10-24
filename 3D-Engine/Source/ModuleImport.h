@@ -16,6 +16,6 @@ public:
 	
 
 	const aiScene* LoadFile(const char* path);
-	MeshData GetMeshData(aiMesh* scene);
+	MeshData *GetMeshData(aiMesh* scene);
 	void ReleaseFile(const aiScene* scene);
 };

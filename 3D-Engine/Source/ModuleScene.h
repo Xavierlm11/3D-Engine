@@ -16,5 +16,5 @@ public:
 	bool LoadScene();
 
 	const aiScene* modelScene;
-	MeshData modelMesh;
+	MeshData * modelMesh;
 };

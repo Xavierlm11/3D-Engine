@@ -58,28 +58,30 @@ void ModuleImport::ReleaseFile(const aiScene* scene) {
 	aiReleaseImport(scene);
 }
 
-MeshData ModuleImport::GetMeshData(aiMesh* mesh) {
+MeshData* ModuleImport::GetMeshData(aiMesh* mesh) {
 
-	MeshData meshData;
+	MeshData *meshData = new MeshData();
 
 	//copy vertices
-	meshData.num_vertices = mesh->mNumVertices;
-	meshData.vertices = new float[meshData.num_vertices * 3];
-	memcpy(meshData.vertices, mesh->mVertices, sizeof(float) * meshData.num_vertices * 3);
-	LOG("New mesh with %d vertices", meshData.num_vertices);
+	meshData->num_vertices = mesh->mNumVertices;
+	meshData->vertices = new float[meshData->num_vertices * 3];
+
+	memcpy(meshData->vertices, mesh->mVertices, sizeof(float) * meshData->num_vertices * 3);
+
+	LOG("New mesh with %d vertices", meshData->num_vertices);
 
 	//copy faces
 	if (mesh->HasFaces())
 	{
-		meshData.num_indices = mesh->mNumFaces * 3;
-		meshData.indices = new uint[meshData.num_indices]; // assume each face is a triangle
+		meshData->num_indices = mesh->mNumFaces * 3;
+		meshData->indices = new uint[meshData->num_indices]; // assume each face is a triangle
 		for (uint i = 0; i < mesh->mNumFaces; ++i)
 		{
 			if (mesh->mFaces[i].mNumIndices != 3) {
 				LOG("WARNING, geometry face with != 3 indices!");
 			}
 			else {
-				memcpy(&meshData.indices[i * 3], mesh->mFaces[i].mIndices, 3 * sizeof(uint));
+				memcpy(&meshData->indices[i * 3], mesh->mFaces[i].mIndices, 3 * sizeof(uint));
 			}
 		}
 	}

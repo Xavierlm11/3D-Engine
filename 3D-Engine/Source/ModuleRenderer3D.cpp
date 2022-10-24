@@ -20,6 +20,7 @@ ModuleRenderer3D::ModuleRenderer3D(Application* app, bool start_enabled) : Modul
 	context = nullptr;
 	mode = RenderMode::NORMAL;
 	buffersLoaded = false;
+	hasLoadedMesh = false;
 }
 
 // Destructor
@@ -248,19 +249,37 @@ update_status ModuleRenderer3D::Update(float dt)
 	return UPDATE_CONTINUE;
 }
 
-void ModuleRenderer3D::LoadModelBuffers(MeshData mesh) {
-	//glGenBuffers(1, (GLuint*)&(mesh.id_vertices));
-	//glBindBuffer(GL_ARRAY_BUFFER, mesh.id_vertices);
-	//glBufferData(GL_ARRAY_BUFFER, sizeof(float) * mesh.num_vertices * 3, &mesh.vertices[0], GL_STATIC_DRAW);
+void ModuleRenderer3D::LoadModelBuffers(MeshData *mesh) {
 
-	//glGenBuffers(1, (GLuint*)&(mesh.id_indices));
-	//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh.id_indices);
-	//glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * mesh.num_indices * 3, &mesh.indices[0], GL_STATIC_DRAW);
-	//
-	//buffersLoaded = true;
+
+
+	glGenBuffers(1, (GLuint*)&(mesh->id_vertices));
+	glBindBuffer(GL_ARRAY_BUFFER, mesh->id_vertices);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * mesh->num_vertices * 3, &mesh->vertices[0], GL_STATIC_DRAW);
+
+	glGenBuffers(1, (GLuint*)&(mesh->id_indices));
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->id_indices);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * mesh->num_indices, &mesh->indices[0], GL_STATIC_DRAW);
+
+	hasLoadedMesh = true;
+	LOG("Mesh Loaded! Mesh indices: %i. Mesh vertices: %i", mesh->num_indices, mesh->num_vertices);
 }
 
-void ModuleRenderer3D::DrawMesh(MeshData mesh) {
+void ModuleRenderer3D::DrawMesh(MeshData* mesh) {
+	
+
+	if (hasLoadedMesh == true) {
+		glEnableClientState(GL_VERTEX_ARRAY);
+		glBindBuffer(GL_ARRAY_BUFFER, mesh->id_vertices);
+		glVertexPointer(3, GL_FLOAT, 0, NULL);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->id_indices);
+		
+		glDrawElements(GL_TRIANGLES, mesh->num_indices, GL_UNSIGNED_INT, NULL);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
+		glDisableClientState(GL_VERTEX_ARRAY);
+		LOG("Mesh Loaded! Num indices: %i. Num vertices: %i. ID Indices: %i. ID Vertices: %i.", mesh->num_indices, mesh->num_vertices, mesh->id_indices, mesh->id_vertices);
+	}
 
 	{
 		//if (buffersLoaded == true) {
@@ -361,17 +380,21 @@ void ModuleRenderer3D::DrawMesh(MeshData mesh) {
 		2
 	};*/
 
+	///// <summary>
+	///// //[CUBEEEEEEEEEEEEE]
+	///// </summary>
+	///// <param name="mesh"></param>
 
+	//glEnableClientState(GL_VERTEX_ARRAY);
+	////glBindBuffer(GL_ARRAY_BUFFER, my_indices);
+	//
 
-	glEnableClientState(GL_VERTEX_ARRAY);
-	//glBindBuffer(GL_ARRAY_BUFFER, my_indices);
-	
+	////glDrawArrays(GL_TRIANGLES, 0, num_vertices);
+	//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, my_indices);
+	//glVertexPointer(3, GL_FLOAT, 0, NULL);
+	//glDrawElements(GL_TRIANGLES, num_indices, GL_UNSIGNED_INT, NULL);
+	//glDisableClientState(GL_VERTEX_ARRAY);
 
-	//glDrawArrays(GL_TRIANGLES, 0, num_vertices);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, my_indices);
-	glVertexPointer(3, GL_FLOAT, 0, NULL);
-	glDrawElements(GL_TRIANGLES, num_indices, GL_UNSIGNED_INT, NULL);
-	glDisableClientState(GL_VERTEX_ARRAY);
 }
 
 // PostUpdate present buffer to screen
