@@ -206,83 +206,8 @@ update_status ModuleEditor::Update(float dt)
 	//    ImGui::End();
 	//}
 
-	if (gl_depthTestEnabled == true) {
-		if (!glIsEnabled(GL_DEPTH_TEST)  ) {
-			glEnable(GL_DEPTH_TEST);
-		}
-	}
-	else {
-		if (glIsEnabled(GL_DEPTH_TEST) ) {
-			glDisable(GL_DEPTH_TEST);
-		}
-	}
-
-	if (gl_cullFaceEnabled == true) {
-		if (!glIsEnabled(GL_CULL_FACE)  ) {
-			glEnable(GL_CULL_FACE);
-		}
-	}
-	else {
-		if (glIsEnabled(GL_CULL_FACE) ) {
-			glDisable(GL_CULL_FACE);
-		}
-	}
-
-	if (gl_lightingEnabled == true) {
-		if (!glIsEnabled(GL_LIGHTING)  ) {
-			glEnable(GL_LIGHTING);
-		}
-	}
-	else {
-		if (glIsEnabled(GL_LIGHTING) ) {
-			glDisable(GL_LIGHTING);
-		}
-	}
-
-	if (gl_colorMaterialEnabled == true) {
-		if (!glIsEnabled(GL_COLOR_MATERIAL)  ) {
-			glEnable(GL_COLOR_MATERIAL);
-		}
-	}
-	else {
-		if (glIsEnabled(GL_COLOR_MATERIAL) ) {
-			glDisable(GL_COLOR_MATERIAL);
-		}
-	}
-
-	if (gl_texture2dEnabled == true) {
-		if (!glIsEnabled(GL_TEXTURE_2D)  ) {
-			glEnable(GL_TEXTURE_2D);
-		}
-	}
-	else {
-		if (glIsEnabled(GL_TEXTURE_2D) ) {
-			glDisable(GL_TEXTURE_2D);
-		}
-	}
-
-	if (gl_lineSmoothEnabled == true) {
-		if (!glIsEnabled(GL_LINE_SMOOTH)  ) {
-			glEnable(GL_LINE_SMOOTH);
-		}
-	}
-	else {
-		if (glIsEnabled(GL_LINE_SMOOTH) ) {
-			glDisable(GL_LINE_SMOOTH);
-		}
-	}
-
-
-	if (gl_fogEnabled == true) {
-		if (!glIsEnabled(GL_FOG) ) {
-			glEnable(GL_FOG);
-		}
-	}
-	else {
-		if (glIsEnabled(GL_FOG) ) {
-			glDisable(GL_FOG);
-		}
-	}
+	CheckGLCapabilities();
+	CheckShapes();
 
 	if (App->input->CallClose)
 	{
@@ -320,6 +245,7 @@ bool ModuleEditor::DrawMenuBar()
 	{
 		BarFile();
 		BarWindows();
+		BarShapes();
 		
 
 		ImGui::EndMainMenuBar();
@@ -578,6 +504,37 @@ void ModuleEditor::BarWindows() {
 	}
 	
 }
+
+void ModuleEditor::BarShapes() {
+	if (ImGui::BeginMenu("Shapes"))
+	{
+		if (ImGui::Checkbox("House", &load_house_shape))
+		{
+
+		}
+		if (ImGui::Checkbox("Cube", &load_cube_shape))
+		{
+
+		}
+		if (ImGui::Checkbox("Sphere", &load_sphere_shape))
+		{
+
+		}
+		if (ImGui::Checkbox("Pyramid", &load_pyramid_shape))
+		{
+
+		}
+		if (ImGui::Checkbox("Cylinder", &load_cylinder_shape))
+		{
+
+		}
+
+
+		ImGui::EndMenu();
+	}
+
+}
+
 void ModuleEditor::BarXXX() {
 	if (ImGui::Begin("Configuration", &show_config_window)) {
 		ImGui::Text("Options");
@@ -801,4 +758,112 @@ void ModuleEditor::CloseEngine()
 
 	}
 	ImGui::End();
+}
+
+void ModuleEditor::CheckShapes() {
+
+	/*if (load_house_shape == true) {
+		if (App->scene->house_loaded == false) {
+			App->scene->LoadCustom("Assets/BakerHouse.fbx", &App->scene->meshes);
+		}
+	}
+	else {
+		if (App->scene->house_loaded == true) {
+			App->scene->RemoveCustom("Assets/BakerHouse.fbx", &App->scene->meshes);
+		}
+	}*/
+	if (load_house_shape == true) {
+		if (App->scene->house_loaded == false) {
+			App->scene->LoadCustom("Assets/BakerHouse.fbx", &App->scene->meshes);
+			for (int i = 0; i < App->scene->meshes.size(); i++)
+			{
+				App->scene->meshes[i]->LoadBuffers();
+			}
+		}
+	}
+	else {
+		if (App->scene->house_loaded == true) {
+			App->scene->CleanMeshes(&App->scene->meshes);
+		}
+	}
+}
+
+void ModuleEditor::CheckGLCapabilities() {
+	if (gl_depthTestEnabled == true) {
+		if (!glIsEnabled(GL_DEPTH_TEST)) {
+			glEnable(GL_DEPTH_TEST);
+		}
+	}
+	else {
+		if (glIsEnabled(GL_DEPTH_TEST)) {
+			glDisable(GL_DEPTH_TEST);
+		}
+	}
+
+	if (gl_cullFaceEnabled == true) {
+		if (!glIsEnabled(GL_CULL_FACE)) {
+			glEnable(GL_CULL_FACE);
+		}
+	}
+	else {
+		if (glIsEnabled(GL_CULL_FACE)) {
+			glDisable(GL_CULL_FACE);
+		}
+	}
+
+	if (gl_lightingEnabled == true) {
+		if (!glIsEnabled(GL_LIGHTING)) {
+			glEnable(GL_LIGHTING);
+		}
+	}
+	else {
+		if (glIsEnabled(GL_LIGHTING)) {
+			glDisable(GL_LIGHTING);
+		}
+	}
+
+	if (gl_colorMaterialEnabled == true) {
+		if (!glIsEnabled(GL_COLOR_MATERIAL)) {
+			glEnable(GL_COLOR_MATERIAL);
+		}
+	}
+	else {
+		if (glIsEnabled(GL_COLOR_MATERIAL)) {
+			glDisable(GL_COLOR_MATERIAL);
+		}
+	}
+
+	if (gl_texture2dEnabled == true) {
+		if (!glIsEnabled(GL_TEXTURE_2D)) {
+			glEnable(GL_TEXTURE_2D);
+		}
+	}
+	else {
+		if (glIsEnabled(GL_TEXTURE_2D)) {
+			glDisable(GL_TEXTURE_2D);
+		}
+	}
+
+	if (gl_lineSmoothEnabled == true) {
+		if (!glIsEnabled(GL_LINE_SMOOTH)) {
+			glEnable(GL_LINE_SMOOTH);
+		}
+	}
+	else {
+		if (glIsEnabled(GL_LINE_SMOOTH)) {
+			glDisable(GL_LINE_SMOOTH);
+		}
+	}
+
+
+	if (gl_fogEnabled == true) {
+		if (!glIsEnabled(GL_FOG)) {
+			glEnable(GL_FOG);
+		}
+	}
+	else {
+		if (glIsEnabled(GL_FOG)) {
+			glDisable(GL_FOG);
+		}
+	}
 }

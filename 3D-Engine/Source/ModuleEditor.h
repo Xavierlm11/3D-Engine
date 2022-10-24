@@ -35,12 +35,20 @@ public:
 
 
 	// Our state
+	//windows
 	bool show_demo_window = false;
 	bool show_another_window = false;
 	bool show_console_window = false;
 	bool show_render3d_window = false;
 	bool show_config_window = false;
 	bool show_about_window = false;
+	//shapes
+	bool load_house_shape = false;
+	bool load_cube_shape = false;
+	bool load_sphere_shape = false;
+	bool load_pyramid_shape = false;
+	bool load_cylinder_shape = false;
+
 
 	ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 
@@ -67,6 +75,7 @@ private:
 	void BarFile();
 	void BarWindows();
 	void BarXXX();
+	void BarShapes();
 
 	void ConfigAppXXX();
 
@@ -84,7 +93,7 @@ private:
 	void CloseEngine();
 
 	void CheckGLCapabilities();
-
+	void CheckShapes();
 
 	
 

@@ -42,6 +42,7 @@ bool ModuleImport::CleanUp()
 
 const aiScene* ModuleImport::LoadFile(const char* file_path) {
 	const aiScene* scene = aiImportFile(file_path, aiProcessPreset_TargetRealtime_MaxQuality);
+
 	if (scene != nullptr && scene->HasMeshes()==true)
 	{
 		// Use scene->mNumMeshes to iterate on scene->mMeshes array
@@ -53,6 +54,15 @@ const aiScene* ModuleImport::LoadFile(const char* file_path) {
 	}
 		
 }
+
+void ModuleImport::GetMeshDatas(const aiScene* scene, std::vector<MeshData*>* meshes){
+
+	//std::vector<MeshData*> meshesVec;
+	for (int i = 0; i < scene->mNumMeshes; i++) {
+		meshes->push_back(GetMeshData(scene->mMeshes[i]));
+	}
+}
+
 
 void ModuleImport::ReleaseFile(const aiScene* scene) {
 	aiReleaseImport(scene);
@@ -85,8 +95,6 @@ MeshData* ModuleImport::GetMeshData(aiMesh* mesh) {
 			}
 		}
 	}
-
-	App->renderer3D->LoadModelBuffers(meshData);
 
 	return meshData;
 }

@@ -9,6 +9,8 @@
 
 ModuleScene::ModuleScene(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
+    modelScene = nullptr;
+    modelMesh = nullptr;
 }
 
 ModuleScene::~ModuleScene()
@@ -20,9 +22,74 @@ bool ModuleScene::Start()
 	LOG("Loading scene");
 	bool ret = true;
 
-    modelScene = App->imp->LoadFile("Assets/BakerHouse.fbx");
-    modelMesh = App->imp->GetMeshData(modelScene->mMeshes[0]);
+    //LoadCustom("Assets/BakerHouse.fbx", &meshes);
+   /* LoadCube(meshes);
+    LoadSphere(meshes);
+    LoadPyramid(meshes);
+    LoadCylinder(meshes);*/
+   /* for (int i = 0; i < meshes.size(); i++)
+    {
+        meshes[i]->LoadBuffers();
+    }*/
 	return ret;
+}
+
+void ModuleScene::CleanMeshes(std::vector<MeshData*>* meshesVec) {
+    for (int i = 0; i < meshesVec->size(); i++)
+    {
+        meshesVec->at(i)->UnloadMesh();
+    }
+    App->imp->ReleaseFile(modelScene);
+    modelScene = nullptr;
+    modelMesh = nullptr;
+    house_loaded = false;
+}
+
+void ModuleScene::LoadCustom(const char* path, std::vector<MeshData*>* meshesVec) {
+
+    if (house_loaded == false) {
+        const aiScene* newScene;
+        newScene = App->imp->LoadFile(path);
+        App->imp->GetMeshDatas(newScene, meshesVec);
+        house_loaded = true;
+    }
+
+    //modelScene = App->imp->LoadFile(path);
+    ////meshes = App->imp->GetMeshDatas(modelScene);
+    //App->imp->GetMeshDatas(modelScene, meshesVec);
+}
+
+void ModuleScene::LoadCube(std::vector<MeshData*>* meshesVec) {
+    if (cube_loaded == false) {
+        const aiScene* newScene;
+        newScene = App->imp->LoadFile("Assets/Cube.fbx");
+        App->imp->GetMeshDatas(newScene, meshesVec);
+        cube_loaded = true;
+    }
+}
+void ModuleScene::LoadSphere(std::vector<MeshData*>* meshesVec) {
+    if (sphere_loaded == false) {
+        const aiScene* newScene;
+        newScene = App->imp->LoadFile("Assets/Sphere.fbx");
+        App->imp->GetMeshDatas(newScene, meshesVec);
+        sphere_loaded = true;
+    }
+}
+void ModuleScene::LoadPyramid(std::vector<MeshData*>* meshesVec) {
+    if (pyramid_loaded == false) {
+        const aiScene* newScene;
+        newScene = App->imp->LoadFile("Assets/Pyramid.fbx");
+        App->imp->GetMeshDatas(newScene, meshesVec);
+        pyramid_loaded = true;
+    }
+}
+void ModuleScene::LoadCylinder(std::vector<MeshData*>* meshesVec) {
+    if (cylinder_loaded == false) {
+        const aiScene* newScene;
+        newScene = App->imp->LoadFile("Assets/Cylinder.fbx");
+        App->imp->GetMeshDatas(newScene, meshesVec);
+        cylinder_loaded = true;
+    }
 }
 
 // Load assets
@@ -30,35 +97,28 @@ bool ModuleScene::CleanUp()
 {
 	LOG("Unloading scene");
 
+    for (int i = 0; i < meshes.size(); i++)
+    {
+        meshes[i]->UnloadMesh();
+    }
+
+    App->imp->ReleaseFile(modelScene);
+    modelScene = nullptr;
+    delete modelScene;
+
+    modelMesh = nullptr;
+    delete modelMesh;
+
 	return true;
 }
 
 // Update
 update_status ModuleScene::Update(float dt)
 {
-   
-
-
 	return UPDATE_CONTINUE;
 }
 
 bool ModuleScene::SaveScene() {
-
-   /* JSON_Value* schema = json_parse_string("{\"name\":\"\"}");
-    JSON_Value* user_data = json_parse_file("user_data.json");
-    char buf[256];
-    const char* name = NULL;
-    if (user_data == NULL || json_validate(schema, user_data) != JSONSuccess) {
-        puts("Enter your name:");
-        scanf("%s", buf);
-        user_data = json_value_init_object();
-        json_object_set_string(json_object(user_data), "name", buf);
-        json_serialize_to_file(user_data, "user_data.json");
-    }
-    name = json_object_get_string(json_object(user_data), "name");
-    printf("Hello, %s.", name);
-    json_value_free(schema);
-    json_value_free(user_data);*/
 
     ImVec4 backgroundColor = App->editor->clear_color;
     int screenWidth = SDL_GetWindowSurface(App->window->window)->w, screenHeight = SDL_GetWindowSurface(App->window->window)->h;

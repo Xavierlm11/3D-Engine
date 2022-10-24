@@ -7,6 +7,10 @@ public:
 	MeshData();
 	~MeshData();
 
+	void LoadBuffers();
+	void DrawMesh();
+	void UnloadMesh();
+
 	uint id_indices = 0; // index in VRAM
 	uint num_indices = 0;
 	uint* indices = nullptr;
@@ -14,4 +18,6 @@ public:
 	uint id_vertices = 0; // unique vertex in VRAM
 	uint num_vertices = 0;
 	float* vertices = nullptr;
+
+	bool hasLoadedBuffers;
 };
