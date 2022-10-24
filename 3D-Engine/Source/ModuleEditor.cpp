@@ -41,6 +41,20 @@ ModuleEditor::ModuleEditor(Application* app, bool start_enabled) : Module(app, s
 	gl_lineSmoothEnabled = false;
 	gl_fogEnabled = false;
 
+
+	tdnow =  " ";
+	
+	altvec = " ";
+	AVX =  " ";
+	AVX2 =  " ";
+	MMX =  " ";
+	RDTSC =  " ";
+	SSE =  " ";
+	SSE2 =  " ";
+	SSE3 =  " ";
+	SSE41 =  " ";
+	SSE42 =  " ";
+
 }
 
 // Destructor
@@ -70,8 +84,16 @@ bool ModuleEditor::Init()
 	ImGuiIO& io = ImGui::GetIO(); (void)io;
 	//io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
 	//io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
-
+	io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;           // Enable Docking
+	//io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;         // Enable Multi-Viewport / Platform Windows
 	// Setup Dear ImGui style
+
+	ImGuiStyle& style = ImGui::GetStyle();
+	if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
+	{
+		style.WindowRounding = 0.0f;
+		style.Colors[ImGuiCol_WindowBg].w = 1.0f;
+	}
 	ImGui::StyleColorsDark();
 	//ImGui::StyleColorsClassic();
 
@@ -95,6 +117,34 @@ bool ModuleEditor::Init()
 	return ret;
 }
 
+update_status ModuleEditor::PreUpdate(float dt)
+{
+	ImGui_ImplOpenGL3_NewFrame();
+	ImGui_ImplSDL2_NewFrame();
+	ImGui::NewFrame();
+	ImGuiWindowFlags flags = ImGuiWindowFlags_NoBackground | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoMove |
+		ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_NoNavFocus;
+
+	const ImGuiViewport* main_viewport = ImGui::GetMainViewport();
+	ImGui::SetNextWindowPos(main_viewport->WorkPos);
+	ImGui::SetNextWindowSize(main_viewport->Size);
+	ImGui::SetNextWindowViewport(main_viewport->ID);
+
+	ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
+	ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
+	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
+
+	ImGui::Begin("DockingInv", nullptr, flags);
+
+	ImGui::PopStyleVar(3);
+
+	ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
+	ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), ImGuiDockNodeFlags_PassthruCentralNode);
+
+	ImGui::End();
+
+	return UPDATE_CONTINUE;
+}
 // Called every update
 update_status ModuleEditor::Update(float dt)
 {
@@ -114,9 +164,7 @@ update_status ModuleEditor::Update(float dt)
 	}*/
 
 	// Start the Dear ImGui frame
-	ImGui_ImplOpenGL3_NewFrame();
-	ImGui_ImplSDL2_NewFrame();
-	ImGui::NewFrame();
+	
 
 	// 1. Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear ImGui!).
     if (show_demo_window)
@@ -159,79 +207,79 @@ update_status ModuleEditor::Update(float dt)
 	//}
 
 	if (gl_depthTestEnabled == true) {
-		if (glIsEnabled(GL_DEPTH_TEST) == false) {
+		if (!glIsEnabled(GL_DEPTH_TEST)  ) {
 			glEnable(GL_DEPTH_TEST);
 		}
 	}
 	else {
-		if (glIsEnabled(GL_DEPTH_TEST) == true) {
+		if (glIsEnabled(GL_DEPTH_TEST) ) {
 			glDisable(GL_DEPTH_TEST);
 		}
 	}
 
 	if (gl_cullFaceEnabled == true) {
-		if (glIsEnabled(GL_CULL_FACE) == false) {
+		if (!glIsEnabled(GL_CULL_FACE)  ) {
 			glEnable(GL_CULL_FACE);
 		}
 	}
 	else {
-		if (glIsEnabled(GL_CULL_FACE) == true) {
+		if (glIsEnabled(GL_CULL_FACE) ) {
 			glDisable(GL_CULL_FACE);
 		}
 	}
 
 	if (gl_lightingEnabled == true) {
-		if (glIsEnabled(GL_LIGHTING) == false) {
+		if (!glIsEnabled(GL_LIGHTING)  ) {
 			glEnable(GL_LIGHTING);
 		}
 	}
 	else {
-		if (glIsEnabled(GL_LIGHTING) == true) {
+		if (glIsEnabled(GL_LIGHTING) ) {
 			glDisable(GL_LIGHTING);
 		}
 	}
 
 	if (gl_colorMaterialEnabled == true) {
-		if (glIsEnabled(GL_COLOR_MATERIAL) == false) {
+		if (!glIsEnabled(GL_COLOR_MATERIAL)  ) {
 			glEnable(GL_COLOR_MATERIAL);
 		}
 	}
 	else {
-		if (glIsEnabled(GL_COLOR_MATERIAL) == true) {
+		if (glIsEnabled(GL_COLOR_MATERIAL) ) {
 			glDisable(GL_COLOR_MATERIAL);
 		}
 	}
 
 	if (gl_texture2dEnabled == true) {
-		if (glIsEnabled(GL_TEXTURE_2D) == false) {
+		if (!glIsEnabled(GL_TEXTURE_2D)  ) {
 			glEnable(GL_TEXTURE_2D);
 		}
 	}
 	else {
-		if (glIsEnabled(GL_TEXTURE_2D) == true) {
+		if (glIsEnabled(GL_TEXTURE_2D) ) {
 			glDisable(GL_TEXTURE_2D);
 		}
 	}
 
 	if (gl_lineSmoothEnabled == true) {
-		if (glIsEnabled(GL_LINE_SMOOTH) == false) {
+		if (!glIsEnabled(GL_LINE_SMOOTH)  ) {
 			glEnable(GL_LINE_SMOOTH);
 		}
 	}
 	else {
-		if (glIsEnabled(GL_LINE_SMOOTH) == true) {
+		if (glIsEnabled(GL_LINE_SMOOTH) ) {
 			glDisable(GL_LINE_SMOOTH);
 		}
 	}
 
 
 	if (gl_fogEnabled == true) {
-		if (glIsEnabled(GL_FOG) == false) {
+		if (!glIsEnabled(GL_FOG) ) {
 			glEnable(GL_FOG);
 		}
 	}
 	else {
-		if (glIsEnabled(GL_FOG) == true) {
+		if (glIsEnabled(GL_FOG) ) {
 			glDisable(GL_FOG);
 		}
 	}
@@ -728,7 +776,7 @@ void ModuleEditor::ConfigPathXXX()
 
 void ModuleEditor::ConfigAudioXXX()
 {
-	if (ImGui::CollapsingHeader("Path"))
+	if (ImGui::CollapsingHeader("Audio"))
 	{
 		ImGui::Text("Work in progress");
 	}
