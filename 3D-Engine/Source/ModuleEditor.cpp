@@ -134,11 +134,11 @@ update_status ModuleEditor::PreUpdate(float dt)
 	ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
 	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
 
-	ImGui::Begin("DockingInv", nullptr, flags);
+	ImGui::Begin("Dock", nullptr, flags);
 
 	ImGui::PopStyleVar(3);
 
-	ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
+	ImGuiID dockspace_id = ImGui::GetID("Dock");
 	ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), ImGuiDockNodeFlags_PassthruCentralNode);
 
 	ImGui::End();
