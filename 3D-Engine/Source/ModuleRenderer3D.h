@@ -49,24 +49,42 @@ public:
 	uint num_indices;
 	GLuint vertexbuffer;
 
-	float vertices[18] = 
+	float vertices[24] = 
 		{ 0.f, 0.f, 0.f,
 		5.f, 0.f, 0.f,
-		0.f, 5.f, 0.f,
-
-		5.f, 0.f, 0.f,
 		5.f, 5.f, 0.f,
-		0.f, 5.f, 0.f };
+		0.f, 5.f, 0.f,
+		
+		0.f, 0.f, -5.f,
+		5.f, 0.f, -5.f,
+		5.f, 5.f, -5.f,
+		0.f, 5.f, -5.f
+	};
 
-	uint indices[6] =
+	uint indices[36] =
 	{
-		0,
-		1,
-		2,
+		0,1,2,
+		2,3,0,
 
-		3,
-		4,
-		5
+		1,5,2,
+		2,5,6,
+
+		5,4,7,
+		7,6,5,
+
+		4,0,3,
+		3,7,4,
+
+		3,2,6,
+		6,7,3,
+
+		0,4,5,
+		5,1,0
+
+
+
+
+		
 	};
 
 	

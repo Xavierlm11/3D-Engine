@@ -190,14 +190,14 @@ bool ModuleRenderer3D::Init()
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementbuffer);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint)* indices.size(), &indices[0], GL_STATIC_DRAW);*/
 
-	num_vertices = 6;
+	num_vertices = 8;
 
 	my_id = 0;
 	glGenBuffers(1, (GLuint*)&(my_id));
 	glBindBuffer(GL_ARRAY_BUFFER, my_id);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(float)* num_vertices * 3, vertices, GL_STATIC_DRAW);
 
-	num_indices = 6;
+	num_indices = 36;
 
 	my_indices = 0;
 	glGenBuffers(1, (GLuint*)&(my_indices));
