@@ -1,5 +1,4 @@
 #include "Mesh.h"
-#include "Glew/include/glew.h"
 
 MeshData::MeshData()
 {
@@ -34,6 +33,10 @@ void MeshData::LoadBuffers() {
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, id_indices);
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * num_indices, &indices[0], GL_STATIC_DRAW);
 
+		glGenBuffers(1, (GLuint*)&(id_textures));
+		glBindBuffer(GL_ARRAY_BUFFER, id_textures);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(float) * num_textures * 2, &textures[0], GL_STATIC_DRAW);
+
 		LOG("Mesh Loaded! Mesh indices: %i. Mesh vertices: %i", num_indices, num_vertices);
 		hasLoadedBuffers = true;
 	}
@@ -66,14 +69,30 @@ void MeshData::UnloadMesh() {
 
 }
 
-void MeshData::DrawMesh() {
+void MeshData::DrawMesh(GLuint textureID) {
 	if (hasLoadedBuffers == true) {
+
+		if (textureID != NULL) {
+			glBindTexture(GL_TEXTURE_2D, textureID);
+		}
+
+
 		glEnableClientState(GL_VERTEX_ARRAY);
 		glBindBuffer(GL_ARRAY_BUFFER, id_vertices);
 		glVertexPointer(3, GL_FLOAT, 0, NULL);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, id_indices);
 
+		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+		glBindBuffer(GL_ARRAY_BUFFER, id_textures);
+		glTexCoordPointer(2, GL_FLOAT, 0, NULL);
+
+
 		glDrawElements(GL_TRIANGLES, num_indices, GL_UNSIGNED_INT, NULL);
+
+		if (textureID != NULL) {
+			glBindTexture(GL_TEXTURE_2D, 0);
+		}
+
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 		glDisableClientState(GL_VERTEX_ARRAY);

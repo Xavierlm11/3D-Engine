@@ -1,5 +1,6 @@
 #include "Globals.h"
 #include "External/MathGeoLib/include/Math/float3.h"
+#include "Glew/include/glew.h"
 
 class MeshData {
 
@@ -8,7 +9,7 @@ public:
 	~MeshData();
 
 	void LoadBuffers();
-	void DrawMesh();
+	void DrawMesh(GLuint textureID);
 	void UnloadMesh();
 
 	uint id_indices = 0; // index in VRAM
@@ -18,6 +19,10 @@ public:
 	uint id_vertices = 0; // unique vertex in VRAM
 	uint num_vertices = 0;
 	float* vertices = nullptr;
+
+	uint id_textures = 0;
+	uint num_textures = 0;
+	float* textures = nullptr;
 
 	bool hasLoadedBuffers;
 };

@@ -7,6 +7,14 @@
 
 #pragma comment (lib, "Assimp/libx86/assimp.lib")
 
+#pragma comment( lib, "DevIL/libx86/DevIL.lib" )
+#pragma comment( lib, "DevIL/libx86/ILU.lib" )
+#pragma comment( lib, "DevIL/libx86/ILUT.lib" )
+#include "DevIL\include\ilu.h"
+#include "DevIL\include\ilut.h"
+
+
+
 ModuleImport::ModuleImport(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
 
@@ -19,13 +27,18 @@ ModuleImport::~ModuleImport()
 
 bool ModuleImport::Init()
 {
+	//Assimp Logs
 	struct aiLogStream stream;
 	stream = aiGetPredefinedLogStream(aiDefaultLogStream_DEBUGGER, nullptr);
 	aiAttachLogStream(&stream);
-
+	LoadCheckerTexture();
 	
 
 	return true;
+}
+
+void ModuleImport::LoadCheckerTexture() {
+
 }
 
 update_status ModuleImport::PreUpdate(float dt)
@@ -93,6 +106,17 @@ MeshData* ModuleImport::GetMeshData(aiMesh* mesh) {
 			else {
 				memcpy(&meshData->indices[i * 3], mesh->mFaces[i].mIndices, 3 * sizeof(uint));
 			}
+		}
+	}
+
+	//copy texture
+	if (mesh->HasTextureCoords(0)) {
+		meshData->num_textures = mesh->mNumVertices;
+		meshData->textures = new float[mesh->mNumVertices * 2];
+
+		for (unsigned int i = 0; i < meshData->num_textures; i++) {
+			meshData->textures[i * 2] = mesh->mTextureCoords[0][i].x;
+			meshData->textures[i * 2 + 1] = mesh->mTextureCoords[0][i].y;
 		}
 	}
 

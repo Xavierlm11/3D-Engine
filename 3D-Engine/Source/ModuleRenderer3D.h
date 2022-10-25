@@ -7,6 +7,9 @@
 
 #define MAX_LIGHTS 8
 
+#define CHECKERS_HEIGHT 256
+#define CHECKERS_WIDTH 256
+
 class ModuleRenderer3D : public Module
 {
 public:
@@ -29,7 +32,7 @@ public:
 	void DrawArrayIndexCube();
 	void DrawDirectCube();
 
-	void LoadModelBuffers(MeshData* mesh);
+	void LoadTextureBuffers();
 	void DrawMesh(MeshData* mesh);
 	update_status PostUpdate(float dt);
 	bool CleanUp();
@@ -88,6 +91,11 @@ public:
 	};
 
 	bool hasLoadedMesh;
+
+
+	//Textures
+	GLuint checkersID;
+	GLubyte checkerImage[CHECKERS_HEIGHT][CHECKERS_WIDTH][4];
 
 public:
 

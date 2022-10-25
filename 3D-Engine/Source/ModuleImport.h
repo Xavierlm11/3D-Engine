@@ -19,4 +19,8 @@ public:
 	void GetMeshDatas(const aiScene* scene, std::vector<MeshData*>* meshes);
 	MeshData* GetMeshData(aiMesh* scene);
 	void ReleaseFile(const aiScene* scene);
+
+	//Textures
+	void LoadCheckerTexture();
+
 };
