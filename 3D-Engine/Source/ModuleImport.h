@@ -23,4 +23,6 @@ public:
 	//Textures
 	void LoadCheckerTexture();
 
+	GLuint ImportTexture(const char* path);
+
 };

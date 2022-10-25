@@ -7,8 +7,8 @@
 
 #define MAX_LIGHTS 8
 
-#define CHECKERS_HEIGHT 256
-#define CHECKERS_WIDTH 256
+#define CHECKERS_HEIGHT 250
+#define CHECKERS_WIDTH 250
 
 class ModuleRenderer3D : public Module
 {
@@ -96,6 +96,8 @@ public:
 	//Textures
 	GLuint checkersID;
 	GLubyte checkerImage[CHECKERS_HEIGHT][CHECKERS_WIDTH][4];
+
+	GLuint houseTexID;
 
 public:
 

@@ -121,7 +121,7 @@ bool ModuleRenderer3D::Init()
 		lights[0].Active(true);
 
 		LoadTextureBuffers();
-
+		houseTexID = App->imp->ImportTexture("Assets/Baker_house.png");
 		OnResize(0,0, App->window->winWidth, App->window->winHeight );
 
 	}
@@ -157,18 +157,18 @@ void ModuleRenderer3D::LoadTextureBuffers() {
 		}
 	}
 
-	//glBindTexture(GL_TEXTURE_2D, 0);
+	glBindTexture(GL_TEXTURE_2D, 0);
 
 	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 	glGenTextures(1, &checkersID);
 	glBindTexture(GL_TEXTURE_2D, checkersID);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, CHECKERS_WIDTH, CHECKERS_HEIGHT, 0, GL_RGBA, GL_UNSIGNED_BYTE, checkerImage);
 	glBindTexture(GL_TEXTURE_2D, 0);
-	//glGenerateMipmap(GL_TEXTURE_2D);
+	glGenerateMipmap(GL_TEXTURE_2D);
 }
 
 // PreUpdate: clear buffer
@@ -242,7 +242,11 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 		p.Render();
 		for (int i = 0; i < App->scene->meshes.size(); i++)
 		{
-			App->scene->meshes[i]->DrawMesh(checkersID);
+			App->scene->meshes[i]->DrawMesh(App->scene->meshes[i]->id_textures);
+			//App->scene->meshes[i]->DrawMesh(checkersID);
+			App->scene->meshes[i]->DrawMesh(houseTexID);
+			
+			LOG("ID_TEX: %i", App->scene->meshes[i]->id_textures);
 		}
 		//DrawCube();
 		break;

@@ -10,9 +10,11 @@
 #pragma comment( lib, "DevIL/libx86/DevIL.lib" )
 #pragma comment( lib, "DevIL/libx86/ILU.lib" )
 #pragma comment( lib, "DevIL/libx86/ILUT.lib" )
-#include "DevIL\include\ilu.h"
-#include "DevIL\include\ilut.h"
+#include "DevIL/include/ilu.h"
+#include "DevIL/include/ilut.h"
+#include "DevIL/include/il.h"
 
+#include <iostream>
 
 
 ModuleImport::ModuleImport(Application* app, bool start_enabled) : Module(app, start_enabled)
@@ -27,6 +29,11 @@ ModuleImport::~ModuleImport()
 
 bool ModuleImport::Init()
 {
+	ilInit();
+	iluInit();
+	ilutInit();
+	ilutRenderer(ILUT_OPENGL);
+
 	//Assimp Logs
 	struct aiLogStream stream;
 	stream = aiGetPredefinedLogStream(aiDefaultLogStream_DEBUGGER, nullptr);
@@ -39,6 +46,54 @@ bool ModuleImport::Init()
 
 void ModuleImport::LoadCheckerTexture() {
 
+}
+
+GLuint ModuleImport::ImportTexture(const char* path) {
+	
+	ILubyte* Lump;
+	ILuint Size;
+	FILE* File;
+
+	File = fopen(path, "rb");
+	fseek(File, 0, SEEK_END);
+	Size = ftell(File);
+
+	Lump = (ILubyte*)malloc(Size);
+	fseek(File, 0, SEEK_SET);
+	fread(Lump, 1, Size, File);
+
+	LOG("SIZE: %i", Size);
+
+	
+
+	
+	if (ilLoadImage(path) == true) {
+
+		LOG("FOUND");
+		GLuint texID;
+		GLuint texture;
+		glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+		texture = ilutGLBindTexImage();
+		
+		glGenTextures(1, &texID);
+		glBindTexture(GL_TEXTURE_2D, texture);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+		//glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, CHECKERS_WIDTH, CHECKERS_HEIGHT, 0, GL_RGBA, GL_UNSIGNED_BYTE, texImage);
+		glGenerateMipmap(GL_TEXTURE_2D);
+		glBindTexture(GL_TEXTURE_2D, 0);
+		fclose(File);
+		free(Lump);
+
+		return texID;
+	}
+	
+	fclose(File);
+	
+
+	LOG("NOT FOUND");
 }
 
 update_status ModuleImport::PreUpdate(float dt)

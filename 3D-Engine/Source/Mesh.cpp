@@ -80,6 +80,7 @@ void MeshData::DrawMesh(GLuint textureID) {
 		glEnableClientState(GL_VERTEX_ARRAY);
 		glBindBuffer(GL_ARRAY_BUFFER, id_vertices);
 		glVertexPointer(3, GL_FLOAT, 0, NULL);
+
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, id_indices);
 
 		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
@@ -96,6 +97,11 @@ void MeshData::DrawMesh(GLuint textureID) {
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 		glDisableClientState(GL_VERTEX_ARRAY);
+
+		if (num_textures != 0) {
+			glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+		}
+
 		//LOG("Mesh Loaded! Num indices: %i. Num vertices: %i. ID Indices: %i. ID Vertices: %i.", num_indices, num_vertices, id_indices, id_vertices);
 
 	}
