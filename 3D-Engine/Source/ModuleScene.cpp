@@ -7,6 +7,8 @@
 #include <gl/GLU.h>
 #include <string>
 
+#include "Assimp/include/cimport.h"
+
 ModuleScene::ModuleScene(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
     modelScene = nullptr;
@@ -51,7 +53,10 @@ void ModuleScene::LoadCustom(const char* path, std::vector<MeshData*>* meshesVec
         const aiScene* newScene;
         newScene = App->imp->LoadFile(path);
         App->imp->GetMeshDatas(newScene, meshesVec);
+        aiReleaseImport(newScene);
         house_loaded = true;
+        newScene = nullptr;
+        delete newScene;
     }
 
     //modelScene = App->imp->LoadFile(path);
