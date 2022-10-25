@@ -41,6 +41,7 @@ void ModuleScene::CleanMeshes(std::vector<MeshData*>* meshesVec) {
     {
         meshesVec->at(i)->UnloadMesh();
     }
+    meshesVec->clear();
     App->imp->ReleaseFile(modelScene);
     modelScene = nullptr;
     modelMesh = nullptr;
