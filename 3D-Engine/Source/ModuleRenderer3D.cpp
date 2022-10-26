@@ -242,7 +242,7 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 		p.Render();
 		for (int i = 0; i < App->scene->meshes.size(); i++)
 		{
-			App->scene->meshes[i]->DrawMesh(App->scene->meshes[i]->id_textures);
+			//App->scene->meshes[i]->DrawMesh(App->scene->meshes[i]->id_textures);
 			//App->scene->meshes[i]->DrawMesh(checkersID);
 			App->scene->meshes[i]->DrawMesh(houseTexID);
 			

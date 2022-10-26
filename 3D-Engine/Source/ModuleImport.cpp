@@ -63,26 +63,28 @@ GLuint ModuleImport::ImportTexture(const char* path) {
 	fread(Lump, 1, Size, File);
 
 	LOG("SIZE: %i", Size);
-
-	
-
 	
 	if (ilLoadImage(path) == true) {
 
 		LOG("FOUND");
 		GLuint texID;
 		GLuint texture;
+
+
 		glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-		texture = ilutGLBindTexImage();
+		texID = ilutGLBindTexImage();
 		
-		glGenTextures(1, &texID);
-		glBindTexture(GL_TEXTURE_2D, texture);
+		glBindTexture(GL_TEXTURE_2D, texID);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 		//glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, CHECKERS_WIDTH, CHECKERS_HEIGHT, 0, GL_RGBA, GL_UNSIGNED_BYTE, texImage);
 		glGenerateMipmap(GL_TEXTURE_2D);
+		glBindTexture(GL_TEXTURE_2D, 0);
+
+		ilDeleteImages(1,&texID);
+
 		glBindTexture(GL_TEXTURE_2D, 0);
 		fclose(File);
 		free(Lump);
