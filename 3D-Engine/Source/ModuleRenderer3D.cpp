@@ -243,10 +243,14 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 		for (int i = 0; i < App->scene->meshes.size(); i++)
 		{
 			//App->scene->meshes[i]->DrawMesh(App->scene->meshes[i]->id_textures);
-			App->scene->meshes[i]->DrawMesh(checkersID);
-			//App->scene->meshes[i]->DrawMesh(houseTexID);
+			if (App->scene->meshes[i]->num_textures > 0) {
+				App->scene->meshes[i]->DrawMesh(houseTexID);
+			}
+			else {
+				App->scene->meshes[i]->DrawMesh(checkersID);
+			}
 			
-			LOG("ID_TEX: %i", App->scene->meshes[i]->id_textures);
+			//LOG("ID_TEX: %i", App->scene->meshes[i]->id_textures);
 		}
 		//DrawCube();
 		break;

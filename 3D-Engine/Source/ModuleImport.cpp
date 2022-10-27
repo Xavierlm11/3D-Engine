@@ -128,7 +128,12 @@ const aiScene* ModuleImport::LoadFile(const char* file_path) {
 void ModuleImport::GetMeshDatas(const aiScene* scene, std::vector<MeshData*>* meshes){
 
 	for (int i = 0; i < scene->mNumMeshes; i++) {
-		meshes->push_back(GetMeshData(scene->mMeshes[i]));
+		MeshData* newMesh = GetMeshData(scene->mMeshes[i]);
+		aiMaterial* material = scene->mMaterials[scene->mMeshes[i]->mMaterialIndex];
+		uint numTextures = material->GetTextureCount(aiTextureType_DIFFUSE);
+		aiString path;
+		material->GetTexture(aiTextureType_DIFFUSE, 0, &path);
+		meshes->push_back(newMesh);
 	}
 }
 
@@ -137,9 +142,12 @@ void ModuleImport::ReleaseFile(const aiScene* scene) {
 	aiReleaseImport(scene);
 }
 
+
+
 MeshData* ModuleImport::GetMeshData(aiMesh* mesh) {
 
 	MeshData *meshData = new MeshData();
+	aiMaterial* material = new aiMaterial();
 
 	//copy vertices
 	meshData->num_vertices = mesh->mNumVertices;
