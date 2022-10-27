@@ -41,7 +41,9 @@ void ModuleScene::CleanMeshes(std::vector<MeshData*>* meshesVec) {
     {
         meshesVec->at(i)->UnloadMesh();
     }
+    meshesVec->erase(meshesVec->begin()), meshesVec->end();
     meshesVec->clear();
+    meshesVec = nullptr;
     App->imp->ReleaseFile(modelScene);
     modelScene = nullptr;
     modelMesh = nullptr;
@@ -50,19 +52,30 @@ void ModuleScene::CleanMeshes(std::vector<MeshData*>* meshesVec) {
 
 void ModuleScene::LoadCustom(const char* path, std::vector<MeshData*>* meshesVec) {
 
-    if (house_loaded == false) {
+   /* if (house_loaded == false) {
         const aiScene* newScene;
         newScene = App->imp->LoadFile(path);
         App->imp->GetMeshDatas(newScene, meshesVec);
         aiReleaseImport(newScene);
+        App->editor->selectedShape = Shapes::NONE;
+        house_loaded = true;
+        newScene = nullptr;
+        delete newScene;
+    }*/
+}
+
+void ModuleScene::LoadHouse(std::vector<MeshData*>* meshesVec) {
+
+    if (house_loaded == false) {
+        const aiScene* newScene;
+        newScene = App->imp->LoadFile("Assets/BakerHouse.fbx");
+        App->imp->GetMeshDatas(newScene, meshesVec);
+        aiReleaseImport(newScene);
+        App->editor->selectedShape = Shapes::HOUSE;
         house_loaded = true;
         newScene = nullptr;
         delete newScene;
     }
-
-    //modelScene = App->imp->LoadFile(path);
-    ////meshes = App->imp->GetMeshDatas(modelScene);
-    //App->imp->GetMeshDatas(modelScene, meshesVec);
 }
 
 void ModuleScene::LoadCube(std::vector<MeshData*>* meshesVec) {
@@ -70,7 +83,10 @@ void ModuleScene::LoadCube(std::vector<MeshData*>* meshesVec) {
         const aiScene* newScene;
         newScene = App->imp->LoadFile("Assets/Cube.fbx");
         App->imp->GetMeshDatas(newScene, meshesVec);
+        App->editor->selectedShape = Shapes::CUBE;
         cube_loaded = true;
+        newScene = nullptr;
+        delete newScene;
     }
 }
 void ModuleScene::LoadSphere(std::vector<MeshData*>* meshesVec) {
@@ -78,7 +94,10 @@ void ModuleScene::LoadSphere(std::vector<MeshData*>* meshesVec) {
         const aiScene* newScene;
         newScene = App->imp->LoadFile("Assets/Sphere.fbx");
         App->imp->GetMeshDatas(newScene, meshesVec);
+        App->editor->selectedShape = Shapes::SPHERE;
         sphere_loaded = true;
+        newScene = nullptr;
+        delete newScene;
     }
 }
 void ModuleScene::LoadPyramid(std::vector<MeshData*>* meshesVec) {
@@ -86,7 +105,10 @@ void ModuleScene::LoadPyramid(std::vector<MeshData*>* meshesVec) {
         const aiScene* newScene;
         newScene = App->imp->LoadFile("Assets/Pyramid.fbx");
         App->imp->GetMeshDatas(newScene, meshesVec);
+        App->editor->selectedShape = Shapes::PYRAMID;
         pyramid_loaded = true;
+        newScene = nullptr;
+        delete newScene;
     }
 }
 void ModuleScene::LoadCylinder(std::vector<MeshData*>* meshesVec) {
@@ -94,7 +116,10 @@ void ModuleScene::LoadCylinder(std::vector<MeshData*>* meshesVec) {
         const aiScene* newScene;
         newScene = App->imp->LoadFile("Assets/Cylinder.fbx");
         App->imp->GetMeshDatas(newScene, meshesVec);
+        App->editor->selectedShape = Shapes::CYLINDER;
         cylinder_loaded = true;
+        newScene = nullptr;
+        delete newScene;
     }
 }
 

@@ -19,6 +19,9 @@ MeshData::~MeshData()
 
 	vertices = nullptr;
 	delete vertices;
+
+	textures = nullptr;
+	delete textures;
 }
 
 
@@ -53,6 +56,10 @@ void MeshData::UnloadMesh() {
 		if (id_vertices != NULL) {
 			glDeleteBuffers(1, &id_vertices);
 		}
+
+		if (id_textures != NULL) {
+			glDeleteBuffers(1, &id_textures);
+		}
 		hasLoadedBuffers = false;
 	}
 
@@ -64,8 +71,13 @@ void MeshData::UnloadMesh() {
 		delete[] vertices;
 	}
 
+	if (textures != nullptr) {
+		delete[] textures;
+	}
+
 	indices = nullptr;
 	vertices = nullptr;
+	textures = nullptr;
 
 }
 

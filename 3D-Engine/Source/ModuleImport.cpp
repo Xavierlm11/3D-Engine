@@ -127,7 +127,6 @@ const aiScene* ModuleImport::LoadFile(const char* file_path) {
 
 void ModuleImport::GetMeshDatas(const aiScene* scene, std::vector<MeshData*>* meshes){
 
-	//std::vector<MeshData*> meshesVec;
 	for (int i = 0; i < scene->mNumMeshes; i++) {
 		meshes->push_back(GetMeshData(scene->mMeshes[i]));
 	}

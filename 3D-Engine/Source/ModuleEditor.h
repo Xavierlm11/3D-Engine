@@ -18,7 +18,7 @@
 
 #include "MathGeoLib/include/Algorithm/Random/LCG.h"
 
-
+#include "ModuleScene.h"
 
 
 class ModuleEditor : public Module
@@ -48,6 +48,8 @@ public:
 	bool load_sphere_shape = false;
 	bool load_pyramid_shape = false;
 	bool load_cylinder_shape = false;
+
+	ModuleScene::Shapes selectedShape;
 
 
 	ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);

@@ -40,6 +40,7 @@ ModuleEditor::ModuleEditor(Application* app, bool start_enabled) : Module(app, s
 	gl_texture2dEnabled = true;
 	gl_lineSmoothEnabled = false;
 	gl_fogEnabled = false;
+	ModuleScene::Shapes::NONE;
 
 
 	tdnow =  " ";
@@ -229,6 +230,8 @@ bool ModuleEditor::CleanUp()
 
 	login.clear();
 	//logs.clear();
+
+	selectedShape = ModuleScene::Shapes::NONE;
 
 	return true;
 }
@@ -762,30 +765,528 @@ void ModuleEditor::CloseEngine()
 
 void ModuleEditor::CheckShapes() {
 
-	/*if (load_house_shape == true) {
-		if (App->scene->house_loaded == false) {
-			App->scene->LoadCustom("Assets/BakerHouse.fbx", &App->scene->meshes);
-		}
-	}
-	else {
-		if (App->scene->house_loaded == true) {
-			App->scene->RemoveCustom("Assets/BakerHouse.fbx", &App->scene->meshes);
-		}
-	}*/
 	if (load_house_shape == true) {
+
+		
+
 		if (App->scene->house_loaded == false) {
-			App->scene->LoadCustom("Assets/BakerHouse.fbx", &App->scene->meshes);
+			if (selectedShape != ModuleScene::Shapes::NONE && selectedShape != ModuleScene::Shapes::HOUSE) {
+				App->scene->CleanMeshes(&App->scene->meshes);
+			}
+			App->scene->LoadHouse(&App->scene->meshes);
 			for (int i = 0; i < App->scene->meshes.size(); i++)
 			{
 				App->scene->meshes[i]->LoadBuffers();
 			}
 		}
 	}
-	else {
+	else 
+	{
 		if (App->scene->house_loaded == true) {
 			App->scene->CleanMeshes(&App->scene->meshes);
 		}
 	}
+
+	if (load_cube_shape == true) {
+
+		
+
+		if (App->scene->cube_loaded == false) {
+			if (selectedShape != ModuleScene::Shapes::NONE && selectedShape != ModuleScene::Shapes::CUBE) {
+				App->scene->CleanMeshes(&App->scene->meshes);
+			}
+			App->scene->LoadCube(&App->scene->meshes);
+			for (int i = 0; i < App->scene->meshes.size(); i++)
+			{
+				App->scene->meshes[i]->LoadBuffers();
+			}
+		}
+	}
+	else
+	{
+		if (App->scene->cube_loaded == true) {
+			App->scene->CleanMeshes(&App->scene->meshes);
+		}
+	}
+
+	if (load_sphere_shape == true) {
+
+		
+
+		if (App->scene->sphere_loaded == false) {
+			if (selectedShape != ModuleScene::Shapes::NONE && selectedShape != ModuleScene::Shapes::SPHERE) {
+				App->scene->CleanMeshes(&App->scene->meshes);
+			}
+			App->scene->LoadSphere(&App->scene->meshes);
+			for (int i = 0; i < App->scene->meshes.size(); i++)
+			{
+				App->scene->meshes[i]->LoadBuffers();
+			}
+		}
+			
+	}
+	else
+	{
+		if (App->scene->sphere_loaded == true) {
+			App->scene->CleanMeshes(&App->scene->meshes);
+		}
+	}
+
+	if (load_pyramid_shape == true) {
+
+		
+		if (App->scene->pyramid_loaded == false) {
+			if (selectedShape != ModuleScene::Shapes::NONE && selectedShape != ModuleScene::Shapes::PYRAMID) {
+				App->scene->CleanMeshes(&App->scene->meshes);
+			}
+
+			App->scene->LoadPyramid(&App->scene->meshes);
+			for (int i = 0; i < App->scene->meshes.size(); i++)
+			{
+				App->scene->meshes[i]->LoadBuffers();
+			}
+		}
+	}
+	else
+	{
+		if (App->scene->pyramid_loaded == true) {
+			App->scene->CleanMeshes(&App->scene->meshes);
+		}
+	}
+
+	if (load_cylinder_shape == true) {
+
+	
+
+		if (App->scene->cylinder_loaded == false) {
+			if (selectedShape != ModuleScene::Shapes::NONE && selectedShape != ModuleScene::Shapes::CYLINDER) {
+				App->scene->CleanMeshes(&App->scene->meshes);
+			}
+			App->scene->LoadCylinder(&App->scene->meshes);
+			for (int i = 0; i < App->scene->meshes.size(); i++)
+			{
+				App->scene->meshes[i]->LoadBuffers();
+			}
+		}
+	}
+	else
+	{
+		if (App->scene->cylinder_loaded == true) {
+			App->scene->CleanMeshes(&App->scene->meshes);
+		}
+	}
+	
+	if (load_house_shape == false
+		&& load_cube_shape == false
+		&& load_sphere_shape == false
+		&& load_pyramid_shape == false
+		&& load_cylinder_shape == false) {
+
+		selectedShape = ModuleScene::Shapes::NONE;
+		App->scene->house_loaded = false;
+		App->scene->cube_loaded = false;
+		App->scene->sphere_loaded = false;
+		App->scene->pyramid_loaded = false;
+		App->scene->cylinder_loaded = false;
+	}
+
+	switch (selectedShape) {
+		case  ModuleScene::Shapes::NONE:
+
+			if (load_house_shape == true) {
+				load_house_shape = false;
+				if (App->scene->house_loaded == true) {
+					App->scene->house_loaded = false;
+				}
+			}
+		
+			if (load_cube_shape == true) {
+				load_cube_shape = false;
+				if (App->scene->cube_loaded == true) {
+					App->scene->cube_loaded = false;
+				}
+			}
+
+			if (load_sphere_shape == true) {
+				load_sphere_shape = false;
+				if (App->scene->sphere_loaded == true) {
+					App->scene->sphere_loaded = false;
+				}
+			}
+
+			if (load_pyramid_shape == true) {
+				load_pyramid_shape = false;
+				if (App->scene->pyramid_loaded == true) {
+					App->scene->pyramid_loaded = false;
+				}
+			}
+
+			if (load_cylinder_shape == true) {
+				load_cylinder_shape = false;
+				if (App->scene->cylinder_loaded == true) {
+					App->scene->cylinder_loaded = false;
+				}
+			}
+
+			break;
+		
+		case  ModuleScene::Shapes::HOUSE:
+
+			if (load_cube_shape == true) {
+				load_cube_shape = false;
+				if (App->scene->cube_loaded == true) {
+					App->scene->cube_loaded = false;
+				}
+			}
+
+			if (load_sphere_shape == true) {
+				load_sphere_shape = false;
+				if (App->scene->sphere_loaded == true) {
+					App->scene->sphere_loaded = false;
+				}
+			}
+
+			if (load_pyramid_shape == true) {
+				load_pyramid_shape = false;
+				if (App->scene->pyramid_loaded == true) {
+					App->scene->pyramid_loaded = false;
+				}
+			}
+
+			if (load_cylinder_shape == true) {
+				load_cylinder_shape = false;
+				if (App->scene->cylinder_loaded == true) {
+					App->scene->cylinder_loaded = false;
+				}
+			}
+
+			break;
+		
+		case  ModuleScene::Shapes::CUBE:
+
+			if (load_house_shape == true) {
+				load_house_shape = false;
+				if (App->scene->house_loaded == true) {
+					App->scene->house_loaded = false;
+				}
+			}
+
+			if (load_sphere_shape == true) {
+				load_sphere_shape = false;
+				if (App->scene->sphere_loaded == true) {
+					App->scene->sphere_loaded = false;
+				}
+			}
+
+			if (load_pyramid_shape == true) {
+				load_pyramid_shape = false;
+				if (App->scene->pyramid_loaded == true) {
+					App->scene->pyramid_loaded = false;
+				}
+			}
+
+			if (load_cylinder_shape == true) {
+				load_cylinder_shape = false;
+				if (App->scene->cylinder_loaded == true) {
+					App->scene->cylinder_loaded = false;
+				}
+			}
+
+			break;
+
+		case  ModuleScene::Shapes::SPHERE:
+
+			if (load_house_shape == true) {
+				load_house_shape = false;
+				if (App->scene->house_loaded == true) {
+					App->scene->house_loaded = false;
+				}
+			}
+
+			if (load_cube_shape == true) {
+				load_cube_shape = false;
+				if (App->scene->cube_loaded == true) {
+					App->scene->cube_loaded = false;
+				}
+			}
+
+			if (load_pyramid_shape == true) {
+				load_pyramid_shape = false;
+				if (App->scene->pyramid_loaded == true) {
+					App->scene->pyramid_loaded = false;
+				}
+			}
+
+			if (load_cylinder_shape == true) {
+				load_cylinder_shape = false;
+				if (App->scene->cylinder_loaded == true) {
+					App->scene->cylinder_loaded = false;
+				}
+			}
+
+			break;
+
+		case  ModuleScene::Shapes::PYRAMID:
+
+			if (load_house_shape == true) {
+				load_house_shape = false;
+				if (App->scene->house_loaded == true) {
+					App->scene->house_loaded = false;
+				}
+			}
+
+			if (load_cube_shape == true) {
+				load_cube_shape = false;
+				if (App->scene->cube_loaded == true) {
+					App->scene->cube_loaded = false;
+				}
+			}
+
+			if (load_sphere_shape == true) {
+				load_sphere_shape = false;
+				if (App->scene->sphere_loaded == true) {
+					App->scene->sphere_loaded = false;
+				}
+			}
+
+			if (load_cylinder_shape == true) {
+				load_cylinder_shape = false;
+				if (App->scene->cylinder_loaded == true) {
+					App->scene->cylinder_loaded = false;
+				}
+			}
+
+			break;
+
+		case  ModuleScene::Shapes::CYLINDER:
+
+			if (load_house_shape == true) {
+				load_house_shape = false;
+				if (App->scene->house_loaded == true) {
+					App->scene->house_loaded = false;
+				}
+			}
+
+			if (load_cube_shape == true) {
+				load_cube_shape = false;
+				if (App->scene->cube_loaded == true) {
+					App->scene->cube_loaded = false;
+				}
+			}
+
+			if (load_sphere_shape == true) {
+				load_sphere_shape = false;
+				if (App->scene->sphere_loaded == true) {
+					App->scene->sphere_loaded = false;
+				}
+			}
+
+			if (load_pyramid_shape == true) {
+				load_pyramid_shape = false;
+				if (App->scene->pyramid_loaded == true) {
+					App->scene->pyramid_loaded = false;
+				}
+			}
+
+			break;
+	}
+		
+
+	{
+//	//house
+//	if (load_house_shape == true) {
+//
+//		/*if (load_cube_shape == true) {
+//			load_cube_shape = false;
+//		}
+//
+//		if (load_sphere_shape == true) {
+//			load_sphere_shape = false;
+//		}
+//
+//		if (load_pyramid_shape == true) {
+//			load_pyramid_shape = false;
+//		}
+//
+//		if (load_cylinder_shape == true) {
+//			load_cylinder_shape = false;
+//		}*/
+//
+//		if (App->scene->house_loaded == false) {
+//			App->scene->LoadCustom("Assets/BakerHouse.fbx", &App->scene->meshes);
+//			for (int i = 0; i < App->scene->meshes.size(); i++)
+//			{
+//				App->scene->meshes[i]->LoadBuffers();
+//			}
+//		}
+//	}
+//	else {
+//		if (App->scene->house_loaded == true) {
+//			App->scene->CleanMeshes(&App->scene->meshes);
+//		}
+//	}
+//
+//	//cube
+//	if (load_cube_shape == true) {
+//
+//		if (load_house_shape == true) {
+//			load_house_shape = false;
+//		}
+//
+//		if (load_sphere_shape == true) {
+//			load_sphere_shape = false;
+//		}
+//
+//		if (load_pyramid_shape == true) {
+//			load_pyramid_shape = false;
+//		}
+//
+//		if (load_cylinder_shape == true) {
+//			load_cylinder_shape = false;
+//		}
+//
+//	}
+//	else {
+//	}
+//
+//	////sphere
+//	//if (load_sphere_shape == true) {
+//
+//	//	if (load_house_shape == true) {
+//	//		load_house_shape = false;
+//	//	}
+//
+//	//	if (load_cube_shape == true) {
+//	//		load_cube_shape = false;
+//	//	}
+//
+//	//	if (load_pyramid_shape == true) {
+//	//		load_pyramid_shape = false;
+//	//	}
+//
+//	//	if (load_cylinder_shape == true) {
+//	//		load_cylinder_shape = false;
+//	//	}
+//
+//
+//	//}
+//	//else {
+//
+//	//}
+//
+//	//pyramid
+//	if (load_pyramid_shape == true) {
+//
+//		if (load_house_shape == true) {
+//			load_house_shape = false;
+//		}
+//
+//		if (load_cube_shape == true) {
+//			load_cube_shape = false;
+//		}
+//
+//		if (load_sphere_shape == true) {
+//			load_sphere_shape = false;
+//		}
+//
+//		if (load_cylinder_shape == true) {
+//			load_cylinder_shape = false;
+//		}
+//
+//	}
+//	else {
+//
+//	}
+//
+//	//cylinder
+//	if (load_cylinder_shape == true) {
+//
+//		if (load_house_shape == true) {
+//			load_house_shape = false;
+//		}
+//
+//		if (load_cube_shape == true) {
+//			load_cube_shape = false;
+//		}
+//
+//		if (load_sphere_shape == true) {
+//			load_sphere_shape = false;
+//		}
+//
+//		if (load_pyramid_shape == true) {
+//			load_pyramid_shape = false;
+//		}
+//
+//	}
+//	else {
+//
+//	}
+//
+//
+//	switch (selectedShape) {
+//	case  ModuleScene::Shapes::NONE:
+//		if (load_house_shape == true) {
+//			load_house_shape = false;
+//		}
+//
+//		if (load_cube_shape == true) {
+//			load_cube_shape = false;
+//		}
+//
+//		if (load_sphere_shape == true) {
+//			load_sphere_shape = false;
+//		}
+//
+//		if (load_pyramid_shape == true) {
+//			load_pyramid_shape = false;
+//		}
+//
+//		if (load_cylinder_shape == true) {
+//			load_cylinder_shape = false;
+//		}
+//		break;
+//
+//		case  ModuleScene::Shapes::HOUSE;
+//			if (load_house_shape == true) {
+//				load_house_shape = false;
+//			}
+//
+//			if (load_cube_shape == true) {
+//				load_cube_shape = false;
+//			}
+//
+//			if (load_sphere_shape == true) {
+//				load_sphere_shape = false;
+//			}
+//
+//			if (load_pyramid_shape == true) {
+//				load_pyramid_shape = false;
+//			}
+//
+//			if (load_cylinder_shape == true) {
+//				load_cylinder_shape = false;
+//			}
+//			break;
+//
+//			case  ModuleScene::Shapes::CUBE;
+//				if (load_house_shape == true) {
+//					load_house_shape = false;
+//				}
+//
+//				if (load_sphere_shape == true) {
+//					load_sphere_shape = false;
+//				}
+//
+//				if (load_pyramid_shape == true) {
+//					load_pyramid_shape = false;
+//				}
+//
+//				if (load_cylinder_shape == true) {
+//					load_cylinder_shape = false;
+//				}
+//				break;
+//	}
+}
 }
 
 void ModuleEditor::CheckGLCapabilities() {
