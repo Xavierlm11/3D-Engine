@@ -60,7 +60,7 @@ ModuleEditor::ModuleEditor(Application* app, bool start_enabled) : Module(app, s
 // Destructor
 ModuleEditor::~ModuleEditor()
 {
-	//logs.clear();
+	
 	login.clear();
 
 }
