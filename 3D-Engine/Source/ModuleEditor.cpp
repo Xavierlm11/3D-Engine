@@ -94,7 +94,9 @@ bool ModuleEditor::Init()
 		style.WindowRounding = 0.0f;
 		style.Colors[ImGuiCol_WindowBg].w = 1.0f;
 	}
+	
 	ImGui::StyleColorsDark();
+	//ImGui::StyleColorsLight();
 	//ImGui::StyleColorsClassic();
 
 	// Setup Platform/Renderer backends

@@ -29,4 +29,55 @@ GameObject::~GameObject()
 	//External->CleanVec(childrens);
 }
 
-void GameObject::Set
+void GameObject::SetParent(GameObject* newparent)
+{
+	GameObject* p = newparent;
+	if (p==parent)return;
+	
+	if (p->parent)
+	{
+		p->parent->DeleteChild(p);
+	}
+	parent = p;
+
+	if (p)
+	{
+		p->childrens.push_back(p);
+	}
+	//set transform
+
+}
+
+void GameObject::DeleteChild(GameObject* delchild)
+{
+	for (uint i=0;i<childrens.size();++i)
+	{
+		if (childrens[i]==delchild)
+		{
+			childrens.erase(childrens.begin() + i);
+		}
+
+	}
+}
+
+void GameObject::Enable()
+{
+	active = true;
+}
+
+void GameObject::Disable()
+{
+	active = false;
+}
+
+bool GameObject::IsEnable()
+{
+	return active;
+}
+
+bool GameObject::IsChild(GameObject* child)
+{
+	if(child==this)return true;
+	else return 
+	if()
+}

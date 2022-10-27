@@ -15,6 +15,16 @@ public:
 	GameObject(const char* name, GameObject* parent);
 	virtual ~GameObject();
 
+	void SetParent(GameObject* newparent);
+
+	void DeleteChild(GameObject* delchild);
+
+	void Enable();
+
+	void Disable();
+
+	bool IsEnable();
+
 public:
 
 	std::string name;
@@ -22,9 +32,12 @@ public:
 	std::vector<GameObject*> childrens;
 	std::vector<Component*> components;
 
+	GameObject* parent = nullptr;
+
 	uint uid=0;
 
-private:
-
+public:
+	bool active=true;
+	bool visible=false;
 };
 
