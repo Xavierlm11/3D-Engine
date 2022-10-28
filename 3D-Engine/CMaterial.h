@@ -4,6 +4,6 @@ class CMaterial :public Component
 {
 public:
 	CMaterial(GameObject* obj);
-	~CMaterial();
+	virtual ~CMaterial();
 };
 

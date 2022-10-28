@@ -10,10 +10,11 @@ public:
 		NONE,
 		TRANSFORM,
 		MESH,
-		MATERIAL
+		MATERIAL,
+		LIGHT
 	};
 	Component(GameObject* obj, Types type);
-	~Component();
+	virtual ~Component();
 
 	void Enable();
 

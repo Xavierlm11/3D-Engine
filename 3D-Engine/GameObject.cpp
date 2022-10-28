@@ -75,3 +75,16 @@ bool GameObject::IsEnable()
 	return active;
 }
 
+Component* GameObject::GetComponent(Component::Types stype)
+{
+	for (uint i = 0; i < components.size(); ++i)
+	{
+		if (components[i]->type == stype)
+		{
+			return components[i];
+		}
+
+	}
+	return nullptr;
+}
+
