@@ -7,15 +7,14 @@
 
 #define MAX_LIGHTS 8
 
-#define CHECKERS_HEIGHT 250
-#define CHECKERS_WIDTH 250
+#define CHECKERS_HEIGHT 100
+#define CHECKERS_WIDTH 100
 
 class ModuleRenderer3D : public Module
 {
 public:
 	enum class RenderMode
 	{
-
 		NORMAL,
 		WIREFRAME,
 		NONE,

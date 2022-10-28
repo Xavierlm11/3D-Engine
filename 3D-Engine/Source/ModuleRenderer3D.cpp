@@ -157,18 +157,22 @@ void ModuleRenderer3D::LoadTextureBuffers() {
 		}
 	}
 
-	glBindTexture(GL_TEXTURE_2D, 0);
+	//glBindTexture(GL_TEXTURE_2D, 0);
 
 	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+
 	glGenTextures(1, &checkersID);
 	glBindTexture(GL_TEXTURE_2D, checkersID);
+
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, CHECKERS_WIDTH, CHECKERS_HEIGHT, 0, GL_RGBA, GL_UNSIGNED_BYTE, checkerImage);
-	glBindTexture(GL_TEXTURE_2D, 0);
-	glGenerateMipmap(GL_TEXTURE_2D);
+
+	//glBindTexture(GL_TEXTURE_2D, 0);
+	//glGenerateMipmap(GL_TEXTURE_2D);
 }
 
 // PreUpdate: clear buffer
@@ -244,12 +248,12 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 		{
 			//App->scene->meshes[i]->DrawMesh(App->scene->meshes[i]->id_textures);
 			if (App->scene->meshes[i]->num_textures > 0) {
-				App->scene->meshes[i]->DrawMesh(houseTexID);
+				//App->scene->meshes[i]->DrawMesh(houseTexID);
 			}
 			else {
-				App->scene->meshes[i]->DrawMesh(checkersID);
+				//App->scene->meshes[i]->DrawMesh(checkersID);
 			}
-			
+			App->scene->meshes[i]->DrawMesh(checkersID);
 			//LOG("ID_TEX: %i", App->scene->meshes[i]->id_textures);
 		}
 		//DrawCube();

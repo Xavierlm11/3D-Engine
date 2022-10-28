@@ -57,9 +57,9 @@ void MeshData::UnloadMesh() {
 			glDeleteBuffers(1, &id_vertices);
 		}
 
-		if (id_textures != NULL) {
+		/*if (id_textures != NULL) {
 			glDeleteBuffers(1, &id_textures);
-		}
+		}*/
 		hasLoadedBuffers = false;
 	}
 
@@ -84,19 +84,22 @@ void MeshData::UnloadMesh() {
 void MeshData::DrawMesh(GLuint textureID) {
 	if (hasLoadedBuffers == true) {
 
-		if (textureID != NULL) {
+		//if (textureID != NULL) {
 			glBindTexture(GL_TEXTURE_2D, textureID);
-		}
+		//}
 
-
+		//draw vertex
 		glEnableClientState(GL_VERTEX_ARRAY);
 		glBindBuffer(GL_ARRAY_BUFFER, id_vertices);
 		glVertexPointer(3, GL_FLOAT, 0, NULL);
 
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, id_indices);
 
+		/*glBindBuffer(GL_ARRAY_BUFFER, id_textures);
+		glTexCoordPointer(2, GL_FLOAT, 0, NULL);*/
+		//draw textutes
 		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-		glBindBuffer(GL_ARRAY_BUFFER, id_textures);
+		glBindBuffer(GL_ARRAY_BUFFER, textureID);
 		glTexCoordPointer(2, GL_FLOAT, 0, NULL);
 
 
@@ -110,9 +113,9 @@ void MeshData::DrawMesh(GLuint textureID) {
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 		glDisableClientState(GL_VERTEX_ARRAY);
 
-		if (num_textures != 0) {
+		//if (num_textures != 0) {
 			glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-		}
+		//}
 
 		//LOG("Mesh Loaded! Num indices: %i. Num vertices: %i. ID Indices: %i. ID Vertices: %i.", num_indices, num_vertices, id_indices, id_vertices);
 

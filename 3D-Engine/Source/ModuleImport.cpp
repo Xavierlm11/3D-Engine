@@ -129,10 +129,10 @@ void ModuleImport::GetMeshDatas(const aiScene* scene, std::vector<MeshData*>* me
 
 	for (int i = 0; i < scene->mNumMeshes; i++) {
 		MeshData* newMesh = GetMeshData(scene->mMeshes[i]);
-		aiMaterial* material = scene->mMaterials[scene->mMeshes[i]->mMaterialIndex];
-		uint numTextures = material->GetTextureCount(aiTextureType_DIFFUSE);
-		aiString path;
-		material->GetTexture(aiTextureType_DIFFUSE, 0, &path);
+		//aiMaterial* material = scene->mMaterials[scene->mMeshes[i]->mMaterialIndex];
+		//uint numTextures = material->GetTextureCount(aiTextureType_DIFFUSE);
+		//aiString path;
+		//material->GetTexture(aiTextureType_DIFFUSE, 0, &path);
 		meshes->push_back(newMesh);
 	}
 }
@@ -174,15 +174,15 @@ MeshData* ModuleImport::GetMeshData(aiMesh* mesh) {
 	}
 
 	//copy texture
-	if (mesh->HasTextureCoords(0)) {
-		meshData->num_textures = mesh->mNumVertices;
-		meshData->textures = new float[mesh->mNumVertices * 2];
+	//if (mesh->HasTextureCoords(0)) {
+	//	meshData->num_textures = mesh->mNumVertices;
+	//	meshData->textures = new float[mesh->mNumVertices * 2];
 
-		for (unsigned int i = 0; i < meshData->num_textures; i++) {
-			meshData->textures[i * 2] = mesh->mTextureCoords[0][i].x;
-			meshData->textures[i * 2 + 1] = mesh->mTextureCoords[0][i].y;
-		}
-	}
+	//	for (unsigned int i = 0; i < meshData->num_textures; i++) {
+	//		meshData->textures[i * 2] = mesh->mTextureCoords[0][i].x;
+	//		meshData->textures[i * 2 + 1] = mesh->mTextureCoords[0][i].y;
+	//	}
+	//}
 
 	return meshData;
 }
