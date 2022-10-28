@@ -121,7 +121,7 @@ bool ModuleRenderer3D::Init()
 		lights[0].Active(true);
 
 		LoadTextureBuffers();
-		houseTexID = App->imp->ImportTexture("Assets/Baker_house.png");
+		//houseTexID = App->imp->ImportTexture("Assets/Baker_house.png");
 		OnResize(0,0, App->window->winWidth, App->window->winHeight );
 
 	}
@@ -248,12 +248,12 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 		{
 			//App->scene->meshes[i]->DrawMesh(App->scene->meshes[i]->id_textures);
 			if (App->scene->models[0]->meshes[i]->num_textures > 0) {
-				App->scene->models[0]->meshes[i]->DrawMesh(houseTexID);
+				//App->scene->models[0]->meshes[i]->DrawMesh(houseTexID);
 			}
 			else {
-				App->scene->models[0]->meshes[i]->DrawMesh(checkersID);
+				//App->scene->models[0]->meshes[i]->DrawMesh(checkersID);
 			}
-			//App->scene->meshes[i]->DrawMesh(checkersID);
+			App->scene->models[0]->meshes[i]->DrawMesh(checkersID);
 			//LOG("ID_TEX: %i", App->scene->meshes[i]->id_textures);
 		}
 		//DrawCube();

@@ -14,6 +14,7 @@ ModuleScene::ModuleScene(Application* app, bool start_enabled) : Module(app, sta
     modelScene = nullptr;
     modelMesh = nullptr;
     models.push_back(new ModelData());
+
 }
 
 ModuleScene::~ModuleScene()

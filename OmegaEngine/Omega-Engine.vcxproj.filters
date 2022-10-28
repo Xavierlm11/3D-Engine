@@ -234,6 +234,9 @@
     <ClCompile Include="Source\ModelData.cpp">
       <Filter>Files\Resources</Filter>
     </ClCompile>
+    <ClCompile Include="Source\MaterialData.cpp">
+      <Filter>Files\Resources</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Primitive.h">
@@ -516,6 +519,9 @@
       <Filter>GameObjects\Propierties</Filter>
     </ClInclude>
     <ClInclude Include="Source\ModelData.h">
+      <Filter>Files\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\MaterialData.h">
       <Filter>Files\Resources</Filter>
     </ClInclude>
   </ItemGroup>

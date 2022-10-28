@@ -128,7 +128,8 @@ const aiScene* ModuleImport::LoadFile(const char* file_path) {
 void ModuleImport::GetMeshDatas(const aiScene* scene, std::vector<MeshData*>* meshes){
 
 	for (int i = 0; i < scene->mNumMeshes; i++) {
-		MeshData* newMesh = GetMeshData(scene->mMeshes[i]);
+		MeshData* newMesh = new MeshData();
+		newMesh = GetMeshData(scene->mMeshes[i], scene);
 		//aiMaterial* material = scene->mMaterials[scene->mMeshes[i]->mMaterialIndex];
 		//uint numTextures = material->GetTextureCount(aiTextureType_DIFFUSE);
 		//aiString path;
@@ -144,10 +145,18 @@ void ModuleImport::ReleaseFile(const aiScene* scene) {
 
 
 
-MeshData* ModuleImport::GetMeshData(aiMesh* mesh) {
+MeshData* ModuleImport::GetMeshData(aiMesh* mesh, const aiScene * scene) {
 
-	MeshData *meshData = new MeshData();
 	aiMaterial* material = new aiMaterial();
+	material = scene->mMaterials[mesh->mMaterialIndex];
+	uint numTextures = material->GetTextureCount(aiTextureType_DIFFUSE);
+	aiString path;
+	material->GetTexture(aiTextureType_DIFFUSE, 0, &path);
+	LOG("PATH: %s", path.C_Str());
+
+	MeshData* meshData = new MeshData();
+	//meshData
+
 
 	//copy vertices
 	meshData->num_vertices = mesh->mNumVertices;
@@ -178,7 +187,7 @@ MeshData* ModuleImport::GetMeshData(aiMesh* mesh) {
 	else {
 		LOG("NO TEX");
 	}
-	//copy texture
+	//copy texture coords
 	if (mesh->HasTextureCoords(0)) {
 		meshData->num_textures = mesh->mNumVertices;
 		meshData->textures = new float[mesh->mNumVertices * 2];

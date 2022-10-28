@@ -1,6 +1,7 @@
 #include "Globals.h"
 #include "External/MathGeoLib/include/Math/float3.h"
 #include "Glew/include/glew.h"
+#include "Assimp/include/scene.h"
 //
 //class ModelData {
 //
