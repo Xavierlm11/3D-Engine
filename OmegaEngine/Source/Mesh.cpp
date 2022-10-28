@@ -99,15 +99,15 @@ void MeshData::DrawMesh(GLuint textureID) {
 		glTexCoordPointer(2, GL_FLOAT, 0, NULL);*/
 		//draw textutes
 		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-		glBindBuffer(GL_ARRAY_BUFFER, textureID);
+		glBindBuffer(GL_ARRAY_BUFFER, id_textures);
 		glTexCoordPointer(2, GL_FLOAT, 0, NULL);
 
 
 		glDrawElements(GL_TRIANGLES, num_indices, GL_UNSIGNED_INT, NULL);
 
-		if (textureID != NULL) {
+		//if (textureID != NULL) {
 			glBindTexture(GL_TEXTURE_2D, 0);
-		}
+		//}
 
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
