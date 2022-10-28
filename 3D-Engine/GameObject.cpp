@@ -75,9 +75,3 @@ bool GameObject::IsEnable()
 	return active;
 }
 
-bool GameObject::IsChild(GameObject* child)
-{
-	if(child==this)return true;
-	else return 
-	if()
-}

@@ -222,6 +222,15 @@
     <ClCompile Include="GameObject.cpp">
       <Filter>GameObjects</Filter>
     </ClCompile>
+    <ClCompile Include="CMeshes.cpp">
+      <Filter>GameObjects\Propierties</Filter>
+    </ClCompile>
+    <ClCompile Include="CTrannsform.cpp">
+      <Filter>GameObjects\Propierties</Filter>
+    </ClCompile>
+    <ClCompile Include="CMaterial.cpp">
+      <Filter>GameObjects\Propierties</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Primitive.h">
@@ -493,6 +502,15 @@
     </ClInclude>
     <ClInclude Include="Component.h">
       <Filter>GameObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="CMeshes.h">
+      <Filter>GameObjects\Propierties</Filter>
+    </ClInclude>
+    <ClInclude Include="CTrannsform.h">
+      <Filter>GameObjects\Propierties</Filter>
+    </ClInclude>
+    <ClInclude Include="CMaterial.h">
+      <Filter>GameObjects\Propierties</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
