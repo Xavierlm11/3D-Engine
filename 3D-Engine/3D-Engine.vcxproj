@@ -14,7 +14,7 @@
     <ClCompile Include="CMaterial.cpp" />
     <ClCompile Include="CMeshes.cpp" />
     <ClCompile Include="Component.cpp" />
-    <ClCompile Include="CTrannsform.cpp" />
+    <ClCompile Include="CTransform.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="Source\Application.cpp" />
     <ClCompile Include="Source\Color.cpp" />
@@ -79,7 +79,7 @@
     <ClInclude Include="CMaterial.h" />
     <ClInclude Include="CMeshes.h" />
     <ClInclude Include="Component.h" />
-    <ClInclude Include="CTrannsform.h" />
+    <ClInclude Include="CTransform.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="Source\Application.h" />
     <ClInclude Include="Source\Color.h" />

@@ -6,7 +6,7 @@
 #include <math.h>
 #include "Source/Globals.h"
 #include "Source/Application.h"
-
+#include "Component.h"
 class Component;
 
 class GameObject
@@ -24,6 +24,8 @@ public:
 	void Disable();
 
 	bool IsEnable();
+
+	Component* GetComponent(Component::Types stype);
 
 public:
 

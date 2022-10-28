@@ -225,7 +225,7 @@
     <ClCompile Include="CMeshes.cpp">
       <Filter>GameObjects\Propierties</Filter>
     </ClCompile>
-    <ClCompile Include="CTrannsform.cpp">
+    <ClCompile Include="CTransform.cpp">
       <Filter>GameObjects\Propierties</Filter>
     </ClCompile>
     <ClCompile Include="CMaterial.cpp">
@@ -506,7 +506,7 @@
     <ClInclude Include="CMeshes.h">
       <Filter>GameObjects\Propierties</Filter>
     </ClInclude>
-    <ClInclude Include="CTrannsform.h">
+    <ClInclude Include="CTransform.h">
       <Filter>GameObjects\Propierties</Filter>
     </ClInclude>
     <ClInclude Include="CMaterial.h">
