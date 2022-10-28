@@ -174,3 +174,4 @@ void Application::SetName(const char* name)
 	/*std::string str(name);
 	EngName =str; */
 }
+

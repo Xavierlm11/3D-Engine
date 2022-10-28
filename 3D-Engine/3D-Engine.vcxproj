@@ -11,6 +11,11 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="CMaterial.cpp" />
+    <ClCompile Include="CMeshes.cpp" />
+    <ClCompile Include="Component.cpp" />
+    <ClCompile Include="CTrannsform.cpp" />
+    <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="Source\Application.cpp" />
     <ClCompile Include="Source\Color.cpp" />
     <ClCompile Include="Source\External\ImGui\imgui.cpp" />
@@ -71,6 +76,11 @@
     <ClCompile Include="Source\Timer.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="CMaterial.h" />
+    <ClInclude Include="CMeshes.h" />
+    <ClInclude Include="Component.h" />
+    <ClInclude Include="CTrannsform.h" />
+    <ClInclude Include="GameObject.h" />
     <ClInclude Include="Source\Application.h" />
     <ClInclude Include="Source\Color.h" />
     <ClInclude Include="Source\External\ImGui\imconfig.h" />

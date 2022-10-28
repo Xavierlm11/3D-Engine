@@ -34,6 +34,12 @@
     <Filter Include="Files\Resources">
       <UniqueIdentifier>{f5ba024a-0047-4146-80eb-41116b96e90c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="GameObjects">
+      <UniqueIdentifier>{e1bfbced-b97b-42e1-8377-d481a6911189}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameObjects\Propierties">
+      <UniqueIdentifier>{6b87970a-5797-4f7f-9da4-1cd4a1db59ae}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\log.cpp">
@@ -209,6 +215,21 @@
     </ClCompile>
     <ClCompile Include="Source\Mesh.cpp">
       <Filter>Files\Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="Component.cpp">
+      <Filter>GameObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObject.cpp">
+      <Filter>GameObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="CMeshes.cpp">
+      <Filter>GameObjects\Propierties</Filter>
+    </ClCompile>
+    <ClCompile Include="CTrannsform.cpp">
+      <Filter>GameObjects\Propierties</Filter>
+    </ClCompile>
+    <ClCompile Include="CMaterial.cpp">
+      <Filter>GameObjects\Propierties</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -475,6 +496,21 @@
     </ClInclude>
     <ClInclude Include="Source\Mesh.h">
       <Filter>Files\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObject.h">
+      <Filter>GameObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="Component.h">
+      <Filter>GameObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="CMeshes.h">
+      <Filter>GameObjects\Propierties</Filter>
+    </ClInclude>
+    <ClInclude Include="CTrannsform.h">
+      <Filter>GameObjects\Propierties</Filter>
+    </ClInclude>
+    <ClInclude Include="CMaterial.h">
+      <Filter>GameObjects\Propierties</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -53,6 +53,11 @@ public:
 	std::string OrgName = ORGANIZATION;//ENGINE NAME
 	//void logs(const char* text);
 	void SetName(const char* name);
+	
+	
+
+	LCG rand;
+
 private:
 
 	void AddModule(Module* mod);
