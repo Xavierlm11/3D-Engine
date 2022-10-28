@@ -13,6 +13,7 @@ ModuleScene::ModuleScene(Application* app, bool start_enabled) : Module(app, sta
 {
     modelScene = nullptr;
     modelMesh = nullptr;
+    models.push_back(new ModelData());
 }
 
 ModuleScene::~ModuleScene()
@@ -128,9 +129,9 @@ bool ModuleScene::CleanUp()
 {
 	LOG("Unloading scene");
 
-    for (int i = 0; i < meshes.size(); i++)
+    for (int i = 0; i < models[0]->meshes.size(); i++)
     {
-        meshes[i]->UnloadMesh();
+        models[0]->meshes[i]->UnloadMesh();
     }
 
     App->imp->ReleaseFile(modelScene);

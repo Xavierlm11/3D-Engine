@@ -43,7 +43,7 @@ public:
 	const aiScene* modelScene;
 	MeshData * modelMesh;
 
-	std::vector<MeshData*> meshes;
+	std::vector<ModelData*> models;
 	
 	
 };

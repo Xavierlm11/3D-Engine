@@ -773,19 +773,19 @@ void ModuleEditor::CheckShapes() {
 
 		if (App->scene->house_loaded == false) {
 			if (selectedShape != ModuleScene::Shapes::NONE && selectedShape != ModuleScene::Shapes::HOUSE) {
-				App->scene->CleanMeshes(&App->scene->meshes);
+				App->scene->CleanMeshes(&App->scene->models[0]->meshes);
 			}
-			App->scene->LoadHouse(&App->scene->meshes);
-			for (int i = 0; i < App->scene->meshes.size(); i++)
+			App->scene->LoadHouse(&App->scene->models[0]->meshes);
+			for (int i = 0; i < App->scene->models[0]->meshes.size(); i++)
 			{
-				App->scene->meshes[i]->LoadBuffers();
+				App->scene->models[0]->meshes[i]->LoadBuffers();
 			}
 		}
 	}
 	else 
 	{
 		if (App->scene->house_loaded == true) {
-			App->scene->CleanMeshes(&App->scene->meshes);
+			App->scene->CleanMeshes(&App->scene->models[0]->meshes);
 		}
 	}
 
@@ -795,19 +795,19 @@ void ModuleEditor::CheckShapes() {
 
 		if (App->scene->cube_loaded == false) {
 			if (selectedShape != ModuleScene::Shapes::NONE && selectedShape != ModuleScene::Shapes::CUBE) {
-				App->scene->CleanMeshes(&App->scene->meshes);
+				App->scene->CleanMeshes(&App->scene->models[0]->meshes);
 			}
-			App->scene->LoadCube(&App->scene->meshes);
-			for (int i = 0; i < App->scene->meshes.size(); i++)
+			App->scene->LoadCube(&App->scene->models[0]->meshes);
+			for (int i = 0; i < App->scene->models[0]->meshes.size(); i++)
 			{
-				App->scene->meshes[i]->LoadBuffers();
+				App->scene->models[0]->meshes[i]->LoadBuffers();
 			}
 		}
 	}
 	else
 	{
 		if (App->scene->cube_loaded == true) {
-			App->scene->CleanMeshes(&App->scene->meshes);
+			App->scene->CleanMeshes(&App->scene->models[0]->meshes);
 		}
 	}
 
@@ -817,12 +817,12 @@ void ModuleEditor::CheckShapes() {
 
 		if (App->scene->sphere_loaded == false) {
 			if (selectedShape != ModuleScene::Shapes::NONE && selectedShape != ModuleScene::Shapes::SPHERE) {
-				App->scene->CleanMeshes(&App->scene->meshes);
+				App->scene->CleanMeshes(&App->scene->models[0]->meshes);
 			}
-			App->scene->LoadSphere(&App->scene->meshes);
-			for (int i = 0; i < App->scene->meshes.size(); i++)
+			App->scene->LoadSphere(&App->scene->models[0]->meshes);
+			for (int i = 0; i < App->scene->models[0]->meshes.size(); i++)
 			{
-				App->scene->meshes[i]->LoadBuffers();
+				App->scene->models[0]->meshes[i]->LoadBuffers();
 			}
 		}
 			
@@ -830,7 +830,7 @@ void ModuleEditor::CheckShapes() {
 	else
 	{
 		if (App->scene->sphere_loaded == true) {
-			App->scene->CleanMeshes(&App->scene->meshes);
+			App->scene->CleanMeshes(&App->scene->models[0]->meshes);
 		}
 	}
 
@@ -839,20 +839,20 @@ void ModuleEditor::CheckShapes() {
 		
 		if (App->scene->pyramid_loaded == false) {
 			if (selectedShape != ModuleScene::Shapes::NONE && selectedShape != ModuleScene::Shapes::PYRAMID) {
-				App->scene->CleanMeshes(&App->scene->meshes);
+				App->scene->CleanMeshes(&App->scene->models[0]->meshes);
 			}
 
-			App->scene->LoadPyramid(&App->scene->meshes);
-			for (int i = 0; i < App->scene->meshes.size(); i++)
+			App->scene->LoadPyramid(&App->scene->models[0]->meshes);
+			for (int i = 0; i < App->scene->models[0]->meshes.size(); i++)
 			{
-				App->scene->meshes[i]->LoadBuffers();
+				App->scene->models[0]->meshes[i]->LoadBuffers();
 			}
 		}
 	}
 	else
 	{
 		if (App->scene->pyramid_loaded == true) {
-			App->scene->CleanMeshes(&App->scene->meshes);
+			App->scene->CleanMeshes(&App->scene->models[0]->meshes);
 		}
 	}
 
@@ -862,19 +862,19 @@ void ModuleEditor::CheckShapes() {
 
 		if (App->scene->cylinder_loaded == false) {
 			if (selectedShape != ModuleScene::Shapes::NONE && selectedShape != ModuleScene::Shapes::CYLINDER) {
-				App->scene->CleanMeshes(&App->scene->meshes);
+				App->scene->CleanMeshes(&App->scene->models[0]->meshes);
 			}
-			App->scene->LoadCylinder(&App->scene->meshes);
-			for (int i = 0; i < App->scene->meshes.size(); i++)
+			App->scene->LoadCylinder(&App->scene->models[0]->meshes);
+			for (int i = 0; i < App->scene->models[0]->meshes.size(); i++)
 			{
-				App->scene->meshes[i]->LoadBuffers();
+				App->scene->models[0]->meshes[i]->LoadBuffers();
 			}
 		}
 	}
 	else
 	{
 		if (App->scene->cylinder_loaded == true) {
-			App->scene->CleanMeshes(&App->scene->meshes);
+			App->scene->CleanMeshes(&App->scene->models[0]->meshes);
 		}
 	}
 	

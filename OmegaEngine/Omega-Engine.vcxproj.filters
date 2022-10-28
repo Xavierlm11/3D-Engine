@@ -213,7 +213,7 @@
     <ClCompile Include="Source\ModuleImport.cpp">
       <Filter>Files\Modules</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Mesh.cpp">
+    <ClCompile Include="Source\MeshData.cpp">
       <Filter>Files\Resources</Filter>
     </ClCompile>
     <ClCompile Include="Component.cpp">
@@ -230,6 +230,9 @@
     </ClCompile>
     <ClCompile Include="CMaterial.cpp">
       <Filter>GameObjects\Propierties</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\ModelData.cpp">
+      <Filter>Files\Resources</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -494,7 +497,7 @@
     <ClInclude Include="Source\ModuleImport.h">
       <Filter>Files\Modules</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Mesh.h">
+    <ClInclude Include="Source\MeshData.h">
       <Filter>Files\Resources</Filter>
     </ClInclude>
     <ClInclude Include="GameObject.h">
@@ -511,6 +514,9 @@
     </ClInclude>
     <ClInclude Include="CMaterial.h">
       <Filter>GameObjects\Propierties</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ModelData.h">
+      <Filter>Files\Resources</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

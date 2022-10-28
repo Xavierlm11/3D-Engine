@@ -1,7 +1,8 @@
 #pragma once
 #include "Module.h"
 #include "Globals.h"
-#include "Mesh.h"
+#include "MeshData.h"
+#include "ModelData.h"
 #include "Assimp/include/scene.h"
 
 class ModuleImport : public Module
