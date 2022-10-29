@@ -800,7 +800,7 @@ void ModuleEditor::CheckShapes() {
 			App->scene->LoadCube(&App->scene->models[0]->meshes);
 			for (int i = 0; i < App->scene->models[0]->meshes.size(); i++)
 			{
-				App->scene->models[0]->meshes[i]->LoadBuffers();
+				//App->scene->models[0]->meshes[i]->LoadBuffers();
 			}
 		}
 	}
@@ -822,7 +822,7 @@ void ModuleEditor::CheckShapes() {
 			App->scene->LoadSphere(&App->scene->models[0]->meshes);
 			for (int i = 0; i < App->scene->models[0]->meshes.size(); i++)
 			{
-				App->scene->models[0]->meshes[i]->LoadBuffers();
+				//App->scene->models[0]->meshes[i]->LoadBuffers();
 			}
 		}
 			
@@ -845,7 +845,7 @@ void ModuleEditor::CheckShapes() {
 			App->scene->LoadPyramid(&App->scene->models[0]->meshes);
 			for (int i = 0; i < App->scene->models[0]->meshes.size(); i++)
 			{
-				App->scene->models[0]->meshes[i]->LoadBuffers();
+				//App->scene->models[0]->meshes[i]->LoadBuffers();
 			}
 		}
 	}
@@ -867,7 +867,7 @@ void ModuleEditor::CheckShapes() {
 			App->scene->LoadCylinder(&App->scene->models[0]->meshes);
 			for (int i = 0; i < App->scene->models[0]->meshes.size(); i++)
 			{
-				App->scene->models[0]->meshes[i]->LoadBuffers();
+				//App->scene->models[0]->meshes[i]->LoadBuffers();
 			}
 		}
 	}
