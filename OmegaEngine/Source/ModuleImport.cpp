@@ -129,11 +129,9 @@ void ModuleImport::GetMeshDatas(const aiScene* scene, std::vector<MeshData*>* me
 
 	for (int i = 0; i < scene->mNumMeshes; i++) {
 		MeshData* newMesh = new MeshData();
-		newMesh = GetMeshData(scene->mMeshes[i], scene);
-		//aiMaterial* material = scene->mMaterials[scene->mMeshes[i]->mMaterialIndex];
-		//uint numTextures = material->GetTextureCount(aiTextureType_DIFFUSE);
-		//aiString path;
-		//material->GetTexture(aiTextureType_DIFFUSE, 0, &path);
+		
+		GetMeshData(newMesh, scene->mMeshes[i], scene);
+		newMesh->LoadBuffers();
 		meshes->push_back(newMesh);
 	}
 }
@@ -145,18 +143,38 @@ void ModuleImport::ReleaseFile(const aiScene* scene) {
 
 
 
-MeshData* ModuleImport::GetMeshData(aiMesh* mesh, const aiScene * scene) {
+MeshData* ModuleImport::GetMeshData(MeshData * meshData, aiMesh* mesh, const aiScene * scene) {
 
 	aiMaterial* material = new aiMaterial();
 	material = scene->mMaterials[mesh->mMaterialIndex];
-	uint numTextures = material->GetTextureCount(aiTextureType_DIFFUSE);
-	aiString path;
-	material->GetTexture(aiTextureType_DIFFUSE, 0, &path);
-	LOG("PATH: %s", path.C_Str());
 
-	MeshData* meshData = new MeshData();
-	//meshData
+	if (scene->HasMaterials()) {
+		uint numTextures = material->GetTextureCount(aiTextureType_DIFFUSE);
+		
 
+		if (numTextures > 0) {
+
+			aiString path;
+			material->GetTexture(aiTextureType_DIFFUSE, 0, &path);
+
+			LOG("PATH: %s", path.C_Str());
+			std::string assetsPath = "Assets/";
+			const char* filePath = path.C_Str();
+
+			std::string finalPath = assetsPath + filePath;
+			LOG("PATH: %s", finalPath.c_str());
+			//const char* newPath = "Assets/%s"
+			meshData->material = new MaterialData();
+			meshData->material->texture_id = App->imp->ImportTexture(finalPath.c_str());
+		}
+	}
+	
+	
+	
+
+	
+	
+	
 
 	//copy vertices
 	meshData->num_vertices = mesh->mNumVertices;
@@ -176,7 +194,8 @@ MeshData* ModuleImport::GetMeshData(aiMesh* mesh, const aiScene * scene) {
 			if (mesh->mFaces[i].mNumIndices != 3) {
 				LOG("WARNING, geometry face with != 3 indices!");
 			}
-			else {
+			else 
+			{
 				memcpy(&meshData->indices[i * 3], mesh->mFaces[i].mIndices, 3 * sizeof(uint));
 			}
 		}
@@ -189,12 +208,12 @@ MeshData* ModuleImport::GetMeshData(aiMesh* mesh, const aiScene * scene) {
 	}
 	//copy texture coords
 	if (mesh->HasTextureCoords(0)) {
-		meshData->num_textures = mesh->mNumVertices;
-		meshData->textures = new float[mesh->mNumVertices * 2];
+		meshData->num_textureCoords = mesh->mNumVertices;
+		meshData->textureCoords = new float[mesh->mNumVertices * 2];
 
-		for (unsigned int i = 0; i < meshData->num_textures; i++) {
-			meshData->textures[i * 2] = mesh->mTextureCoords[0][i].x;
-			meshData->textures[i * 2 + 1] = mesh->mTextureCoords[0][i].y;
+		for (unsigned int i = 0; i < meshData->num_textureCoords; i++) {
+			meshData->textureCoords[i * 2] = mesh->mTextureCoords[0][i].x;
+			meshData->textureCoords[i * 2 + 1] = mesh->mTextureCoords[0][i].y;
 		}
 	}
 	

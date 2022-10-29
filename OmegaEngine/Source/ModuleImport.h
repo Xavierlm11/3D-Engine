@@ -3,7 +3,7 @@
 #include "Globals.h"
 #include "MeshData.h"
 #include "ModelData.h"
-#include "MaterialData.h"
+
 #include "Assimp/include/scene.h"
 
 class ModuleImport : public Module
@@ -19,7 +19,7 @@ public:
 
 	const aiScene* LoadFile(const char* path);
 	void GetMeshDatas(const aiScene* scene, std::vector<MeshData*>* meshes);
-	MeshData* GetMeshData(aiMesh* mesh, const aiScene * scene);
+	MeshData* GetMeshData(MeshData * meshData, aiMesh* mesh, const aiScene * scene);
 	void ReleaseFile(const aiScene* scene);
 
 	//Textures

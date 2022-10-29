@@ -2,6 +2,7 @@
 #include "External/MathGeoLib/include/Math/float3.h"
 #include "Glew/include/glew.h"
 #include "Assimp/include/scene.h"
+#include "MaterialData.h"
 //
 //class ModelData {
 //
@@ -30,9 +31,11 @@ public:
 	uint num_vertices = 0;
 	float* vertices = nullptr;
 
-	uint id_textures = 0;
-	uint num_textures = 0;
-	float* textures = nullptr;
+	uint id_textureCoords = 0;
+	uint num_textureCoords = 0;
+	float* textureCoords = nullptr;
 
 	bool hasLoadedBuffers;
+
+	MaterialData* material = nullptr;
 };

@@ -9,6 +9,13 @@ MeshData::MeshData()
 	id_vertices = 0; // unique vertex in VRAM
 	num_vertices = 0;
 	vertices = nullptr;
+
+	id_textureCoords = 0; 
+	num_textureCoords = 0;
+	textureCoords = nullptr;
+
+	material = nullptr;
+
 	hasLoadedBuffers = false;
 }
 
@@ -20,8 +27,11 @@ MeshData::~MeshData()
 	vertices = nullptr;
 	delete vertices;
 
-	textures = nullptr;
-	delete textures;
+	textureCoords = nullptr;
+	delete textureCoords;
+
+	material = nullptr;
+	delete material;
 }
 
 
@@ -36,9 +46,9 @@ void MeshData::LoadBuffers() {
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, id_indices);
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * num_indices, &indices[0], GL_STATIC_DRAW);
 
-		glGenBuffers(1, (GLuint*)&(id_textures));
-		glBindBuffer(GL_ARRAY_BUFFER, id_textures);
-		glBufferData(GL_ARRAY_BUFFER, sizeof(float) * num_textures * 2, &textures[0], GL_STATIC_DRAW);
+		glGenBuffers(1, (GLuint*)&(id_textureCoords));
+		glBindBuffer(GL_ARRAY_BUFFER, id_textureCoords);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(float) * num_textureCoords * 2, &textureCoords[0], GL_STATIC_DRAW);
 
 		LOG("Mesh Loaded! Mesh indices: %i. Mesh vertices: %i", num_indices, num_vertices);
 		hasLoadedBuffers = true;
@@ -57,9 +67,10 @@ void MeshData::UnloadMesh() {
 			glDeleteBuffers(1, &id_vertices);
 		}
 
-		/*if (id_textures != NULL) {
-			glDeleteBuffers(1, &id_textures);
-		}*/
+		if (id_textureCoords != NULL) {
+			glDeleteBuffers(1, &id_textureCoords);
+		}
+
 		hasLoadedBuffers = false;
 	}
 
@@ -71,13 +82,13 @@ void MeshData::UnloadMesh() {
 		delete[] vertices;
 	}
 
-	if (textures != nullptr) {
-		delete[] textures;
+	if (textureCoords != nullptr) {
+		delete[] textureCoords;
 	}
 
 	indices = nullptr;
 	vertices = nullptr;
-	textures = nullptr;
+	textureCoords = nullptr;
 
 }
 
@@ -99,7 +110,7 @@ void MeshData::DrawMesh(GLuint textureID) {
 		glTexCoordPointer(2, GL_FLOAT, 0, NULL);*/
 		//draw textutes
 		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-		glBindBuffer(GL_ARRAY_BUFFER, id_textures);
+		glBindBuffer(GL_ARRAY_BUFFER, id_textureCoords);
 		glTexCoordPointer(2, GL_FLOAT, 0, NULL);
 
 

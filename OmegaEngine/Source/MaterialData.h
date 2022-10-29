@@ -7,4 +7,6 @@ class MaterialData {
 public:
 	MaterialData() {};
 	~MaterialData() {};
+
+	GLuint texture_id;
 };

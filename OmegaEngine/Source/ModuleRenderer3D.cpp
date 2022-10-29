@@ -246,14 +246,25 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 		p.Render();
 		for (int i = 0; i < App->scene->models[0]->meshes.size(); i++)
 		{
-			//App->scene->meshes[i]->DrawMesh(App->scene->meshes[i]->id_textures);
-			if (App->scene->models[0]->meshes[i]->num_textures > 0) {
+			if (App->scene->models[0]->meshes[i]->id_textureCoords != 0) {
+				//App->scene->models[0]->meshes[i]->DrawMesh(App->scene->models[0]->meshes[i]->id_textures);
+			}
+			
+			if (App->scene->models[0]->meshes[i]->num_textureCoords > 0) {
 				//App->scene->models[0]->meshes[i]->DrawMesh(houseTexID);
 			}
 			else {
 				//App->scene->models[0]->meshes[i]->DrawMesh(checkersID);
 			}
-			App->scene->models[0]->meshes[i]->DrawMesh(checkersID);
+			//App->scene->models[0]->meshes[i]->DrawMesh(houseTexID);
+			//App->scene->models[0]->meshes[i]->DrawMesh(checkersID);
+			if (App->scene->models[0]->meshes[i]->material!=nullptr) {
+				App->scene->models[0]->meshes[i]->DrawMesh(App->scene->models[0]->meshes[i]->material->texture_id);
+			}
+			else {
+				App->scene->models[0]->meshes[i]->DrawMesh(0);
+			}
+			
 			//LOG("ID_TEX: %i", App->scene->meshes[i]->id_textures);
 		}
 		//DrawCube();
