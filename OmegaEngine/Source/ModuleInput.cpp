@@ -30,6 +30,8 @@ bool ModuleInput::Init()
 		ret = false;
 	}
 
+	SDL_EventState(SDL_DROPFILE, SDL_ENABLE);
+
 	return ret;
 }
 
@@ -104,17 +106,45 @@ update_status ModuleInput::PreUpdate(float dt)
 			mouse_y_motion = e.motion.yrel / SCREEN_SIZE;
 			break;
 
-			case SDL_QUIT:
-			quit = true;
-			break;
+			case SDL_DROPFILE:
+			{
+				//char* dropped_filedir;
+				std::string dropped_filedir = e.drop.file;
+				std::string fileName = dropped_filedir.substr(dropped_filedir.find_last_of('\\') + 2);
+				std::string extension = fileName.substr(fileName.find_last_of('.') + 1);
+				//LOG(last.c_str());
+				
+				if (extension == "png") {
+
+				}
+				else if (extension == "fbx")
+				{
+					App->scene->LoadCustom(dropped_filedir.c_str(), &App->scene->models[0]->meshes);
+				}
+				else {
+
+				}
+
+				/*if(dropped_filedir.substr(dropped_filedir.back()) == "conf") {
+					std::cout << "Yes..." << std::endl;
+				}
+				else {
+					std::cout << "No..." << std::endl;
+				}*/
+				break;
+			}
 
 			case SDL_WINDOWEVENT:
 			{
 				if (e.window.event == SDL_WINDOWEVENT_RESIZED) {
 					App->renderer3D->OnResize(0, 0, e.window.data1, e.window.data2);//e.window.data1, e.window.data2);
 				}
+				break;
 			}
-			
+
+			case SDL_QUIT:
+				quit = true;
+				break;
 			
 
 		}

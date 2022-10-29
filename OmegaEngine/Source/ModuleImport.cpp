@@ -39,7 +39,6 @@ bool ModuleImport::Init()
 	stream = aiGetPredefinedLogStream(aiDefaultLogStream_DEBUGGER, nullptr);
 	aiAttachLogStream(&stream);
 	LoadCheckerTexture();
-	
 
 	return true;
 }
@@ -55,47 +54,51 @@ GLuint ModuleImport::ImportTexture(const char* path) {
 	FILE* File;
 
 	File = fopen(path, "rb");
-	fseek(File, 0, SEEK_END);
-	Size = ftell(File);
-
-	Lump = (ILubyte*)malloc(Size);
-	fseek(File, 0, SEEK_SET);
-	fread(Lump, 1, Size, File);
-
-	LOG("SIZE: %i", Size);
-	
-	if (ilLoadImage(path) == true) {
-
-		LOG("FOUND");
-		GLuint texID;
-		GLuint texture;
-
-
-		glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-		texID = ilutGLBindTexImage();
+	if (File != NULL) {
 		
-		glBindTexture(GL_TEXTURE_2D, texID);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-		//glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, CHECKERS_WIDTH, CHECKERS_HEIGHT, 0, GL_RGBA, GL_UNSIGNED_BYTE, texImage);
-		glGenerateMipmap(GL_TEXTURE_2D);
-		glBindTexture(GL_TEXTURE_2D, 0);
+		fseek(File, 0, SEEK_END);
+		Size = ftell(File);
 
-		ilDeleteImages(1,&texID);
+		Lump = (ILubyte*)malloc(Size);
+		fseek(File, 0, SEEK_SET);
+		fread(Lump, 1, Size, File);
 
-		glBindTexture(GL_TEXTURE_2D, 0);
+		LOG("SIZE: %i", Size);
+
+		if (ilLoadImage(path) == true) {
+
+			LOG("FOUND");
+			GLuint texID;
+			GLuint texture;
+
+
+			glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+			texID = ilutGLBindTexImage();
+
+			glBindTexture(GL_TEXTURE_2D, texID);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+			//glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, CHECKERS_WIDTH, CHECKERS_HEIGHT, 0, GL_RGBA, GL_UNSIGNED_BYTE, texImage);
+			glGenerateMipmap(GL_TEXTURE_2D);
+			glBindTexture(GL_TEXTURE_2D, 0);
+
+			ilDeleteImages(1, &texID);
+
+			glBindTexture(GL_TEXTURE_2D, 0);
+			fclose(File);
+			free(Lump);
+
+			return texID;
+		}
+
 		fclose(File);
-		free(Lump);
 
-		return texID;
+
+		LOG("NOT FOUND");
 	}
-	
-	fclose(File);
-	
 
-	LOG("NOT FOUND");
 }
 
 update_status ModuleImport::PreUpdate(float dt)

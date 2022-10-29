@@ -54,6 +54,13 @@ void ModuleScene::CleanMeshes(std::vector<MeshData*>* meshesVec) {
 
 void ModuleScene::LoadCustom(const char* path, std::vector<MeshData*>* meshesVec) {
 
+    const aiScene* newScene;
+    newScene = App->imp->LoadFile(path);
+    App->imp->GetMeshDatas(newScene, meshesVec);
+    aiReleaseImport(newScene);
+    newScene = nullptr;
+    delete newScene;
+
    /* if (house_loaded == false) {
         const aiScene* newScene;
         newScene = App->imp->LoadFile(path);
