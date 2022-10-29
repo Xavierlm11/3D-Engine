@@ -1,12 +1,14 @@
 #include "GameObject.h"
-
+#include "CMaterial.h"
+#include "CMeshes.h"
+#include "CTransform.h"
 
 GameObject::GameObject(const char* name, GameObject* parent):name(name)
 {
 	uid = External->rand.Int();
 	if(parent!=nullptr )
 	{ 
-		parent->childrens.push_back(parent);
+		parent->childrens.push_back(this);
 	}
 }
 
@@ -32,17 +34,17 @@ GameObject::~GameObject()
 void GameObject::SetParent(GameObject* newparent)
 {
 	GameObject* p = newparent;
-	if (p==parent)return;
+	if (p==parent)return ;
 	
 	if (p->parent)
 	{
-		p->parent->DeleteChild(p);
+		p->parent->DeleteChild(this);
 	}
 	parent = p;
 
 	if (p)
 	{
-		p->childrens.push_back(p);
+		p->childrens.push_back(this);
 	}
 	//set transform
 
@@ -86,5 +88,51 @@ Component* GameObject::GetComponent(Component::Types stype)
 
 	}
 	return nullptr;
+}
+
+GameObject* GameObject::GetParent()
+{
+	return parent;
+}
+
+std::vector<GameObject*> GameObject::GetChildrens()
+{
+	return childrens;
+}
+
+Component* GameObject::CreateComp(Component::Types type)
+{
+	Component* comp = nullptr;
+	switch (type)
+	{
+		case Component::Types::NONE :
+		{
+			//SI
+		}
+			break;
+		case Component::Types::TRANSFORM:
+		{
+			comp = new CTransform(this);
+		}
+			break;
+		case Component::Types::MATERIAL:
+		{
+			comp = new CMaterial(this);
+		}
+			break;
+		case Component::Types::MESH:
+		{
+			comp = new CMeshes(this);
+		}
+			break;
+		case Component::Types::LIGHT:
+		{
+			//no
+		}
+			break;
+	}
+	if (comp != nullptr) components.push_back(comp);
+	
+	return comp;
 }
 

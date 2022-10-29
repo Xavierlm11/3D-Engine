@@ -6,6 +6,6 @@ public:
 	CTransform(GameObject* obj);
 	virtual ~CTransform();
 
-
+	void Update() override;
 };
 

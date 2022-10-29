@@ -4,8 +4,8 @@
 #include <stdio.h>	
 #include <list>
 #include <math.h>
-#include "Source/Globals.h"
-#include "Source/Application.h"
+#include "Globals.h"
+#include "Application.h"
 #include "Component.h"
 class Component;
 
@@ -26,6 +26,12 @@ public:
 	bool IsEnable();
 
 	Component* GetComponent(Component::Types stype);
+
+	GameObject* GetParent();
+
+	std::vector<GameObject*> GetChildrens();
+
+	Component* CreateComp(Component::Types type);
 
 public:
 

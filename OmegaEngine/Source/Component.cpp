@@ -29,6 +29,16 @@ bool Component::IsEnable()
 	return active;
 }
 
+Component::Types Component::GetType() const
+{
+	return type;
+}
+
+GameObject* Component::GetGO()
+{
+	return GO;
+}
+
 //Types Component::()
 //{
 //

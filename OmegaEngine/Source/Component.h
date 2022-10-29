@@ -16,12 +16,14 @@ public:
 	Component(GameObject* obj, Types type);
 	virtual ~Component();
 
-	void Enable();
+	virtual void Enable();
 
-	void Disable();
+	virtual void Disable();
 
-	bool IsEnable();
-	Types GetType();
+	virtual bool IsEnable();
+	Types GetType() const;
+	GameObject* GetGO() ;
+	virtual void Update(){}
 
 public:
 	Types type =Types::NONE;

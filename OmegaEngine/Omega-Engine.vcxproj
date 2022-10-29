@@ -11,13 +11,12 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="CMaterial.cpp" />
-    <ClCompile Include="CMeshes.cpp" />
-    <ClCompile Include="Component.cpp" />
-    <ClCompile Include="CTransform.cpp" />
-    <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="Source\Application.cpp" />
+    <ClCompile Include="Source\CMaterial.cpp" />
+    <ClCompile Include="Source\CMeshes.cpp" />
     <ClCompile Include="Source\Color.cpp" />
+    <ClCompile Include="Source\Component.cpp" />
+    <ClCompile Include="Source\CTransform.cpp" />
     <ClCompile Include="Source\External\ImGui\imgui.cpp" />
     <ClCompile Include="Source\External\ImGui\imgui_demo.cpp" />
     <ClCompile Include="Source\External\ImGui\imgui_draw.cpp" />
@@ -58,6 +57,7 @@
     <ClCompile Include="Source\External\MathGeoLib\include\Math\TransformOps.cpp" />
     <ClCompile Include="Source\External\MathGeoLib\include\Time\Clock.cpp" />
     <ClCompile Include="Source\External\parson\parson.c" />
+    <ClCompile Include="Source\GameObject.cpp" />
     <ClCompile Include="Source\glmath.cpp" />
     <ClCompile Include="Source\Light.cpp" />
     <ClCompile Include="Source\log.cpp" />
@@ -78,13 +78,12 @@
     <ClCompile Include="Source\Timer.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="CMaterial.h" />
-    <ClInclude Include="CMeshes.h" />
-    <ClInclude Include="Component.h" />
-    <ClInclude Include="CTransform.h" />
-    <ClInclude Include="GameObject.h" />
     <ClInclude Include="Source\Application.h" />
+    <ClInclude Include="Source\CMaterial.h" />
+    <ClInclude Include="Source\CMeshes.h" />
     <ClInclude Include="Source\Color.h" />
+    <ClInclude Include="Source\Component.h" />
+    <ClInclude Include="Source\CTransform.h" />
     <ClInclude Include="Source\External\ImGui\imconfig.h" />
     <ClInclude Include="Source\External\ImGui\imgui.h" />
     <ClInclude Include="Source\External\ImGui\imgui_impl_opengl3.h" />
@@ -155,6 +154,7 @@
     <ClInclude Include="Source\External\MathGeoLib\include\Math\TransformOps.h" />
     <ClInclude Include="Source\External\MathGeoLib\include\Time\Clock.h" />
     <ClInclude Include="Source\External\parson\parson.h" />
+    <ClInclude Include="Source\GameObject.h" />
     <ClInclude Include="Source\glmath.h" />
     <ClInclude Include="Source\Globals.h" />
     <ClInclude Include="Source\Light.h" />
