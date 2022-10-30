@@ -119,7 +119,12 @@ update_status ModuleInput::PreUpdate(float dt)
 				}
 				else if (extension == "fbx")
 				{
-					App->scene->LoadCustom(dropped_filedir.c_str(), &App->scene->models[0]->meshes);
+					//App->scene->LoadCustom(dropped_filedir.c_str(), &App->scene->models[0]->meshes);
+					
+					/*if()
+					App->scene->LoadCustom(dropped_filedir.c_str(), &App->scene);*/
+					App->scene->LoadCustomObj(dropped_filedir.c_str());
+
 				}
 				else {
 

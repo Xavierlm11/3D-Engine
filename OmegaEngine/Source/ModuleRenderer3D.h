@@ -4,7 +4,8 @@
 #include "glmath.h"
 #include "Light.h"
 #include "Glew/include/glew.h"
-
+#include <vector>
+#include "CMeshes.h"
 #define MAX_LIGHTS 8
 
 #define CHECKERS_HEIGHT 100
@@ -34,6 +35,7 @@ public:
 	void LoadTextureBuffers();
 	void DrawMesh(MeshData* mesh);
 	update_status PostUpdate(float dt);
+	void GoRender();
 	bool CleanUp();
 
 	void OnResize(int x, int y, int width, int height);
@@ -89,6 +91,8 @@ public:
 		
 	};
 
+
+
 	bool hasLoadedMesh;
 
 
@@ -97,6 +101,8 @@ public:
 	GLubyte checkerImage[CHECKERS_HEIGHT][CHECKERS_WIDTH][4];
 
 	GLuint houseTexID;
+
+	std::vector<CMeshes*> meshlist;
 
 public:
 

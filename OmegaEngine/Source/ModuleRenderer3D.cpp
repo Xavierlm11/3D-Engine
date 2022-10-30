@@ -244,10 +244,25 @@ void ModuleRenderer3D::DrawMesh(MeshData* mesh) {
 update_status ModuleRenderer3D::PostUpdate(float dt)
 {
 	
+	GoRender();
+
+	if (App->input->GetKey(SDL_SCANCODE_F)==KEY_REPEAT) {
+		App->camera->LookAt(vec3(0, 0, 0));
+	}
+
+
+	App->editor->Draw();
+
+	SDL_GL_SwapWindow(App->window->window);
+	return UPDATE_CONTINUE;
+}
+
+void ModuleRenderer3D::GoRender()
+{
 	PrimPlane p(0, 0, 0, 0);
 	p.axis = true;
 
-	switch(mode)
+	switch (mode)
 	{
 	case RenderMode::NONE:
 
@@ -259,7 +274,7 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 			if (App->scene->models[0]->meshes[i]->id_textureCoords != 0) {
 				//App->scene->models[0]->meshes[i]->DrawMesh(App->scene->models[0]->meshes[i]->id_textures);
 			}
-			
+
 			if (App->scene->models[0]->meshes[i]->num_textureCoords > 0) {
 				//App->scene->models[0]->meshes[i]->DrawMesh(houseTexID);
 			}
@@ -268,17 +283,28 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 			}
 			//App->scene->models[0]->meshes[i]->DrawMesh(houseTexID);
 			//App->scene->models[0]->meshes[i]->DrawMesh(checkersID);
-			if (App->scene->models[0]->meshes[i]->material!=nullptr) {
+			if (App->scene->models[0]->meshes[i]->material != nullptr) {
 				App->scene->models[0]->meshes[i]->DrawMesh(App->scene->models[0]->meshes[i]->material->texture_id);
 			}
 			else {
-				
+
 				App->scene->models[0]->meshes[i]->DrawMesh(0);
 				//glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 			}
-			
+
 			//LOG("ID_TEX: %i", App->scene->meshes[i]->id_textures);
 		}
+		p.Render();
+		for (int i = 0; i <meshlist.size(); i++)
+		{
+			if (meshlist[i] != nullptr)
+			{
+
+				meshlist[i]->MeshRenderer();
+
+			}
+		}
+
 		//DrawCube();
 		break;
 	case RenderMode::WIREFRAME:
@@ -294,22 +320,22 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 				App->scene->models[0]->meshes[i]->DrawMesh(0);
 				//glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 			}
-			
+			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+		}
+		for (int i = 0; i < meshlist.size(); i++)
+		{
+			glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+			if (meshlist[i] != nullptr)
+			{
+
+				meshlist[i]->MeshRenderer();
+
+			}
 			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 		}
 		//Draw();
 		break;
 	}
-
-	if (App->input->GetKey(SDL_SCANCODE_F)==KEY_REPEAT) {
-		App->camera->LookAt(vec3(0, 0, 0));
-	}
-
-
-	App->editor->Draw();
-
-	SDL_GL_SwapWindow(App->window->window);
-	return UPDATE_CONTINUE;
 }
 
 // Called before quitting
@@ -319,6 +345,12 @@ bool ModuleRenderer3D::CleanUp()
 
 	SDL_GL_DeleteContext(context);
 
+	for (uint i = 0; i < meshlist.size(); ++i)
+	{
+		delete meshlist[i];
+		meshlist[i] = nullptr;
+	}
+	meshlist.clear();
 	return true;
 }
 

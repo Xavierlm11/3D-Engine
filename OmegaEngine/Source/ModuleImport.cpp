@@ -139,6 +139,27 @@ void ModuleImport::GetMeshDatas(const aiScene* scene, std::vector<MeshData*>* me
 	}
 }
 
+void ModuleImport::GetMeshDatasObj(const aiScene* scene) {
+
+	/*if(scene->mNumMeshes>1)
+	{
+		Create
+	}*/
+	for (int i = 0; i < scene->mNumMeshes; i++) {
+		MeshData* newMesh = new MeshData();
+		GameObject* dobj = nullptr;
+		if (i <=0)
+			tgo[i] = dobj = App->scene->CreateGO("picaporte", App->scene->RootParent);
+		if(i>0)
+			dobj = App->scene->CreateGO("picaportitos",tgo[0]);
+
+		dobj->CreateComp(Component::Types::MESH);
+		GetMeshData(dobj[i].GOmesh->GOmesh, scene->mMeshes[i], scene);
+		dobj[i].GOmesh->GOmesh->LoadBuffers();
+		//meshes->push_back(newMesh);
+	}
+	tgo.clear();
+}
 
 void ModuleImport::ReleaseFile(const aiScene* scene) {
 	aiReleaseImport(scene);
@@ -147,6 +168,7 @@ void ModuleImport::ReleaseFile(const aiScene* scene) {
 
 
 MeshData* ModuleImport::GetMeshData(MeshData * meshData, aiMesh* mesh, const aiScene * scene) {
+
 
 	aiMaterial* material = new aiMaterial();
 	material = scene->mMaterials[mesh->mMaterialIndex];

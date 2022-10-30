@@ -9,6 +9,8 @@
 #include "Component.h"
 class Component;
 
+class CMeshes;
+
 class GameObject
 {
 public:
@@ -41,6 +43,8 @@ public:
 	std::vector<Component*> components;
 
 	GameObject* parent = nullptr;
+
+	CMeshes* GOmesh=nullptr;
 
 	uint uid=0;
 

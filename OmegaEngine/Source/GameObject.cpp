@@ -87,7 +87,7 @@ Component* GameObject::GetComponent(Component::Types stype)
 		{
 			return components[i];
 		}
-
+		
 	}
 	return nullptr;
 }

@@ -29,9 +29,9 @@ bool ModuleScene::Start()
 	bool ret = true;
 
 
-    CreateGO(RootParent,"RootParent",nullptr);
+    CreateGORoot(RootParent,"RootParent",nullptr);
 
-
+  //RootParent->components[1].
     //LoadCustom("Assets/BakerHouse.fbx", &meshes);
    /* LoadCube(meshes);
     LoadSphere(meshes);
@@ -58,10 +58,21 @@ void ModuleScene::CleanMeshes(std::vector<MeshData*>* meshesVec) {
     house_loaded = false;
 }
 
-void ModuleScene::CreateGO(GameObject* obj, const char* name, GameObject* parent)
+void ModuleScene::CreateGORoot(GameObject* obj, const char* name, GameObject* parent)
 {
     obj = new GameObject(name,parent);
     AddGOList(obj);
+}
+
+GameObject* ModuleScene::CreateGO( const char* name, GameObject* parent)
+{
+    //new GameObject(name, parent);
+    GameObject* obj;
+    obj = new GameObject(name, parent);
+    
+    AddGOList(obj);
+
+    return obj;
 }
 
 void ModuleScene::AddGOList(GameObject* objlist)
@@ -73,6 +84,7 @@ void ModuleScene::LoadCustom(const char* path, std::vector<MeshData*>* meshesVec
 
     const aiScene* newScene;
     newScene = App->imp->LoadFile(path);
+    
     App->imp->GetMeshDatas(newScene, meshesVec);//aqui obtienes la mesh
     aiReleaseImport(newScene);
     newScene = nullptr;
@@ -89,7 +101,29 @@ void ModuleScene::LoadCustom(const char* path, std::vector<MeshData*>* meshesVec
         delete newScene;
     }*/
 }
+void ModuleScene::LoadCustomObj(const char* path) {
 
+    const aiScene* newScene;
+    newScene = App->imp->LoadFile(path);
+    //for(uint i=0;newScene)
+   // GameObject* newGo = App->scene->CreateGO();
+    
+    App->imp->GetMeshDatasObj(newScene);//aqui obtienes la mesh
+    aiReleaseImport(newScene);
+    newScene = nullptr;
+    delete newScene;
+
+    /* if (house_loaded == false) {
+         const aiScene* newScene;
+         newScene = App->imp->LoadFile(path);
+         App->imp->GetMeshDatas(newScene, meshesVec);
+         aiReleaseImport(newScene);
+         App->editor->selectedShape = Shapes::NONE;
+         house_loaded = true;
+         newScene = nullptr;
+         delete newScene;
+     }*/
+}
 void ModuleScene::LoadHouse(std::vector<MeshData*>* meshesVec) {
 
     if (house_loaded == false) {

@@ -27,6 +27,7 @@ public:
 	bool LoadScene();
 
 	void LoadCustom(const char* path, std::vector<MeshData*>* meshes);
+	void LoadCustomObj(const char* path);
 	void LoadHouse(std::vector<MeshData*>* meshes);
 	void LoadCube(std::vector<MeshData*>* meshes);
 	void LoadSphere(std::vector<MeshData*>* meshes);
@@ -35,7 +36,8 @@ public:
 
 	void CleanMeshes(std::vector<MeshData*>* meshes);
 
-	void CreateGO(GameObject* obj, const char* name, GameObject* parent);
+	GameObject* CreateGO( const char* name, GameObject* parent);
+	void CreateGORoot(GameObject* obj, const char* name, GameObject* parent);
 	void AddGOList(GameObject* obj);
 
 	bool house_loaded = false;
@@ -49,7 +51,7 @@ public:
 
 	std::vector<ModelData*> models;
 	
-	GameObject* RootParent=nullptr;
+	GameObject* RootParent;
 
 	std::vector< GameObject*> ListGO;
 
