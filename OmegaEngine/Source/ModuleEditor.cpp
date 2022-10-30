@@ -40,6 +40,14 @@ ModuleEditor::ModuleEditor(Application* app, bool start_enabled) : Module(app, s
 	gl_texture2dEnabled = true;
 	gl_lineSmoothEnabled = false;
 	gl_fogEnabled = false;
+
+	fog_density = 0;
+	fog_start = 0;
+	fog_end = 0;
+	fog_index = 0;
+	fog_coord = 0;
+	selectedFogMode = 1;
+
 	ModuleScene::Shapes::NONE;
 
 
@@ -337,6 +345,70 @@ void ModuleEditor::Render3DWindow() {
 			ImGui::Checkbox("Texture 2D", &gl_texture2dEnabled);
 			ImGui::Checkbox("Line Smooth", &gl_lineSmoothEnabled);
 			ImGui::Checkbox("Fog", &gl_fogEnabled);
+			if (gl_fogEnabled == true) {
+
+				if (ImGui::TreeNode("Fog Parameters"))
+				{
+					const char* fogModes[] = { "Linear", "Exponential", "Exponential 2"};
+
+					if (ImGui::Button("Fog mode"))
+						ImGui::OpenPopup("Fog mode");
+					ImGui::SameLine();
+					ImGui::TextUnformatted(selectedFogMode == -1 ? "<None>" : fogModes[selectedFogMode]);
+					if (ImGui::BeginPopup("Fog mode"))
+					{
+						for (int i = 0; i < IM_ARRAYSIZE(fogModes); i++) {
+							if (ImGui::Selectable(fogModes[i])) {
+								selectedFogMode = i;
+
+							}
+						}
+
+						ImGui::EndPopup();
+					}
+
+					
+					switch (selectedFogMode) {
+					case 0:
+						ImGui::SliderFloat("Start", &fog_start, 0.0f, 500.0f, "%.2f");
+						ImGui::SliderFloat("End", &fog_end, 0.0f, 500.0f, "%.2f");
+						break;
+					case 1:
+						ImGui::SliderFloat("Density", &fog_density, 0.0f, 1.0f, "%.2f");
+						break;
+					case 2:
+						ImGui::SliderFloat("Density", &fog_density, 0.0f, 1.0f, "%.2f");
+						break;
+					default:
+						ImGui::SliderFloat("Density", &fog_density, 0.0f, 1.0f, "%.2f");
+					}
+					ImGui::ColorEdit4("Color", fog_color);
+					ImGui::TreePop();
+				}
+
+				
+				switch (selectedFogMode) {
+				case 0:
+					glFogf(GL_FOG_MODE, GL_LINEAR);
+					break;
+				case 1:
+					glFogf(GL_FOG_MODE, GL_EXP);
+					break;
+				case 2:
+					glFogf(GL_FOG_MODE, GL_EXP2);
+					break;
+				default:
+					glFogf(GL_FOG_MODE, GL_EXP);
+				}
+				
+				glFogf(GL_FOG_DENSITY, fog_density);
+				glFogf(GL_FOG_START, fog_start);
+				glHint(GL_FOG_HINT, GL_DONT_CARE); 
+				glFogf(GL_FOG_END, fog_end);
+				glFogfv(GL_FOG_COLOR, fog_color);
+				glFogi(GL_FOG_COORD_SRC, GL_FRAGMENT_DEPTH);
+			}
+			
 			
 
 			ImGui::TreePop();
@@ -1189,6 +1261,7 @@ void ModuleEditor::CheckGLCapabilities() {
 	if (gl_fogEnabled == true) {
 		if (!glIsEnabled(GL_FOG)) {
 			glEnable(GL_FOG);
+			//glFogf(GL_FOG_DENSITY, 0.5f);
 		}
 	}
 	else {

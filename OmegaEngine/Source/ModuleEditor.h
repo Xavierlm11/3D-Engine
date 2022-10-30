@@ -8,6 +8,7 @@
 #include <stdio.h>
 #include "SDL/include/SDL.h"
 #include <vector>
+#include "ImGui/imgui.h"
 
 #include <string.h>
 #if defined(IMGUI_IMPL_OPENGL_ES2)
@@ -120,6 +121,15 @@ private:
 	bool gl_texture2dEnabled;
 	bool gl_lineSmoothEnabled;
 	bool gl_fogEnabled;
+
+	//fog
+	int selectedFogMode;
+	float fog_density;
+	float fog_start;
+	float fog_end;
+	float fog_index;
+	float fog_color[4] = {0,0,0};
+	float fog_coord;
 
 	const char* tdnow,
 		*altvec, 
