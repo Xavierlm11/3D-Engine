@@ -5,12 +5,16 @@
 
 GameObject::GameObject(const char* name, GameObject* parent):name(name)
 {
-	uid = External->rand.Int();
+	//uid = External->rand.Int();
 	if(parent!=nullptr )
 	{ 
-		parent->childrens.push_back(this);
+		//parent->childrens.push_back(this);
 	}
 	SetParent(parent);
+}
+
+void GameObject::SetProperties() {
+
 }
 
 GameObject::~GameObject() 

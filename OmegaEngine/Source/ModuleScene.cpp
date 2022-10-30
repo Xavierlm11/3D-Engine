@@ -29,7 +29,9 @@ bool ModuleScene::Start()
 	bool ret = true;
 
 
-    CreateGORoot(RootParent,"RootParent",nullptr);
+    //CreateGORoot(RootParent,"RootParent",nullptr);
+    RootParent = new GameObject("RootParent", nullptr);
+    AddGOList(RootParent);
 
   //RootParent->components[1].
     //LoadCustom("Assets/BakerHouse.fbx", &meshes);
@@ -60,8 +62,8 @@ void ModuleScene::CleanMeshes(std::vector<MeshData*>* meshesVec) {
 
 void ModuleScene::CreateGORoot(GameObject* obj, const char* name, GameObject* parent)
 {
-    obj = new GameObject(name,parent);
-    AddGOList(obj);
+   /* obj = new GameObject(name,parent);
+    AddGOList(obj);*/
 }
 
 GameObject* ModuleScene::CreateGO( const char* name, GameObject* parent)

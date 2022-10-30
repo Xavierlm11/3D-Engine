@@ -14,7 +14,7 @@ public:
 	void MeshRenderer();
 
 public:
-	MeshData* GOmesh;
+	MeshData* GOmesh = nullptr;
 	//ModuleRenderer3D* GOmesh;
 	
 };

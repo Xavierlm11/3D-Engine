@@ -27,6 +27,8 @@ public:
 
 	bool IsEnable();
 
+	void SetProperties();
+
 	Component* GetComponent(Component::Types stype);
 
 	GameObject* GetParent();
@@ -46,7 +48,7 @@ public:
 
 	CMeshes* GOmesh=nullptr;
 
-	uint uid=0;
+	//uint uid=0;
 
 public:
 	bool active=true;

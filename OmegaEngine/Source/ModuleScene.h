@@ -51,7 +51,7 @@ public:
 
 	std::vector<ModelData*> models;
 	
-	GameObject* RootParent;
+	GameObject* RootParent = nullptr;
 
 	std::vector< GameObject*> ListGO;
 
