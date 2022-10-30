@@ -32,7 +32,7 @@ void CMeshes::MeshRenderer()
 {
 
 
-	GOmesh->DrawMesh();
+	GOmesh->DrawMesh(0);
 
 
 	

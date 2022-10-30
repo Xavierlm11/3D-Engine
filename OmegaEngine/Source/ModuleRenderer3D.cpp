@@ -123,7 +123,7 @@ bool ModuleRenderer3D::Init()
 		LoadTextureBuffers();
 		//houseTexID = App->imp->ImportTexture("Assets/Baker_house.png");
 		OnResize(0,0, App->window->winWidth, App->window->winHeight );
-
+		
 	}
 	
 
@@ -262,7 +262,9 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 				App->scene->models[0]->meshes[i]->DrawMesh(App->scene->models[0]->meshes[i]->material->texture_id);
 			}
 			else {
+				
 				App->scene->models[0]->meshes[i]->DrawMesh(0);
+				//glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 			}
 			
 			//LOG("ID_TEX: %i", App->scene->meshes[i]->id_textures);
@@ -270,7 +272,21 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 		//DrawCube();
 		break;
 	case RenderMode::WIREFRAME:
-		Draw();
+		p.Render();
+		for (int i = 0; i < App->scene->models[0]->meshes.size(); i++)
+		{
+			glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+			if (App->scene->models[0]->meshes[i]->material != nullptr) {
+				App->scene->models[0]->meshes[i]->DrawMesh(App->scene->models[0]->meshes[i]->material->texture_id);
+			}
+			else {
+
+				App->scene->models[0]->meshes[i]->DrawMesh(0);
+				//glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+			}
+			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+		}
+		//Draw();
 		break;
 	}
 
