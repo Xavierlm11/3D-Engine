@@ -12,8 +12,13 @@
 
 #pragma comment (lib, "Source/External/Glew/libx86/glew32.lib")
 
-#include "Primitive.h"
+#ifdef _DEBUG
+#pragma comment( lib, "Source/External/MathGeoLib/libx86/MGLDebug/MathGeoLib.lib")
+#else
+#pragma comment (lib, "Source/External/MathGeoLib/libx86/MGLRelease/MathGeoLib.lib")
+#endif
 
+#include "Primitive.h"
 
 ModuleRenderer3D::ModuleRenderer3D(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
@@ -185,9 +190,13 @@ update_status ModuleRenderer3D::PreUpdate(float dt)
 	glClearColor(c.r, c.g, c.b, c.a);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glMatrixMode(GL_MODELVIEW);
+	App->camera->CalculateViewMatrixOpenGL();
 	glLoadMatrixf((GLfloat*)App->camera->GetViewMatrixOpenGL());
 
-	glLoadMatrixf(App->camera->GetViewMatrix());
+
+	
+
+	//glLoadMatrixf(App->camera->GetViewMatrix());
 
 	// light 0 on cam pos
 	lights[0].SetPos(App->camera->Position.x, App->camera->Position.y, App->camera->Position.z);
@@ -325,11 +334,16 @@ void ModuleRenderer3D::OnResize(int x, int y, int width, int height)
 		glViewport(x, y, width, height);
 
 		glMatrixMode(GL_PROJECTION);
-		glLoadIdentity();
-		ProjectionMatrix = perspective(60.0f, (float)width / (float)height, 0.125f, 512.0f);
-		glLoadMatrixf(&ProjectionMatrix);
 
+		//glLoadIdentity();	
+		////mat4x4 ProjectionMatrix = perspective(60.0f, (float)width / (float)height, 0.125f, 512.0f);
+
+		float4x4* ProjectionMatrix;
+		ProjectionMatrix = App->camera->GetProjectionMatrixOpenGL();
+		glLoadMatrixf((GLfloat*) ProjectionMatrix);
+		
 		glMatrixMode(GL_MODELVIEW);
+		glLoadIdentity();
 
 }
 

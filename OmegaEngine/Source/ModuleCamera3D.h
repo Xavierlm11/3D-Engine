@@ -3,7 +3,7 @@
 #include "Globals.h"
 #include "glmath.h"
 
-#include "MathGeoLib/include/Math/float4x4.h"
+#include"MathGeoLib/include/Math/float4x4.h"
 #include "MathGeoLib/include/Geometry/Frustum.h"
 
 
@@ -17,16 +17,19 @@ public:
 	update_status Update(float dt);
 	bool CleanUp();
 
+	void UpdateFrustum();
+	void Rotate();
 	void Look(const vec3 &Position, const vec3 &Reference, bool RotateAroundReference = false);
 	void LookAt(const vec3 &Spot);
 	void Move(const vec3 &Movement);
 	float* GetViewMatrix();
-	float4x4* GetViewMatrixOpenGL();
-
-private:
+	float4x4 *GetViewMatrixOpenGL();
+	float4x4 *GetProjectionMatrixOpenGL();
 
 	void CalculateViewMatrix();
 	void CalculateViewMatrixOpenGL();
+
+	void CalculateProjectionMatrixOpenGL();
 
 public:
 	
@@ -35,6 +38,9 @@ public:
 
 private:
 	mat4x4 ViewMatrix, ViewMatrixInverse;
-	float4x4 ViewMatrixOpenGL;
-	Frustum camFrustrum;
+	float4x4* ViewMatrixOpenGL;
+	float4x4* ProjectionMatrixOpenGL;
+	Frustum cameraFrustum;
+
+	float nextRot = 0;
 };

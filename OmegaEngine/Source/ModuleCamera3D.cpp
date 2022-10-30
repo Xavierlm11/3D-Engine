@@ -4,7 +4,7 @@
 
 ModuleCamera3D::ModuleCamera3D(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
-	CalculateViewMatrix();
+	//CalculateViewMatrixOpenGL();
 
 	X = vec3(1.0f, 0.0f, 0.0f);
 	Y = vec3(0.0f, 1.0f, 0.0f);
@@ -12,6 +12,18 @@ ModuleCamera3D::ModuleCamera3D(Application* app, bool start_enabled) : Module(ap
 
 	Position = vec3(0.0f, 0.0f, 5.0f);
 	Reference = vec3(0.0f, 0.0f, 0.0f);
+
+	cameraFrustum.type = math::PerspectiveFrustum;
+	cameraFrustum.front = float3(Z.x, Z.y, Z.z);
+	cameraFrustum.up = float3(Y.x, Y.y, Y.z);
+	cameraFrustum.pos = float3(Position.x, Position.y, Position.z);
+	cameraFrustum.nearPlaneDistance = 0.1f;
+	cameraFrustum.farPlaneDistance = 1000.0f;
+	cameraFrustum.verticalFov = 60.0f * DEGTORAD;
+	cameraFrustum.horizontalFov = 2.0f * atanf(tanf(cameraFrustum.verticalFov / 2.0f) * 1.6f);
+
+	CalculateViewMatrixOpenGL();
+	CalculateProjectionMatrixOpenGL();
 }
 
 ModuleCamera3D::~ModuleCamera3D()
@@ -34,6 +46,53 @@ bool ModuleCamera3D::CleanUp()
 	return true;
 }
 
+void ModuleCamera3D::UpdateFrustum() {
+
+	cameraFrustum.pos = float3(Position.x, Position.y, Position.z);
+	cameraFrustum.type = math::PerspectiveFrustum;
+	cameraFrustum.front = float3(Z.x, Z.y, Z.z);
+	cameraFrustum.up = float3(Y.x, Y.y, Y.z);
+	cameraFrustum.pos = float3(Position.x, Position.y, Position.z);
+	/*cameraFrustum.nearPlaneDistance = 0.1f;
+	cameraFrustum.farPlaneDistance = 1000.0f;
+	cameraFrustum.verticalFov = 60.0f * DEGTORAD;
+	cameraFrustum.horizontalFov = 2.0f * atanf(tanf(cameraFrustum.verticalFov / 2.0f) * 1.6f);*/
+
+}
+
+void ModuleCamera3D::Rotate() {
+
+	int dx = -App->input->GetMouseXMotion();
+	int dy = -App->input->GetMouseYMotion();
+
+	float Sensitivity = 0.15f;
+
+	if (dx != 0)
+	{
+		float DeltaX = (float)dx * Sensitivity;
+
+		X = rotate(X, DeltaX, vec3(0.0f, 1.0f, 0.0f));
+		Y = rotate(Y, DeltaX, vec3(0.0f, 1.0f, 0.0f));
+		Z = rotate(Z, DeltaX, vec3(0.0f, 1.0f, 0.0f));
+	}
+
+	if (dy != 0)
+	{
+		float DeltaY = (float)dy * Sensitivity;
+
+		Y = rotate(Y, DeltaY, -X);
+		Z = rotate(Z, DeltaY, -X);
+
+		if (Y.y < 0.0f)
+		{
+			Z = vec3(0.0f, Z.y > 0.0f ? 1.0f : -1.0f, 0.0f);
+			Y = cross(Z, X);
+		}
+	}
+
+}
+
+
 // -----------------------------------------------------------------
 update_status ModuleCamera3D::Update(float dt)
 {
@@ -45,15 +104,15 @@ update_status ModuleCamera3D::Update(float dt)
 	if(App->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT)
 		speed = 8.0f * dt;
 
-	if(App->input->GetKey(SDL_SCANCODE_E) == KEY_REPEAT) newPos.y += speed;
-	if(App->input->GetKey(SDL_SCANCODE_C) == KEY_REPEAT) newPos.y -= speed;
+	if(App->input->GetKey(SDL_SCANCODE_E) == KEY_REPEAT) newPos += Y * speed;
+	if(App->input->GetKey(SDL_SCANCODE_C) == KEY_REPEAT) newPos -= Y * speed;
 
-	if(App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT) newPos -= Z * speed;
-	if(App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT) newPos += Z * speed;
+	if(App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT) newPos += Z * speed;
+	if(App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT) newPos -= Z * speed;
 
 
-	if(App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) newPos -= X * speed;
-	if(App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) newPos += X * speed;
+	if(App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) newPos += X * speed;
+	if(App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) newPos -= X * speed;
 
 	Position += newPos;
 	Reference += newPos;
@@ -62,7 +121,14 @@ update_status ModuleCamera3D::Update(float dt)
 
 	if(App->input->GetMouseButton(SDL_BUTTON_RIGHT) == KEY_REPEAT)
 	{
-		int dx = -App->input->GetMouseXMotion();
+		nextRot += dt;
+		if (nextRot > 0.005f) {
+			nextRot = 0;
+			//Rotate();
+		}
+		Rotate();
+
+		/*int dx = -App->input->GetMouseXMotion();
 		int dy = -App->input->GetMouseYMotion();
 
 		float Sensitivity = 0.25f;
@@ -92,11 +158,11 @@ update_status ModuleCamera3D::Update(float dt)
 			}
 		}
 
-		Position = Reference + Z * length(Position);
+		Position = Reference + Z * length(Position);*/
 	}
 
 	// Recalculate matrix -------------
-	CalculateViewMatrix();
+	CalculateViewMatrixOpenGL();
 
 	return UPDATE_CONTINUE;
 }
@@ -117,7 +183,7 @@ void ModuleCamera3D::Look(const vec3 &Position, const vec3 &Reference, bool Rota
 		this->Position += Z * 0.05f;
 	}
 
-	CalculateViewMatrix();
+	CalculateViewMatrixOpenGL();
 }
 
 // -----------------------------------------------------------------
@@ -129,7 +195,7 @@ void ModuleCamera3D::LookAt( const vec3 &Spot)
 	X = normalize(cross(vec3(0.0f, 1.0f, 0.0f), Z));
 	Y = cross(Z, X);
 
-	CalculateViewMatrix();
+	CalculateViewMatrixOpenGL();
 }
 
 
@@ -139,20 +205,16 @@ void ModuleCamera3D::Move(const vec3 &Movement)
 	Position += Movement;
 	Reference += Movement;
 
-	CalculateViewMatrix();
+	CalculateViewMatrixOpenGL();
 }
 
 // -----------------------------------------------------------------
 float* ModuleCamera3D::GetViewMatrix()
 {
 	return &ViewMatrix;
-	//return 
 }
 
- float4x4* ModuleCamera3D::GetViewMatrixOpenGL()
-{
-	return &ViewMatrixOpenGL;
-}
+
 
 // -----------------------------------------------------------------
 void ModuleCamera3D::CalculateViewMatrix()
@@ -161,9 +223,35 @@ void ModuleCamera3D::CalculateViewMatrix()
 	ViewMatrixInverse = inverse(ViewMatrix);
 }
 
+float4x4 *ModuleCamera3D::GetViewMatrixOpenGL()
+{
+	return ViewMatrixOpenGL;
+}
+
 void ModuleCamera3D::CalculateViewMatrixOpenGL() {
-	static float4x4 view;
-	view = camFrustrum.ViewMatrix();
+
+	UpdateFrustum();
+
+	math::float4x4 view;
+	view = cameraFrustum.ViewMatrix();
+	
 	view.Transpose();
-	ViewMatrixOpenGL = view;
+	ViewMatrixOpenGL = &view;
+}
+
+float4x4 *ModuleCamera3D::GetProjectionMatrixOpenGL()
+{
+	CalculateProjectionMatrixOpenGL();
+	return ViewMatrixOpenGL;
+}
+
+void ModuleCamera3D::CalculateProjectionMatrixOpenGL() {
+
+	UpdateFrustum();
+
+	static float4x4 view;
+	view = cameraFrustum.ProjectionMatrix();
+
+	view.Transpose();
+	ViewMatrixOpenGL = &view;
 }
