@@ -60,9 +60,6 @@
     <ClCompile Include="Source\ModuleRenderer3D.cpp">
       <Filter>Files\Modules</Filter>
     </ClCompile>
-    <ClCompile Include="Source\ModuleSceneIntro.cpp">
-      <Filter>Files\Modules</Filter>
-    </ClCompile>
     <ClCompile Include="Source\ModuleWindow.cpp">
       <Filter>Files\Modules</Filter>
     </ClCompile>
@@ -258,9 +255,6 @@
       <Filter>Files\Modules</Filter>
     </ClInclude>
     <ClInclude Include="Source\ModuleRenderer3D.h">
-      <Filter>Files\Modules</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\ModuleSceneIntro.h">
       <Filter>Files\Modules</Filter>
     </ClInclude>
     <ClInclude Include="Source\ModuleWindow.h">

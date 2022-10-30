@@ -10,7 +10,6 @@ Application::Application()
 	window = new ModuleWindow(this);
 	input = new ModuleInput(this);
 	
-	scene_intro = new ModuleSceneIntro(this);
 	renderer3D = new ModuleRenderer3D(this);
 	camera = new ModuleCamera3D(this);
 	scene = new ModuleScene(this);
@@ -33,8 +32,6 @@ Application::Application()
 
 	// Scenes
 	AddModule(scene);
-	
-	AddModule(scene_intro);
 
 
 	// Renderer before editor!(Editor uses implOpenGl, which is initialized in Renderer3D)
