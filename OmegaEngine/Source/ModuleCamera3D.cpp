@@ -27,7 +27,7 @@ ModuleCamera3D::ModuleCamera3D(Application* app, bool start_enabled) : Module(ap
 
 	CalculateViewMatrixOpenGL();
 	CalculateProjectionMatrixOpenGL();
-	//App->camera->LookAt(vec3(0, 0, 0));
+	
 }
 
 ModuleCamera3D::~ModuleCamera3D()
@@ -38,7 +38,7 @@ bool ModuleCamera3D::Start()
 {
 	LOG("Setting up the camera");
 	bool ret = true;
-
+	App->camera->LookAt(vec3(0, 0, 0));
 	return ret;
 }
 
@@ -165,10 +165,36 @@ update_status ModuleCamera3D::Update(float dt)
 		Position = Reference + Z * length(Position);*/
 	}
 
+
+	if (App->input->GetMouseZ() != 0)
+	{
+		Zoom();
+	}
+
 	// Recalculate matrix -------------
 	UpdateFrustum();
 
 	return UPDATE_CONTINUE;
+}
+
+void ModuleCamera3D::Zoom() {
+
+	//vec3 frontVec = (cameraFrustum.front.x, cameraFrustum.front.y, cameraFrustum.front.z);
+	Position += Z * App->input->GetMouseZ() * 1.5f;
+	Reference += Z * App->input->GetMouseZ() * 1.5f;
+
+	//cameraFrustum.nearPlaneDistance += App->input->GetMouseZ() * 0.8f;
+	//cameraFrustum.nearPlaneDistance += 2;
+
+	UpdateFrustum();
+	//CalculateViewMatrixOpenGL();
+	
+
+	/*glMatrixMode(GL_PROJECTION);
+	glLoadMatrixf((GLfloat*)GetProjectionMatrixOpenGL());
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();*/
+
 }
 
 // -----------------------------------------------------------------
