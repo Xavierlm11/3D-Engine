@@ -284,10 +284,15 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 				App->scene->models[0]->meshes[i]->DrawMesh(0);
 				//glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 			}
+			
 			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 		}
 		//Draw();
 		break;
+	}
+
+	if (App->input->GetKey(SDL_SCANCODE_F)==KEY_REPEAT) {
+		App->camera->LookAt(vec3(0, 0, 0));
 	}
 
 
