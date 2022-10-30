@@ -23,6 +23,7 @@ public:
 	void LookAt(const vec3 &Spot);
 	void Move(const vec3 &Movement);
 	void Zoom();
+	void Orbit(float3 target);
 
 	float* GetViewMatrix();
 	float4x4 *GetViewMatrixOpenGL();
@@ -45,4 +46,6 @@ private:
 	Frustum cameraFrustum;
 
 	float nextRot = 0;
+
+	bool isMovingAround = false;
 };

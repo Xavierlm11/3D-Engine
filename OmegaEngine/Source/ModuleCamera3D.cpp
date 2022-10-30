@@ -94,6 +94,51 @@ void ModuleCamera3D::Rotate() {
 		}
 	}
 
+	UpdateFrustum();
+
+}
+
+void ModuleCamera3D::Orbit(float3 target) {
+
+	int dx = -App->input->GetMouseXMotion();
+	int dy = -App->input->GetMouseYMotion();
+
+	float Sensitivity = 0.15f;
+
+	float distance = cameraFrustum.pos.Distance(target);
+
+	if (dx != 0)
+	{
+		float DeltaX = (float)dx * Sensitivity;
+
+		X = rotate(X, DeltaX, vec3(0.0f, 1.0f, 0.0f));
+		Y = rotate(Y, DeltaX, vec3(0.0f, 1.0f, 0.0f));
+		Z = rotate(Z, DeltaX, vec3(0.0f, 1.0f, 0.0f));
+	}
+
+	if (dy != 0)
+	{
+		float DeltaY = (float)dy * Sensitivity;
+
+		Y = rotate(Y, DeltaY, -X);
+		Z = rotate(Z, DeltaY, -X);
+
+		if (Y.y < 0.0f)
+		{
+			Z = vec3(0.0f, Z.y > 0.0f ? 1.0f : -1.0f, 0.0f);
+			Y = cross(Z, X);
+		}
+	}
+
+	//UpdateFrustum();
+	UpdateFrustum();
+	
+	float3 posFloat = target - distance * cameraFrustum.front.Normalized();
+	posFloat = target - distance * cameraFrustum.front.Normalized();
+	Position.x = posFloat.x;
+	Position.y = posFloat.y;
+	Position.z = posFloat.z;
+	UpdateFrustum();
 }
 
 
@@ -102,6 +147,11 @@ update_status ModuleCamera3D::Update(float dt)
 {
 	// Implement a debug camera with keys and mouse
 	// Now we can make this movememnt frame rate independant!
+
+
+	
+
+
 
 	vec3 newPos(0,0,0);
 	float speed = 3.0f * dt;
@@ -122,8 +172,14 @@ update_status ModuleCamera3D::Update(float dt)
 	Reference += newPos;
 
 	// Mouse motion ----------------
-
-	if(App->input->GetMouseButton(SDL_BUTTON_RIGHT) == KEY_REPEAT)
+	if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_REPEAT && App->input->GetKey(SDL_SCANCODE_LALT) == KEY_REPEAT)
+	{
+		float3 objectPosF(0.f, 0.f, 0.f);
+		vec3 objectPosV(objectPosF.x, objectPosF.y, objectPosF.z);
+		/*LookAt(objectPosV);*/
+		Orbit(objectPosF);
+	}
+	else if(App->input->GetMouseButton(SDL_BUTTON_RIGHT) == KEY_REPEAT)
 	{
 		nextRot += dt;
 		if (nextRot > 0.005f) {
@@ -171,6 +227,7 @@ update_status ModuleCamera3D::Update(float dt)
 		Zoom();
 	}
 
+	
 	// Recalculate matrix -------------
 	UpdateFrustum();
 
