@@ -10,7 +10,7 @@ ModuleCamera3D::ModuleCamera3D(Application* app, bool start_enabled) : Module(ap
 	Y = vec3(0.0f, 1.0f, 0.0f);
 	Z = vec3(0.0f, 0.0f, 1.0f);
 
-	Position = vec3(0.0f, 0.0f, 5.0f);
+	Position = vec3(0.0f, 1.0f, 5.0f);
 	Reference = vec3(0.0f, 0.0f, 0.0f);
 
 	cameraFrustum.type = math::PerspectiveFrustum;
@@ -22,8 +22,12 @@ ModuleCamera3D::ModuleCamera3D(Application* app, bool start_enabled) : Module(ap
 	cameraFrustum.verticalFov = 60.0f * DEGTORAD;
 	cameraFrustum.horizontalFov = 2.0f * atanf(tanf(cameraFrustum.verticalFov / 2.0f) * 1.6f);
 
+	//LookAt(0, 0, 0);
+	
+
 	CalculateViewMatrixOpenGL();
 	CalculateProjectionMatrixOpenGL();
+	//App->camera->LookAt(vec3(0, 0, 0));
 }
 
 ModuleCamera3D::~ModuleCamera3D()
@@ -162,7 +166,7 @@ update_status ModuleCamera3D::Update(float dt)
 	}
 
 	// Recalculate matrix -------------
-	CalculateViewMatrixOpenGL();
+	UpdateFrustum();
 
 	return UPDATE_CONTINUE;
 }
@@ -183,7 +187,7 @@ void ModuleCamera3D::Look(const vec3 &Position, const vec3 &Reference, bool Rota
 		this->Position += Z * 0.05f;
 	}
 
-	CalculateViewMatrixOpenGL();
+	UpdateFrustum();
 }
 
 // -----------------------------------------------------------------
@@ -191,11 +195,11 @@ void ModuleCamera3D::LookAt( const vec3 &Spot)
 {
 	Reference = Spot;
 
-	Z = normalize(Position - Reference);
+	Z = normalize(Reference - Position);
 	X = normalize(cross(vec3(0.0f, 1.0f, 0.0f), Z));
 	Y = cross(Z, X);
 
-	CalculateViewMatrixOpenGL();
+	UpdateFrustum();
 }
 
 
@@ -205,7 +209,7 @@ void ModuleCamera3D::Move(const vec3 &Movement)
 	Position += Movement;
 	Reference += Movement;
 
-	CalculateViewMatrixOpenGL();
+	UpdateFrustum();
 }
 
 // -----------------------------------------------------------------
@@ -225,12 +229,11 @@ void ModuleCamera3D::CalculateViewMatrix()
 
 float4x4 *ModuleCamera3D::GetViewMatrixOpenGL()
 {
+	CalculateViewMatrixOpenGL();
 	return ViewMatrixOpenGL;
 }
 
 void ModuleCamera3D::CalculateViewMatrixOpenGL() {
-
-	UpdateFrustum();
 
 	math::float4x4 view;
 	view = cameraFrustum.ViewMatrix();
@@ -246,8 +249,6 @@ float4x4 *ModuleCamera3D::GetProjectionMatrixOpenGL()
 }
 
 void ModuleCamera3D::CalculateProjectionMatrixOpenGL() {
-
-	UpdateFrustum();
 
 	static float4x4 view;
 	view = cameraFrustum.ProjectionMatrix();
