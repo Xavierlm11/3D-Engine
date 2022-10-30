@@ -1,5 +1,7 @@
 #pragma once
 #include "Component.h"
+class ModuleRenderer3D;
+class MeshData;
 class CMeshes : public Component
 {
 public:
@@ -11,5 +13,9 @@ public:
 
 	void MeshRenderer();
 
+public:
+	MeshData* GOmesh;
+	//ModuleRenderer3D* GOmesh;
+	
 };
 

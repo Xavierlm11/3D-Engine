@@ -21,6 +21,11 @@ public:
 	virtual void Disable();
 
 	virtual bool IsEnable();
+
+	virtual void Load();
+
+	virtual void Save();
+
 	Types GetType() const;
 	GameObject* GetGO() ;
 	virtual void Update(){}

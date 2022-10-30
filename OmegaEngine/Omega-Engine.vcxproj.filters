@@ -40,29 +40,11 @@
     <Filter Include="Files\GameObjects\Propierties">
       <UniqueIdentifier>{6b87970a-5797-4f7f-9da4-1cd4a1db59ae}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Files\Tools">
+      <UniqueIdentifier>{436c2ba0-6cce-42d2-b74a-7e18adede8b0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Source\log.cpp">
-      <Filter>Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Main.cpp">
-      <Filter>Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Primitive.cpp">
-      <Filter>Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Timer.cpp">
-      <Filter>Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Color.cpp">
-      <Filter>Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\glmath.cpp">
-      <Filter>Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Light.cpp">
-      <Filter>Files</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Application.cpp">
       <Filter>Files\Modules</Filter>
     </ClCompile>
@@ -237,26 +219,29 @@
     <ClCompile Include="Source\GameObject.cpp">
       <Filter>Files\GameObjects</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Color.cpp">
+      <Filter>Files\Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\glmath.cpp">
+      <Filter>Files\Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Light.cpp">
+      <Filter>Files\Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\log.cpp">
+      <Filter>Files\Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Main.cpp">
+      <Filter>Files\Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Primitive.cpp">
+      <Filter>Files\Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Timer.cpp">
+      <Filter>Files\Tools</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Source\Primitive.h">
-      <Filter>Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Timer.h">
-      <Filter>Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Color.h">
-      <Filter>Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\glmath.h">
-      <Filter>Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Globals.h">
-      <Filter>Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Light.h">
-      <Filter>Files</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Application.h">
       <Filter>Files\Modules</Filter>
     </ClInclude>
@@ -523,6 +508,24 @@
     </ClInclude>
     <ClInclude Include="Source\GameObject.h">
       <Filter>Files\GameObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Color.h">
+      <Filter>Files\Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\glmath.h">
+      <Filter>Files\Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Globals.h">
+      <Filter>Files\Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Light.h">
+      <Filter>Files\Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Primitive.h">
+      <Filter>Files\Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Timer.h">
+      <Filter>Files\Tools</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

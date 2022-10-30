@@ -170,10 +170,10 @@ update_status ModuleEditor::Update(float dt)
 	
 
 	// 1. Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear ImGui!).
-    if (show_demo_window)
+   /* if (show_demo_window)
 		ImGui::ShowDemoWindow(&show_demo_window);
 
-	ImGuiIO& io = ImGui::GetIO(); (void)io;
+	ImGuiIO& io = ImGui::GetIO(); (void)io;*/
 
 	// 2. Show a simple window that we create ourselves. We use a Begin/End pair to created a named window.
 	{
@@ -211,7 +211,7 @@ update_status ModuleEditor::Update(float dt)
 
 	CheckGLCapabilities();
 	CheckShapes();
-
+	GOList();
 	if (App->input->CallClose)
 	{
 		CloseEngine();
@@ -1091,6 +1091,31 @@ void ModuleEditor::CheckShapes() {
 			}
 			break;
 	}
+}
+
+void ModuleEditor::GOList()
+{
+	
+	if (ImGui::Begin("Game Object List"))
+	{
+		for(uint i=0;i< App->scene->ListGO.size();++i)
+		{
+
+			if (App->scene->ListGO[i]->parent!=nullptr)
+			{
+				ImGui::BulletText("%s", App->scene->ListGO[i]->name.c_str());
+			}
+			else
+			{
+				ImGui::Text("%s", App->scene->ListGO[i]->name.c_str());
+			}
+		}
+
+
+	}
+	ImGui::End();
+
+
 }
 
 void ModuleEditor::CheckGLCapabilities() {

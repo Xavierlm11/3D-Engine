@@ -1,7 +1,8 @@
 #pragma once
 #include "Module.h"
 #include "Globals.h"
-
+#include "GameObject.h"
+#include "Component.h"
 class ModuleScene : public Module
 {
 public:
@@ -34,6 +35,9 @@ public:
 
 	void CleanMeshes(std::vector<MeshData*>* meshes);
 
+	void CreateGO(GameObject* obj, const char* name, GameObject* parent);
+	void AddGOList(GameObject* obj);
+
 	bool house_loaded = false;
 	bool cube_loaded = false;
 	bool sphere_loaded = false;
@@ -45,5 +49,8 @@ public:
 
 	std::vector<ModelData*> models;
 	
-	
+	GameObject* RootParent=nullptr;
+
+	std::vector< GameObject*> ListGO;
+
 };

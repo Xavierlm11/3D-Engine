@@ -10,6 +10,7 @@ GameObject::GameObject(const char* name, GameObject* parent):name(name)
 	{ 
 		parent->childrens.push_back(this);
 	}
+	SetParent(parent);
 }
 
 GameObject::~GameObject() 
@@ -34,17 +35,18 @@ GameObject::~GameObject()
 void GameObject::SetParent(GameObject* newparent)
 {
 	GameObject* p = newparent;
-	if (p==parent)return ;
+	if (newparent ==parent)
+		return ;
 	
-	if (p->parent)
+	if (newparent->parent)
 	{
-		p->parent->DeleteChild(this);
+		newparent->parent->DeleteChild(this);
 	}
-	parent = p;
+	parent = newparent;
 
-	if (p)
+	if (newparent)
 	{
-		p->childrens.push_back(this);
+		newparent->childrens.push_back(this);
 	}
 	//set transform
 

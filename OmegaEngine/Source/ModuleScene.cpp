@@ -18,13 +18,19 @@ ModuleScene::ModuleScene(Application* app, bool start_enabled) : Module(app, sta
 }
 
 ModuleScene::~ModuleScene()
-{}
+{
+    
+}
 
 // Load assets
 bool ModuleScene::Start()
 {
 	LOG("Loading scene");
 	bool ret = true;
+
+
+    CreateGO(RootParent,"RootParent",nullptr);
+
 
     //LoadCustom("Assets/BakerHouse.fbx", &meshes);
    /* LoadCube(meshes);
@@ -52,11 +58,22 @@ void ModuleScene::CleanMeshes(std::vector<MeshData*>* meshesVec) {
     house_loaded = false;
 }
 
+void ModuleScene::CreateGO(GameObject* obj, const char* name, GameObject* parent)
+{
+    obj = new GameObject(name,parent);
+    AddGOList(obj);
+}
+
+void ModuleScene::AddGOList(GameObject* objlist)
+{
+    ListGO.push_back(objlist);
+}
+
 void ModuleScene::LoadCustom(const char* path, std::vector<MeshData*>* meshesVec) {
 
     const aiScene* newScene;
     newScene = App->imp->LoadFile(path);
-    App->imp->GetMeshDatas(newScene, meshesVec);
+    App->imp->GetMeshDatas(newScene, meshesVec);//aqui obtienes la mesh
     aiReleaseImport(newScene);
     newScene = nullptr;
     delete newScene;
@@ -148,6 +165,13 @@ bool ModuleScene::CleanUp()
 
     modelMesh = nullptr;
     delete modelMesh;
+
+    for (uint i = 0; i < ListGO.size(); ++i)
+    {
+        delete ListGO[i];
+        ListGO[i] = nullptr;
+    }
+    ListGO.clear();
 
 	return true;
 }

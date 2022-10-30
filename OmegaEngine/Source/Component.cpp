@@ -29,6 +29,14 @@ bool Component::IsEnable()
 	return active;
 }
 
+void Component::Load()
+{
+}
+
+void Component::Save()
+{
+}
+
 Component::Types Component::GetType() const
 {
 	return type;

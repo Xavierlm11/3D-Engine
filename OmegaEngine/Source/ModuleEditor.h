@@ -97,7 +97,7 @@ private:
 	void CheckGLCapabilities();
 	void CheckShapes();
 
-	
+	void GOList();
 
 
 public:
