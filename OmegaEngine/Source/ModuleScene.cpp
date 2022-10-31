@@ -215,6 +215,11 @@ bool ModuleScene::CleanUp()
 // Update
 update_status ModuleScene::Update(float dt)
 {
+    for (uint i=0; i<ListGO.size(); ++i)
+    {
+        ListGO[i]->Update(dt);
+    }
+
 	return UPDATE_CONTINUE;
 }
 

@@ -145,3 +145,13 @@ Component* GameObject::CreateComp(Component::Types type)
 	return comp;
 }
 
+void GameObject::Update(float dt)
+{
+
+	for (uint i = 0; i < components.size(); ++i)
+	{
+		if(components[i]->IsEnable())
+			components[i]->Update();
+	}
+}
+

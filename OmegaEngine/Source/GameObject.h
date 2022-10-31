@@ -36,6 +36,7 @@ public:
 	std::vector<GameObject*> GetChildrens();
 
 	Component* CreateComp(Component::Types type);
+	void Update(float dt);
 
 public:
 
