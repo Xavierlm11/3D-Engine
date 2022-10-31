@@ -7,5 +7,15 @@ public:
 	virtual ~CMaterial();
 
 	void Update() override;
+
+	void HasMeses();
+
+	void Enable() override { active = true; }
+
+	void Disable()override { active = false; }
+
+	bool IsEnable()override { return active; }
+
+	bool active = false;
 };
 

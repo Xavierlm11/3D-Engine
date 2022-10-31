@@ -139,12 +139,13 @@ void ModuleImport::GetMeshDatas(const aiScene* scene, std::vector<MeshData*>* me
 	}
 }
 
-void ModuleImport::GetMeshDatasObj(const aiScene* scene) {
+void ModuleImport::GetMeshDatasObj(const aiScene* scene ,const char* name) {
 
 	/*if(scene->mNumMeshes>1)
 	{
 		Create
 	}*/
+	int j = 0;
 	for (int i = 0; i < scene->mNumMeshes; i++) {
 		MeshData* newMesh = new MeshData();
 		
@@ -159,18 +160,23 @@ void ModuleImport::GetMeshDatasObj(const aiScene* scene) {
 		}*/
 
 		if (i <= 0) {
-			dobj = App->scene->CreateGO("picaporte", App->scene->RootParent);
+			dobj = App->scene->CreateGO(name, App->scene->RootParent);
 			tgo.push_back(dobj);
+			++j;
 		}
 			
 		//App->scene->RootParent->childrens.push_back(dobj);
-		if(i>0)
-			dobj = App->scene->CreateGO("picaportitos",tgo[0]);
-
+		if (i > 0)
+		{
+			dobj = App->scene->CreateGO(name, tgo[0]);
+			
+		}
 		dobj->CreateComp(Component::Types::MESH);
-		dobj->GOmesh->GOmesh = new MeshData();
-		dobj->GOmesh->GOmesh = GetMeshData(dobj->GOmesh->GOmesh, scene->mMeshes[i], scene);
-		dobj->GOmesh->GOmesh->LoadBuffers();
+		dobj->GOmesh->CompMesh = new MeshData();
+		dobj->GOmesh->CompMesh = GetMeshData(dobj->GOmesh->CompMesh, scene->mMeshes[i], scene);
+		dobj->GOmesh->CompMesh->LoadBuffers();
+
+		
 		//meshes->push_back(newMesh);
 		
 	}

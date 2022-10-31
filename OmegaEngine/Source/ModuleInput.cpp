@@ -123,7 +123,7 @@ update_status ModuleInput::PreUpdate(float dt)
 					
 					/*if()
 					App->scene->LoadCustom(dropped_filedir.c_str(), &App->scene);*/
-					App->scene->LoadCustomObj(dropped_filedir.c_str());
+					App->scene->LoadCustomObj(dropped_filedir.c_str(),fileName.c_str());
 
 				}
 				else {

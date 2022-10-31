@@ -27,7 +27,7 @@ public:
 	bool LoadScene();
 
 	void LoadCustom(const char* path, std::vector<MeshData*>* meshes);
-	void LoadCustomObj(const char* path);
+	void LoadCustomObj(const char* path, const char* name);
 	void LoadHouse(std::vector<MeshData*>* meshes);
 	void LoadCube(std::vector<MeshData*>* meshes);
 	void LoadSphere(std::vector<MeshData*>* meshes);

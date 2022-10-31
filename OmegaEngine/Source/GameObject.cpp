@@ -5,9 +5,9 @@
 
 GameObject::GameObject(const char* name, GameObject* parent):name(name)
 {
-	//uid = External->rand.Int();
 	if(parent!=nullptr )
 	{ 
+		while(uid!=0)uid = External->rand.Int();
 		//parent->childrens.push_back(this);
 	}
 	SetParent(parent);
@@ -154,4 +154,6 @@ void GameObject::Update(float dt)
 			components[i]->Update();
 	}
 }
+
+
 

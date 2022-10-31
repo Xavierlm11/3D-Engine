@@ -103,14 +103,14 @@ void ModuleScene::LoadCustom(const char* path, std::vector<MeshData*>* meshesVec
         delete newScene;
     }*/
 }
-void ModuleScene::LoadCustomObj(const char* path) {
-
+void ModuleScene::LoadCustomObj(const char* path, const char* name) {
+    
     const aiScene* newScene;
     newScene = App->imp->LoadFile(path);
     //for(uint i=0;newScene)
    // GameObject* newGo = App->scene->CreateGO();
     
-    App->imp->GetMeshDatasObj(newScene);//aqui obtienes la mesh
+    App->imp->GetMeshDatasObj(newScene,name);//aqui obtienes la mesh
     aiReleaseImport(newScene);
     newScene = nullptr;
     delete newScene;

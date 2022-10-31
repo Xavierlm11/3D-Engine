@@ -38,6 +38,8 @@ public:
 	Component* CreateComp(Component::Types type);
 	void Update(float dt);
 
+	
+
 public:
 
 	std::string name;
@@ -49,7 +51,7 @@ public:
 
 	CMeshes* GOmesh=nullptr;
 
-	//uint uid=0;
+	uint uid=0;
 
 public:
 	bool active=true;

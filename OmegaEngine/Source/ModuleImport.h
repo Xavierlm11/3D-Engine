@@ -23,13 +23,13 @@ public:
 
 	const aiScene* LoadFile(const char* path);
 	void GetMeshDatas(const aiScene* scene, std::vector<MeshData*>* meshes);
-	void GetMeshDatasObj(const aiScene* scene);
+	void GetMeshDatasObj(const aiScene* scene, const char* name);
 	MeshData* GetMeshData(MeshData * meshData, aiMesh* mesh, const aiScene * scene);
 	void ReleaseFile(const aiScene* scene);
 
 	//Textures
 	void LoadCheckerTexture();
-
+	
 	GLuint ImportTexture(const char* path);
 
 	std::vector<GameObject*>tgo;

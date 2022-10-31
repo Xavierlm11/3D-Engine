@@ -1171,11 +1171,13 @@ void ModuleEditor::GOList()
 
 			if (App->scene->ListGO[i]->parent!=nullptr)
 			{
+			    if(/*App->scene->ListGO[i]->parent==nullptr ||*/ App->scene->ListGO[i]->parent==App->scene->RootParent)ImGui::Separator();
 				ImGui::BulletText("%s", App->scene->ListGO[i]->name.c_str());
 			}
 			else
 			{
 				ImGui::Text("%s", App->scene->ListGO[i]->name.c_str());
+				ImGui::Separator();
 			}
 		}
 

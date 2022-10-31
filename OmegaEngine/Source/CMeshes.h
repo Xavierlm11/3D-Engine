@@ -2,6 +2,7 @@
 #include "Component.h"
 class ModuleRenderer3D;
 class MeshData;
+class Component;
 class CMeshes : public Component
 {
 public:
@@ -13,8 +14,17 @@ public:
 
 	void MeshRenderer();
 
+	void Enable() override { active = true; }
+
+	void Disable()override { active = false; }
+
+	bool IsEnable()override { return active; }
+
+	bool active = true;
+
 public:
-	MeshData* GOmesh = nullptr;
+	MeshData* CompMesh = nullptr;
+	
 	//ModuleRenderer3D* GOmesh;
 	
 };
