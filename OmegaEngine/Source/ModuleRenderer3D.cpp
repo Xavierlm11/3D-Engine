@@ -294,7 +294,7 @@ void ModuleRenderer3D::GoRender()
 
 			//LOG("ID_TEX: %i", App->scene->meshes[i]->id_textures);
 		}
-		p.Render();
+		//p.Render();
 		for (int i = 0; i <meshlist.size(); i++)
 		{
 			if (meshlist[i] != nullptr)
@@ -304,7 +304,7 @@ void ModuleRenderer3D::GoRender()
 
 			}
 		}
-
+		meshlist.clear();
 		//DrawCube();
 		break;
 	case RenderMode::WIREFRAME:
@@ -333,6 +333,7 @@ void ModuleRenderer3D::GoRender()
 			}
 			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 		}
+		meshlist.clear();
 		//Draw();
 		break;
 	}

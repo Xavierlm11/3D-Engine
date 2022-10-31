@@ -147,7 +147,17 @@ void ModuleImport::GetMeshDatasObj(const aiScene* scene) {
 	}*/
 	for (int i = 0; i < scene->mNumMeshes; i++) {
 		MeshData* newMesh = new MeshData();
+		
 		GameObject* dobj = nullptr;
+
+		/*if(scene->mNumMeshes>1)
+
+
+		if (scene->mRootNode->mParent) {
+			dobj = App->scene->CreateGO("picaporte", App->scene->RootParent);
+			tgo.push_back(dobj);
+		}*/
+
 		if (i <= 0) {
 			dobj = App->scene->CreateGO("picaporte", App->scene->RootParent);
 			tgo.push_back(dobj);
@@ -162,6 +172,7 @@ void ModuleImport::GetMeshDatasObj(const aiScene* scene) {
 		dobj->GOmesh->GOmesh = GetMeshData(dobj->GOmesh->GOmesh, scene->mMeshes[i], scene);
 		dobj->GOmesh->GOmesh->LoadBuffers();
 		//meshes->push_back(newMesh);
+		
 	}
 	tgo.clear();
 }
