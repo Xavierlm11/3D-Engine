@@ -128,7 +128,10 @@ Component* GameObject::CreateComp(Component::Types type)
 			break;
 		case Component::Types::MESH:
 		{
-			comp = new CMeshes(this);
+			CMeshes * cmesh = new CMeshes(this);
+			GOmesh = cmesh;
+			comp = cmesh;
+			//GOmesh = (CMeshes*)comp;
 		}
 			break;
 		case Component::Types::LIGHT:

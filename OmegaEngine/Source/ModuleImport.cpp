@@ -158,7 +158,8 @@ void ModuleImport::GetMeshDatasObj(const aiScene* scene) {
 			dobj = App->scene->CreateGO("picaportitos",tgo[0]);
 
 		dobj->CreateComp(Component::Types::MESH);
-		GetMeshData(dobj->GOmesh->GOmesh, scene->mMeshes[i], scene);
+		dobj->GOmesh->GOmesh = new MeshData();
+		dobj->GOmesh->GOmesh = GetMeshData(dobj->GOmesh->GOmesh, scene->mMeshes[i], scene);
 		dobj->GOmesh->GOmesh->LoadBuffers();
 		//meshes->push_back(newMesh);
 	}
