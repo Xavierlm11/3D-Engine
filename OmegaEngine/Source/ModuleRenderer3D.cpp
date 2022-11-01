@@ -26,6 +26,28 @@ ModuleRenderer3D::ModuleRenderer3D(Application* app, bool start_enabled) : Modul
 	mode = RenderMode::NORMAL;
 	buffersLoaded = false;
 	hasLoadedMesh = false;
+
+	num_vertices = 0;
+	my_id = 0;
+
+	my_indices = 0;
+	elementbuffer = 0;
+	num_indices = 0;
+	vertexbuffer = 0;
+
+	checkersID = 0;
+
+	houseTexID = 0;
+
+	for (int i = 0; i < CHECKERS_HEIGHT; i++) {
+		for (int j = 0; j < CHECKERS_WIDTH; j++) {
+			int c = ((((i & 0x8) == 0) ^ (((j & 0x8)) == 0))) * 255;
+			checkerImage[i][j][0] = (GLubyte)0;
+			checkerImage[i][j][1] = (GLubyte)0;
+			checkerImage[i][j][2] = (GLubyte)0;
+			checkerImage[i][j][3] = (GLubyte)0;
+		}
+	}
 }
 
 // Destructor
@@ -127,6 +149,8 @@ bool ModuleRenderer3D::Init()
 
 		LoadTextureBuffers();
 		//houseTexID = App->imp->ImportTexture("Assets/Baker_house.png");
+
+		
 		OnResize(0,0, App->window->winWidth, App->window->winHeight );
 		
 	}
@@ -388,10 +412,11 @@ void ModuleRenderer3D::OnResize(int x, int y, int width, int height)
 
 		glMatrixMode(GL_PROJECTION);
 		
-		//glLoadIdentity();	
+		glLoadIdentity();	
 		//mat4x4 ProjectionMatrix = perspective(60.0f, (float)width / (float)height, 0.125f, 512.0f);
 		//glLoadMatrixf((GLfloat*)&ProjectionMatrix);
-		glLoadMatrixf((GLfloat*)App->camera->GetProjectionMatrixOpenGL());
+		// glMatrixMode(GL_PROJECTION);
+		//glLoadMatrixf((GLfloat*)App->camera->GetProjectionMatrixOpenGL());
 		
 		glMatrixMode(GL_MODELVIEW);
 		glLoadIdentity();

@@ -57,11 +57,16 @@ void ModuleCamera3D::UpdateFrustum() {
 	cameraFrustum.front = float3(Z.x, Z.y, Z.z);
 	cameraFrustum.up = float3(Y.x, Y.y, Y.z);
 	cameraFrustum.pos = float3(Position.x, Position.y, Position.z);
+
+	cameraFrustum.verticalFov = 60.0f * DEGTORAD;
+	cameraFrustum.horizontalFov = 2.0f * atanf(tanf(cameraFrustum.verticalFov / 2.0f) * App->window->winWidth/ App->window->winHeight);
+
 	/*cameraFrustum.nearPlaneDistance = 0.1f;
 	cameraFrustum.farPlaneDistance = 1000.0f;
 	cameraFrustum.verticalFov = 60.0f * DEGTORAD;
 	cameraFrustum.horizontalFov = 2.0f * atanf(tanf(cameraFrustum.verticalFov / 2.0f) * 1.6f);*/
-
+	glMatrixMode(GL_PROJECTION);
+	glLoadMatrixf((GLfloat*)App->camera->GetProjectionMatrixOpenGL());
 }
 
 void ModuleCamera3D::Rotate() {
