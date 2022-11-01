@@ -269,13 +269,13 @@ bool ModuleScene::SaveScene() {
         json_object_set_boolean(json_object(scene_settings), "show_config_window", show_config_window);
         json_object_set_boolean(json_object(scene_settings), "show_about_window", show_about_window);
 
-        json_object_set_boolean(json_object(scene_settings), "gl_depthTestEnabled", show_demo_window);
-        json_object_set_boolean(json_object(scene_settings), "gl_cullFaceEnabled", show_console_window);
-        json_object_set_boolean(json_object(scene_settings), "gl_lightingEnabled", show_render3d_window);
-        json_object_set_boolean(json_object(scene_settings), "gl_colorMaterialEnabled", show_config_window);
-        json_object_set_boolean(json_object(scene_settings), "gl_texture2dEnabled", show_about_window);
-        json_object_set_boolean(json_object(scene_settings), "gl_lineSmoothEnabled", show_demo_window);
-        json_object_set_boolean(json_object(scene_settings), "gl_fogEnabled", show_console_window);
+        json_object_set_boolean(json_object(scene_settings), "gl_depthTestEnabled", gl_depthTestEnabled);
+        json_object_set_boolean(json_object(scene_settings), "gl_cullFaceEnabled", gl_cullFaceEnabled);
+        json_object_set_boolean(json_object(scene_settings), "gl_lightingEnabled", gl_lightingEnabled);
+        json_object_set_boolean(json_object(scene_settings), "gl_colorMaterialEnabled", gl_colorMaterialEnabled);
+        json_object_set_boolean(json_object(scene_settings), "gl_texture2dEnabled", gl_texture2dEnabled);
+        json_object_set_boolean(json_object(scene_settings), "gl_lineSmoothEnabled", gl_lineSmoothEnabled);
+        json_object_set_boolean(json_object(scene_settings), "gl_fogEnabled", gl_fogEnabled);
 
         json_object_set_number(json_object(scene_settings), "fog_density", fog_density);
         json_object_set_number(json_object(scene_settings), "fog_start", fog_start);
