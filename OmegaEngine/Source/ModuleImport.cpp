@@ -158,13 +158,13 @@ void ModuleImport::GetMeshDatasObj(const aiScene* scene ,const char* name) {
 			dobj = App->scene->CreateGO("picaporte", App->scene->RootParent);
 			tgo.push_back(dobj);
 		}*/
-
+		
 		if (i <= 0) {
 			dobj = App->scene->CreateGO(name, App->scene->RootParent);
 			tgo.push_back(dobj);
 			++j;
 		}
-			
+			//scene->mRootNode.m///////////aquuiiiiiiiiiiiiiiiii
 		//App->scene->RootParent->childrens.push_back(dobj);
 		if (i > 0)
 		{
