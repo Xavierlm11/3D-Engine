@@ -100,6 +100,12 @@ private:
 
 	void GOList();
 
+	int GOIndex;
+	int selection_mask;
+	/*void HierarchyShowParent(ImGuiTreeNodeFlags node_flags, int id, int node_clicked);
+	void HierarchyShowChild(ImGuiTreeNodeFlags node_flags, int id);*/
+
+	void SelectChilds();
 	void DeleteGo();
 
 

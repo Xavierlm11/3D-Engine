@@ -48,6 +48,9 @@ ModuleEditor::ModuleEditor(Application* app, bool start_enabled) : Module(app, s
 	fog_color[3] = 0;
 	selectedFogMode = 1;
 
+	GOIndex = 0;
+	selection_mask = 2;
+
 	ModuleScene::Shapes::NONE;
 	selectedShape = ModuleScene::Shapes::NONE;
 
@@ -606,27 +609,23 @@ void ModuleEditor::BarShapes() {
 
 		}*/
 
-		char* shapes[] = { "House" ,"Cube" , "Sphere" , "Pyramid", "Cylinder" };
-		
+		char* shapes[] = {"Cube" , "Sphere" , "Pyramid", "Cylinder" };
+
 		if (ImGui::MenuItem(shapes[0]))
 		{
-			App->scene->LoadCustomObj("Assets/BakerHouse.fbx", "BakerHouse");
+			App->scene->LoadCustomObj("Assets/Cube.fbx", shapes[0]);
 		}
 		if (ImGui::MenuItem(shapes[1]))
 		{
-			App->scene->LoadCustomObj("Assets/Cube.fbx", shapes[1]);
+			App->scene->LoadCustomObj("Assets/Sphere.fbx", shapes[1]);
 		}
 		if (ImGui::MenuItem(shapes[2]))
 		{
-			App->scene->LoadCustomObj("Assets/Sphere.fbx", shapes[2]);
+			App->scene->LoadCustomObj("Assets/Pyramid.fbx", shapes[2]);
 		}
 		if (ImGui::MenuItem(shapes[3]))
 		{
-			App->scene->LoadCustomObj("Assets/Pyramid.fbx", shapes[3]);
-		}
-		if (ImGui::MenuItem(shapes[4]))
-		{
-			App->scene->LoadCustomObj("Assets/Cylinder.fbx", shapes[4]);
+			App->scene->LoadCustomObj("Assets/Cylinder.fbx", shapes[3]);
 		}
 
 
@@ -1203,27 +1202,132 @@ void ModuleEditor::CheckShapes() {
 
 void ModuleEditor::GOList()
 {
-	
+
 	if (ImGui::Begin("Game Object List"))
 	{
-		for(uint i=0;i< App->scene->ListGO.size();++i)
+		static ImGuiTreeNodeFlags base_flags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick | ImGuiTreeNodeFlags_SpanAvailWidth;
+		static bool align_label_with_current_x_position = false;
+		static bool test_drag_and_drop = false;
+
+		if (align_label_with_current_x_position)
+			ImGui::Unindent(ImGui::GetTreeNodeToLabelSpacing());
+
+
+		selection_mask = (1 << 2);
+		for (int i = 0; i < App->scene->ListGO.size(); i++)
 		{
+			ImGuiTreeNodeFlags node_flags = base_flags;
+			
+			const bool is_selected = (selection_mask & (1 << i)) != 0;
+			if (is_selected)
+				node_flags |= ImGuiTreeNodeFlags_Selected;
 
-			if (App->scene->ListGO[i]->parent!=nullptr)
+			//Root
+			if (App->scene->ListGO[i]->parent == nullptr)
 			{
-			    if(/*App->scene->ListGO[i]->parent==nullptr ||*/ App->scene->ListGO[i]->parent==App->scene->RootParent)ImGui::Separator();
-				ImGui::BulletText("%s", App->scene->ListGO[i]->name.c_str());
+				node_flags |= ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_NoTreePushOnOpen; // ImGuiTreeNodeFlags_Bullet
+				ImGui::TreeNodeEx((void*)(intptr_t)i, node_flags, App->scene->ListGO[i]->name.c_str(), i);
+				if (ImGui::IsItemClicked() && !ImGui::IsItemToggledOpen())
+					GOIndex = i;
+				if (test_drag_and_drop && ImGui::BeginDragDropSource())
+				{
+					ImGui::SetDragDropPayload("_TREENODE", NULL, 0);
+					ImGui::Text("This is a drag and drop source");
+					ImGui::EndDragDropSource();
+				}
 			}
-			else
+			else {
+				//Parent childs
+				if (App->scene->ListGO[i]->parent->parent == nullptr && App->scene->ListGO[i]->childrens.size()>0)
+				{
+					bool node_open = ImGui::TreeNodeEx((void*)(intptr_t)i, node_flags, App->scene->ListGO[i]->name.c_str(), i);
+					if (ImGui::IsItemClicked() && !ImGui::IsItemToggledOpen())
+						GOIndex = i;
+					if (test_drag_and_drop && ImGui::BeginDragDropSource())
+					{
+						ImGui::SetDragDropPayload("_TREENODE", NULL, 0);
+						ImGui::Text("This is a drag and drop source");
+						ImGui::EndDragDropSource();
+					}
+					if (node_open)
+					{
+						for (int j = 0; j < App->scene->ListGO.size(); j++) {
+							//Its not root
+							if (App->scene->ListGO[j]->parent!=nullptr) {
+								//its not direct child
+								if (App->scene->ListGO[j]->parent->parent != nullptr) {
+									node_flags |= ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_NoTreePushOnOpen; // ImGuiTreeNodeFlags_Bullet
+									ImGui::TreeNodeEx((void*)(intptr_t)j, node_flags, App->scene->ListGO[j]->name.c_str(), j);
+									if (ImGui::IsItemClicked() && !ImGui::IsItemToggledOpen())
+										GOIndex = j;
+									if (test_drag_and_drop && ImGui::BeginDragDropSource())
+									{
+										ImGui::SetDragDropPayload("_TREENODE", NULL, 0);
+										ImGui::Text("This is a drag and drop source");
+										ImGui::EndDragDropSource();
+									}
+								}
+							}
+						}
+						ImGui::TreePop();
+					}
+				}
+				//Direct childs
+				else if(App->scene->ListGO[i]->parent->parent == nullptr)
+				{
+					node_flags |= ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_NoTreePushOnOpen; // ImGuiTreeNodeFlags_Bullet
+					ImGui::TreeNodeEx((void*)(intptr_t)i, node_flags, App->scene->ListGO[i]->name.c_str(), i);
+					if (ImGui::IsItemClicked() && !ImGui::IsItemToggledOpen())
+						GOIndex = i;
+					if (test_drag_and_drop && ImGui::BeginDragDropSource())
+					{
+						ImGui::SetDragDropPayload("_TREENODE", NULL, 0);
+						ImGui::Text("This is a drag and drop source");
+						ImGui::EndDragDropSource();
+					}
+				}
+
+				
+			}
+			
+			
+
+			if (GOIndex != -1)
 			{
-				ImGui::Text("%s", App->scene->ListGO[i]->name.c_str());
-				ImGui::Separator();
+				// Update selection state
+				// (process outside of tree loop to avoid visual inconsistencies during the clicking frame)
+				if (ImGui::GetIO().KeyCtrl)
+					selection_mask ^= (1 << GOIndex);          // CTRL+click to toggle
+				else //if (!(selection_mask & (1 << node_clicked))) // Depending on selection behavior you want, may want to preserve selection when clicking on item that is part of the selection
+					selection_mask = (1 << GOIndex);           // Click to single-select
+				//if (!(selection_mask & (1 << node_clicked))) // Depending on selection behavior you want, may want to preserve selection when clicking on item that is part of the selection
+				//	selection_mask = (1 << GOIndex);           // Click to single-select
 			}
-		}
+			if (align_label_with_current_x_position)
+				ImGui::Indent(ImGui::GetTreeNodeToLabelSpacing());
 
 
-	}
-	ImGui::End();
+
+
+
+
+			//for(uint i=0;i< App->scene->ListGO.size();++i)
+			//{
+
+			//	if (App->scene->ListGO[i]->parent!=nullptr)
+			//	{
+			//	    if(/*App->scene->ListGO[i]->parent==nullptr ||*/ App->scene->ListGO[i]->parent==App->scene->RootParent)ImGui::Separator();
+			//		ImGui::BulletText("%s", App->scene->ListGO[i]->name.c_str());
+			//	}
+			//	else
+			//	{
+			//		ImGui::Text("%s", App->scene->ListGO[i]->name.c_str());
+			//		ImGui::Separator();
+			//	}
+			//}
+
+
+
 
 
 }
@@ -1235,7 +1339,37 @@ void ModuleEditor::DeleteGo()
 		App->scene->ListGO.erase(App->scene->ListGO.begin(), App->scene->ListGO.end());
 	}
 
+		}
+		ImGui::End();
+	}
 }
+
+//void ModuleEditor::HierarchyShowParent(ImGuiTreeNodeFlags node_flags) {
+//
+//
+//	// Items 0..2 are Tree Node
+//	bool node_open = ImGui::TreeNodeEx((void*)(intptr_t)i, node_flags, "Selectable Node %d", i);
+//	if (ImGui::IsItemClicked() && !ImGui::IsItemToggledOpen())
+//		node_clicked = i;
+//	if (test_drag_and_drop && ImGui::BeginDragDropSource())
+//	{
+//		ImGui::SetDragDropPayload("_TREENODE", NULL, 0);
+//		ImGui::Text("This is a drag and drop source");
+//		ImGui::EndDragDropSource();
+//	}
+//	if (node_open)
+//	{
+//		ImGui::BulletText("Blah blah\nBlah Blah");
+//		ImGui::TreePop();
+//	}
+//
+//
+//	
+//}
+//
+//void ModuleEditor::HierarchyShowChild() {
+//
+//}
 
 void ModuleEditor::CheckGLCapabilities() {
 	if (gl_depthTestEnabled == true) {
