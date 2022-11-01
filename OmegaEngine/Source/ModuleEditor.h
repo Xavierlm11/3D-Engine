@@ -100,6 +100,8 @@ private:
 
 	void GOList();
 
+	void DeleteGo();
+
 
 public:
 	bool close=false;

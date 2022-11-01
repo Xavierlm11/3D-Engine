@@ -607,7 +607,7 @@ void ModuleEditor::BarShapes() {
 		}*/
 
 		char* shapes[] = { "House" ,"Cube" , "Sphere" , "Pyramid", "Cylinder" };
-
+		
 		if (ImGui::MenuItem(shapes[0]))
 		{
 			App->scene->LoadCustomObj("Assets/BakerHouse.fbx", "BakerHouse");
@@ -629,6 +629,11 @@ void ModuleEditor::BarShapes() {
 			App->scene->LoadCustomObj("Assets/Cylinder.fbx", shapes[4]);
 		}
 
+
+		if (ImGui::Button("Clear Shapes"))
+		{
+			DeleteGo();
+		}
 
 		ImGui::EndMenu();
 	}
@@ -1220,6 +1225,15 @@ void ModuleEditor::GOList()
 	}
 	ImGui::End();
 
+
+}
+
+void ModuleEditor::DeleteGo()
+{
+	for (uint i = 0; i < App->scene->ListGO.size(); ++i) {
+
+		App->scene->ListGO.erase(App->scene->ListGO.begin(), App->scene->ListGO.end());
+	}
 
 }
 

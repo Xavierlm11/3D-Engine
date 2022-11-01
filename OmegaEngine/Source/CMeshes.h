@@ -2,6 +2,7 @@
 #include "Component.h"
 #include "CMaterial.h"
 #include "GameObject.h"
+#include "ModuleRenderer3D.h"
 class ModuleRenderer3D;
 class MeshData;
 class Component;

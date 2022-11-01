@@ -33,6 +33,14 @@ GameObject::~GameObject()
 	}
 	childrens.clear();
 
+	parent = nullptr;
+
+	GOmat = nullptr;
+	GOtrans = nullptr;
+
+	delete parent;
+	delete GOmat;
+	delete GOtrans;
 	//External->CleanVec(childrens);
 }
 

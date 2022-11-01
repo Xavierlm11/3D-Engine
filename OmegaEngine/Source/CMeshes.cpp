@@ -36,14 +36,20 @@ void CMeshes::Update()
 
 void CMeshes::MeshRenderer()
 {
-	if (GO->GOmat->GetMaterial() != nullptr/* && GO->GetComponent(Component::Types::MATERIAL)!=nullptr*/) {
+	//External->rendere
+	if (GO->GOmat->GetMaterial() != nullptr && External->renderer3D->mode == ModuleRenderer3D::RenderMode::NORMAL) {
 		CompMesh->DrawMesh(GO->GOmat->GetMaterial()->texture_id);
 
 		
+	}
+	else if (External->renderer3D->mode== ModuleRenderer3D::RenderMode::CHECKERS)
+	{
+		CompMesh->DrawMesh(External->renderer3D->checkersID);
 	}
 	else {
 
 		CompMesh->DrawMesh(0);
 	}
+	
 	
 }
