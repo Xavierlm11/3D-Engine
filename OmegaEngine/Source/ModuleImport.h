@@ -34,7 +34,7 @@ public:
 
 	std::vector<GameObject*>tgo;
 
-	const aiScene* CanLoad=nullptr;
+	
 	//Component::Types type;
 	
 };

@@ -115,7 +115,7 @@ bool ModuleImport::CleanUp()
 
 const aiScene* ModuleImport::LoadFile(const char* file_path) {
 	const aiScene* scene = aiImportFile(file_path, aiProcessPreset_TargetRealtime_MaxQuality);
-	CanLoad = scene;
+	
 	if (scene != nullptr && scene->HasMeshes()==true)
 	{
 		// Use scene->mNumMeshes to iterate on scene->mMeshes array
@@ -124,6 +124,7 @@ const aiScene* ModuleImport::LoadFile(const char* file_path) {
 	}
 	else {
 		LOG("Error loading scene % s", file_path);
+		return scene;
 	}
 		
 }
@@ -141,38 +142,53 @@ void ModuleImport::GetMeshDatas(const aiScene* scene, std::vector<MeshData*>* me
 
 void ModuleImport::GetMeshDatasObj(const aiScene* scene ,const char* name) {
 
-	/*if(scene->mNumMeshes>1)
-	{
-		Create
-	}*/
+	GameObject* parent = nullptr;
+	parent = App->scene->RootParent;
+
 	int j = 0;
 	if (scene->HasMeshes())
 	{
-		for (int i = 0; i < scene->mNumMeshes; i++) {
+		for (unsigned int i = 0; i < scene->mNumMeshes; i++) {
 			MeshData* newMesh = new MeshData();
 
 			GameObject* dobj = nullptr;
 
 			/*if(scene->mNumMeshes>1)
 
-
-			if (scene->mRootNode->mParent && scene->mRootNode.) {
+			*/
+			/*if (scene->mRootNode->mParent  ) {
 				dobj = App->scene->CreateGO("picaporte", App->scene->RootParent);
 				tgo.push_back(dobj);
 			}*/
-
-			if (i <= 0) {
-				dobj = App->scene->CreateGO(name, App->scene->RootParent);
-				tgo.push_back(dobj);
-				++j;
-			}
-			//scene->mRootNode.m///////////aquuiiiiiiiiiiiiiiiii
-		//App->scene->RootParent->childrens.push_back(dobj);
-			if (i > 0)
+			//scene->mRootNode.mp
+			if (scene->mNumMeshes> 1 && i == 0)
 			{
-				dobj = App->scene->CreateGO(name, tgo[0]);
-
+				dobj = App->scene->CreateGO("picaporton", parent);
+				parent = dobj;
 			}
+
+			if (scene->mRootNode->mParent==nullptr && scene->mRootNode->mChildren[0]->mNumChildren!=0) {
+				dobj = App->scene->CreateGO("picaporte", parent);
+				//tgo.push_back(dobj);
+				parent = dobj;
+			}
+			else if (scene->mRootNode->mChildren!=nullptr) {
+				dobj = App->scene->CreateGO("picaportito", parent);
+				//tgo.push_back(dobj);
+				//parent = dobj;
+			}
+		//	if (i <= 0) {
+		//		dobj = App->scene->CreateGO(name, App->scene->RootParent);
+		//		tgo.push_back(dobj);
+		//		++j;
+		//	}
+		//	//scene->mRootNode.m///////////aquuiiiiiiiiiiiiiiiii
+		////App->scene->RootParent->childrens.push_back(dobj);
+		//	if (i > 0)
+		//	{
+		//		dobj = App->scene->CreateGO(name, tgo[0]);
+
+		//	}
 			dobj->CreateComp(Component::Types::MESH);
 			dobj->GOmesh->CompMesh = new MeshData();
 			dobj->GOmesh->CompMesh = GetMeshData(dobj->GOmesh->CompMesh, scene->mMeshes[i], scene);
@@ -186,6 +202,8 @@ void ModuleImport::GetMeshDatasObj(const aiScene* scene ,const char* name) {
 	else {
 		LOG("IMPOSIBLE TO LOAD THIS OBJECT");
 	}
+
+	parent = nullptr;
 	tgo.clear();
 }
 

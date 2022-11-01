@@ -110,29 +110,19 @@ void ModuleScene::LoadCustomObj(const char* path, const char* name) {
     //for(uint i=0;newScene)
    // GameObject* newGo = App->scene->CreateGO();
     
-    if (App->imp->CanLoad != nullptr)
+    if (newScene!=nullptr)
     {
-
         App->imp->GetMeshDatasObj(newScene, name);//aqui obtienes la mesh
         aiReleaseImport(newScene);
     }
-    else
+    else if(newScene == nullptr)
     {
         LOG("IMPOSIBLE TO LOAD THIS OBJECT, TRY EXPORTING THE FBX WITH BLENDER");
     }
     newScene = nullptr;
     delete newScene;
-    App->imp->CanLoad = nullptr;
-    /* if (house_loaded == false) {
-         const aiScene* newScene;
-         newScene = App->imp->LoadFile(path);
-         App->imp->GetMeshDatas(newScene, meshesVec);
-         aiReleaseImport(newScene);
-         App->editor->selectedShape = Shapes::NONE;
-         house_loaded = true;
-         newScene = nullptr;
-         delete newScene;
-     }*/
+    
+    
 }
 void ModuleScene::LoadHouse(std::vector<MeshData*>* meshesVec) {
 
