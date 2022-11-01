@@ -7,9 +7,14 @@
 #include "Globals.h"
 #include "Application.h"
 #include "Component.h"
+
 class Component;
 
 class CMeshes;
+
+class CMaterial;
+
+class CTransform;
 
 class GameObject
 {
@@ -50,7 +55,8 @@ public:
 	GameObject* parent = nullptr;
 
 	CMeshes* GOmesh=nullptr;
-
+	CMaterial* GOmat = nullptr;
+	CTransform* GOtrans = nullptr;
 	uint uid=0;
 
 public:

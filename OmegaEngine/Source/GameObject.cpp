@@ -118,12 +118,17 @@ Component* GameObject::CreateComp(Component::Types type)
 			break;
 		case Component::Types::TRANSFORM:
 		{
-			comp = new CTransform(this);
+			CTransform* ctrans = new CTransform(this);
+			GOtrans = ctrans;
+			comp = ctrans;
 		}
 			break;
 		case Component::Types::MATERIAL:
 		{
-			comp = new CMaterial(this);
+			//comp = new CMaterial(this);
+			CMaterial* cmat= new CMaterial(this);
+			GOmat = cmat;
+			comp = cmat;
 		}
 			break;
 		case Component::Types::MESH:

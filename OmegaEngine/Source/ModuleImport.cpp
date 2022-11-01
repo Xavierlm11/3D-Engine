@@ -153,45 +153,26 @@ void ModuleImport::GetMeshDatasObj(const aiScene* scene ,const char* name) {
 
 			GameObject* dobj = nullptr;
 
-			/*if(scene->mNumMeshes>1)
-
-			*/
-			/*if (scene->mRootNode->mParent  ) {
-				dobj = App->scene->CreateGO("picaporte", App->scene->RootParent);
-				tgo.push_back(dobj);
-			}*/
-			//scene->mRootNode.mp
+			
 			if (scene->mNumMeshes> 1 && i == 0)
 			{
-				dobj = App->scene->CreateGO("picaporton", parent);
+				dobj = App->scene->CreateGO(name, parent);
 				parent = dobj;
 			}
 
 			if (scene->mRootNode->mParent==nullptr && scene->mRootNode->mChildren[0]->mNumChildren!=0) {
-				dobj = App->scene->CreateGO("picaporte", parent);
-				//tgo.push_back(dobj);
+				dobj = App->scene->CreateGO(name, parent);
+				
 				parent = dobj;
 			}
 			else if (scene->mRootNode->mChildren!=nullptr) {
-				dobj = App->scene->CreateGO("picaportito", parent);
-				//tgo.push_back(dobj);
-				//parent = dobj;
+				dobj = App->scene->CreateGO(name, parent);
+				
 			}
-		//	if (i <= 0) {
-		//		dobj = App->scene->CreateGO(name, App->scene->RootParent);
-		//		tgo.push_back(dobj);
-		//		++j;
-		//	}
-		//	//scene->mRootNode.m///////////aquuiiiiiiiiiiiiiiiii
-		////App->scene->RootParent->childrens.push_back(dobj);
-		//	if (i > 0)
-		//	{
-		//		dobj = App->scene->CreateGO(name, tgo[0]);
-
-		//	}
+		
 			dobj->CreateComp(Component::Types::MESH);
 			dobj->GOmesh->CompMesh = new MeshData();
-			dobj->GOmesh->CompMesh = GetMeshData(dobj->GOmesh->CompMesh, scene->mMeshes[i], scene);
+			dobj->GOmesh->CompMesh = GetMeshDataObj(dobj->GOmesh->CompMesh, scene->mMeshes[i], scene, dobj);
 			dobj->GOmesh->CompMesh->LoadBuffers();
 
 
@@ -289,6 +270,86 @@ MeshData* ModuleImport::GetMeshData(MeshData * meshData, aiMesh* mesh, const aiS
 	}
 	
 	
+
+	return meshData;
+}
+
+MeshData* ModuleImport::GetMeshDataObj(MeshData* meshData, aiMesh* mesh, const aiScene* scene, GameObject* obj) {
+
+
+	aiMaterial* material = new aiMaterial();
+	material = scene->mMaterials[mesh->mMaterialIndex];
+
+	if (scene->HasMaterials()) {
+		uint numTextures = material->GetTextureCount(aiTextureType_DIFFUSE);
+		obj->CreateComp(Component::Types::MATERIAL);
+		obj->GOmat.
+		if (numTextures > 0) {
+
+			aiString path;
+			material->GetTexture(aiTextureType_DIFFUSE, 0, &path);
+
+			LOG("PATH: %s", path.C_Str());
+			std::string assetsPath = "Assets/";
+			const char* filePath = path.C_Str();
+
+			std::string finalPath = assetsPath + filePath;
+			LOG("PATH: %s", finalPath.c_str());
+			//const char* newPath = "Assets/%s"
+			meshData->material = new MaterialData();
+			meshData->material->texture_id = App->imp->ImportTexture(finalPath.c_str());
+		}
+	}
+
+
+
+
+
+
+
+
+	//copy vertices
+	meshData->num_vertices = mesh->mNumVertices;
+	meshData->vertices = new float[meshData->num_vertices * 3];
+
+	memcpy(meshData->vertices, mesh->mVertices, sizeof(float) * meshData->num_vertices * 3);
+
+	LOG("New mesh with %d vertices", meshData->num_vertices);
+
+	//copy faces
+	if (mesh->HasFaces())
+	{
+		meshData->num_indices = mesh->mNumFaces * 3;
+		meshData->indices = new uint[meshData->num_indices]; // assume each face is a triangle
+		for (uint i = 0; i < mesh->mNumFaces; ++i)
+		{
+			if (mesh->mFaces[i].mNumIndices != 3) {
+				LOG("WARNING, geometry face with != 3 indices!");
+			}
+			else
+			{
+				memcpy(&meshData->indices[i * 3], mesh->mFaces[i].mIndices, 3 * sizeof(uint));
+			}
+		}
+	}
+	if (mesh->mNumUVComponents > 0) {
+		LOG("HAS TEX");
+	}
+	else {
+		LOG("NO TEX");
+	}
+	//copy texture coords
+	if (mesh->HasTextureCoords(0)) {
+		meshData->num_textureCoords = mesh->mNumVertices;
+		meshData->textureCoords = new float[mesh->mNumVertices * 2];
+
+		for (unsigned int i = 0; i < meshData->num_textureCoords; i++) {
+			meshData->textureCoords[i * 2] = mesh->mTextureCoords[0][i].x;
+			meshData->textureCoords[i * 2 + 1] = mesh->mTextureCoords[0][i].y;
+		}
+	}
+
+
 
 	return meshData;
 }

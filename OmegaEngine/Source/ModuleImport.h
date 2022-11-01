@@ -25,6 +25,7 @@ public:
 	void GetMeshDatas(const aiScene* scene, std::vector<MeshData*>* meshes);
 	void GetMeshDatasObj(const aiScene* scene, const char* name);
 	MeshData* GetMeshData(MeshData * meshData, aiMesh* mesh, const aiScene * scene);
+	MeshData* GetMeshDataObj(MeshData* meshData, aiMesh* mesh, const aiScene* scene, GameObject* obj);
 	void ReleaseFile(const aiScene* scene);
 
 	//Textures

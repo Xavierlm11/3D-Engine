@@ -1,5 +1,11 @@
 #pragma once
 #include "Component.h"
+//#include "MaterialData.h"
+
+class MeshData;
+class Component;
+class MaterialData;
+
 class CMaterial :public Component
 {
 public:
@@ -8,14 +14,15 @@ public:
 
 	void Update() override;
 
-	void HasMeses();
-
 	void Enable() override { active = true; }
 
 	void Disable()override { active = false; }
 
 	bool IsEnable()override { return active; }
 
-	bool active = false;
+	bool active = true;
+public:
+
+	MaterialData* CmMat = nullptr;
 };
 
