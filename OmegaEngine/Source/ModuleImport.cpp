@@ -115,7 +115,7 @@ bool ModuleImport::CleanUp()
 
 const aiScene* ModuleImport::LoadFile(const char* file_path) {
 	const aiScene* scene = aiImportFile(file_path, aiProcessPreset_TargetRealtime_MaxQuality);
-
+	CanLoad = scene;
 	if (scene != nullptr && scene->HasMeshes()==true)
 	{
 		// Use scene->mNumMeshes to iterate on scene->mMeshes array
@@ -146,39 +146,45 @@ void ModuleImport::GetMeshDatasObj(const aiScene* scene ,const char* name) {
 		Create
 	}*/
 	int j = 0;
-	for (int i = 0; i < scene->mNumMeshes; i++) {
-		MeshData* newMesh = new MeshData();
-		
-		GameObject* dobj = nullptr;
+	if (scene->HasMeshes())
+	{
+		for (int i = 0; i < scene->mNumMeshes; i++) {
+			MeshData* newMesh = new MeshData();
 
-		/*if(scene->mNumMeshes>1)
+			GameObject* dobj = nullptr;
+
+			/*if(scene->mNumMeshes>1)
 
 
-		if (scene->mRootNode->mParent) {
-			dobj = App->scene->CreateGO("picaporte", App->scene->RootParent);
-			tgo.push_back(dobj);
-		}*/
-		
-		if (i <= 0) {
-			dobj = App->scene->CreateGO(name, App->scene->RootParent);
-			tgo.push_back(dobj);
-			++j;
-		}
+			if (scene->mRootNode->mParent && scene->mRootNode.) {
+				dobj = App->scene->CreateGO("picaporte", App->scene->RootParent);
+				tgo.push_back(dobj);
+			}*/
+
+			if (i <= 0) {
+				dobj = App->scene->CreateGO(name, App->scene->RootParent);
+				tgo.push_back(dobj);
+				++j;
+			}
 			//scene->mRootNode.m///////////aquuiiiiiiiiiiiiiiiii
 		//App->scene->RootParent->childrens.push_back(dobj);
-		if (i > 0)
-		{
-			dobj = App->scene->CreateGO(name, tgo[0]);
-			
-		}
-		dobj->CreateComp(Component::Types::MESH);
-		dobj->GOmesh->CompMesh = new MeshData();
-		dobj->GOmesh->CompMesh = GetMeshData(dobj->GOmesh->CompMesh, scene->mMeshes[i], scene);
-		dobj->GOmesh->CompMesh->LoadBuffers();
+			if (i > 0)
+			{
+				dobj = App->scene->CreateGO(name, tgo[0]);
 
-		
-		//meshes->push_back(newMesh);
-		
+			}
+			dobj->CreateComp(Component::Types::MESH);
+			dobj->GOmesh->CompMesh = new MeshData();
+			dobj->GOmesh->CompMesh = GetMeshData(dobj->GOmesh->CompMesh, scene->mMeshes[i], scene);
+			dobj->GOmesh->CompMesh->LoadBuffers();
+
+
+			//meshes->push_back(newMesh);
+
+		}
+	}
+	else {
+		LOG("IMPOSIBLE TO LOAD THIS OBJECT");
 	}
 	tgo.clear();
 }
