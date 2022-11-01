@@ -229,6 +229,46 @@ bool ModuleScene::SaveScene() {
     int screenWidth = SDL_GetWindowSurface(App->window->window)->w, screenHeight = SDL_GetWindowSurface(App->window->window)->h;
     const char* AppName = App->EngName.c_str();
     const char* OrgName = App->OrgName.c_str();
+
+    bool show_demo_window = App->editor->show_demo_window;
+    bool show_another_window = App->editor->show_another_window;
+    bool show_console_window = App->editor->show_console_window;
+    bool show_render3d_window = App->editor->show_render3d_window;
+    bool show_config_window = App->editor->show_config_window;
+    bool show_about_window = App->editor->show_about_window;
+
+    bool gl_depthTestEnabled = App->editor->gl_depthTestEnabled;
+    bool gl_cullFaceEnabled = App->editor->gl_cullFaceEnabled;
+    bool gl_lightingEnabled = App->editor->gl_lightingEnabled;
+    bool gl_colorMaterialEnabled = App->editor->gl_colorMaterialEnabled;
+    bool gl_texture2dEnabled = App->editor->gl_texture2dEnabled;
+    bool gl_lineSmoothEnabled = App->editor->gl_lineSmoothEnabled;
+    bool gl_fogEnabled = App->editor->gl_fogEnabled;
+
+    float fog_density = App->editor->fog_density;
+    float fog_start = App->editor->fog_start;
+    float fog_end = App->editor->fog_end;
+    float fog_color[] = { App->editor->fog_color[0], App->editor->fog_color[1], App->editor->fog_color[2], App->editor->fog_color[3] };
+
+    
+    {
+       /* selectedRenderMode = 0;
+        gl_depthTestEnabled = true;
+        gl_cullFaceEnabled = true;
+        gl_lightingEnabled = true;
+        gl_colorMaterialEnabled = true;
+        gl_texture2dEnabled = true;
+        gl_lineSmoothEnabled = false;
+        gl_fogEnabled = false;
+
+        
+        fog_index = 0;
+        fog_coord = 0;
+        selectedFogMode = 1;*/
+
+       
+    }
+
     JSON_Value* schema = json_parse_string("{\"name\":\"\"}");
     JSON_Value* scene_settings = json_parse_file("scene_settings.json");
 

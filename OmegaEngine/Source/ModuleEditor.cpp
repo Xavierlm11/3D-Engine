@@ -42,6 +42,10 @@ ModuleEditor::ModuleEditor(Application* app, bool start_enabled) : Module(app, s
 	fog_end = 0;
 	fog_index = 0;
 	fog_coord = 0;
+	fog_color[0] = 0;
+	fog_color[1] = 0;
+	fog_color[2] = 0;
+	fog_color[3] = 0;
 	selectedFogMode = 1;
 
 	ModuleScene::Shapes::NONE;
@@ -214,7 +218,7 @@ update_status ModuleEditor::Update(float dt)
 	//}
 
 	CheckGLCapabilities();
-	CheckShapes();
+	//CheckShapes();
 	GOList();
 	if (App->input->CallClose)
 	{
@@ -581,7 +585,7 @@ void ModuleEditor::BarWindows() {
 void ModuleEditor::BarShapes() {
 	if (ImGui::BeginMenu("Shapes"))
 	{
-		if (ImGui::Checkbox("House", &load_house_shape))
+		/*if (ImGui::Checkbox("House", &load_house_shape))
 		{
 
 		}
@@ -600,6 +604,29 @@ void ModuleEditor::BarShapes() {
 		if (ImGui::Checkbox("Cylinder", &load_cylinder_shape))
 		{
 
+		}*/
+
+		char* shapes[] = { "House" ,"Cube" , "Sphere" , "Pyramid", "Cylinder" };
+
+		if (ImGui::MenuItem(shapes[0]))
+		{
+			App->scene->LoadCustomObj("Assets/BakerHouse.fbx", "BakerHouse");
+		}
+		if (ImGui::MenuItem(shapes[1]))
+		{
+			App->scene->LoadCustomObj("Assets/Cube.fbx", shapes[1]);
+		}
+		if (ImGui::MenuItem(shapes[2]))
+		{
+			App->scene->LoadCustomObj("Assets/Sphere.fbx", shapes[2]);
+		}
+		if (ImGui::MenuItem(shapes[3]))
+		{
+			App->scene->LoadCustomObj("Assets/Pyramid.fbx", shapes[3]);
+		}
+		if (ImGui::MenuItem(shapes[4]))
+		{
+			App->scene->LoadCustomObj("Assets/Cylinder.fbx", shapes[4]);
 		}
 
 
@@ -816,15 +843,15 @@ void ModuleEditor::CloseEngine()
 {
 	if (ImGui::Begin("Exit"))
 	{
-		ImGui::TextWrapped("Are you sure you want to partirle piernas to Albert");
-		if (ImGui::Button("YES"))
+		ImGui::TextWrapped("Are you sure you want to exit?");
+		if (ImGui::Button("Yes"))
 		{
 			/*OpenWeb("https://images.cdn.circlesix.co/image/1/700/0/uploads/posts/2018/09/63125b0ed58a7f29b69b20bb066fd184.jpg");
 			OpenWeb("https://youtu.be/OgZzUJud3Q4");*/
 			App->input->close = true;
 		}
 		ImGui::SameLine();
-		if (ImGui::Button("NO"))
+		if (ImGui::Button("No"))
 		{
 			App->input->CallClose = false;
 		}

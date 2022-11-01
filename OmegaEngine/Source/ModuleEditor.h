@@ -109,7 +109,7 @@ public:
 	std::vector<std::string> login;
 	
 	//ImGuiTextBuffer logs;
-private:
+
 	int winWidth;
 	int winHeight;
 	int selectedRenderMode;
@@ -128,8 +128,10 @@ private:
 	float fog_start;
 	float fog_end;
 	float fog_index;
-	float fog_color[4] = {0,0,0};
+	float fog_color[4] = {0,0,0,0};
 	float fog_coord;
+
+private:
 
 	const char* tdnow,
 		*altvec, 
