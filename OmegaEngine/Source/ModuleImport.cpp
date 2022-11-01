@@ -171,6 +171,8 @@ void ModuleImport::GetMeshDatasObj(const aiScene* scene ,const char* name) {
 			}
 		
 			dobj->CreateComp(Component::Types::MESH);
+			
+			
 			dobj->GOmesh->CompMesh = new MeshData();
 			dobj->GOmesh->CompMesh = GetMeshDataObj(dobj->GOmesh->CompMesh, scene->mMeshes[i], scene, dobj);
 			dobj->GOmesh->CompMesh->LoadBuffers();
@@ -283,7 +285,8 @@ MeshData* ModuleImport::GetMeshDataObj(MeshData* meshData, aiMesh* mesh, const a
 	if (scene->HasMaterials()) {
 		uint numTextures = material->GetTextureCount(aiTextureType_DIFFUSE);
 		obj->CreateComp(Component::Types::MATERIAL);
-		//obj->GOmat.
+		//obj->GOmat->CmMat->texture_id
+		
 		if (numTextures > 0) {
 
 			aiString path;
@@ -296,8 +299,8 @@ MeshData* ModuleImport::GetMeshDataObj(MeshData* meshData, aiMesh* mesh, const a
 			std::string finalPath = assetsPath + filePath;
 			LOG("PATH: %s", finalPath.c_str());
 			//const char* newPath = "Assets/%s"
-			meshData->material = new MaterialData();
-			meshData->material->texture_id = App->imp->ImportTexture(finalPath.c_str());
+			obj->GOmat->CmMat = new MaterialData();
+			obj->GOmat->CmMat->texture_id = App->imp->ImportTexture(finalPath.c_str());
 		}
 	}
 

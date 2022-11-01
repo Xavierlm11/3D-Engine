@@ -36,8 +36,8 @@ void CMeshes::Update()
 
 void CMeshes::MeshRenderer()
 {
-	if (CompMesh->material != nullptr/* && GO->GetComponent(Component::Types::MATERIAL)!=nullptr*/) {
-		CompMesh->DrawMesh(CompMesh->material->texture_id);
+	if (GO->GOmat->GetMaterial() != nullptr/* && GO->GetComponent(Component::Types::MATERIAL)!=nullptr*/) {
+		CompMesh->DrawMesh(GO->GOmat->GetMaterial()->texture_id);
 
 		
 	}

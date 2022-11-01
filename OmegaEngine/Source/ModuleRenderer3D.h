@@ -11,6 +11,8 @@
 #define CHECKERS_HEIGHT 100
 #define CHECKERS_WIDTH 100
 
+class CMeshes;
+
 class ModuleRenderer3D : public Module
 {
 public:

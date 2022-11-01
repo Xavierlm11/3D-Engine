@@ -6,6 +6,7 @@
 #include "GameObject.h"
 #include <vector>
 #include "Component.h"
+#include "CMaterial.h"
 #include "Assimp/include/scene.h"
 
 class Component;

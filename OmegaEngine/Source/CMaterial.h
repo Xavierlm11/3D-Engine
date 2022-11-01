@@ -14,6 +14,8 @@ public:
 
 	void Update() override;
 
+	MaterialData* GetMaterial();
+
 	void Enable() override { active = true; }
 
 	void Disable()override { active = false; }

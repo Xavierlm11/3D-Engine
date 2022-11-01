@@ -1,5 +1,7 @@
 #pragma once
 #include "Component.h"
+#include "CMaterial.h"
+#include "GameObject.h"
 class ModuleRenderer3D;
 class MeshData;
 class Component;
@@ -24,7 +26,7 @@ public:
 
 public:
 	MeshData* CompMesh = nullptr;
-	
+	CMaterial* MeshMat = nullptr;
 	//ModuleRenderer3D* GOmesh;
 	
 };
