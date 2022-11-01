@@ -100,7 +100,7 @@ private:
 
 	void GOList();
 
-	int GOIndex;
+	
 	int selection_mask;
 	/*void HierarchyShowParent(ImGuiTreeNodeFlags node_flags, int id, int node_clicked);
 	void HierarchyShowChild(ImGuiTreeNodeFlags node_flags, int id);*/
@@ -110,6 +110,7 @@ private:
 
 
 public:
+	int GOIndex;
 	bool close=false;
 	bool scroll = false;
 	LCG randomLCG;

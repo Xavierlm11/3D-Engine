@@ -1217,7 +1217,7 @@ void ModuleEditor::GOList()
 		for (int i = 0; i < App->scene->ListGO.size(); i++)
 		{
 			ImGuiTreeNodeFlags node_flags = base_flags;
-			
+
 			const bool is_selected = (selection_mask & (1 << i)) != 0;
 			if (is_selected)
 				node_flags |= ImGuiTreeNodeFlags_Selected;
@@ -1238,7 +1238,7 @@ void ModuleEditor::GOList()
 			}
 			else {
 				//Parent childs
-				if (App->scene->ListGO[i]->parent->parent == nullptr && App->scene->ListGO[i]->childrens.size()>0)
+				if (App->scene->ListGO[i]->parent->parent == nullptr && App->scene->ListGO[i]->childrens.size() > 0)
 				{
 					bool node_open = ImGui::TreeNodeEx((void*)(intptr_t)i, node_flags, App->scene->ListGO[i]->name.c_str(), i);
 					if (ImGui::IsItemClicked() && !ImGui::IsItemToggledOpen())
@@ -1253,7 +1253,7 @@ void ModuleEditor::GOList()
 					{
 						for (int j = 0; j < App->scene->ListGO.size(); j++) {
 							//Its not root
-							if (App->scene->ListGO[j]->parent!=nullptr) {
+							if (App->scene->ListGO[j]->parent != nullptr) {
 								//its not direct child
 								if (App->scene->ListGO[j]->parent->parent != nullptr) {
 									node_flags |= ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_NoTreePushOnOpen; // ImGuiTreeNodeFlags_Bullet
@@ -1273,7 +1273,7 @@ void ModuleEditor::GOList()
 					}
 				}
 				//Direct childs
-				else if(App->scene->ListGO[i]->parent->parent == nullptr)
+				else if (App->scene->ListGO[i]->parent->parent == nullptr)
 				{
 					node_flags |= ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_NoTreePushOnOpen; // ImGuiTreeNodeFlags_Bullet
 					ImGui::TreeNodeEx((void*)(intptr_t)i, node_flags, App->scene->ListGO[i]->name.c_str(), i);
@@ -1287,10 +1287,10 @@ void ModuleEditor::GOList()
 					}
 				}
 
-				
+
 			}
-			
-			
+
+
 
 			if (GOIndex != -1)
 			{
@@ -1330,19 +1330,29 @@ void ModuleEditor::GOList()
 
 
 
+		}
+ImGui::End();
+	}
 }
 
 void ModuleEditor::DeleteGo()
 {
-	for (uint i = 0; i < App->scene->ListGO.size(); ++i) {
+	
 
-		App->scene->ListGO.erase(App->scene->ListGO.begin(), App->scene->ListGO.end());
-	}
+	if (App->scene->ListGO.size()>1) {
+		for (uint i = 1; i < App->scene->ListGO.size(); ++i) {
 
+			App->scene->ListGO.at(i)->~GameObject();
 		}
-		ImGui::End();
+
+		App->scene->ListGO.erase(App->scene->ListGO.begin() + 1, App->scene->ListGO.end());
 	}
+	
+	
+
 }
+
+
 
 //void ModuleEditor::HierarchyShowParent(ImGuiTreeNodeFlags node_flags) {
 //

@@ -113,9 +113,20 @@ update_status ModuleInput::PreUpdate(float dt)
 				std::string fileName = dropped_filedir.substr(dropped_filedir.find_last_of('\\') + 1);
 				std::string extension = fileName.substr(fileName.find_last_of('.') + 1);
 				//LOG(last.c_str());
+				//LOG("PATH: %s", path.C_Str());
+				std::string assetsPath = "Assets/";
+				const char* texPath = fileName.c_str();
+
+				std::string finalPath = assetsPath + texPath;
+				LOG("PATH: %s", finalPath.c_str());
 				
 				if (extension == "png") {
-
+					if (App->editor->GOIndex > -1 && App->editor->GOIndex < App->scene->ListGO.size()) {
+						if (App->scene->ListGO[App->editor->GOIndex] != nullptr) {
+							//App->scene->ListGO[App->editor->GOIndex]->GOmat->CmMat->texture_id = App->imp->ImportTexture(dropped_filedir.c_str());
+						}
+					}
+					
 				}
 				else if (extension == "fbx")
 				{

@@ -22,8 +22,14 @@ CMeshes::CMeshes(GameObject* obj) :Component(obj, Types::MESH)
 }
 CMeshes::~CMeshes()
 {
-	if (CompMesh != nullptr)
-		CompMesh = nullptr;
+
+	CompMesh->UnloadMesh();
+	CompMesh = nullptr;
+	delete CompMesh;
+
+	MeshMat = nullptr;
+	delete MeshMat;
+
 }
 
 void CMeshes::Update()
