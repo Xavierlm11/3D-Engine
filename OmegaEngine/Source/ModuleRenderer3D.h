@@ -17,6 +17,7 @@ public:
 	enum class RenderMode
 	{
 		NORMAL,
+		CHECKERS,
 		WIREFRAME,
 		NONE,
 	};

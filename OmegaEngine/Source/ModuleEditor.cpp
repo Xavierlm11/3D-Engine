@@ -313,7 +313,7 @@ void ModuleEditor::Render3DWindow() {
 	//const char* viewModeItems[] = { "Normal", "Wireframe" };
 	//ImGui::ListBox("View Mode",0,viewModeItems, 2);
 
-		const char* modes[] = { "Normal", "Wireframe"};
+		const char* modes[] = { "Normal", "Checkers", "Wireframe"};
 
 		if (ImGui::Button("Select..."))
 			ImGui::OpenPopup("Render mode");

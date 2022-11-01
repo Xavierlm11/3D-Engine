@@ -110,7 +110,7 @@ update_status ModuleInput::PreUpdate(float dt)
 			{
 				//char* dropped_filedir;
 				std::string dropped_filedir = e.drop.file;
-				std::string fileName = dropped_filedir.substr(dropped_filedir.find_last_of('\\') + 2);
+				std::string fileName = dropped_filedir.substr(dropped_filedir.find_last_of('\\') + 1);
 				std::string extension = fileName.substr(fileName.find_last_of('.') + 1);
 				//LOG(last.c_str());
 				

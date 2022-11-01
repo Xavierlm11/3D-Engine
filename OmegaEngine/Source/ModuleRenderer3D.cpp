@@ -307,6 +307,25 @@ void ModuleRenderer3D::GoRender()
 		meshlist.clear();
 		//DrawCube();
 		break;
+	case RenderMode::CHECKERS:
+		p.Render();
+		for (int i = 0; i < App->scene->models[0]->meshes.size(); i++)
+		{
+			App->scene->models[0]->meshes[i]->DrawMesh(checkersID);
+		}
+		//p.Render();
+		for (int i = 0; i < meshlist.size(); i++)
+		{
+			if (meshlist[i] != nullptr)
+			{
+
+				meshlist[i]->MeshRenderer();
+
+			}
+		}
+		meshlist.clear();
+		//DrawCube();
+		break;
 	case RenderMode::WIREFRAME:
 		p.Render();
 		for (int i = 0; i < App->scene->models[0]->meshes.size(); i++)
