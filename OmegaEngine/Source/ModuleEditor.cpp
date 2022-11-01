@@ -49,7 +49,7 @@ ModuleEditor::ModuleEditor(Application* app, bool start_enabled) : Module(app, s
 	selectedFogMode = 1;
 
 	ModuleScene::Shapes::NONE;
-
+	selectedShape = ModuleScene::Shapes::NONE;
 
 	tdnow =  " ";
 	
@@ -843,15 +843,23 @@ void ModuleEditor::CloseEngine()
 {
 	if (ImGui::Begin("Exit"))
 	{
-		ImGui::TextWrapped("Are you sure you want to exit?");
+		ImGui::TextWrapped("Do you want to save before leaving?");
+		ImGui::Text("");
 		if (ImGui::Button("Yes"))
 		{
 			/*OpenWeb("https://images.cdn.circlesix.co/image/1/700/0/uploads/posts/2018/09/63125b0ed58a7f29b69b20bb066fd184.jpg");
 			OpenWeb("https://youtu.be/OgZzUJud3Q4");*/
+			App->scene->SaveScene();
+			
 			App->input->close = true;
 		}
 		ImGui::SameLine();
 		if (ImGui::Button("No"))
+		{
+			App->input->close = true;
+		}
+		ImGui::SameLine();
+		if (ImGui::Button("Cancel"))
 		{
 			App->input->CallClose = false;
 		}

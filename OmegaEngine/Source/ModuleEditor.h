@@ -110,8 +110,8 @@ public:
 	
 	//ImGuiTextBuffer logs;
 
-	int winWidth;
-	int winHeight;
+	//int winWidth;
+	//int winHeight;
 	int selectedRenderMode;
 
 	bool gl_depthTestEnabled;

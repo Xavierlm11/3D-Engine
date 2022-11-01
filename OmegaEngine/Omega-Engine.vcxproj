@@ -69,7 +69,6 @@
     <ClCompile Include="Source\ModuleEditor.cpp" />
     <ClCompile Include="Source\ModuleImport.cpp" />
     <ClCompile Include="Source\ModuleInput.cpp" />
-    <ClCompile Include="Source\ModulePhysics3D.cpp" />
     <ClCompile Include="Source\ModuleRenderer3D.cpp" />
     <ClCompile Include="Source\ModuleScene.cpp" />
     <ClCompile Include="Source\ModuleWindow.cpp" />
@@ -165,7 +164,6 @@
     <ClInclude Include="Source\ModuleEditor.h" />
     <ClInclude Include="Source\ModuleImport.h" />
     <ClInclude Include="Source\ModuleInput.h" />
-    <ClInclude Include="Source\ModulePhysics3D.h" />
     <ClInclude Include="Source\ModuleRenderer3D.h" />
     <ClInclude Include="Source\ModuleScene.h" />
     <ClInclude Include="Source\ModuleWindow.h" />

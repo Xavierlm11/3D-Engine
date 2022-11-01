@@ -54,9 +54,6 @@
     <ClCompile Include="Source\ModuleInput.cpp">
       <Filter>Files\Modules</Filter>
     </ClCompile>
-    <ClCompile Include="Source\ModulePhysics3D.cpp">
-      <Filter>Files\Modules</Filter>
-    </ClCompile>
     <ClCompile Include="Source\ModuleRenderer3D.cpp">
       <Filter>Files\Modules</Filter>
     </ClCompile>
@@ -249,9 +246,6 @@
       <Filter>Files\Modules</Filter>
     </ClInclude>
     <ClInclude Include="Source\ModuleInput.h">
-      <Filter>Files\Modules</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\ModulePhysics3D.h">
       <Filter>Files\Modules</Filter>
     </ClInclude>
     <ClInclude Include="Source\ModuleRenderer3D.h">
