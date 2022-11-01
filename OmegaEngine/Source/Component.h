@@ -26,6 +26,8 @@ public:
 
 	virtual void Save();
 
+	virtual void OnInspector();
+
 	Types GetType() const;
 	GameObject* GetGO() ;
 	virtual void Update(){}

@@ -37,6 +37,10 @@ void Component::Save()
 {
 }
 
+void Component::OnInspector()
+{
+}
+
 Component::Types Component::GetType() const
 {
 	return type;

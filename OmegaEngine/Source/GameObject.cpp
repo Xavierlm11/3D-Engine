@@ -11,6 +11,8 @@ GameObject::GameObject(const char* name, GameObject* parent):name(name)
 		//parent->childrens.push_back(this);
 	}
 	SetParent(parent);
+
+	CreateComp(Component::Types::TRANSFORM);
 }
 
 void GameObject::SetProperties() {
@@ -163,8 +165,13 @@ void GameObject::Update(float dt)
 
 	for (uint i = 0; i < components.size(); ++i)
 	{
-		if(components[i]->IsEnable())
+		if (components[i]->IsEnable())
+		{
+
 			components[i]->Update();
+			
+		}
+
 	}
 }
 

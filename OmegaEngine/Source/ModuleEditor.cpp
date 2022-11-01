@@ -219,7 +219,21 @@ update_status ModuleEditor::Update(float dt)
 	//        show_another_window = false;
 	//    ImGui::End();
 	//}
+	//App->scene->CreateGO();
+	
+	/*if(ImGui::Begin("inspector"))
+	{
+		for (uint i = 0; App->scene->ListGO.size(); ++i)
+		{
+			if (GOIndex == i)
+			{
+				App->scene->ListGO[i]->Update(dt);
+			}
+			
+		}
 
+	}
+	ImGui::End();*/
 	CheckGLCapabilities();
 	//CheckShapes();
 	GOList();
@@ -1328,12 +1342,11 @@ void ModuleEditor::GOList()
 
 
 
-
+	}
+		ImGui::End();
+	}
 
 		}
-ImGui::End();
-	}
-}
 
 void ModuleEditor::DeleteGo()
 {
