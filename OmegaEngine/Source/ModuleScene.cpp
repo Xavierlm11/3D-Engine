@@ -225,13 +225,12 @@ update_status ModuleScene::Update(float dt)
 
 bool ModuleScene::SaveScene() {
 
-    ImVec4 backgroundColor = App->editor->clear_color;
+    //ImVec4 backgroundColor = App->editor->clear_color;
     int screenWidth = SDL_GetWindowSurface(App->window->window)->w, screenHeight = SDL_GetWindowSurface(App->window->window)->h;
     const char* AppName = App->EngName.c_str();
     const char* OrgName = App->OrgName.c_str();
 
     bool show_demo_window = App->editor->show_demo_window;
-    bool show_another_window = App->editor->show_another_window;
     bool show_console_window = App->editor->show_console_window;
     bool show_render3d_window = App->editor->show_render3d_window;
     bool show_config_window = App->editor->show_config_window;
@@ -250,38 +249,43 @@ bool ModuleScene::SaveScene() {
     float fog_end = App->editor->fog_end;
     float fog_color[] = { App->editor->fog_color[0], App->editor->fog_color[1], App->editor->fog_color[2], App->editor->fog_color[3] };
 
-    
-    {
-       /* selectedRenderMode = 0;
-        gl_depthTestEnabled = true;
-        gl_cullFaceEnabled = true;
-        gl_lightingEnabled = true;
-        gl_colorMaterialEnabled = true;
-        gl_texture2dEnabled = true;
-        gl_lineSmoothEnabled = false;
-        gl_fogEnabled = false;
-
-        
-        fog_index = 0;
-        fog_coord = 0;
-        selectedFogMode = 1;*/
-
-       
-    }
-
     JSON_Value* schema = json_parse_string("{\"name\":\"\"}");
     JSON_Value* scene_settings = json_parse_file("scene_settings.json");
 
     if (scene_settings == NULL || json_validate(schema, scene_settings) != JSONSuccess) {
         scene_settings = json_value_init_object();
-        json_object_set_number(json_object(scene_settings), "R", backgroundColor.x);
-        json_object_set_number(json_object(scene_settings), "G", backgroundColor.y);
-        json_object_set_number(json_object(scene_settings), "B", backgroundColor.z);
-        json_object_set_number(json_object(scene_settings), "A", backgroundColor.w);
+        //json_object_set_number(json_object(scene_settings), "R", backgroundColor.x);
+        //json_object_set_number(json_object(scene_settings), "G", backgroundColor.y);
+        //json_object_set_number(json_object(scene_settings), "B", backgroundColor.z);
+        //json_object_set_number(json_object(scene_settings), "A", backgroundColor.w);
         json_object_set_number(json_object(scene_settings), "screen_width", screenWidth);
         json_object_set_number(json_object(scene_settings), "screen_height", screenHeight);
-        json_object_set_string(json_object(scene_settings), "Engine_name", AppName);
-        json_object_set_string(json_object(scene_settings), "Org_name", AppName);
+        json_object_set_string(json_object(scene_settings), "engine_name", AppName);
+        json_object_set_string(json_object(scene_settings), "org_name", AppName);
+
+        json_object_set_boolean(json_object(scene_settings), "show_demo_window", show_demo_window);
+        json_object_set_boolean(json_object(scene_settings), "show_console_window", show_console_window);
+        json_object_set_boolean(json_object(scene_settings), "show_render3d_window", show_render3d_window);
+        json_object_set_boolean(json_object(scene_settings), "show_config_window", show_config_window);
+        json_object_set_boolean(json_object(scene_settings), "show_about_window", show_about_window);
+
+        json_object_set_boolean(json_object(scene_settings), "gl_depthTestEnabled", show_demo_window);
+        json_object_set_boolean(json_object(scene_settings), "gl_cullFaceEnabled", show_console_window);
+        json_object_set_boolean(json_object(scene_settings), "gl_lightingEnabled", show_render3d_window);
+        json_object_set_boolean(json_object(scene_settings), "gl_colorMaterialEnabled", show_config_window);
+        json_object_set_boolean(json_object(scene_settings), "gl_texture2dEnabled", show_about_window);
+        json_object_set_boolean(json_object(scene_settings), "gl_lineSmoothEnabled", show_demo_window);
+        json_object_set_boolean(json_object(scene_settings), "gl_fogEnabled", show_console_window);
+
+        json_object_set_number(json_object(scene_settings), "fog_density", fog_density);
+        json_object_set_number(json_object(scene_settings), "fog_start", fog_start);
+        json_object_set_number(json_object(scene_settings), "fog_end", fog_end);
+        json_object_set_number(json_object(scene_settings), "fog_color_0", fog_color[0]);
+        json_object_set_number(json_object(scene_settings), "fog_color_1", fog_color[1]);
+        json_object_set_number(json_object(scene_settings), "fog_color_2", fog_color[2]);
+        json_object_set_number(json_object(scene_settings), "fog_color_3", fog_color[3]);
+
+
         json_serialize_to_file(scene_settings, "Settings/scene_settings.json");
     }
    
@@ -298,40 +302,108 @@ bool ModuleScene::LoadScene() {
 
     JSON_Value* schema = json_parse_string("{\"name\":\"\"}");
     JSON_Value* scene_settings = json_parse_file("Settings/scene_settings.json");
-    ImVec4 new_backgroundColor;
+    //ImVec4 new_backgroundColor;
     int new_winWidth = 480, new_winHeight = 480;
     float name = NULL;
     const char* AppName = "DefaultName";
     const char* OrgName = "DefaultName";
 
+    bool show_demo_window = false;
+    bool show_console_window = false;
+    bool show_render3d_window = false;
+    bool show_config_window = false;
+    bool show_about_window = false;
+
+    bool gl_depthTestEnabled = false;
+    bool gl_cullFaceEnabled = false;
+    bool gl_lightingEnabled = false;
+    bool gl_colorMaterialEnabled = false;
+    bool gl_texture2dEnabled = false;
+    bool gl_lineSmoothEnabled = false;
+    bool gl_fogEnabled = false;
+
+    float fog_density = false;
+    float fog_start = false;
+    float fog_end = false;
+    float fog_color[] = { 0,0,0,0 };
+
+
     if (scene_settings == NULL || json_validate(schema, scene_settings) != JSONSuccess) {
         //scene_settings = json_value_init_object();
-        new_backgroundColor.x = json_object_get_number(json_object(scene_settings), "R");
-        new_backgroundColor.y = json_object_get_number(json_object(scene_settings), "G");
-        new_backgroundColor.z = json_object_get_number(json_object(scene_settings), "B");
-        new_backgroundColor.w = json_object_get_number(json_object(scene_settings), "A");
-
-        AppName = json_object_get_string(json_object(scene_settings), "Engine_name");
-        OrgName = json_object_get_string(json_object(scene_settings), "Org_name");
+        //new_backgroundColor.x = json_object_get_number(json_object(scene_settings), "R");
+        //new_backgroundColor.y = json_object_get_number(json_object(scene_settings), "G");
+        //new_backgroundColor.z = json_object_get_number(json_object(scene_settings), "B");
+        //new_backgroundColor.w = json_object_get_number(json_object(scene_settings), "A");
 
         new_winWidth = json_object_get_number(json_object(scene_settings), "screen_width");
         new_winHeight = json_object_get_number(json_object(scene_settings), "screen_height");
+        AppName = json_object_get_string(json_object(scene_settings), "engine_name");
+        OrgName = json_object_get_string(json_object(scene_settings), "org_name");
+
+        show_demo_window = json_object_get_boolean(json_object(scene_settings), "show_demo_window");
+        show_console_window =  json_object_get_boolean(json_object(scene_settings), "show_console_window");
+        show_render3d_window = json_object_get_boolean(json_object(scene_settings), "show_render3d_window");
+        show_config_window = json_object_get_boolean(json_object(scene_settings), "show_config_window");
+        show_about_window = json_object_get_boolean(json_object(scene_settings), "show_about_window");
+
+        gl_depthTestEnabled = json_object_get_boolean(json_object(scene_settings), "gl_depthTestEnabled");
+        gl_cullFaceEnabled = json_object_get_boolean(json_object(scene_settings), "gl_cullFaceEnabled");
+        gl_lightingEnabled = json_object_get_boolean(json_object(scene_settings), "gl_lightingEnabled");
+        gl_colorMaterialEnabled = json_object_get_boolean(json_object(scene_settings), "gl_colorMaterialEnabled");
+        gl_texture2dEnabled = json_object_get_boolean(json_object(scene_settings), "gl_texture2dEnabled");
+        gl_lineSmoothEnabled = json_object_get_boolean(json_object(scene_settings), "gl_lineSmoothEnabled");
+        gl_fogEnabled = json_object_get_boolean(json_object(scene_settings), "gl_fogEnabled");
+
+        fog_density = json_object_get_number(json_object(scene_settings), "fog_density");
+        fog_start = json_object_get_number(json_object(scene_settings), "fog_start");
+        fog_end = json_object_get_number(json_object(scene_settings), "fog_end");
+        fog_color[0] = json_object_get_number(json_object(scene_settings), "fog_color_0");
+        fog_color[1] = json_object_get_number(json_object(scene_settings), "fog_color_1");
+        fog_color[2] = json_object_get_number(json_object(scene_settings), "fog_color_2");
+        fog_color[3] = json_object_get_number(json_object(scene_settings), "fog_color_3");
         //LOG("W::::::::::%i", new_winWidth);
     }
     
-    App->editor->clear_color = new_backgroundColor;
+    //App->editor->clear_color = new_backgroundColor;
     /*App->window->screenWidth = new_screenWidth;
     App->window->screenHeight = new_screenHeight;*/
     SDL_SetWindowSize(App->window->window, new_winWidth, new_winHeight);
 
-    App->window->winWidth = new_winWidth;
-    App->window->winHeight = new_winHeight;
+   
+
+
 
     //App->EngName = AppName;
     //App->OrgName = OrgName;
 
     App->editor->SetAppName(AppName);
     App->editor->SetOrgName(OrgName);
+
+    App->window->winWidth = new_winWidth;
+    App->window->winHeight = new_winHeight;
+
+    App->editor->show_demo_window = show_demo_window;
+    App->editor->show_console_window = show_console_window;
+    App->editor->show_render3d_window = show_render3d_window;
+    App->editor->show_config_window = show_config_window;
+    App->editor->show_about_window = show_about_window;
+
+    App->editor->gl_depthTestEnabled = gl_depthTestEnabled;
+    App->editor->gl_cullFaceEnabled = gl_cullFaceEnabled;
+    App->editor->gl_lightingEnabled = gl_lightingEnabled;
+    App->editor->gl_colorMaterialEnabled = gl_colorMaterialEnabled;
+    App->editor->gl_texture2dEnabled = gl_texture2dEnabled;
+    App->editor->gl_lineSmoothEnabled = gl_lineSmoothEnabled;
+    App->editor->gl_fogEnabled = gl_fogEnabled;
+
+    App->editor->fog_density = fog_density;
+    App->editor->fog_start = fog_start;
+    App->editor->fog_end = fog_end;
+    App->editor->fog_color[0] = fog_color[0];
+    App->editor->fog_color[1] = fog_color[1];
+    App->editor->fog_color[2] = fog_color[2];
+    App->editor->fog_color[3] = fog_color[3];
+
     json_value_free(schema);
     json_value_free(scene_settings);
 
