@@ -283,7 +283,7 @@ MeshData* ModuleImport::GetMeshDataObj(MeshData* meshData, aiMesh* mesh, const a
 	if (scene->HasMaterials()) {
 		uint numTextures = material->GetTextureCount(aiTextureType_DIFFUSE);
 		obj->CreateComp(Component::Types::MATERIAL);
-		obj->GOmat.
+		//obj->GOmat.
 		if (numTextures > 0) {
 
 			aiString path;
