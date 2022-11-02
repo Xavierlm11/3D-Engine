@@ -481,7 +481,7 @@ void ModuleEditor::AboutWindow() {
 		if (ImGui::Button("Github Repository")) {
 
 			//for (unsigned int i = 0; i <= 10; ++i)OpenWeb("https://www.raylib.com/");
-			OpenWeb("https://youtu.be/OgZzUJud3Q4");
+			OpenWeb("https://github.com/Xavierlm11/Omega-Engine");
 		}	
 		ImGui::Text("");
 
