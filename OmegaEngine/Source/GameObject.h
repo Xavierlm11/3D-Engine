@@ -43,6 +43,7 @@ public:
 	Component* CreateComp(Component::Types type);
 	void Update(float dt);
 
+	void Editor();
 	
 
 public:

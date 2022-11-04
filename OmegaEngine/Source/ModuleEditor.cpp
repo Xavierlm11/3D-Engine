@@ -225,9 +225,9 @@ update_status ModuleEditor::Update(float dt)
 	{
 		for (uint i = 0; App->scene->ListGO.size(); ++i)
 		{
-			if (GOIndex == i)
+			if (GOIndex == i && GOIndex != 0)
 			{
-				App->scene->ListGO[i]->Update(dt);
+				App->scene->ListGO[i]->Editor();
 			}
 			
 		}

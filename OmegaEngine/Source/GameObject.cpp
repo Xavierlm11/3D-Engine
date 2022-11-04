@@ -168,8 +168,22 @@ void GameObject::Update(float dt)
 		if (components[i]->IsEnable())
 		{
 
-			components[i]->Update();
+			components[i]->OnInspector();
 			
+		}
+
+	}
+}
+
+void GameObject::Editor()
+{
+	for (uint i = 0; i < components.size(); ++i)
+	{
+		if (components[i]->IsEnable())
+		{
+
+			components[i]->Update();
+
 		}
 
 	}

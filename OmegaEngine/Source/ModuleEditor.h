@@ -108,6 +108,8 @@ private:
 	void SelectChilds();
 	void DeleteGo();
 
+	
+
 
 public:
 	int GOIndex;

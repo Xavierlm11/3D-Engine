@@ -18,7 +18,7 @@ public:
 
 	 bool IsEnable()override { return active ; }
 
-	bool active = false;
+	bool active = true;
 
 	void Update() override;
 
