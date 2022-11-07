@@ -221,19 +221,19 @@ update_status ModuleEditor::Update(float dt)
 	//}
 	//App->scene->CreateGO();
 	
-	/*if(ImGui::Begin("inspector"))
-	{
-		for (uint i = 0; App->scene->ListGO.size(); ++i)
-		{
-			if (GOIndex == i && GOIndex != 0)
-			{
-				App->scene->ListGO[i]->Editor();
-			}
-			
-		}
+	//if(ImGui::Begin("inspector"))
+	//{
+	//	for (uint i = 0; App->scene->ListGO.size(); ++i)
+	//	{
+	//		if (GOIndex == i && GOIndex != 0)
+	//		{
+	//			App->scene->ListGO[i]->Editor();
+	//		}
+	//		
+	//	}
 
-	}
-	ImGui::End();*/
+	//}
+	//ImGui::End();
 	CheckGLCapabilities();
 	//CheckShapes();
 	GOList();
