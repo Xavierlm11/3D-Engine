@@ -43,6 +43,8 @@ GameObject::~GameObject()
 
 	GOtrans = nullptr;
 	delete GOtrans;
+	GOmesh = nullptr;
+	delete GOmesh;
 	//External->CleanVec(childrens);
 }
 
@@ -190,4 +192,40 @@ void GameObject::Editor()
 }
 
 
+void GameObject::Remove()
+{
+	if (parent != nullptr) {
+		if (!components.empty())
+		{
+			for (uint i = 0; i < components.size(); ++i)
+			{
+				delete components[i];
+				components[i] = nullptr;
+			}
+			components.clear();
+		}
+		//External->CleanVec(components);
+		if (!childrens.empty()) {
+			for (uint i = 0; i < childrens.size(); ++i)
+			{
+				delete childrens[i];
+				childrens[i] = nullptr;
+			}
+			childrens.clear();
+		}
+		parent = nullptr;
+		delete parent;
 
+		GOmat = nullptr;
+		delete GOmat;
+
+		GOtrans = nullptr;
+		delete GOtrans;
+		GOmesh = nullptr;
+		delete GOmesh;
+		
+		
+
+	}
+
+}

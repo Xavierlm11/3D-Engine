@@ -187,7 +187,7 @@ update_status ModuleEditor::Update(float dt)
 	ImGuiIO& io = ImGui::GetIO(); (void)io;*/
 
 	// 2. Show a simple window that we create ourselves. We use a Begin/End pair to created a named window.
-	{
+	//{
 		//static float f = 0.0f;
 		//static int counter = 0;
 
@@ -208,7 +208,7 @@ update_status ModuleEditor::Update(float dt)
 		//ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
 		//
 		//ImGui::End();
-	}
+	//}
 
 	//// 3. Show another simple window.
 	//if (show_another_window)
@@ -241,7 +241,7 @@ update_status ModuleEditor::Update(float dt)
 	{
 		CloseEngine();
 	}
-
+	LOG("%i", App->scene->ListGO.size());
 
 	return UPDATE_CONTINUE;
 }
@@ -321,20 +321,20 @@ void ModuleEditor::ConsoleWindow()
 
 void ModuleEditor::Render3DWindow() {
 
-	ImGui::Begin("Scene View", &show_render3d_window);
-	
-	//// Using the _simplified_ one-liner ListBox() api here
-	//// See "List boxes" section for examples of how to use the more flexible BeginListBox()/EndListBox() api.
-	//const char* items[] = { "Normal", "Wireframe" };
-	//static int item_current = 1;
-	//ImGui::ListBox("View Mode", &item_current, items, IM_ARRAYSIZE(items));
-	////ImGui::SameLine(); HelpMarker(
-	////	"Using the simplified one-liner ListBox API here.\nRefer to the \"List boxes\" section below for an explanation of how to use the more flexible and general BeginListBox/EndListBox API.");
+	if (ImGui::Begin("Scene View", &show_render3d_window)) {
 
-	//const char* viewModeItems[] = { "Normal", "Wireframe" };
-	//ImGui::ListBox("View Mode",0,viewModeItems, 2);
+		//// Using the _simplified_ one-liner ListBox() api here
+		//// See "List boxes" section for examples of how to use the more flexible BeginListBox()/EndListBox() api.
+		//const char* items[] = { "Normal", "Wireframe" };
+		//static int item_current = 1;
+		//ImGui::ListBox("View Mode", &item_current, items, IM_ARRAYSIZE(items));
+		////ImGui::SameLine(); HelpMarker(
+		////	"Using the simplified one-liner ListBox API here.\nRefer to the \"List boxes\" section below for an explanation of how to use the more flexible and general BeginListBox/EndListBox API.");
 
-		const char* modes[] = { "Normal", "Checkers", "Wireframe"};
+		//const char* viewModeItems[] = { "Normal", "Wireframe" };
+		//ImGui::ListBox("View Mode",0,viewModeItems, 2);
+
+		const char* modes[] = { "Normal", "Checkers", "Wireframe" };
 
 		if (ImGui::Button("Select..."))
 			ImGui::OpenPopup("Render mode");
@@ -346,10 +346,10 @@ void ModuleEditor::Render3DWindow() {
 				if (ImGui::Selectable(modes[i])) {
 					selectedRenderMode = i;
 					App->renderer3D->mode = (ModuleRenderer3D::RenderMode)selectedRenderMode;
-					
+
 				}
 			}
-				
+
 			ImGui::EndPopup();
 		}
 
@@ -366,7 +366,7 @@ void ModuleEditor::Render3DWindow() {
 
 				if (ImGui::TreeNode("Fog Parameters"))
 				{
-					const char* fogModes[] = { "Linear", "Exponential", "Exponential 2"};
+					const char* fogModes[] = { "Linear", "Exponential", "Exponential 2" };
 
 					if (ImGui::Button("Fog mode"))
 						ImGui::OpenPopup("Fog mode");
@@ -384,7 +384,7 @@ void ModuleEditor::Render3DWindow() {
 						ImGui::EndPopup();
 					}
 
-					
+
 					switch (selectedFogMode) {
 					case 0:
 						ImGui::SliderFloat("Start", &fog_start, 0.0f, 500.0f, "%.2f");
@@ -403,7 +403,7 @@ void ModuleEditor::Render3DWindow() {
 					ImGui::TreePop();
 				}
 
-				
+
 				switch (selectedFogMode) {
 				case 0:
 					glFogf(GL_FOG_MODE, GL_LINEAR);
@@ -417,31 +417,31 @@ void ModuleEditor::Render3DWindow() {
 				default:
 					glFogf(GL_FOG_MODE, GL_EXP);
 				}
-				
+
 				glFogf(GL_FOG_DENSITY, fog_density);
 				glFogf(GL_FOG_START, fog_start);
-				glHint(GL_FOG_HINT, GL_DONT_CARE); 
+				glHint(GL_FOG_HINT, GL_DONT_CARE);
 				glFogf(GL_FOG_END, fog_end);
 				glFogfv(GL_FOG_COLOR, fog_color);
 				glFogi(GL_FOG_COORD_SRC, GL_FRAGMENT_DEPTH);
 			}
-			
-			
+
+
 
 			ImGui::TreePop();
 		}
 
 
 
-	/*int renderX = ImGui::GetWindowPos().x;
-	int renderY = ImGui::GetWindowPos().y;
-	int renderW = ImGui::GetWindowWidth();
-	int renderH = ImGui::GetWindowHeight();*/
-	//App->renderer3D->OnResize(renderX, -renderY + renderH, renderW, renderH);
+		/*int renderX = ImGui::GetWindowPos().x;
+		int renderY = ImGui::GetWindowPos().y;
+		int renderW = ImGui::GetWindowWidth();
+		int renderH = ImGui::GetWindowHeight();*/
+		//App->renderer3D->OnResize(renderX, -renderY + renderH, renderW, renderH);
 
-	//SDL_GetWindowSize(App->window->window, &winWidth, &winHeight);
-	//App->renderer3D->OnResize(0, 0, winWidth, winHeight);
-
+		//SDL_GetWindowSize(App->window->window, &winWidth, &winHeight);
+		//App->renderer3D->OnResize(0, 0, winWidth, winHeight);
+	}
 	ImGui::End();
 }
 
@@ -668,10 +668,10 @@ void ModuleEditor::BarXXX() {
 			ConfigPathXXX();
 
 			ConfigAudioXXX();
-		}
-
-
+	}
 	ImGui::End();
+
+
 
 }
 
@@ -1343,10 +1343,10 @@ void ModuleEditor::GOList()
 
 
 	}
-		ImGui::End();
 	}
+		ImGui::End();
 
-		}
+	}
 
 void ModuleEditor::DeleteGo()
 {
@@ -1358,10 +1358,23 @@ void ModuleEditor::DeleteGo()
 			App->scene->ListGO.at(i)->~GameObject();
 		}
 
-		App->scene->ListGO.erase(App->scene->ListGO.begin() + 1, App->scene->ListGO.end());
 	}
-	
-	
+		App->scene->ListGO.erase(App->scene->ListGO.begin() + 1, App->scene->ListGO.end());
+		
+		//for (uint i = 1; i < App->scene->ListGO.size(); ++i) {
+		//	
+		//		App->scene->ListGO.at(i)->Remove();
+		//		App->scene->ListGO.erase(App->scene->ListGO.begin()+1, App->scene->ListGO.end());
+		//		//App->scene->ListGO.at(i) = nullptr;
+		//		//delete App->scene->ListGO.at(i);
+		//		
+		//}
+		/*for (uint i = 1; i < App->scene->ListGO.size(); ++i) {
+			App->scene->ListGO[i] = nullptr;
+			delete App->scene->ListGO[i];
+
+		}
+			App->scene->ListGO.clear();*/
 
 }
 

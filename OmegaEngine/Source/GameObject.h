@@ -44,6 +44,8 @@ public:
 	void Update(float dt);
 
 	void Editor();
+
+	void Remove();
 	
 
 public:
