@@ -1,8 +1,10 @@
 #pragma once
 #include "Component.h"
-#include "CMaterial.h"
+//#include "CMaterial.h"
 #include "GameObject.h"
 #include "ModuleRenderer3D.h"
+#include "GameObject.h"
+#include"CTransform.h"
 class ModuleRenderer3D;
 class MeshData;
 class Component;
@@ -22,6 +24,8 @@ public:
 	void Disable()override { active = false; }
 
 	bool IsEnable()override { return active; }
+
+	void OnInspector()override;
 
 	bool active = true;
 

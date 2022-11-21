@@ -1,5 +1,7 @@
 #include "MeshData.h"
 
+
+
 MeshData::MeshData()
 {
 	id_indices = 0; // index in VRAM
@@ -92,7 +94,7 @@ void MeshData::UnloadMesh() {
 
 }
 
-void MeshData::DrawMesh(GLuint textureID) {
+void MeshData::DrawMesh(GLuint textureID, mat4x4 mat) {
 	if (hasLoadedBuffers == true) {
 
 		//if (textureID != NULL) {
@@ -113,6 +115,8 @@ void MeshData::DrawMesh(GLuint textureID) {
 		glBindBuffer(GL_ARRAY_BUFFER, id_textureCoords);
 		glTexCoordPointer(2, GL_FLOAT, 0, NULL);
 
+		glPushMatrix();
+		glMultMatrixf(&mat);
 
 		glDrawElements(GL_TRIANGLES, num_indices, GL_UNSIGNED_INT, NULL);
 

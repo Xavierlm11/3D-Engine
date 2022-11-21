@@ -44,18 +44,22 @@ void CMeshes::MeshRenderer()
 {
 	//External->rendere
 	if (GO->GOmat->GetMaterial() != nullptr && External->renderer3D->mode == ModuleRenderer3D::RenderMode::NORMAL) {
-		CompMesh->DrawMesh(GO->GOmat->GetMaterial()->texture_id);
+		CompMesh->DrawMesh(GO->GOmat->GetMaterial()->texture_id, GO->GOtrans->matrix);
 
 		
 	}
 	else if (External->renderer3D->mode== ModuleRenderer3D::RenderMode::CHECKERS)
 	{
-		CompMesh->DrawMesh(External->renderer3D->checkersID);
+		CompMesh->DrawMesh(External->renderer3D->checkersID, GO->GOtrans->matrix);
 	}
 	else {
 
-		CompMesh->DrawMesh(0);
+		CompMesh->DrawMesh(0, GO->GOtrans->matrix);
 	}
 	
 	
+}
+
+void CMeshes::OnInspector()
+{
 }

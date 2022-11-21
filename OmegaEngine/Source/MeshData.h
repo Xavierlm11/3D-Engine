@@ -3,6 +3,9 @@
 #include "Glew/include/glew.h"
 #include "Assimp/include/scene.h"
 #include "MaterialData.h"
+#include "glmath.h"
+//#include "GameObject.h"
+//#include "Component.h"
 //
 //class ModelData {
 //
@@ -20,7 +23,7 @@ public:
 	~MeshData();
 
 	void LoadBuffers();
-	void DrawMesh(GLuint textureID);
+	void DrawMesh(GLuint textureID, mat4x4 mat);
 	void UnloadMesh();
 
 	uint id_indices = 0; // index in VRAM
@@ -38,4 +41,6 @@ public:
 	bool hasLoadedBuffers;
 
 	MaterialData* material = nullptr;
+
+	//GameObject* obj;
 };

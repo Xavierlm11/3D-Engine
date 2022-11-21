@@ -3,7 +3,7 @@
 #include "Globals.h"
 #include "MeshData.h"
 #include "ModelData.h"
-#include "GameObject.h"
+//#include "GameObject.h"
 #include <vector>
 #include "Component.h"
 #include "CMaterial.h"
