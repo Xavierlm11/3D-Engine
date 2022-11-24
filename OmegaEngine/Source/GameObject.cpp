@@ -118,6 +118,20 @@ std::vector<GameObject*> GameObject::GetChildrens()
 	return childrens;
 }
 
+int GameObject::GetLayer() {
+	int deepLayer = 0;
+	bool hasParent = true;
+	while (hasParent == true) {
+		if (parent != nullptr) {
+			deepLayer++;
+		}
+		else {
+			hasParent = false;
+		}
+	}
+	return deepLayer;
+}
+
 Component* GameObject::CreateComp(Component::Types type)
 {
 	Component* comp = nullptr;

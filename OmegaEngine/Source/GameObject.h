@@ -47,6 +47,7 @@ public:
 
 	void Remove();
 	
+	int GetLayer();
 
 public:
 
@@ -65,5 +66,7 @@ public:
 public:
 	bool active=true;
 	bool visible=false;
+	bool showingInHierarchy = true;
+	int layer = 0;
 };
 

@@ -164,6 +164,7 @@ void ModuleImport::GetMeshDatasObj(const aiScene* scene ,const char* name) {
 				dobj = App->scene->CreateGO(name, parent);
 				
 				parent = dobj;
+				//dobj->showingInHierarchy = false;
 			}
 			else if (scene->mRootNode->mChildren!=nullptr) {
 				dobj = App->scene->CreateGO(name, parent);
