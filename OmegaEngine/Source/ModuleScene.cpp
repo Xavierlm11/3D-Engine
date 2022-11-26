@@ -31,6 +31,7 @@ bool ModuleScene::Start()
 
     //CreateGORoot(RootParent,"RootParent",nullptr);
     RootParent = new GameObject("RootParent", nullptr);
+    RootParent->showingInHierarchy = false;
     AddGOList(RootParent);
 
   //RootParent->components[1].

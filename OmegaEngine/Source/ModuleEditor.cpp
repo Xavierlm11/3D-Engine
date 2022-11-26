@@ -1399,6 +1399,12 @@ void ModuleEditor::GOList()
 			if (align_label_with_current_x_position)
 				ImGui::Indent(ImGui::GetTreeNodeToLabelSpacing());
 		}
+		if (GOIndex == 0) {
+			GOIndex = -1;
+		}
+		/*if (showingGOIndex == 0) {
+			showingGOIndex = -1;
+		}*/
 		LOG("GOIndex: %i", GOIndex);
 		LOG("ShowingGOIndex: %i", showingGOIndex);
 	}

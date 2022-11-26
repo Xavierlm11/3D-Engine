@@ -288,6 +288,8 @@ MeshData* ModuleImport::GetMeshDataObj(MeshData* meshData, aiMesh* mesh, const a
 		obj->CreateComp(Component::Types::MATERIAL);
 		//obj->GOmat->CmMat->texture_id
 		
+		obj->GOmat->CmMat = new MaterialData();
+
 		if (numTextures > 0) {
 
 			aiString path;
@@ -300,8 +302,8 @@ MeshData* ModuleImport::GetMeshDataObj(MeshData* meshData, aiMesh* mesh, const a
 			std::string finalPath = assetsPath + filePath;
 			LOG("PATH: %s", finalPath.c_str());
 			//const char* newPath = "Assets/%s"
-			obj->GOmat->CmMat = new MaterialData();
-			obj->GOmat->CmMat->texture_id = App->imp->ImportTexture(finalPath.c_str());
+
+			obj->GOmat->CmMat->texture_id = ImportTexture(finalPath.c_str());
 		}
 	}
 

@@ -1,6 +1,9 @@
 #include "Globals.h"
 #include "Application.h"
 #include "ModuleInput.h"
+#include "ModuleImport.h"
+
+#include <iostream>
 
 #define MAX_KEYS 300
 
@@ -123,7 +126,7 @@ update_status ModuleInput::PreUpdate(float dt)
 				if (extension == "png") {
 					if (App->editor->GOIndex > -1 && App->editor->GOIndex < App->scene->ListGO.size()) {
 						if (App->scene->ListGO[App->editor->GOIndex] != nullptr) {
-							//App->scene->ListGO[App->editor->GOIndex]->GOmat->CmMat->texture_id = App->imp->ImportTexture(dropped_filedir.c_str());
+							App->scene->ListGO[App->editor->GOIndex]->GOmat->CmMat->texture_id = App->imp->ImportTexture(finalPath.c_str());
 						}
 					}
 					
