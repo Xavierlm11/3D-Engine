@@ -1416,23 +1416,23 @@ void ModuleEditor::DeleteGo()
 {
 	
 
-	if (App->scene->ListGO.size()>1) {
+	/*if (App->scene->ListGO.size()>1) {
 		for (uint i = 1; i < App->scene->ListGO.size(); ++i) {
 
 			App->scene->ListGO.at(i)->~GameObject();
 		}
 
 	}
-		App->scene->ListGO.erase(App->scene->ListGO.begin() + 1, App->scene->ListGO.end());
+		App->scene->ListGO.erase(App->scene->ListGO.begin() + 1, App->scene->ListGO.end());*/
 		
-		//for (uint i = 1; i < App->scene->ListGO.size(); ++i) {
-		//	
-		//		App->scene->ListGO.at(i)->Remove();
-		//		App->scene->ListGO.erase(App->scene->ListGO.begin()+1, App->scene->ListGO.end());
-		//		//App->scene->ListGO.at(i) = nullptr;
-		//		//delete App->scene->ListGO.at(i);
-		//		
-		//}
+		for (uint i = 1; i < App->scene->ListGO.size(); ++i) {
+			
+				App->scene->ListGO.at(i)->Remove();
+				App->scene->ListGO.erase(App->scene->ListGO.begin()+1, App->scene->ListGO.end());
+				//App->scene->ListGO.at(i) = nullptr;
+				//delete App->scene->ListGO.at(i);
+				
+		}
 		/*for (uint i = 1; i < App->scene->ListGO.size(); ++i) {
 			App->scene->ListGO[i] = nullptr;
 			delete App->scene->ListGO[i];
