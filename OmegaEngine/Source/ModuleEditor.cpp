@@ -49,6 +49,7 @@ ModuleEditor::ModuleEditor(Application* app, bool start_enabled) : Module(app, s
 	selectedFogMode = 1;
 
 	GOIndex = 0;
+	showingGOIndex = 0;
 	selection_mask = 2;
 
 	ModuleScene::Shapes::NONE;
@@ -242,7 +243,7 @@ update_status ModuleEditor::Update(float dt)
 	{
 		CloseEngine();
 	}
-	LOG("%i", App->scene->ListGO.size());
+	//LOG("%i", App->scene->ListGO.size());
 
 	return UPDATE_CONTINUE;
 }
@@ -1220,7 +1221,7 @@ void ModuleEditor::GOList()
 
 	if (ImGui::Begin("Game Object List"))
 	{
-		std::vector<GameObject*> gameObjectsShowing;
+		gameObjectsShowing.clear();
 		for (int i = 0; i < App->scene->ListGO.size(); i++)
 		{
 			if (App->scene->ListGO[i]->showingInHierarchy == true) {
@@ -1244,20 +1245,29 @@ void ModuleEditor::GOList()
 				//Root
 			if (gameObjectsShowing[i]->parent == nullptr)
 			{
-				if (i == GOIndex) {
+				if (i == showingGOIndex) {
 					node_flags |= ImGuiTreeNodeFlags_Selected;
 				}
 				node_flags |= ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_NoTreePushOnOpen;
 				ImGui::TreeNodeEx((void*)(intptr_t)i, node_flags, gameObjectsShowing[i]->name.c_str(), i);
-				if (ImGui::IsItemClicked() && !ImGui::IsItemToggledOpen())
-					GOIndex = i;
+				if (ImGui::IsItemClicked() && !ImGui::IsItemToggledOpen()) {
+					showingGOIndex = i;
+					for (int ind = 0; ind < App->scene->ListGO.size(); ind++) {
+						if (App->scene->ListGO[ind] == gameObjectsShowing[i]) {
+							GOIndex = ind;
+						}
+					}
+				}
+					
+
+				
 				if (test_drag_and_drop && ImGui::BeginDragDropSource())
 				{
 					ImGui::SetDragDropPayload("_TREENODE", NULL, 0);
 					ImGui::Text("This is a drag and drop source");
 					ImGui::EndDragDropSource();
 				}
-				if (i == GOIndex) {
+				if (i == showingGOIndex) {
 					node_flags = base_flags;
 				}
 			}
@@ -1265,24 +1275,39 @@ void ModuleEditor::GOList()
 				//Parents
 				if (gameObjectsShowing[i]->parent->parent == nullptr && gameObjectsShowing[i]->childrens.size() > 0)
 				{
-					if (i == GOIndex) {
+					if (i == showingGOIndex) {
 						node_flags |= ImGuiTreeNodeFlags_Selected;
 					}
 					bool node_open = ImGui::TreeNodeEx((void*)(intptr_t)i, node_flags, gameObjectsShowing[i]->name.c_str(), i);
-					if (ImGui::IsItemClicked() && !ImGui::IsItemToggledOpen())
-						GOIndex = i;
+					if (ImGui::IsItemClicked() && !ImGui::IsItemToggledOpen()) {
+						showingGOIndex = i;
+						for (int ind = 0; ind < App->scene->ListGO.size(); ind++) {
+							if (App->scene->ListGO[ind] == gameObjectsShowing[i]) {
+								GOIndex = ind;
+							}
+						}
+					}
+						
 					if (test_drag_and_drop && ImGui::BeginDragDropSource())
 					{
 						ImGui::SetDragDropPayload("_TREENODE", NULL, 0);
 						ImGui::Text("This is a drag and drop source");
 						ImGui::EndDragDropSource();
 					}
-					if (i == GOIndex) {
+					if (i == showingGOIndex) {
 						node_flags = base_flags;
 					}
 					//Childs
 					if (node_open)
 					{
+						if (hasToMoveSelection == true) {
+							if(showingGOIndex > i)
+							{
+								showingGOIndex += gameObjectsShowing[i]->childrens.size();
+							}
+							hasToMoveSelection = false;
+						}
+
 						for (int j = 0; j < gameObjectsShowing[i]->childrens.size(); j++) {
 							if (gameObjectsShowing[i]->childrens[j]->showingInHierarchy == false) {
 								gameObjectsShowing[i]->childrens[j]->showingInHierarchy = true;
@@ -1291,13 +1316,18 @@ void ModuleEditor::GOList()
 
 								for (int k = 0; k < gameObjectsShowing.size(); k++) {
 									if (gameObjectsShowing[i]->childrens[j] == gameObjectsShowing[k]) {
-										if (k == GOIndex) {
+										if (k == showingGOIndex) {
 											node_flags |= ImGuiTreeNodeFlags_Selected;
 										}
 										node_flags |= ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_NoTreePushOnOpen;
 										ImGui::TreeNodeEx((void*)(intptr_t)k, node_flags, gameObjectsShowing[k]->name.c_str(), k);
 										if (ImGui::IsItemClicked() && !ImGui::IsItemToggledOpen()) {
-											GOIndex = k;
+											showingGOIndex = k;
+											for (int ind = 0; ind < App->scene->ListGO.size(); ind++) {
+												if (App->scene->ListGO[ind] == gameObjectsShowing[k]) {
+													GOIndex = ind;
+												}
+											}
 										}
 
 										if (test_drag_and_drop && ImGui::BeginDragDropSource())
@@ -1306,7 +1336,7 @@ void ModuleEditor::GOList()
 											ImGui::Text("This is a drag and drop source");
 											ImGui::EndDragDropSource();
 										}
-										if (k == GOIndex) {
+										if (k == showingGOIndex) {
 											node_flags = base_flags;
 										}
 									}
@@ -1316,6 +1346,18 @@ void ModuleEditor::GOList()
 						ImGui::TreePop();
 					}
 					else {
+						if (hasToMoveSelection == false) {
+							if (showingGOIndex > i && showingGOIndex <= i+gameObjectsShowing[i]->childrens.size()) {
+								showingGOIndex = i;
+								GOIndex = i;
+							}
+							else if (showingGOIndex > i)
+							{
+								showingGOIndex -= gameObjectsShowing[i]->childrens.size();
+							}
+							hasToMoveSelection = true;
+						}
+						
 						for (int j = 0; j < gameObjectsShowing[i]->childrens.size(); j++) {
 							if (gameObjectsShowing[i]->childrens[j]->showingInHierarchy == true) {
 								gameObjectsShowing[i]->childrens[j]->showingInHierarchy = false;
@@ -1325,22 +1367,29 @@ void ModuleEditor::GOList()
 
 				}
 				//Direct childs
-				else if (App->scene->ListGO[i]->parent->parent == nullptr)
+				else if (gameObjectsShowing[i]->parent->parent == nullptr)
 				{
-					if (i == GOIndex) {
+					if (i == showingGOIndex) {
 						node_flags |= ImGuiTreeNodeFlags_Selected;
 					}
 					node_flags |= ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_NoTreePushOnOpen; // ImGuiTreeNodeFlags_Bullet
 					ImGui::TreeNodeEx((void*)(intptr_t)i, node_flags, gameObjectsShowing[i]->name.c_str(), i);
-					if (ImGui::IsItemClicked() && !ImGui::IsItemToggledOpen())
-						GOIndex = i;
+					if (ImGui::IsItemClicked() && !ImGui::IsItemToggledOpen()) {
+						showingGOIndex = i;
+						for (int ind = 0; ind < App->scene->ListGO.size(); ind++) {
+							if (App->scene->ListGO[ind] == gameObjectsShowing[i]) {
+								GOIndex = ind;
+							}
+						}
+					}
+						
 					if (test_drag_and_drop && ImGui::BeginDragDropSource())
 					{
 						ImGui::SetDragDropPayload("_TREENODE", NULL, 0);
 						ImGui::Text("This is a drag and drop source");
 						ImGui::EndDragDropSource();
 					}
-					if (i == GOIndex) {
+					if (i == showingGOIndex) {
 						node_flags = base_flags;
 					}
 				}
@@ -1350,6 +1399,8 @@ void ModuleEditor::GOList()
 			if (align_label_with_current_x_position)
 				ImGui::Indent(ImGui::GetTreeNodeToLabelSpacing());
 		}
+		LOG("GOIndex: %i", GOIndex);
+		LOG("ShowingGOIndex: %i", showingGOIndex);
 	}
 	ImGui::End();
 

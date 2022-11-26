@@ -43,6 +43,9 @@
     <Filter Include="Files\Tools">
       <UniqueIdentifier>{436c2ba0-6cce-42d2-b74a-7e18adede8b0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Files\Importers">
+      <UniqueIdentifier>{5cbcdd1b-4ea3-479b-a099-2a20bf0a257b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Application.cpp">
@@ -514,6 +517,9 @@
     </ClInclude>
     <ClInclude Include="Source\Timer.h">
       <Filter>Files\Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\MaterialImporter.h">
+      <Filter>Files\Importers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -113,10 +113,13 @@ private:
 
 public:
 	int GOIndex;
+	int showingGOIndex;
 	bool close=false;
 	bool scroll = false;
 	LCG randomLCG;
+	bool hasToMoveSelection = true;
 	
+	std::vector<GameObject*> gameObjectsShowing;
 	std::vector<std::string> login;
 	
 	//ImGuiTextBuffer logs;

@@ -157,6 +157,7 @@
     <ClInclude Include="Source\Globals.h" />
     <ClInclude Include="Source\Light.h" />
     <ClInclude Include="Source\MaterialData.h" />
+    <ClInclude Include="Source\MaterialImporter.h" />
     <ClInclude Include="Source\MeshData.h" />
     <ClInclude Include="Source\ModelData.h" />
     <ClInclude Include="Source\Module.h" />
