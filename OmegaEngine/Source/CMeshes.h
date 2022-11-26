@@ -8,12 +8,12 @@
 class ModuleRenderer3D;
 class MeshData;
 class Component;
-class CMeshes : public Component
+class CMesh : public Component
 {
 public:
 
-	CMeshes(GameObject* obj);
-	virtual	~CMeshes();
+	CMesh(GameObject* obj);
+	virtual	~CMesh();
 
 	void Update() override;
 

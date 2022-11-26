@@ -11,7 +11,7 @@
 #define CHECKERS_HEIGHT 100
 #define CHECKERS_WIDTH 100
 
-class CMeshes;
+class CMesh;
 
 class ModuleRenderer3D : public Module
 {
@@ -105,7 +105,7 @@ public:
 
 	GLuint houseTexID;
 
-	std::vector<CMeshes*> meshlist;
+	std::vector<CMesh*> meshlist;
 
 public:
 

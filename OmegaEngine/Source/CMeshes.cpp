@@ -16,11 +16,11 @@
 
 #include "Primitive.h"
 
-CMeshes::CMeshes(GameObject* obj) :Component(obj, Types::MESH)
+CMesh::CMesh(GameObject* obj) :Component(obj, Types::MESH)
 {
 
 }
-CMeshes::~CMeshes()
+CMesh::~CMesh()
 {
 
 	CompMesh->UnloadMesh();
@@ -32,7 +32,7 @@ CMeshes::~CMeshes()
 
 }
 
-void CMeshes::Update()
+void CMesh::Update()
 {
 	if(CompMesh!=nullptr)
 		External->renderer3D->meshlist.push_back(this);
@@ -40,7 +40,7 @@ void CMeshes::Update()
 	
 }
 
-void CMeshes::MeshRenderer()
+void CMesh::MeshRenderer()
 {
 	//External->rendere
 	if (GO->GOmat->GetMaterial() != nullptr && External->renderer3D->mode == ModuleRenderer3D::RenderMode::NORMAL) {
@@ -60,6 +60,6 @@ void CMeshes::MeshRenderer()
 	
 }
 
-void CMeshes::OnInspector()
+void CMesh::OnInspector()
 {
 }

@@ -10,7 +10,7 @@
 
 class Component;
 
-class CMeshes;
+class CMesh;
 
 class CMaterial;
 
@@ -53,12 +53,12 @@ public:
 
 	std::string name;
 
-	std::vector<GameObject*> childrens;
+	std::vector<GameObject*> children;
 	std::vector<Component*> components;
 
 	GameObject* parent = nullptr;
 
-	CMeshes* GOmesh=nullptr;
+	CMesh* GOmesh=nullptr;
 	CMaterial* GOmat = nullptr;
 	CTransform* GOtrans = nullptr;
 	uint uid=0;

@@ -1273,7 +1273,7 @@ void ModuleEditor::GOList()
 			}
 			else {
 				//Parents
-				if (gameObjectsShowing[i]->parent->parent == nullptr && gameObjectsShowing[i]->childrens.size() > 0)
+				if (gameObjectsShowing[i]->parent->parent == nullptr && gameObjectsShowing[i]->children.size() > 0)
 				{
 					if (i == showingGOIndex) {
 						node_flags |= ImGuiTreeNodeFlags_Selected;
@@ -1303,19 +1303,19 @@ void ModuleEditor::GOList()
 						if (hasToMoveSelection == true) {
 							if(showingGOIndex > i)
 							{
-								showingGOIndex += gameObjectsShowing[i]->childrens.size();
+								showingGOIndex += gameObjectsShowing[i]->children.size();
 							}
 							hasToMoveSelection = false;
 						}
 
-						for (int j = 0; j < gameObjectsShowing[i]->childrens.size(); j++) {
-							if (gameObjectsShowing[i]->childrens[j]->showingInHierarchy == false) {
-								gameObjectsShowing[i]->childrens[j]->showingInHierarchy = true;
+						for (int j = 0; j < gameObjectsShowing[i]->children.size(); j++) {
+							if (gameObjectsShowing[i]->children[j]->showingInHierarchy == false) {
+								gameObjectsShowing[i]->children[j]->showingInHierarchy = true;
 							}
 							else {
 
 								for (int k = 0; k < gameObjectsShowing.size(); k++) {
-									if (gameObjectsShowing[i]->childrens[j] == gameObjectsShowing[k]) {
+									if (gameObjectsShowing[i]->children[j] == gameObjectsShowing[k]) {
 										if (k == showingGOIndex) {
 											node_flags |= ImGuiTreeNodeFlags_Selected;
 										}
@@ -1347,20 +1347,20 @@ void ModuleEditor::GOList()
 					}
 					else {
 						if (hasToMoveSelection == false) {
-							if (showingGOIndex > i && showingGOIndex <= i+gameObjectsShowing[i]->childrens.size()) {
+							if (showingGOIndex > i && showingGOIndex <= i+gameObjectsShowing[i]->children.size()) {
 								showingGOIndex = i;
 								GOIndex = i;
 							}
 							else if (showingGOIndex > i)
 							{
-								showingGOIndex -= gameObjectsShowing[i]->childrens.size();
+								showingGOIndex -= gameObjectsShowing[i]->children.size();
 							}
 							hasToMoveSelection = true;
 						}
 						
-						for (int j = 0; j < gameObjectsShowing[i]->childrens.size(); j++) {
-							if (gameObjectsShowing[i]->childrens[j]->showingInHierarchy == true) {
-								gameObjectsShowing[i]->childrens[j]->showingInHierarchy = false;
+						for (int j = 0; j < gameObjectsShowing[i]->children.size(); j++) {
+							if (gameObjectsShowing[i]->children[j]->showingInHierarchy == true) {
+								gameObjectsShowing[i]->children[j]->showingInHierarchy = false;
 							}
 						}
 					}

@@ -28,12 +28,12 @@ GameObject::~GameObject()
 	}
 	components.clear();
 	//External->CleanVec(components);
-	for (uint i = 0; i < childrens.size(); ++i)
+	for (uint i = 0; i < children.size(); ++i)
 	{
-		delete childrens[i];
-		childrens[i] = nullptr;
+		delete children[i];
+		children[i] = nullptr;
 	}
-	childrens.clear();
+	children.clear();
 
 	parent = nullptr;
 	delete parent;
@@ -62,7 +62,7 @@ void GameObject::SetParent(GameObject* newparent)
 
 	if (newparent)
 	{
-		newparent->childrens.push_back(this);
+		newparent->children.push_back(this);
 	}
 	//set transform
 
@@ -70,11 +70,11 @@ void GameObject::SetParent(GameObject* newparent)
 
 void GameObject::DeleteChild(GameObject* delchild)
 {
-	for (uint i=0;i<childrens.size();++i)
+	for (uint i=0;i<children.size();++i)
 	{
-		if (childrens[i]==delchild)
+		if (children[i]==delchild)
 		{
-			childrens.erase(childrens.begin() + i);
+			children.erase(children.begin() + i);
 		}
 
 	}
@@ -115,7 +115,7 @@ GameObject* GameObject::GetParent()
 
 std::vector<GameObject*> GameObject::GetChildrens()
 {
-	return childrens;
+	return children;
 }
 
 int GameObject::GetLayer() {
@@ -159,7 +159,7 @@ Component* GameObject::CreateComp(Component::Types type)
 			break;
 		case Component::Types::MESH:
 		{
-			CMeshes * cmesh = new CMeshes(this);
+			CMesh * cmesh = new CMesh(this);
 			GOmesh = cmesh;
 			comp = cmesh;
 			//GOmesh = (CMeshes*)comp;
@@ -219,13 +219,13 @@ void GameObject::Remove()
 			components.clear();
 		}
 		//External->CleanVec(components);
-		if (!childrens.empty()) {
-			for (uint i = 0; i < childrens.size(); ++i)
+		if (!children.empty()) {
+			for (uint i = 0; i < children.size(); ++i)
 			{
-				delete childrens[i];
-				childrens[i] = nullptr;
+				delete children[i];
+				children[i] = nullptr;
 			}
-			childrens.clear();
+			children.clear();
 		}
 		parent = nullptr;
 		delete parent;
