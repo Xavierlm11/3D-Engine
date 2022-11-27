@@ -1,4 +1,4 @@
-#include "CMeshes.h"
+#include "CMesh.h"
 #include "CMaterial.h"
 #include "Globals.h"
 #include "Glew/include/glew.h"

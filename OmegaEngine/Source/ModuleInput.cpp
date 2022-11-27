@@ -111,45 +111,40 @@ update_status ModuleInput::PreUpdate(float dt)
 
 			case SDL_DROPFILE:
 			{
-				//char* dropped_filedir;
-				std::string dropped_filedir = e.drop.file;
-				std::string fileName = dropped_filedir.substr(dropped_filedir.find_last_of('\\') + 1);
-				std::string extension = fileName.substr(fileName.find_last_of('.') + 1);
-				//LOG(last.c_str());
-				//LOG("PATH: %s", path.C_Str());
-				std::string assetsPath = "Assets/";
-				const char* texPath = fileName.c_str();
 
-				std::string finalPath = assetsPath + texPath;
+				
+				/////////////[BEFORE]
+				//char* dropped_filedir;
+				std::string dropped_filedir_s = e.drop.file;
+				std::string fileName_s = dropped_filedir_s.substr(dropped_filedir_s.find_last_of('\\') + 1);
+				std::string extension_s = fileName_s.substr(fileName_s.find_last_of('.') + 1);
+				std::string assetsPath_s = "Assets/";
+				const char* fileName = fileName_s.c_str();
+
+				std::string finalPath = assetsPath_s + fileName;
 				LOG("PATH: %s", finalPath.c_str());
 				
-				if (extension == "png") {
+				if (extension_s == "png") {
 					if (App->editor->GOIndex > -1 && App->editor->GOIndex < App->scene->ListGO.size()) {
 						if (App->scene->ListGO[App->editor->GOIndex] != nullptr) {
-							App->scene->ListGO[App->editor->GOIndex]->GOmat->CmMat->texture_id = App->imp->ImportTexture(finalPath.c_str());
+							//App->scene->ListGO[App->editor->GOIndex]->GOmat->CmMat->texture_id = App->imp->ImportTexture(finalPath.c_str());
+							
 						}
 					}
+					App->imp->LoadFile(e.drop.file, Resource::Types::MATERIAL);
 					
 				}
-				else if (extension == "fbx")
+				else if (extension_s == "fbx")
 				{
 					//App->scene->LoadCustom(dropped_filedir.c_str(), &App->scene->models[0]->meshes);
 					
 					/*if()
 					App->scene->LoadCustom(dropped_filedir.c_str(), &App->scene);*/
-					App->scene->LoadCustomObj(dropped_filedir.c_str(),fileName.c_str());
-
-				}
-				else {
-
+					//App->scene->LoadCustomObj(dropped_filedir_s.c_str(),fileName_s.c_str());
+					App->imp->LoadFile(e.drop.file, Resource::Types::MODEL);
 				}
 
-				/*if(dropped_filedir.substr(dropped_filedir.back()) == "conf") {
-					std::cout << "Yes..." << std::endl;
-				}
-				else {
-					std::cout << "No..." << std::endl;
-				}*/
+
 				break;
 			}
 

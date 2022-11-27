@@ -1,8 +1,6 @@
 #include "MeshData.h"
 
-
-
-MeshData::MeshData()
+MeshData::MeshData(const char* path) : Resource(path, Resource::Types::MESH)
 {
 	id_indices = 0; // index in VRAM
 	num_indices = 0;
@@ -12,7 +10,11 @@ MeshData::MeshData()
 	num_vertices = 0;
 	vertices = nullptr;
 
-	id_textureCoords = 0; 
+	id_normals = 0;
+	num_normals = 0;
+	normals = nullptr;
+
+	id_textureCoords = 0;
 	num_textureCoords = 0;
 	textureCoords = nullptr;
 
@@ -28,6 +30,9 @@ MeshData::~MeshData()
 
 	vertices = nullptr;
 	delete vertices;
+
+	normals = nullptr;
+	delete normals;
 
 	textureCoords = nullptr;
 	delete textureCoords;
@@ -47,6 +52,10 @@ void MeshData::LoadBuffers() {
 		glGenBuffers(1, (GLuint*)&(id_indices));
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, id_indices);
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * num_indices, &indices[0], GL_STATIC_DRAW);
+
+		glGenBuffers(1, (GLuint*)&(id_normals));
+		glBindBuffer(GL_ARRAY_BUFFER, id_normals);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(float) * num_normals * 3, &normals[0], GL_STATIC_DRAW);
 
 		glGenBuffers(1, (GLuint*)&(id_textureCoords));
 		glBindBuffer(GL_ARRAY_BUFFER, id_textureCoords);
@@ -69,6 +78,10 @@ void MeshData::UnloadMesh() {
 			glDeleteBuffers(1, &id_vertices);
 		}
 
+		if (id_normals != NULL) {
+			glDeleteBuffers(1, &id_normals);
+		}
+
 		if (id_textureCoords != NULL) {
 			glDeleteBuffers(1, &id_textureCoords);
 		}
@@ -84,12 +97,17 @@ void MeshData::UnloadMesh() {
 		delete[] vertices;
 	}
 
+	if (normals != nullptr) {
+		delete[] normals;
+	}
+
 	if (textureCoords != nullptr) {
 		delete[] textureCoords;
 	}
 
 	indices = nullptr;
 	vertices = nullptr;
+	normals = nullptr;
 	textureCoords = nullptr;
 
 }

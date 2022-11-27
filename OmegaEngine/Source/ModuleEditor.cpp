@@ -325,17 +325,6 @@ void ModuleEditor::Render3DWindow() {
 
 	if (ImGui::Begin("Scene View", &show_render3d_window)) {
 
-		//// Using the _simplified_ one-liner ListBox() api here
-		//// See "List boxes" section for examples of how to use the more flexible BeginListBox()/EndListBox() api.
-		//const char* items[] = { "Normal", "Wireframe" };
-		//static int item_current = 1;
-		//ImGui::ListBox("View Mode", &item_current, items, IM_ARRAYSIZE(items));
-		////ImGui::SameLine(); HelpMarker(
-		////	"Using the simplified one-liner ListBox API here.\nRefer to the \"List boxes\" section below for an explanation of how to use the more flexible and general BeginListBox/EndListBox API.");
-
-		//const char* viewModeItems[] = { "Normal", "Wireframe" };
-		//ImGui::ListBox("View Mode",0,viewModeItems, 2);
-
 		const char* modes[] = { "Normal", "Checkers", "Wireframe" };
 
 		if (ImGui::Button("Select..."))
@@ -447,6 +436,43 @@ void ModuleEditor::Render3DWindow() {
 	ImGui::End();
 }
 
+void ModuleEditor::AssetsWindow() {
+
+	if (ImGui::Begin("Assets", &show_assets_window)) {
+
+		
+		for (int n = 0; n < App->scene->resourceList.size(); n++)
+		{
+			ImGui::PushID(n);
+			if ((n % 3) != 0)
+				ImGui::SameLine();
+			ImGui::Button(App->scene->resourceList[n]->assetName.c_str(), ImVec2(100, 100));
+
+			// Our buttons are both drag sources and drag targets here!
+			if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_None))
+			{
+				// Set payload to carry the index of our item (could be anything)
+				ImGui::SetDragDropPayload("LOAD_ASSET_INTO_SCENE", &n, sizeof(int));
+				//ImGui::SetDragDropPayload("LOAD_ASSET_INTO_SCENE", &App->scene->resourceList[n], sizeof(int));
+
+				// Display preview (could be anything, e.g. when dragging an image we could decide to display
+				// the filename and a small preview of the image, etc.)
+				ImGui::Text("Load file into scene");
+
+				ImGui::EndDragDropSource();
+			}
+			if (ImGui::IsItemHovered()) {
+				ImGui::SetTooltip(App->scene->resourceList[n]->assetName.c_str());
+			}
+				
+			
+			ImGui::PopID();
+		}
+
+	}
+	ImGui::End();
+}
+
 void ModuleEditor::ConfigWindow() {
 
 	BarXXX();
@@ -531,6 +557,11 @@ void ModuleEditor::Draw() {
 		Render3DWindow();
 	}
 
+	if (show_assets_window) {
+
+		AssetsWindow();
+	}
+
 	if (show_config_window) {
 
 		ConfigWindow();
@@ -583,6 +614,10 @@ void ModuleEditor::BarWindows() {
 
 		}
 		if (ImGui::Checkbox("Scene View Window", &show_render3d_window))
+		{
+
+		}
+		if (ImGui::Checkbox("Assets Window", &show_assets_window))
 		{
 
 		}
@@ -1221,6 +1256,8 @@ void ModuleEditor::GOList()
 
 	if (ImGui::Begin("Game Object List"))
 	{
+		
+
 		gameObjectsShowing.clear();
 		for (int i = 0; i < App->scene->ListGO.size(); i++)
 		{
@@ -1242,7 +1279,7 @@ void ModuleEditor::GOList()
 		{
 			ImGuiTreeNodeFlags node_flags = base_flags;
 
-				//Root
+			//Root
 			if (gameObjectsShowing[i]->parent == nullptr)
 			{
 				if (i == showingGOIndex) {
@@ -1258,9 +1295,24 @@ void ModuleEditor::GOList()
 						}
 					}
 				}
-					
 
-				
+				if (ImGui::BeginDragDropTarget())
+				{
+					if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("LOAD_ASSET_INTO_SCENE"))
+					{
+						//	/*IM_ASSERT(payload->DataSize == sizeof(int));
+						//	int payload_n = *(const int*)payload->Data;*/
+						int resource_ind = *(const int*)payload->Data;
+						Resource *payload_res = App->scene->resourceList[resource_ind];
+
+						LOG("Dropped %s in scene", payload_res->assetName.c_str());
+						//LOG("Dropped");
+					}
+					//LOG("Droppesssssssd");
+					ImGui::EndDragDropTarget();
+				}
+
+
 				if (test_drag_and_drop && ImGui::BeginDragDropSource())
 				{
 					ImGui::SetDragDropPayload("_TREENODE", NULL, 0);
@@ -1287,7 +1339,7 @@ void ModuleEditor::GOList()
 							}
 						}
 					}
-						
+
 					if (test_drag_and_drop && ImGui::BeginDragDropSource())
 					{
 						ImGui::SetDragDropPayload("_TREENODE", NULL, 0);
@@ -1301,7 +1353,7 @@ void ModuleEditor::GOList()
 					if (node_open)
 					{
 						if (hasToMoveSelection == true) {
-							if(showingGOIndex > i)
+							if (showingGOIndex > i)
 							{
 								showingGOIndex += gameObjectsShowing[i]->children.size();
 							}
@@ -1347,7 +1399,7 @@ void ModuleEditor::GOList()
 					}
 					else {
 						if (hasToMoveSelection == false) {
-							if (showingGOIndex > i && showingGOIndex <= i+gameObjectsShowing[i]->children.size()) {
+							if (showingGOIndex > i && showingGOIndex <= i + gameObjectsShowing[i]->children.size()) {
 								showingGOIndex = i;
 								GOIndex = i;
 							}
@@ -1357,7 +1409,7 @@ void ModuleEditor::GOList()
 							}
 							hasToMoveSelection = true;
 						}
-						
+
 						for (int j = 0; j < gameObjectsShowing[i]->children.size(); j++) {
 							if (gameObjectsShowing[i]->children[j]->showingInHierarchy == true) {
 								gameObjectsShowing[i]->children[j]->showingInHierarchy = false;
@@ -1382,7 +1434,7 @@ void ModuleEditor::GOList()
 							}
 						}
 					}
-						
+
 					if (test_drag_and_drop && ImGui::BeginDragDropSource())
 					{
 						ImGui::SetDragDropPayload("_TREENODE", NULL, 0);
@@ -1405,8 +1457,23 @@ void ModuleEditor::GOList()
 		/*if (showingGOIndex == 0) {
 			showingGOIndex = -1;
 		}*/
-		LOG("GOIndex: %i", GOIndex);
-		LOG("ShowingGOIndex: %i", showingGOIndex);
+		//LOG("GOIndex: %i", GOIndex);
+		//LOG("ShowingGOIndex: %i", showingGOIndex);
+
+		
+	
+
+	}
+	if (ImGui::BeginDragDropTarget())
+	{
+		if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("LOAD_ASSET_INTO_SCENE"))
+		{
+			/*IM_ASSERT(payload->DataSize == sizeof(int));
+			int payload_n = *(const int*)payload->Data;*/
+			//LOG("DROPPED");
+
+		}
+		ImGui::EndDragDropTarget();
 	}
 	ImGui::End();
 

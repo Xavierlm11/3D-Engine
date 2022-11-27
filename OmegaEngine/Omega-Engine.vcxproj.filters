@@ -31,9 +31,6 @@
     <Filter Include="Files\Parson">
       <UniqueIdentifier>{4d393ecd-7976-46be-886e-d2e47f480f98}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Files\Resources">
-      <UniqueIdentifier>{f5ba024a-0047-4146-80eb-41116b96e90c}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Files\GameObjects">
       <UniqueIdentifier>{e1bfbced-b97b-42e1-8377-d481a6911189}</UniqueIdentifier>
     </Filter>
@@ -45,6 +42,9 @@
     </Filter>
     <Filter Include="Files\Importers">
       <UniqueIdentifier>{5cbcdd1b-4ea3-479b-a099-2a20bf0a257b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Files\Resources">
+      <UniqueIdentifier>{f5ba024a-0047-4146-80eb-41116b96e90c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -204,7 +204,7 @@
     <ClCompile Include="Source\CMaterial.cpp">
       <Filter>Files\GameObjects\Propierties</Filter>
     </ClCompile>
-    <ClCompile Include="Source\CMeshes.cpp">
+    <ClCompile Include="Source\CMesh.cpp">
       <Filter>Files\GameObjects\Propierties</Filter>
     </ClCompile>
     <ClCompile Include="Source\CTransform.cpp">
@@ -236,6 +236,12 @@
     </ClCompile>
     <ClCompile Include="Source\Timer.cpp">
       <Filter>Files\Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\MaterialImporter.cpp">
+      <Filter>Files\Importers</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\MeshImporter.cpp">
+      <Filter>Files\Importers</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -488,7 +494,7 @@
     <ClInclude Include="Source\CMaterial.h">
       <Filter>Files\GameObjects\Propierties</Filter>
     </ClInclude>
-    <ClInclude Include="Source\CMeshes.h">
+    <ClInclude Include="Source\CMesh.h">
       <Filter>Files\GameObjects\Propierties</Filter>
     </ClInclude>
     <ClInclude Include="Source\CTransform.h">
@@ -519,6 +525,12 @@
       <Filter>Files\Tools</Filter>
     </ClInclude>
     <ClInclude Include="Source\MaterialImporter.h">
+      <Filter>Files\Importers</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\MeshImporter.h">
+      <Filter>Files\Importers</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Resource.h">
       <Filter>Files\Importers</Filter>
     </ClInclude>
   </ItemGroup>

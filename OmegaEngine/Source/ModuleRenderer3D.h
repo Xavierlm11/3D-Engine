@@ -5,7 +5,7 @@
 #include "Light.h"
 #include "Glew/include/glew.h"
 #include <vector>
-#include "CMeshes.h"
+#include "CMesh.h"
 #define MAX_LIGHTS 8
 
 #define CHECKERS_HEIGHT 100

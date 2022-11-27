@@ -1,6 +1,6 @@
 #include "GameObject.h"
 #include "CMaterial.h"
-#include "CMeshes.h"
+#include "CMesh.h"
 #include "CTransform.h"
 
 GameObject::GameObject(const char* name, GameObject* parent):name(name)

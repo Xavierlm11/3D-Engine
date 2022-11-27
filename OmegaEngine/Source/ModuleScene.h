@@ -3,6 +3,7 @@
 #include "Globals.h"
 #include "GameObject.h"
 #include "Component.h"
+
 class ModuleScene : public Module
 {
 public:
@@ -53,6 +54,8 @@ public:
 	
 	GameObject* RootParent = nullptr;
 
-	std::vector< GameObject*> ListGO;
+	std::vector <GameObject*> ListGO;
+
+	std::vector <Resource*> resourceList;
 
 };

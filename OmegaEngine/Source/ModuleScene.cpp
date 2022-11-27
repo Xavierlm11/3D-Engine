@@ -13,7 +13,7 @@ ModuleScene::ModuleScene(Application* app, bool start_enabled) : Module(app, sta
 {
     modelScene = nullptr;
     modelMesh = nullptr;
-    models.push_back(new ModelData());
+    //models.push_back(new ModelData());
 
 }
 
@@ -31,7 +31,7 @@ bool ModuleScene::Start()
 
     //CreateGORoot(RootParent,"RootParent",nullptr);
     RootParent = new GameObject("RootParent", nullptr);
-    RootParent->showingInHierarchy = false;
+    //RootParent->showingInHierarchy = false;
     AddGOList(RootParent);
 
   //RootParent->components[1].
@@ -55,7 +55,7 @@ void ModuleScene::CleanMeshes(std::vector<MeshData*>* meshesVec) {
     meshesVec->erase(meshesVec->begin()), meshesVec->end();
     meshesVec->clear();
     meshesVec = nullptr;
-    App->imp->ReleaseFile(modelScene);
+    
     modelScene = nullptr;
     modelMesh = nullptr;
     house_loaded = false;
@@ -85,104 +85,105 @@ void ModuleScene::AddGOList(GameObject* objlist)
 
 void ModuleScene::LoadCustom(const char* path, std::vector<MeshData*>* meshesVec) {
 
-    const aiScene* newScene;
-    newScene = App->imp->LoadFile(path);
-    
-    App->imp->GetMeshDatas(newScene, meshesVec);//aqui obtienes la mesh
-    aiReleaseImport(newScene);
-    newScene = nullptr;
-    delete newScene;
+   //////// const aiScene* newScene;
+   //////// newScene = App->imp->LoadFile(path);
+   //////// 
+   //////// App->imp->GetMeshDatas(newScene, meshesVec);//aqui obtienes la mesh
+   //////// aiReleaseImport(newScene);
+   //////// newScene = nullptr;
+   //////// delete newScene;
 
-   /* if (house_loaded == false) {
-        const aiScene* newScene;
-        newScene = App->imp->LoadFile(path);
-        App->imp->GetMeshDatas(newScene, meshesVec);
-        aiReleaseImport(newScene);
-        App->editor->selectedShape = Shapes::NONE;
-        house_loaded = true;
-        newScene = nullptr;
-        delete newScene;
-    }*/
+   /////////* if (house_loaded == false) {
+   ////////     const aiScene* newScene;
+   ////////     newScene = App->imp->LoadFile(path);
+   ////////     App->imp->GetMeshDatas(newScene, meshesVec);
+   ////////     aiReleaseImport(newScene);
+   ////////     App->editor->selectedShape = Shapes::NONE;
+   ////////     house_loaded = true;
+   ////////     newScene = nullptr;
+   ////////     delete newScene;
+   //////// }*/
 }
 void ModuleScene::LoadCustomObj(const char* path, const char* name) {
     
-    const aiScene* newScene;
-    newScene = App->imp->LoadFile(path);
-    //for(uint i=0;newScene)
-   // GameObject* newGo = App->scene->CreateGO();
-    
-    if (newScene!=nullptr)
-    {
-        App->imp->GetMeshDatasObj(newScene, name);//aqui obtienes la mesh
-        aiReleaseImport(newScene);
-    }
-    else if(newScene == nullptr)
-    {
-        LOG("IMPOSIBLE TO LOAD THIS OBJECT, TRY EXPORTING THE FBX WITH BLENDER");
-    }
-    newScene = nullptr;
-    delete newScene;
+   
+   // const aiScene* newScene;
+   // newScene = App->imp->LoadFile(path);
+   // //for(uint i=0;newScene)
+   //// GameObject* newGo = App->scene->CreateGO();
+   // 
+   // if (newScene!=nullptr)
+   // {
+   //     App->imp->GetObjectResources(newScene, name);//aqui obtienes la mesh
+   //     aiReleaseImport(newScene);
+   // }
+   // else if(newScene == nullptr)
+   // {
+   //     LOG("IMPOSIBLE TO LOAD THIS OBJECT, TRY EXPORTING THE FBX WITH BLENDER");
+   // }
+   // newScene = nullptr;
+   // delete newScene;
     
     
 }
 
 void ModuleScene::LoadHouse(std::vector<MeshData*>* meshesVec) {
 
-    if (house_loaded == false) {
-        const aiScene* newScene;
-        newScene = App->imp->LoadFile("Assets/BakerHouse.fbx");
-        App->imp->GetMeshDatas(newScene, meshesVec);
-        aiReleaseImport(newScene);
-        App->editor->selectedShape = Shapes::HOUSE;
-        house_loaded = true;
-        newScene = nullptr;
-        delete newScene;
-    }
+   ///////////* if (house_loaded == false) {
+   //////////     const aiScene* newScene;
+   //////////     newScene = App->imp->LoadFile("Assets/BakerHouse.fbx");
+   //////////     App->imp->GetMeshDatas(newScene, meshesVec);
+   //////////     aiReleaseImport(newScene);
+   //////////     App->editor->selectedShape = Shapes::HOUSE;
+   //////////     house_loaded = true;
+   //////////     newScene = nullptr;
+   //////////     delete newScene;
+   ////////// }*/
 }
 
 void ModuleScene::LoadCube(std::vector<MeshData*>* meshesVec) {
-    if (cube_loaded == false) {
-        const aiScene* newScene;
-        newScene = App->imp->LoadFile("Assets/Cube.fbx");
-        App->imp->GetMeshDatas(newScene, meshesVec);
-        App->editor->selectedShape = Shapes::CUBE;
-        cube_loaded = true;
-        newScene = nullptr;
-        delete newScene;
-    }
+   ///////* if (cube_loaded == false) {
+   //////     const aiScene* newScene;
+   //////     newScene = App->imp->LoadFile("Assets/Cube.fbx");
+   //////     App->imp->GetMeshDatas(newScene, meshesVec);
+   //////     App->editor->selectedShape = Shapes::CUBE;
+   //////     cube_loaded = true;
+   //////     newScene = nullptr;
+   //////     delete newScene;
+   ////// }*/
 }
 void ModuleScene::LoadSphere(std::vector<MeshData*>* meshesVec) {
-    if (sphere_loaded == false) {
-        const aiScene* newScene;
-        newScene = App->imp->LoadFile("Assets/Sphere.fbx");
-        App->imp->GetMeshDatas(newScene, meshesVec);
-        App->editor->selectedShape = Shapes::SPHERE;
-        sphere_loaded = true;
-        newScene = nullptr;
-        delete newScene;
-    }
+    ///////*if (sphere_loaded == false) {
+    //////    const aiScene* newScene;
+    //////    newScene = App->imp->LoadFile("Assets/Sphere.fbx");
+    //////    App->imp->GetMeshDatas(newScene, meshesVec);
+    //////    App->editor->selectedShape = Shapes::SPHERE;
+    //////    sphere_loaded = true;
+    //////    newScene = nullptr;
+    //////    delete newScene;
+    //////}*/
 }
 void ModuleScene::LoadPyramid(std::vector<MeshData*>* meshesVec) {
-    if (pyramid_loaded == false) {
-        const aiScene* newScene;
-        newScene = App->imp->LoadFile("Assets/Pyramid.fbx");
-        App->imp->GetMeshDatas(newScene, meshesVec);
-        App->editor->selectedShape = Shapes::PYRAMID;
-        pyramid_loaded = true;
-        newScene = nullptr;
-        delete newScene;
-    }
+   ///////* if (pyramid_loaded == false) {
+   //////     const aiScene* newScene;
+   //////     newScene = App->imp->LoadFile("Assets/Pyramid.fbx");
+   //////     App->imp->GetMeshDatas(newScene, meshesVec);
+   //////     App->editor->selectedShape = Shapes::PYRAMID;
+   //////     pyramid_loaded = true;
+   //////     newScene = nullptr;
+   //////     delete newScene;
+   ////// }*/
 }
 void ModuleScene::LoadCylinder(std::vector<MeshData*>* meshesVec) {
-    if (cylinder_loaded == false) {
-        const aiScene* newScene;
-        newScene = App->imp->LoadFile("Assets/Cylinder.fbx");
-        App->imp->GetMeshDatas(newScene, meshesVec);
-        App->editor->selectedShape = Shapes::CYLINDER;
-        cylinder_loaded = true;
-        newScene = nullptr;
-        delete newScene;
-    }
+   /////////* if (cylinder_loaded == false) {
+   ////////     const aiScene* newScene;
+   ////////     newScene = App->imp->LoadFile("Assets/Cylinder.fbx");
+   ////////     App->imp->GetMeshDatas(newScene, meshesVec);
+   ////////     App->editor->selectedShape = Shapes::CYLINDER;
+   ////////     cylinder_loaded = true;
+   ////////     newScene = nullptr;
+   ////////     delete newScene;
+   //////// }*/
 }
 
 // Load assets
@@ -195,7 +196,7 @@ bool ModuleScene::CleanUp()
         models[0]->meshes[i]->UnloadMesh();
     }
 
-    App->imp->ReleaseFile(modelScene);
+    
     modelScene = nullptr;
     delete modelScene;
 
@@ -232,6 +233,7 @@ bool ModuleScene::SaveScene() {
 
     bool show_demo_window = App->editor->show_demo_window;
     bool show_console_window = App->editor->show_console_window;
+    bool show_assets_window = App->editor->show_assets_window;
     bool show_render3d_window = App->editor->show_render3d_window;
     bool show_config_window = App->editor->show_config_window;
     bool show_about_window = App->editor->show_about_window;
@@ -265,6 +267,7 @@ bool ModuleScene::SaveScene() {
 
         json_object_set_boolean(json_object(scene_settings), "show_demo_window", show_demo_window);
         json_object_set_boolean(json_object(scene_settings), "show_console_window", show_console_window);
+        json_object_set_boolean(json_object(scene_settings), "show_assets_window", show_assets_window);
         json_object_set_boolean(json_object(scene_settings), "show_render3d_window", show_render3d_window);
         json_object_set_boolean(json_object(scene_settings), "show_config_window", show_config_window);
         json_object_set_boolean(json_object(scene_settings), "show_about_window", show_about_window);
@@ -310,6 +313,7 @@ bool ModuleScene::LoadScene() {
 
     bool show_demo_window = false;
     bool show_console_window = false;
+    bool show_assets_window = false;
     bool show_render3d_window = false;
     bool show_config_window = false;
     bool show_about_window = false;
@@ -342,6 +346,7 @@ bool ModuleScene::LoadScene() {
 
         show_demo_window = json_object_get_boolean(json_object(scene_settings), "show_demo_window");
         show_console_window =  json_object_get_boolean(json_object(scene_settings), "show_console_window");
+        show_assets_window = json_object_get_boolean(json_object(scene_settings), "show_assets_window");
         show_render3d_window = json_object_get_boolean(json_object(scene_settings), "show_render3d_window");
         show_config_window = json_object_get_boolean(json_object(scene_settings), "show_config_window");
         show_about_window = json_object_get_boolean(json_object(scene_settings), "show_about_window");
@@ -384,6 +389,7 @@ bool ModuleScene::LoadScene() {
 
     App->editor->show_demo_window = show_demo_window;
     App->editor->show_console_window = show_console_window;
+    App->editor->show_assets_window = show_assets_window;
     App->editor->show_render3d_window = show_render3d_window;
     App->editor->show_config_window = show_config_window;
     App->editor->show_about_window = show_about_window;

@@ -25,7 +25,7 @@
 class ModuleEditor : public Module
 {
 public:
-
+	
 	ModuleEditor(Application* app, bool start_enabled = true);
 	~ModuleEditor();
 
@@ -41,6 +41,7 @@ public:
 	bool show_another_window = false;
 	bool show_console_window = false;
 	bool show_render3d_window = false;
+	bool show_assets_window = false;
 	bool show_config_window = false;
 	bool show_about_window = false;
 	//shapes
@@ -71,6 +72,7 @@ private:
 	//Windows
 	void ConsoleWindow();
 	void Render3DWindow();
+	void AssetsWindow();
 	void ConfigWindow();
 	void AboutWindow();
 

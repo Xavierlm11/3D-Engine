@@ -5,8 +5,9 @@
 #include "ModuleRenderer3D.h"
 #include "GameObject.h"
 #include"CTransform.h"
+#include "MeshData.h"
 class ModuleRenderer3D;
-class MeshData;
+
 class Component;
 class CMesh : public Component
 {

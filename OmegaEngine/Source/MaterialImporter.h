@@ -5,7 +5,7 @@
 
 namespace MaterialImporter
 {
-	void Import(const aiMaterial* material, CMaterial* ourMaterial);
-	Uint64  Save(const CMaterial* ourMaterial, char** fileBuffer);
-	void Load(const char* fileBuffer, CMaterial* ourMaterial);
+	void Import(const aiMaterial* material, MaterialData* ourMaterial);
+	Uint64  Save(const MaterialData* ourMaterial, char** fileBuffer);
+	void Load(const char* fileBuffer, MaterialData* ourMaterial);
 };
