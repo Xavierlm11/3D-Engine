@@ -69,17 +69,17 @@ Uint64 MeshImporter::Save(const MeshData* mesh, char** buffer) {
 	cursor += bytes;
 
 	// Store vertices
-	bytes = sizeof(float) * mesh->num_indices;
+	bytes = sizeof(float) * mesh->num_vertices;
 	memcpy(cursor, mesh->vertices, bytes);
 	cursor += bytes;
 
 	// Store normals
-	bytes = sizeof(float) * mesh->num_indices;
+	bytes = sizeof(float) * mesh->num_normals;
 	memcpy(cursor, mesh->normals, bytes);
 	cursor += bytes;
 
 	// Store texture_coords
-	bytes = sizeof(float) * mesh->num_indices;
+	bytes = sizeof(float) * mesh->num_textureCoords;
 	memcpy(cursor, mesh->textureCoords, bytes);
 	cursor += bytes;
 

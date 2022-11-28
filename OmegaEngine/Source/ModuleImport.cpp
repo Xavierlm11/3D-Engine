@@ -164,7 +164,7 @@ void ModuleImport::ImportModelResources(const aiScene* scene, Resource* model) {
 
 			meshesVec.push_back(meshData->assetID);
 			//dobj->GOmesh->CompMesh = GetMeshDataObj(dobj->GOmesh->CompMesh, scene->mMeshes[i], scene, dobj);
-	
+		
 		}
 	}
 
