@@ -17,6 +17,7 @@
 #include "ModuleEditor.h"
 #include "ModuleScene.h"
 #include "ModuleFileSystem.h"
+#include "ModuleResources.h"
 
 
 class Application
@@ -31,6 +32,7 @@ public:
 	ModuleEditor* editor;
 	ModuleScene* scene;
 	ModuleFileSystem* fileSystem;
+	ModuleResources* resources;
 
 private:
 

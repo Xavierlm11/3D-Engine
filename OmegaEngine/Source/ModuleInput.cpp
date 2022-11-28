@@ -143,6 +143,7 @@ update_status ModuleInput::PreUpdate(float dt)
 					//App->scene->LoadCustomObj(dropped_filedir_s.c_str(),fileName_s.c_str());
 					App->imp->LoadFile(e.drop.file, Resource::Types::MODEL);
 					App->fileSystem->ImportFileToAssets(dropped_filedir_s.c_str());
+
 				}
 
 
