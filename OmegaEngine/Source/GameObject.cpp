@@ -199,6 +199,7 @@ void GameObject::Editor()
 		{
 
 			components[i]->OnInspector();
+			
 
 		}
 

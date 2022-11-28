@@ -115,6 +115,7 @@ void MeshData::DrawMesh(GLuint textureID, mat4x4 mat) {
 		glBindBuffer(GL_ARRAY_BUFFER, id_textureCoords);
 		glTexCoordPointer(2, GL_FLOAT, 0, NULL);
 
+		glMatrixMode(GL_MODELVIEW);
 		glPushMatrix();
 		glMultMatrixf(&mat);
 

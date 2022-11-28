@@ -33,6 +33,5 @@ public:
 	vec3 scl = { 1,1,1 };
 
 	mat4x4 matrix;
-
 };
 

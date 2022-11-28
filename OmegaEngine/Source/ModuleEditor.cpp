@@ -1405,8 +1405,8 @@ void ModuleEditor::GOList()
 		/*if (showingGOIndex == 0) {
 			showingGOIndex = -1;
 		}*/
-		LOG("GOIndex: %i", GOIndex);
-		LOG("ShowingGOIndex: %i", showingGOIndex);
+		//LOG("GOIndex: %i", GOIndex);
+		//LOG("ShowingGOIndex: %i", showingGOIndex);
 	}
 	ImGui::End();
 
