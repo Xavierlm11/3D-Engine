@@ -86,6 +86,43 @@ Uint64 MeshImporter::Save(const MeshData* mesh, char** buffer) {
 	return 0;
 }
 
-void MeshImporter::Load(const char* fileBuffer, MeshData* ourMesh) {
+void MeshImporter::Load(const char* buffer, MeshData* meshData) {
 
+	const char* cursor = buffer;
+
+	// amount of indices / vertices / normals / texture_coords
+	uint ranges[4] = { meshData->num_indices, meshData->num_vertices, meshData->num_normals, meshData->num_textureCoords };
+	uint bytes = sizeof(ranges);
+
+	memcpy(ranges, cursor, bytes);
+	cursor += bytes;
+
+	meshData->num_indices = ranges[0];
+	meshData->num_vertices = ranges[1];
+	meshData->num_normals = ranges[2];
+	meshData->num_textureCoords = ranges[3];
+
+	// Load indices
+	bytes = sizeof(uint) * meshData->num_indices;
+	meshData->indices = new uint[meshData->num_indices];
+	memcpy(meshData->indices, cursor, bytes);
+	cursor += bytes;
+
+	// Load vertices
+	bytes = sizeof(float) * meshData->num_vertices;
+	meshData->vertices = new float[meshData->num_vertices];
+	memcpy(meshData->vertices, cursor, bytes);
+	cursor += bytes;
+
+	// Load normals
+	bytes = sizeof(float) * meshData->num_normals;
+	meshData->normals = new float[meshData->num_normals];
+	memcpy(meshData->normals, cursor, bytes);
+	cursor += bytes;
+
+	// Load texture_coords
+	bytes = sizeof(float) * meshData->num_textureCoords;
+	meshData->textureCoords = new float[meshData->num_textureCoords];
+	memcpy(meshData->textureCoords, cursor, bytes);
+	cursor += bytes;
 }

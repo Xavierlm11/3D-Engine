@@ -157,6 +157,9 @@ void ModuleImport::ImportModelResources(const aiScene* scene, Resource* model) {
 			char* fileBuffer = nullptr;
 			MeshImporter::Save(meshData, &fileBuffer);
 
+			
+			MeshImporter::Load(fileBuffer, meshData);
+
 			if (fileBuffer != nullptr) {
 				delete[] fileBuffer;
 				fileBuffer = nullptr;
