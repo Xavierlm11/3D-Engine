@@ -230,6 +230,7 @@ update_status ModuleEditor::Update(float dt)
 			if (GOIndex == i && GOIndex != 0 && i!=0)
 			{
 				App->scene->ListGO[i]->Editor();
+			//LOG("PARENT: %s ",App->scene->ListGO[i]->GetParent()->name.c_str() );
 			}
 			
 		}
@@ -237,6 +238,8 @@ update_status ModuleEditor::Update(float dt)
 	}
 	ImGui::End();
 	CheckGLCapabilities();
+	
+
 	//CheckShapes();
 	GOList();
 	if (App->input->CallClose)
@@ -541,8 +544,29 @@ void ModuleEditor::Draw() {
 		AboutWindow();
 	}
 
+	DrawSceneViewport();
+
+
 	ImGui::Render();
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+}
+
+void ModuleEditor::DrawSceneViewport()
+{
+
+	if (ImGui::Begin("Scene"))
+	{
+		ImVec2 ViewSize = ImGui::GetContentRegionAvail();
+		if ((ViewSize.x/ViewSize.y)!=AspRatioScene)
+		{
+			AspRatioScene = (float)(ViewSize.x / ViewSize.y);
+			App->camera->aspRatio = AspRatioScene;
+			App->camera->UpdateFrustum();
+
+		}
+		ImGui::Image((ImTextureID)App->renderer3D->GetBuffCam(),ViewSize,  ImVec2(0, 1), ImVec2(1, 0));
+	}
+	ImGui::End();
 }
 
 void ModuleEditor::BarFile() {
@@ -1405,8 +1429,8 @@ void ModuleEditor::GOList()
 		/*if (showingGOIndex == 0) {
 			showingGOIndex = -1;
 		}*/
-		LOG("GOIndex: %i", GOIndex);
-		LOG("ShowingGOIndex: %i", showingGOIndex);
+		//LOG("GOIndex: %i", GOIndex);
+		//LOG("ShowingGOIndex: %i", showingGOIndex);
 	}
 	ImGui::End();
 

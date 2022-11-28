@@ -403,6 +403,11 @@ void ModuleRenderer3D::Draw() {
 
 }
 
+GLuint ModuleRenderer3D::GetBuffCam()
+{
+	return checkersID;
+}
+
 void ModuleRenderer3D::OnResize(int x, int y, int width, int height)
 {
 		App->window->winWidth = width;

@@ -94,7 +94,7 @@ public:
 		
 	};
 
-
+	GLuint GetBuffCam();
 
 	bool hasLoadedMesh;
 

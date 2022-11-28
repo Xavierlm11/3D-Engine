@@ -14,13 +14,13 @@ ModuleCamera3D::ModuleCamera3D(Application* app, bool start_enabled) : Module(ap
 	Reference = vec3(0.0f, 0.0f, 0.0f);
 
 	cameraFrustum.type = math::PerspectiveFrustum;
+	cameraFrustum.verticalFov = camFOV * DEGTORAD;
+	cameraFrustum.horizontalFov = 2.0f * atanf(tanf(cameraFrustum.verticalFov / 2.0f) * 1.6f);
+	cameraFrustum.nearPlaneDistance = 0.01f;
+	cameraFrustum.farPlaneDistance = 1000.0f;
+	cameraFrustum.pos = float3(Position.x, Position.y, Position.z);
 	cameraFrustum.front = float3(Z.x, Z.y, Z.z);
 	cameraFrustum.up = float3(Y.x, Y.y, Y.z);
-	cameraFrustum.pos = float3(Position.x, Position.y, Position.z);
-	cameraFrustum.nearPlaneDistance = 0.1f;
-	cameraFrustum.farPlaneDistance = 1000.0f;
-	cameraFrustum.verticalFov = 60.0f * DEGTORAD;
-	cameraFrustum.horizontalFov = 2.0f * atanf(tanf(cameraFrustum.verticalFov / 2.0f) * 1.6f);
 
 	//LookAt(0, 0, 0);
 	
@@ -52,21 +52,27 @@ bool ModuleCamera3D::CleanUp()
 
 void ModuleCamera3D::UpdateFrustum() {
 
+
+
+
 	cameraFrustum.pos = float3(Position.x, Position.y, Position.z);
 	cameraFrustum.type = math::PerspectiveFrustum;
 	cameraFrustum.front = float3(Z.x, Z.y, Z.z);
 	cameraFrustum.up = float3(Y.x, Y.y, Y.z);
 	cameraFrustum.pos = float3(Position.x, Position.y, Position.z);
 
-	cameraFrustum.verticalFov = 60.0f * DEGTORAD;
-	cameraFrustum.horizontalFov = 2.0f * atanf(tanf(cameraFrustum.verticalFov / 2.0f) * App->window->winWidth/ App->window->winHeight);
-
+	cameraFrustum.verticalFov = camFOV * DEGTORAD;
+	//cameraFrustum.horizontalFov = 2.0f * atanf(tanf(cameraFrustum.verticalFov / 2.0f) * App->window->winWidth/ App->window->winHeight);
+	cameraFrustum.horizontalFov = 2.0f * atanf(tanf(cameraFrustum.verticalFov / 2.0f) * aspRatio);
 	/*cameraFrustum.nearPlaneDistance = 0.1f;
 	cameraFrustum.farPlaneDistance = 1000.0f;
 	cameraFrustum.verticalFov = 60.0f * DEGTORAD;
 	cameraFrustum.horizontalFov = 2.0f * atanf(tanf(cameraFrustum.verticalFov / 2.0f) * 1.6f);*/
 	glMatrixMode(GL_PROJECTION);
 	glLoadMatrixf((GLfloat*)App->camera->GetProjectionMatrixOpenGL());
+
+	CalculateViewMatrixOpenGL();
+	CalculateProjectionMatrixOpenGL();
 }
 
 void ModuleCamera3D::Rotate() {

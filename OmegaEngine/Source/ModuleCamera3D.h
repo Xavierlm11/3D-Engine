@@ -39,6 +39,8 @@ public:
 	vec3 X, Y, Z, Position, Reference;
 	Color background;
 
+	float camFOV = 60.0f, aspRatio;
+	
 private:
 	mat4x4 ViewMatrix, ViewMatrixInverse;
 	float4x4* ViewMatrixOpenGL;
