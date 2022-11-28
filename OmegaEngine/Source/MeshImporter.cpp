@@ -88,11 +88,15 @@ Uint64 MeshImporter::Save(const MeshData* mesh, char** buffer) {
 
 void MeshImporter::Load(const char* buffer, MeshData* meshData) {
 
+	
 	const char* cursor = buffer;
 
 	// amount of indices / vertices / normals / texture_coords
-	uint ranges[4] = { meshData->num_indices, meshData->num_vertices, meshData->num_normals, meshData->num_textureCoords };
+	uint ranges[4];
 	uint bytes = sizeof(ranges);
+
+	//char* fileBuffer = new char[bytes]; // Allocatew
+	
 
 	memcpy(ranges, cursor, bytes);
 	cursor += bytes;

@@ -246,6 +246,9 @@
     <ClCompile Include="Source\ModelImporter.cpp">
       <Filter>Files\Importers</Filter>
     </ClCompile>
+    <ClCompile Include="Source\ModuleFileSystem.cpp">
+      <Filter>Files\Modules</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Application.h">
@@ -538,6 +541,9 @@
     </ClInclude>
     <ClInclude Include="Source\ModelImporter.h">
       <Filter>Files\Importers</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ModuleFileSystem.h">
+      <Filter>Files\Modules</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

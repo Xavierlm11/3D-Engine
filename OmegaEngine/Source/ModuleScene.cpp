@@ -191,9 +191,9 @@ bool ModuleScene::CleanUp()
 {
 	LOG("Unloading scene");
 
-    for (int i = 0; i < models[0]->meshes.size(); i++)
+    for (int i = 0; i < models[0]->meshDatas.size(); i++)
     {
-        models[0]->meshes[i]->UnloadMesh();
+        models[0]->meshDatas[i]->UnloadMesh();
     }
 
     

@@ -24,6 +24,7 @@
 #include <xstring>
 
 #include "MeshImporter.h"
+#include "ModuleFileSystem.h"
 
 
 ModuleEditor::ModuleEditor(Application* app, bool start_enabled) : Module(app, start_enabled)
@@ -1303,14 +1304,27 @@ void ModuleEditor::GOList()
 						//	/*IM_ASSERT(payload->DataSize == sizeof(int));
 						//	int payload_n = *(const int*)payload->Data;*/
 						int resource_ind = *(const int*)payload->Data;
-						Resource *payload_res = App->scene->modelList[resource_ind];
+						Resource *payload_res = App->scene->resourceList[resource_ind];
 						if (payload_res->resourceType==Resource::Types::MODEL) {
-							LOG("Dropped %s in scene", payload_res->assetName.c_str());
-							GameObject * go = App->scene->CreateGO(payload_res->assetName.c_str(), gameObjectsShowing[i]);
-							char* fileBuffer = nullptr;
-							go->CreateComp(Component::Types::MESH);
-							/////////////////go->GOmesh->meshData = App->scene->modelList[resource_ind]->meshDatas[0];
-							MeshImporter::Load(fileBuffer, go->GOmesh->meshData);
+							ModelData * payload_model = (ModelData*)payload_res;
+							if (payload_model->meshDatas.size()==1) {
+								LOG("Dropped %s in scene", payload_res->assetName.c_str());
+								GameObject* go = App->scene->CreateGO(payload_res->assetName.c_str(), gameObjectsShowing[i]);
+								
+								
+								go->CreateComp(Component::Types::MESH);
+								go->GOmesh->meshData = payload_model->meshDatas[0];
+								go->GOmesh->meshData->LoadBuffers();
+
+								go->CreateComp(Component::Types::MATERIAL);
+								aiMaterial* material = new aiMaterial();
+								
+									/////////////////go->GOmesh->meshData = App->scene->modelList[resource_ind]->meshDatas[0];
+								char* fileBuffer = nullptr;
+								//uint bufferSize = App->fileSystem->FileToBuffer(payload_res->assetName.c_str(), &fileBuffer);
+								//MeshImporter::Load(fileBuffer, go->GOmesh->meshData);
+							}
+							
 						}
 						
 						//for (int ind = 0; ind < App->scene->ListGO.size(); ind++) {

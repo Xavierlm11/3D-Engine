@@ -27,7 +27,7 @@ public:
 	bool Init();
 	update_status PreUpdate(float dt);
 	bool CleanUp();
-	
+
 	void GetFile(const char* path);
 	void LoadFile(const char* path, Resource::Types type);
 	void GetMeshDatas(const aiScene* scene, std::vector<MeshData*>* meshes);

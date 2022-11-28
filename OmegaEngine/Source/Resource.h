@@ -16,7 +16,7 @@ public:
 	};
 
 	Resource(const char* path, Types type) {
-		std::string assetPath = path;
+		assetPath = path;
 		std::string fileName_s = assetPath.substr(assetPath.find_last_of('\\') + 1);
 		assetName = fileName_s;
 		resourceType = type;

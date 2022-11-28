@@ -16,6 +16,7 @@
 #include "ModuleCamera3D.h"	
 #include "ModuleEditor.h"
 #include "ModuleScene.h"
+#include "ModuleFileSystem.h"
 
 
 class Application
@@ -29,6 +30,7 @@ public:
 	ModuleCamera3D* camera;
 	ModuleEditor* editor;
 	ModuleScene* scene;
+	ModuleFileSystem* fileSystem;
 
 private:
 
