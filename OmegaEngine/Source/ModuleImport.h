@@ -35,7 +35,7 @@ public:
 	//MeshData* GetMeshData(MeshData * meshData, aiMesh* mesh, const aiScene * scene);
 	MeshData* GetMeshDataObj(MeshData* meshData, aiMesh* mesh, const aiScene* scene, GameObject* obj);
 	void ReleaseFile(const aiScene* scene);
-	void ImportModelResources(const aiScene* scene, Resource* model);
+	void ImportModelResources(const aiScene* scene, ModelData* model);
 
 	//Textures
 	void LoadCheckerTexture();

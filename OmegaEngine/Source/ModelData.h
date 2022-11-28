@@ -10,5 +10,5 @@ public:
 	ModelData(const char* path);
 	~ModelData() {};
 
-	std::vector<MeshData*> meshes;
+	std::vector<MeshData*> meshDatas;
 };

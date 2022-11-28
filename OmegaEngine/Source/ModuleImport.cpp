@@ -136,10 +136,10 @@ void ModuleImport::GetFile(const char* file_path) {
 //		
 //}
 
-void ModuleImport::ImportModelResources(const aiScene* scene, Resource* model) {
+void ModuleImport::ImportModelResources(const aiScene* scene, ModelData* model) {
 
-	std::vector<Uint64> meshesVec;
-	std::vector<Uint64> materialsVec;
+	//std::vector<MeshData*> meshDatasVec;
+	//std::vector<Uint64> materialsVec;
 
 	if (scene->HasMeshes())
 	{
@@ -156,18 +156,18 @@ void ModuleImport::ImportModelResources(const aiScene* scene, Resource* model) {
 
 			char* fileBuffer = nullptr;
 			MeshImporter::Save(meshData, &fileBuffer);
-
-			
-			MeshImporter::Load(fileBuffer, meshData);
-
 			if (fileBuffer != nullptr) {
 				delete[] fileBuffer;
 				fileBuffer = nullptr;
 			}
+			
+			//MeshImporter::Load(fileBuffer, meshData);
 
-			meshesVec.push_back(meshData->assetID);
-			//dobj->GOmesh->CompMesh = GetMeshDataObj(dobj->GOmesh->CompMesh, scene->mMeshes[i], scene, dobj);
-		
+			
+
+			//meshDatasVec.push_back(meshData->assetID);
+			//dobj->GOmesh->meshData = GetMeshDataObj(dobj->GOmesh->meshData, scene->mMeshes[i], scene, dobj);
+			model->meshDatas.push_back(meshData);
 		}
 	}
 
@@ -179,12 +179,17 @@ void ModuleImport::ImportModelResources(const aiScene* scene, Resource* model) {
 
 void ModuleImport::LoadFile(const char* file_path, Resource::Types type) {
 
-	Resource* new_res = new Resource(file_path, type);
-	App->scene->resourceList.push_back(new_res);
+	//Resource* new_res = new Resource(file_path, type);
+	
 
 	if (type==Resource::Types::MODEL) {
 		const aiScene* new_scene = aiImportFile(file_path, aiProcessPreset_TargetRealtime_MaxQuality);
-		ImportModelResources(new_scene, new_res);
+
+		ModelData* new_model = new ModelData(file_path);
+		ImportModelResources(new_scene, new_model);
+		App->scene->modelList.push_back(new_model);
+		App->scene->resourceList.push_back(new_model);
+
 		ReleaseFile(new_scene);
 	}
 
@@ -230,9 +235,9 @@ void ModuleImport::GetObjectResources(const aiScene* scene, const char* name) {
 
 	//		dobj->CreateComp(Component::Types::MESH);
 
-	//		dobj->GOmesh->CompMesh = new MeshData();
-	//		dobj->GOmesh->CompMesh = GetMeshDataObj(dobj->GOmesh->CompMesh, scene->mMeshes[i], scene, dobj);
-	//		dobj->GOmesh->CompMesh->LoadBuffers();
+	//		dobj->GOmesh->meshData = new MeshData();
+	//		dobj->GOmesh->meshData = GetMeshDataObj(dobj->GOmesh->meshData, scene->mMeshes[i], scene, dobj);
+	//		dobj->GOmesh->meshData->LoadBuffers();
 
 	//	}
 	//}

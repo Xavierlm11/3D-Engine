@@ -23,7 +23,7 @@
 #include <string>
 #include <xstring>
 
-
+#include "MeshImporter.h"
 
 
 ModuleEditor::ModuleEditor(Application* app, bool start_enabled) : Module(app, start_enabled)
@@ -446,7 +446,7 @@ void ModuleEditor::AssetsWindow() {
 			ImGui::PushID(n);
 			if ((n % 3) != 0)
 				ImGui::SameLine();
-			ImGui::Button(App->scene->resourceList[n]->assetName.c_str(), ImVec2(100, 100));
+			ImGui::Button(App->scene->resourceList[n]->assetName.c_str(), ImVec2(110, 110));
 
 			// Our buttons are both drag sources and drag targets here!
 			if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_None))
@@ -931,10 +931,10 @@ void ModuleEditor::CheckShapes() {
 
 		if (App->scene->house_loaded == false) {
 			if (selectedShape != ModuleScene::Shapes::NONE && selectedShape != ModuleScene::Shapes::HOUSE) {
-				App->scene->CleanMeshes(&App->scene->models[0]->meshes);
+				App->scene->CleanMeshes(&App->scene->models[0]->meshDatas);
 			}
-			App->scene->LoadHouse(&App->scene->models[0]->meshes);
-			for (int i = 0; i < App->scene->models[0]->meshes.size(); i++)
+			App->scene->LoadHouse(&App->scene->models[0]->meshDatas);
+			for (int i = 0; i < App->scene->models[0]->meshDatas.size(); i++)
 			{
 				//App->scene->models[0]->meshes[i]->LoadBuffers();
 			}
@@ -943,7 +943,7 @@ void ModuleEditor::CheckShapes() {
 	else 
 	{
 		if (App->scene->house_loaded == true) {
-			App->scene->CleanMeshes(&App->scene->models[0]->meshes);
+			App->scene->CleanMeshes(&App->scene->models[0]->meshDatas);
 		}
 	}
 
@@ -953,10 +953,10 @@ void ModuleEditor::CheckShapes() {
 
 		if (App->scene->cube_loaded == false) {
 			if (selectedShape != ModuleScene::Shapes::NONE && selectedShape != ModuleScene::Shapes::CUBE) {
-				App->scene->CleanMeshes(&App->scene->models[0]->meshes);
+				App->scene->CleanMeshes(&App->scene->models[0]->meshDatas);
 			}
-			App->scene->LoadCube(&App->scene->models[0]->meshes);
-			for (int i = 0; i < App->scene->models[0]->meshes.size(); i++)
+			App->scene->LoadCube(&App->scene->models[0]->meshDatas);
+			for (int i = 0; i < App->scene->models[0]->meshDatas.size(); i++)
 			{
 				//App->scene->models[0]->meshes[i]->LoadBuffers();
 			}
@@ -965,7 +965,7 @@ void ModuleEditor::CheckShapes() {
 	else
 	{
 		if (App->scene->cube_loaded == true) {
-			App->scene->CleanMeshes(&App->scene->models[0]->meshes);
+			App->scene->CleanMeshes(&App->scene->models[0]->meshDatas);
 		}
 	}
 
@@ -975,10 +975,10 @@ void ModuleEditor::CheckShapes() {
 
 		if (App->scene->sphere_loaded == false) {
 			if (selectedShape != ModuleScene::Shapes::NONE && selectedShape != ModuleScene::Shapes::SPHERE) {
-				App->scene->CleanMeshes(&App->scene->models[0]->meshes);
+				App->scene->CleanMeshes(&App->scene->models[0]->meshDatas);
 			}
-			App->scene->LoadSphere(&App->scene->models[0]->meshes);
-			for (int i = 0; i < App->scene->models[0]->meshes.size(); i++)
+			App->scene->LoadSphere(&App->scene->models[0]->meshDatas);
+			for (int i = 0; i < App->scene->models[0]->meshDatas.size(); i++)
 			{
 				//App->scene->models[0]->meshes[i]->LoadBuffers();
 			}
@@ -988,7 +988,7 @@ void ModuleEditor::CheckShapes() {
 	else
 	{
 		if (App->scene->sphere_loaded == true) {
-			App->scene->CleanMeshes(&App->scene->models[0]->meshes);
+			App->scene->CleanMeshes(&App->scene->models[0]->meshDatas);
 		}
 	}
 
@@ -997,11 +997,11 @@ void ModuleEditor::CheckShapes() {
 		
 		if (App->scene->pyramid_loaded == false) {
 			if (selectedShape != ModuleScene::Shapes::NONE && selectedShape != ModuleScene::Shapes::PYRAMID) {
-				App->scene->CleanMeshes(&App->scene->models[0]->meshes);
+				App->scene->CleanMeshes(&App->scene->models[0]->meshDatas);
 			}
 
-			App->scene->LoadPyramid(&App->scene->models[0]->meshes);
-			for (int i = 0; i < App->scene->models[0]->meshes.size(); i++)
+			App->scene->LoadPyramid(&App->scene->models[0]->meshDatas);
+			for (int i = 0; i < App->scene->models[0]->meshDatas.size(); i++)
 			{
 				//App->scene->models[0]->meshes[i]->LoadBuffers();
 			}
@@ -1010,7 +1010,7 @@ void ModuleEditor::CheckShapes() {
 	else
 	{
 		if (App->scene->pyramid_loaded == true) {
-			App->scene->CleanMeshes(&App->scene->models[0]->meshes);
+			App->scene->CleanMeshes(&App->scene->models[0]->meshDatas);
 		}
 	}
 
@@ -1020,10 +1020,10 @@ void ModuleEditor::CheckShapes() {
 
 		if (App->scene->cylinder_loaded == false) {
 			if (selectedShape != ModuleScene::Shapes::NONE && selectedShape != ModuleScene::Shapes::CYLINDER) {
-				App->scene->CleanMeshes(&App->scene->models[0]->meshes);
+				App->scene->CleanMeshes(&App->scene->models[0]->meshDatas);
 			}
-			App->scene->LoadCylinder(&App->scene->models[0]->meshes);
-			for (int i = 0; i < App->scene->models[0]->meshes.size(); i++)
+			App->scene->LoadCylinder(&App->scene->models[0]->meshDatas);
+			for (int i = 0; i < App->scene->models[0]->meshDatas.size(); i++)
 			{
 				//App->scene->models[0]->meshes[i]->LoadBuffers();
 			}
@@ -1032,7 +1032,7 @@ void ModuleEditor::CheckShapes() {
 	else
 	{
 		if (App->scene->cylinder_loaded == true) {
-			App->scene->CleanMeshes(&App->scene->models[0]->meshes);
+			App->scene->CleanMeshes(&App->scene->models[0]->meshDatas);
 		}
 	}
 	
@@ -1303,10 +1303,21 @@ void ModuleEditor::GOList()
 						//	/*IM_ASSERT(payload->DataSize == sizeof(int));
 						//	int payload_n = *(const int*)payload->Data;*/
 						int resource_ind = *(const int*)payload->Data;
-						Resource *payload_res = App->scene->resourceList[resource_ind];
-
-						LOG("Dropped %s in scene", payload_res->assetName.c_str());
-						//LOG("Dropped");
+						Resource *payload_res = App->scene->modelList[resource_ind];
+						if (payload_res->resourceType==Resource::Types::MODEL) {
+							LOG("Dropped %s in scene", payload_res->assetName.c_str());
+							GameObject * go = App->scene->CreateGO(payload_res->assetName.c_str(), gameObjectsShowing[i]);
+							char* fileBuffer = nullptr;
+							go->CreateComp(Component::Types::MESH);
+							/////////////////go->GOmesh->meshData = App->scene->modelList[resource_ind]->meshDatas[0];
+							MeshImporter::Load(fileBuffer, go->GOmesh->meshData);
+						}
+						
+						//for (int ind = 0; ind < App->scene->ListGO.size(); ind++) {
+						//	if (App->scene->ListGO[ind] == gameObjectsShowing[k]) {
+						//		GOIndex = ind;
+						//	}
+						//}
 					}
 					//LOG("Droppesssssssd");
 					ImGui::EndDragDropTarget();

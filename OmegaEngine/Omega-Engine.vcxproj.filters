@@ -243,6 +243,9 @@
     <ClCompile Include="Source\MeshImporter.cpp">
       <Filter>Files\Importers</Filter>
     </ClCompile>
+    <ClCompile Include="Source\ModelImporter.cpp">
+      <Filter>Files\Importers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Application.h">
@@ -531,6 +534,9 @@
       <Filter>Files\Importers</Filter>
     </ClInclude>
     <ClInclude Include="Source\Resource.h">
+      <Filter>Files\Importers</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ModelImporter.h">
       <Filter>Files\Importers</Filter>
     </ClInclude>
   </ItemGroup>

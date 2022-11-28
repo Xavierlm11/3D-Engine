@@ -31,7 +31,7 @@ public:
 	bool active = true;
 
 public:
-	MeshData* CompMesh = nullptr;
+	MeshData* meshData = nullptr;
 	CMaterial* MeshMat = nullptr;
 	//ModuleRenderer3D* GOmesh;
 	

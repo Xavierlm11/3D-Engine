@@ -57,5 +57,5 @@ public:
 	std::vector <GameObject*> ListGO;
 
 	std::vector <Resource*> resourceList;
-
+	std::vector <ModelData*> modelList;
 };

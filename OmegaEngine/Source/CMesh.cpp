@@ -23,9 +23,9 @@ CMesh::CMesh(GameObject* obj) :Component(obj, Types::MESH)
 CMesh::~CMesh()
 {
 
-	CompMesh->UnloadMesh();
-	CompMesh = nullptr;
-	delete CompMesh;
+	meshData->UnloadMesh();
+	meshData = nullptr;
+	delete meshData;
 
 	MeshMat = nullptr;
 	delete MeshMat;
@@ -34,7 +34,7 @@ CMesh::~CMesh()
 
 void CMesh::Update()
 {
-	if(CompMesh!=nullptr)
+	if(meshData!=nullptr)
 		External->renderer3D->meshlist.push_back(this);
 		
 	
@@ -44,17 +44,17 @@ void CMesh::MeshRenderer()
 {
 	//External->rendere
 	if (GO->GOmat->GetMaterial() != nullptr && External->renderer3D->mode == ModuleRenderer3D::RenderMode::NORMAL) {
-		CompMesh->DrawMesh(GO->GOmat->GetMaterial()->texture_id, GO->GOtrans->matrix);
+		meshData->DrawMesh(GO->GOmat->GetMaterial()->texture_id, GO->GOtrans->matrix);
 
 		
 	}
 	else if (External->renderer3D->mode== ModuleRenderer3D::RenderMode::CHECKERS)
 	{
-		CompMesh->DrawMesh(External->renderer3D->checkersID, GO->GOtrans->matrix);
+		meshData->DrawMesh(External->renderer3D->checkersID, GO->GOtrans->matrix);
 	}
 	else {
 
-		CompMesh->DrawMesh(0, GO->GOtrans->matrix);
+		meshData->DrawMesh(0, GO->GOtrans->matrix);
 	}
 	
 	
