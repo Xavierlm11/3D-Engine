@@ -4,6 +4,6 @@
 namespace MeshImporter
 {
 	void Import(const aiMesh* mesh, MeshData* ourMesh);
-	char* Save(const MeshData* ourMesh, char** fileBuffer);
+	char* Save(const MeshData* ourMesh, uint& size);// char** fileBuffer);
 	void Load(const char* fileBuffer, MeshData* ourMesh);
 };

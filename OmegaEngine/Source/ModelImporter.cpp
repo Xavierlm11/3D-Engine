@@ -50,41 +50,62 @@ void ModelImporter::Import(const aiMesh* mesh, MeshData* meshData) {
 
 }
 
-Uint64 ModelImporter::Save(const MeshData* mesh, char** buffer) {
-	// amount of indices / vertices / normals / texture_coords
-	uint ranges[4] = { mesh->num_indices, mesh->num_vertices, mesh->num_normals, mesh->num_textureCoords };
+char* ModelImporter::Save(const ModelData* model, uint& size) {//char*& buffer) {
 
-	uint size = sizeof(ranges) + (sizeof(uint) * mesh->num_indices) + (sizeof(float) * mesh->num_vertices * 3) + (sizeof(float) * mesh->num_normals * 3) + (sizeof(float) * mesh->num_textureCoords * 2);
+	////uint m = 0;
+	//for (int i = 0; i < model->meshDatas.size(); i++) {
+	//	rangesSize
+	//}
 
-	char* fileBuffer = new char[size]; // Allocatew
+	for (int i = 0; i < model->meshDatas.size(); i++) {
+
+		MeshData* mesh = model->meshDatas[i];
+
+		// amount of indices / vertices / normals / texture_coords
+		uint ranges[4] = { mesh->num_indices, mesh->num_vertices, mesh->num_normals, mesh->num_textureCoords };
+
+		size += sizeof(ranges) + (sizeof(uint) * mesh->num_indices) + (sizeof(float) * mesh->num_vertices * 3) + (sizeof(float) * mesh->num_normals * 3) + (sizeof(float) * mesh->num_textureCoords * 2);
+	}
+
+	char* fileBuffer = new char[size]; // Allocate
 	char* cursor = fileBuffer;
 
-	uint bytes = sizeof(ranges); // First store ranges
-	memcpy(cursor, ranges, bytes);
-	cursor += bytes;
+	for (int i = 0; i < model->meshDatas.size(); i++) {
 
-	// Store indices
-	bytes = sizeof(uint) * mesh->num_indices;
-	memcpy(cursor, mesh->indices, bytes);
-	cursor += bytes;
+		MeshData* mesh = model->meshDatas[i];
+		uint ranges[4] = { mesh->num_indices, mesh->num_vertices, mesh->num_normals, mesh->num_textureCoords };
 
-	// Store vertices
-	bytes = sizeof(float) * mesh->num_vertices;
-	memcpy(cursor, mesh->vertices, bytes);
-	cursor += bytes;
+		uint bytes = sizeof(ranges); // First store ranges
+		memcpy(cursor, ranges, bytes);
+		cursor += bytes;
 
-	// Store normals
-	bytes = sizeof(float) * mesh->num_normals;
-	memcpy(cursor, mesh->normals, bytes);
-	cursor += bytes;
+		// Store indices
+		bytes = sizeof(uint) * mesh->num_indices;
+		memcpy(cursor, mesh->indices, bytes);
+		cursor += bytes;
 
-	// Store texture_coords
-	bytes = sizeof(float) * mesh->num_textureCoords;
-	memcpy(cursor, mesh->textureCoords, bytes);
-	cursor += bytes;
+		// Store vertices
+		bytes = sizeof(float) * mesh->num_vertices;
+		memcpy(cursor, mesh->vertices, bytes);
+		cursor += bytes;
 
-	return 0;
+		// Store normals
+		bytes = sizeof(float) * mesh->num_normals;
+		memcpy(cursor, mesh->normals, bytes);
+		cursor += bytes;
+
+		// Store texture_coords
+		bytes = sizeof(float) * mesh->num_textureCoords;
+		memcpy(cursor, mesh->textureCoords, bytes);
+		cursor += bytes;
+	}
+
+
+	
+
+	return fileBuffer;
 }
+
 
 void ModelImporter::Load(const char* buffer, MeshData* meshData) {
 

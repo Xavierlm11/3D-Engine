@@ -1317,12 +1317,31 @@ void ModuleEditor::GOList()
 								go->GOmesh->meshData->LoadBuffers();
 
 								go->CreateComp(Component::Types::MATERIAL);
-								aiMaterial* material = new aiMaterial();
+								if (payload_model->meshDatas[0]->material != nullptr) {
+									go->GOmat->materialData = payload_model->meshDatas[0]->material;
+								}
+								
 								
 									/////////////////go->GOmesh->meshData = App->scene->modelList[resource_ind]->meshDatas[0];
-								char* fileBuffer = nullptr;
+								//char* fileBuffer = nullptr;
 								//uint bufferSize = App->fileSystem->FileToBuffer(payload_res->assetName.c_str(), &fileBuffer);
 								//MeshImporter::Load(fileBuffer, go->GOmesh->meshData);
+							}
+							else {
+								LOG("Dropped %s in scene", payload_res->assetName.c_str());
+								GameObject* go = App->scene->CreateGO(payload_res->assetName.c_str(), gameObjectsShowing[i]);
+
+								for (int ind = 0; ind < payload_model->meshDatas.size(); ind++) {
+									GameObject* goChild = App->scene->CreateGO(payload_res->assetName.c_str(), go);
+									goChild->CreateComp(Component::Types::MESH);
+									goChild->GOmesh->meshData = payload_model->meshDatas[ind];
+									goChild->GOmesh->meshData->LoadBuffers();
+
+									goChild->CreateComp(Component::Types::MATERIAL);
+									
+								}
+								
+
 							}
 							
 						}

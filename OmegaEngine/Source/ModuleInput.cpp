@@ -2,6 +2,8 @@
 #include "Application.h"
 #include "ModuleInput.h"
 #include "ModuleImport.h"
+#include "MeshImporter.h"
+#include "ModelImporter.h"
 
 #include <iostream>
 
@@ -118,7 +120,7 @@ update_status ModuleInput::PreUpdate(float dt)
 				std::string dropped_filedir_s = e.drop.file;
 				std::string fileName_s = dropped_filedir_s.substr(dropped_filedir_s.find_last_of('\\') + 1);
 				std::string extension_s = fileName_s.substr(fileName_s.find_last_of('.') + 1);
-				std::string assetsPath_s = "Assets/";
+				std::string assetsPath_s = ASSETS_PATH;
 				
 				const char* fileName = fileName_s.c_str();
 
@@ -129,7 +131,7 @@ update_status ModuleInput::PreUpdate(float dt)
 				if (extension_s == "png") {
 					if (App->editor->GOIndex > -1 && App->editor->GOIndex < App->scene->ListGO.size()) {
 						if (App->scene->ListGO[App->editor->GOIndex] != nullptr) {
-							//App->scene->ListGO[App->editor->GOIndex]->GOmat->CmMat->texture_id = App->imp->ImportTexture(finalPath.c_str());
+							//App->scene->ListGO[App->editor->GOIndex]->GOmat->materialData->texture_id = App->imp->ImportTexture(finalPath.c_str());
 							
 						}
 					}
@@ -143,16 +145,42 @@ update_status ModuleInput::PreUpdate(float dt)
 					/*if()
 					App->scene->LoadCustom(dropped_filedir.c_str(), &App->scene);*/
 					//App->scene->LoadCustomObj(dropped_filedir_s.c_str(),fileName_s.c_str());
-					App->imp->LoadFile(e.drop.file, Resource::Types::MODEL);
+					ModelData* new_model_data = App->imp->LoadFile(e.drop.file, Resource::Types::MODEL);
 					App->fileSystem->ImportFileToAssets(dropped_filedir_s.c_str());
 
-					std::string libraryPath_s = "Library/";
-					std::string finalLibraryPath = libraryPath_s + fileName;
+					std::string libraryPath_s = LIB_MESH_PATH;
+					
 
 					uint size = 0;
-					char* buffer;
-					//MeshImporter::Save();
-					App->fileSystem->SaveFile(finalLibraryPath, buffer, size);
+					char* buffer = nullptr;
+					buffer = ModelImporter::Save(new_model_data, size);
+
+
+					std::string new_name = new_model_data->assetName.substr(0, new_model_data->assetName.find_last_of('.') + 1);
+					new_name += "chad";
+					std::string finalLibraryPath = libraryPath_s + new_name;
+					App->fileSystem->SaveFile(finalLibraryPath.c_str(), buffer, size);
+
+					if (buffer != nullptr) {
+						delete[] buffer;
+						buffer = nullptr;
+					}
+
+					//for (int i = 0; i < new_model_data->meshDatas.size(); i++) {
+					//	size = 0;
+					//	
+					//	std::string new_name = new_model_data->meshDatas[i]->assetName;//.substr(0, new_model_data->meshDatas[i]->assetName.find_last_of('.') + 1);
+					//	new_name += ".chad";
+					//	std::string finalLibraryPath = libraryPath_s + new_name;
+					//	App->fileSystem->SaveFile(finalLibraryPath.c_str(), buffer, size);
+					//	if (buffer != nullptr) {
+					//		delete[] buffer;
+					//		buffer = nullptr;
+					//	}
+					//}
+
+					
+
 				}
 
 

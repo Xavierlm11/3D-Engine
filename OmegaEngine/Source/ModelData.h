@@ -8,7 +8,9 @@ class ModelData : public Resource{
 
 public:
 	ModelData(const char* path);
+	ModelData();
 	~ModelData() {};
 
 	std::vector<MeshData*> meshDatas;
+	std::vector<MaterialData*> materialDatas;
 };

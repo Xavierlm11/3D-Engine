@@ -149,18 +149,19 @@ void ModuleImport::ImportModelResources(const aiScene* scene, ModelData* model) 
 			aiMesh* mesh = new aiMesh();
 			mesh = scene->mMeshes[i];
 			
-			MeshData* meshData = new MeshData(model->assetPath.c_str());
+			MeshData* meshData = new MeshData(scene->mMeshes[i]->mName.C_Str());//model->assetPath.c_str());
 			
 			//Resource* meshResource = new Resource(model->assetName.c_str(), Resource::Types::MESH);
 			
 			MeshImporter::Import(mesh, meshData);
 
-			char* fileBuffer = nullptr;
-			MeshImporter::Save(meshData, &fileBuffer);
-			if (fileBuffer != nullptr) {
-				delete[] fileBuffer;
-				fileBuffer = nullptr;
-			}
+			//////char* fileBuffer = nullptr;
+			//////uint size = 0;
+			//////MeshImporter::Save(meshData, size);// &fileBuffer);
+			//////if (fileBuffer != nullptr) {
+			//////	delete[] fileBuffer;
+			//////	fileBuffer = nullptr;
+			//////}
 			
 			//MeshImporter::Load(fileBuffer, meshData);
 
@@ -172,13 +173,76 @@ void ModuleImport::ImportModelResources(const aiScene* scene, ModelData* model) 
 		}
 	}
 
-	if (scene->HasMaterials())
-	{
+	if (scene->HasMaterials()) {
+
+		for (unsigned int i = 0; i < scene->mNumMaterials; i++)
+		{
+			aiMaterial* material = scene->mMaterials[i];
+
+			uint numTextures = material->GetTextureCount(aiTextureType_DIFFUSE);
+
+			if (numTextures > 0) {
+
+				aiString path;
+				material->GetTexture(aiTextureType_DIFFUSE, 0, &path);
+
+				const char* filePath = path.C_Str();
+				LOG("PATH: %s", filePath);
+				
+				std::string assetsPath = ASSETS_PATH;
+				std::string finalPath = assetsPath + filePath;
+				LOG("PATH: %s", finalPath.c_str());
+
+				ImportTexture(finalPath.c_str());
+				model->materialDatas.push_back(new MaterialData(finalPath.c_str()));
+			}
+		}
+
+		if (scene->HasMeshes())
+		{
+			for (unsigned int j = 0; j < scene->mNumMeshes; j++) {
+				//If the mesh has a material assigned
+				if (scene->mMeshes[j]->mMaterialIndex != -1) {
+
+					aiMaterial* meshMat = scene->mMaterials[scene->mMeshes[j]->mMaterialIndex];
+
+					aiString path;
+					meshMat->GetTexture(aiTextureType_DIFFUSE, 0, &path);
+
+					const char* filePath = path.C_Str();
+					LOG("PATH: %s", filePath);
+
+					std::string assetsPath = ASSETS_PATH;
+					std::string finalPath = assetsPath + filePath;
+					LOG("PATH: %s", finalPath.c_str());
+
+					for (unsigned int k = 0; k < model->materialDatas.size(); k++) {
+						//If material of mesh is the same as one of the model materials list
+						if (finalPath == model->materialDatas[k]->assetPath) {
+
+							for (unsigned int l = 0; l < model->meshDatas.size(); l++) {
+
+								//Find the mesh in model meshes list
+								if (model->meshDatas[l]->assetName == scene->mMeshes[j]->mName.C_Str()) 
+								{
+									//Now we need to find the game object of the mesh data and assign it the texture
+									//model->meshDatas[l]
+								}
+
+							}
+
+
+						}
+					}
+				}
+			}
+		}
+		
 
 	}
 }
 
-void ModuleImport::LoadFile(const char* file_path, Resource::Types type) {
+ModelData* ModuleImport::LoadFile(const char* file_path, Resource::Types type) {
 
 	//Resource* new_res = new Resource(file_path, type);
 	
@@ -188,10 +252,13 @@ void ModuleImport::LoadFile(const char* file_path, Resource::Types type) {
 
 		ModelData* new_model = new ModelData(file_path);
 		ImportModelResources(new_scene, new_model);
-		App->scene->modelList.push_back(new_model);
+		//App->scene->modelList.push_back(new_model);
 		App->scene->resourceList.push_back(new_model);
 
+		
 		ReleaseFile(new_scene);
+
+		return new_model;
 	}
 
 	
@@ -256,9 +323,9 @@ void ModuleImport::GetObjectResources(const aiScene* scene, const char* name) {
 
 		//uint numTextures = material->GetTextureCount(aiTextureType_DIFFUSE);
 		//obj->CreateComp(Component::Types::MATERIAL);
-		////obj->GOmat->CmMat->texture_id
+		////obj->GOmat->materialData->texture_id
 
-		//obj->GOmat->CmMat = new MaterialData();
+		//obj->GOmat->materialData = new MaterialData();
 
 		//if (numTextures > 0) {
 
@@ -273,7 +340,7 @@ void ModuleImport::GetObjectResources(const aiScene* scene, const char* name) {
 		//	LOG("PATH: %s", finalPath.c_str());
 		//	//const char* newPath = "Assets/%s"
 
-		//	obj->GOmat->CmMat->texture_id = ImportTexture(finalPath.c_str());
+		//	obj->GOmat->materialData->texture_id = ImportTexture(finalPath.c_str());
 		//}
 		//
 
@@ -378,9 +445,9 @@ MeshData* ModuleImport::GetMeshDataObj(MeshData* meshData, aiMesh* mesh, const a
 	//if (scene->HasMaterials()) {
 	//	uint numTextures = material->GetTextureCount(aiTextureType_DIFFUSE);
 	//	obj->CreateComp(Component::Types::MATERIAL);
-	//	//obj->GOmat->CmMat->texture_id
+	//	//obj->GOmat->materialData->texture_id
 	//	
-	//	obj->GOmat->CmMat = new MaterialData();
+	//	obj->GOmat->materialData = new MaterialData();
 
 	//	if (numTextures > 0) {
 
@@ -395,7 +462,7 @@ MeshData* ModuleImport::GetMeshDataObj(MeshData* meshData, aiMesh* mesh, const a
 	//		LOG("PATH: %s", finalPath.c_str());
 	//		//const char* newPath = "Assets/%s"
 
-	//		obj->GOmat->CmMat->texture_id = ImportTexture(finalPath.c_str());
+	//		obj->GOmat->materialData->texture_id = ImportTexture(finalPath.c_str());
 	//	}
 	//}
 

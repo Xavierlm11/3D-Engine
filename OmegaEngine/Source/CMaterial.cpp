@@ -12,8 +12,8 @@ CMaterial::CMaterial(GameObject* obj):Component(obj, Types::MATERIAL)
 
 CMaterial::~CMaterial()
 {
-	CmMat = nullptr;
-	delete CmMat;
+	materialData = nullptr;
+	delete materialData;
 
 }
 
@@ -26,6 +26,6 @@ void CMaterial::Update()
 MaterialData* CMaterial::GetMaterial()
 {
 	//mat
-	return CmMat;
+	return materialData;
 }
 

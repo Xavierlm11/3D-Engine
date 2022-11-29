@@ -50,13 +50,13 @@ void MeshImporter::Import(const aiMesh* mesh, MeshData* meshData) {
 
 }
 
-char* MeshImporter::Save(const MeshData* mesh, char** buffer) {
+char* MeshImporter::Save(const MeshData* mesh, uint& size){ //char** buffer) {
 	// amount of indices / vertices / normals / texture_coords
 	uint ranges[4] = { mesh->num_indices, mesh->num_vertices, mesh->num_normals, mesh->num_textureCoords};
 	
-	uint size = sizeof(ranges) + (sizeof(uint) * mesh->num_indices) + (sizeof(float) * mesh->num_vertices * 3) + (sizeof(float) * mesh->num_normals * 3) + (sizeof(float) * mesh->num_textureCoords * 2);
+	size = sizeof(ranges) + (sizeof(uint) * mesh->num_indices) + (sizeof(float) * mesh->num_vertices * 3) + (sizeof(float) * mesh->num_normals * 3) + (sizeof(float) * mesh->num_textureCoords * 2);
 	
-	char* fileBuffer = new char[size]; // Allocatew
+	char* fileBuffer = new char[size]; // Allocate
 	char* cursor = fileBuffer;
 
 	uint bytes = sizeof(ranges); // First store ranges

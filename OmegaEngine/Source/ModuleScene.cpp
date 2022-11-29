@@ -292,6 +292,7 @@ bool ModuleScene::SaveScene() {
         json_serialize_to_file(scene_settings, "Settings/scene_settings.json");
     }
    
+    json_serialize_to_file_pretty(scene_settings, "Settings/scene_settings.json");
 
     json_value_free(schema);
     json_value_free(scene_settings);
@@ -409,6 +410,9 @@ bool ModuleScene::LoadScene() {
     App->editor->fog_color[1] = fog_color[1];
     App->editor->fog_color[2] = fog_color[2];
     App->editor->fog_color[3] = fog_color[3];
+
+
+    json_serialize_to_file_pretty(scene_settings, "Settings/scene_settings.json");
 
     json_value_free(schema);
     json_value_free(scene_settings);

@@ -83,16 +83,16 @@ uint ModuleFileSystem::FileToBuffer(const char* filePath, char** fileBuffer)cons
 	return ret;
 }
 
-uint ModuleFileSystem::ImportFileToAssets(const char* fileName) {
+uint ModuleFileSystem::ImportFileToAssets(const char* filePath) {
 
 	uint size = 0;
 
-	std::string assetsDir = "Assets/";
-	std::string libDir = "Library/";
+	std::string assetsDir = ASSETS_PATH;
+	//std::string libDir = "Library/";
 	
 
 	std::FILE* file;
-	fopen_s(&file, fileName, "rb");
+	fopen_s(&file, filePath, "rb");
 
 	if (file != nullptr)
 	{
@@ -106,28 +106,28 @@ uint ModuleFileSystem::ImportFileToAssets(const char* fileName) {
 
 		if (size > 0)
 		{
-			std::string dropped_filedir_s = fileName;
+			std::string dropped_filedir_s = filePath;
 			std::string fileName_s = dropped_filedir_s.substr(dropped_filedir_s.find_last_of('\\') + 1);
 			std::string totalAssetsDir = assetsDir + fileName_s;
-			std::string totalLibDir = libDir + fileName_s;
+			//std::string totalLibDir = libDir + fileName_s;
 			
 			PHYSFS_file* physfs_assets_file = nullptr;
 			physfs_assets_file = PHYSFS_openWrite(totalAssetsDir.c_str());
 			if (physfs_assets_file != nullptr) {
 
-				uint a = PHYSFS_writeBytes(physfs_assets_file, (const void*)buffer, size);
+				PHYSFS_writeBytes(physfs_assets_file, (const void*)buffer, size);
 				PHYSFS_close(physfs_assets_file);
 
 			}
 
-			PHYSFS_file* physfs_library_file = nullptr;
+			/*PHYSFS_file* physfs_library_file = nullptr;
 			physfs_library_file = PHYSFS_openWrite(totalLibDir.c_str());
 			if (physfs_library_file != nullptr) {
 
 				uint b = PHYSFS_writeBytes(physfs_library_file, (const void*)buffer, size);
 				PHYSFS_close(physfs_library_file);
 
-			}
+			}*/
 			
 
 
@@ -145,9 +145,19 @@ uint ModuleFileSystem::ImportFileToAssets(const char* fileName) {
 	return size;
 }
 
-uint ModuleFileSystem::SaveFile(const char* filePath, char* buffer, uint size) {
+void ModuleFileSystem::SaveFile(const char* newFilePath, char* buffer, uint size) {
 
+	PHYSFS_file* physfs_lib_file = nullptr;
+	physfs_lib_file = PHYSFS_openWrite(newFilePath);
 
+	if (physfs_lib_file != nullptr) {
+
+		PHYSFS_writeBytes(physfs_lib_file, (const void*)buffer, size);
+		PHYSFS_close(physfs_lib_file);
+
+		
+
+	}
 
 }
 

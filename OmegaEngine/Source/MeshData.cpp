@@ -1,6 +1,6 @@
 #include "MeshData.h"
 
-MeshData::MeshData(const char* path) : Resource(path, Resource::Types::MESH)
+MeshData::MeshData(const char* name) : Resource(Resource::Types::MESH)
 {
 	id_indices = 0; // index in VRAM
 	num_indices = 0;
@@ -21,6 +21,8 @@ MeshData::MeshData(const char* path) : Resource(path, Resource::Types::MESH)
 	material = nullptr;
 
 	hasLoadedBuffers = false;
+
+	assetName = name;
 }
 
 MeshData::~MeshData()

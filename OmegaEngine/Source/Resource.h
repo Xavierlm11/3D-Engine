@@ -21,6 +21,11 @@ public:
 		assetName = fileName_s;
 		resourceType = type;
 		assetID = random.Int();
+	}	
+
+	Resource(Types type) {
+		resourceType = type;
+		assetID = random.Int();
 	}
 
 	~Resource() {};
