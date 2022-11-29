@@ -115,18 +115,23 @@ uint ModuleFileSystem::ImportFileToAssets(const char* fileName) {
 			physfs_assets_file = PHYSFS_openWrite(totalAssetsDir.c_str());
 			if (physfs_assets_file != nullptr) {
 
+				
+				
 				uint a = PHYSFS_writeBytes(physfs_assets_file, (const void*)buffer, size);
-				PHYSFS_close(physfs_assets_file);
 
+				PHYSFS_close(physfs_assets_file);
+				
 			}
 
 			PHYSFS_file* physfs_library_file = nullptr;
 			physfs_library_file = PHYSFS_openWrite(totalLibDir.c_str());
 			if (physfs_library_file != nullptr) {
 
-				uint b = PHYSFS_writeBytes(physfs_library_file, (const void*)buffer, size);
-				PHYSFS_close(physfs_library_file);
+				
 
+				uint b = PHYSFS_writeBytes(physfs_library_file, (const void*)buffer, size);
+
+				PHYSFS_close(physfs_library_file);
 			}
 			
 
