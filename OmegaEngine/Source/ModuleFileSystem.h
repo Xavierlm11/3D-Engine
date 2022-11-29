@@ -13,10 +13,6 @@ public:
 
 	uint FileToBuffer(const char* filePath, char** fileBuffer)const;
 	uint ImportFileToAssets(const char* fileName);
-	
-	/*bool Start();
-	update_status Update(float dt);
-	bool CleanUp();
+	uint SaveFile(const char* filePath, char* buffer, uint size);
 
-	uint FileToBuffer(const char* file, char** buffer);*/
 };

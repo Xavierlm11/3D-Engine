@@ -119,10 +119,12 @@ update_status ModuleInput::PreUpdate(float dt)
 				std::string fileName_s = dropped_filedir_s.substr(dropped_filedir_s.find_last_of('\\') + 1);
 				std::string extension_s = fileName_s.substr(fileName_s.find_last_of('.') + 1);
 				std::string assetsPath_s = "Assets/";
+				
 				const char* fileName = fileName_s.c_str();
 
-				std::string finalPath = assetsPath_s + fileName;
-				LOG("PATH: %s", finalPath.c_str());
+				std::string finalAssetPath = assetsPath_s + fileName;
+				
+				LOG("PATH: %s", finalAssetPath.c_str());
 				
 				if (extension_s == "png") {
 					if (App->editor->GOIndex > -1 && App->editor->GOIndex < App->scene->ListGO.size()) {
@@ -144,6 +146,13 @@ update_status ModuleInput::PreUpdate(float dt)
 					App->imp->LoadFile(e.drop.file, Resource::Types::MODEL);
 					App->fileSystem->ImportFileToAssets(dropped_filedir_s.c_str());
 
+					std::string libraryPath_s = "Library/";
+					std::string finalLibraryPath = libraryPath_s + fileName;
+
+					uint size = 0;
+					char* buffer;
+					//MeshImporter::Save();
+					App->fileSystem->SaveFile(finalLibraryPath, buffer, size);
 				}
 
 

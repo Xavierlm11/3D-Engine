@@ -50,7 +50,7 @@ void MeshImporter::Import(const aiMesh* mesh, MeshData* meshData) {
 
 }
 
-Uint64 MeshImporter::Save(const MeshData* mesh, char** buffer) {
+char* MeshImporter::Save(const MeshData* mesh, char** buffer) {
 	// amount of indices / vertices / normals / texture_coords
 	uint ranges[4] = { mesh->num_indices, mesh->num_vertices, mesh->num_normals, mesh->num_textureCoords};
 	
@@ -83,7 +83,7 @@ Uint64 MeshImporter::Save(const MeshData* mesh, char** buffer) {
 	memcpy(cursor, mesh->textureCoords, bytes);
 	cursor += bytes;
 
-	return 0;
+	return fileBuffer;
 }
 
 void MeshImporter::Load(const char* buffer, MeshData* meshData) {

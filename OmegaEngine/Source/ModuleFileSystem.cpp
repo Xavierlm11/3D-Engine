@@ -145,4 +145,9 @@ uint ModuleFileSystem::ImportFileToAssets(const char* fileName) {
 	return size;
 }
 
+uint ModuleFileSystem::SaveFile(const char* filePath, char* buffer, uint size) {
+
+
+
+}
 
