@@ -167,5 +167,6 @@ private:
 
 	float AspRatioScene;
 
+	GLfloat* cam;
 	
 };

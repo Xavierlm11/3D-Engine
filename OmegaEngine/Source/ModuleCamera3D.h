@@ -18,6 +18,7 @@ public:
 	bool CleanUp();
 
 	void UpdateFrustum();
+	GLfloat* GetGlLoadMat();
 	void Rotate();
 	void Look(const vec3 &Position, const vec3 &Reference, bool RotateAroundReference = false);
 	void LookAt(const vec3 &Spot);
@@ -39,7 +40,7 @@ public:
 	vec3 X, Y, Z, Position, Reference;
 	Color background;
 
-	float camFOV = 60.0f, aspRatio;
+	float camFOV = 60.0f, aspRatio = 1.6f;
 	
 private:
 	mat4x4 ViewMatrix, ViewMatrixInverse;

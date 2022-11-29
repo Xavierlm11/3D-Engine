@@ -564,7 +564,7 @@ void ModuleEditor::DrawSceneViewport()
 			App->camera->UpdateFrustum();
 
 		}
-		ImGui::Image((ImTextureID)App->renderer3D->GetBuffCam(),ViewSize,  ImVec2(0, 1), ImVec2(1, 0));
+		ImGui::Image((ImTextureID)App->camera->GetGlLoadMat(), ViewSize, ImVec2(0, 1), ImVec2(1, 0));
 	}
 	ImGui::End();
 }

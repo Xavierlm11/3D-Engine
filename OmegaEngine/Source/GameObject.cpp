@@ -189,6 +189,7 @@ void GameObject::Update(float dt)
 		}
 
 	}
+
 }
 
 void GameObject::Editor()

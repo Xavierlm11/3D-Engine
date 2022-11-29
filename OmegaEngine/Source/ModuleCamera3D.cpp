@@ -70,9 +70,16 @@ void ModuleCamera3D::UpdateFrustum() {
 	cameraFrustum.horizontalFov = 2.0f * atanf(tanf(cameraFrustum.verticalFov / 2.0f) * 1.6f);*/
 	glMatrixMode(GL_PROJECTION);
 	glLoadMatrixf((GLfloat*)App->camera->GetProjectionMatrixOpenGL());
+	GetGlLoadMat();
 
-	CalculateViewMatrixOpenGL();
-	CalculateProjectionMatrixOpenGL();
+	//CalculateViewMatrixOpenGL();
+	//CalculateProjectionMatrixOpenGL();
+}
+
+GLfloat* ModuleCamera3D::GetGlLoadMat()
+{
+
+	return (GLfloat*)App->camera->GetProjectionMatrixOpenGL();
 }
 
 void ModuleCamera3D::Rotate() {
