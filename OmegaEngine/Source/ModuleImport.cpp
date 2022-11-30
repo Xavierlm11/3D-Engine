@@ -142,6 +142,9 @@ void ModuleImport::ImportModelResources(const aiScene* scene, ModelData* model) 
 	//std::vector<MeshData*> meshDatasVec;
 	//std::vector<Uint64> materialsVec;
 
+	//uint size = 0;
+	//char* buffer = nullptr;
+
 	if (scene->HasMeshes())
 	{
 		for (unsigned int i = 0; i < scene->mNumMeshes; i++)
@@ -154,7 +157,8 @@ void ModuleImport::ImportModelResources(const aiScene* scene, ModelData* model) 
 			//Resource* meshResource = new Resource(model->assetName.c_str(), Resource::Types::MESH);
 			
 			MeshImporter::Import(mesh, meshData);
-
+			
+			//buffer = MeshImporter::Save(meshData, size);
 			//////char* fileBuffer = nullptr;
 			//////uint size = 0;
 			//////MeshImporter::Save(meshData, size);// &fileBuffer);
@@ -185,7 +189,7 @@ void ModuleImport::ImportModelResources(const aiScene* scene, ModelData* model) 
 
 				aiString path;
 				material->GetTexture(aiTextureType_DIFFUSE, 0, &path);
-
+				
 				const char* filePath = path.C_Str();
 				LOG("PATH: %s", filePath);
 				
@@ -217,6 +221,7 @@ void ModuleImport::ImportModelResources(const aiScene* scene, ModelData* model) 
 					LOG("PATH: %s", finalPath.c_str());
 
 					for (unsigned int k = 0; k < model->materialDatas.size(); k++) {
+
 						//If material of mesh is the same as one of the model materials list
 						if (finalPath == model->materialDatas[k]->assetPath) {
 

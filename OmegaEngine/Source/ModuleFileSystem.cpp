@@ -7,7 +7,7 @@
 #include <iostream>
 #include "SDL/include/SDL_filesystem.h"
 
-ModuleFileSystem::ModuleFileSystem(Application * app, bool start_enabled) : Module(app, start_enabled)
+ModuleFileSystem::ModuleFileSystem(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
 
 }
@@ -43,7 +43,7 @@ bool ModuleFileSystem::Init()
 }
 
 
-uint ModuleFileSystem::FileToBuffer(const char* filePath, char** fileBuffer)const {
+uint ModuleFileSystem::FileToBuffer(const char* filePath, char** fileBuffer) const {
 
 	uint ret = 0;
 
@@ -70,7 +70,7 @@ uint ModuleFileSystem::FileToBuffer(const char* filePath, char** fileBuffer)cons
 			if (readData == size)
 			{
 				ret = readData;
-				(*fileBuffer)[size] = '\0';
+				*fileBuffer[size] = '\0';
 				
 			}
 		}

@@ -1313,9 +1313,13 @@ void ModuleEditor::GOList()
 								
 								
 								go->CreateComp(Component::Types::MESH);
+								//MeshImporter::Load();
+								char* fileBuffer = nullptr;
+								uint bufferSize = App->fileSystem->FileToBuffer(payload_res->assetName.c_str(), &fileBuffer);
+								MeshImpo
 								go->GOmesh->meshData = payload_model->meshDatas[0];
 								go->GOmesh->meshData->LoadBuffers();
-
+								
 								go->CreateComp(Component::Types::MATERIAL);
 								if (payload_model->meshDatas[0]->material != nullptr) {
 									go->GOmat->materialData = payload_model->meshDatas[0]->material;
