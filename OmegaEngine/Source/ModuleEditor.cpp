@@ -1316,8 +1316,10 @@ void ModuleEditor::GOList()
 								//MeshImporter::Load();
 								char* fileBuffer = nullptr;
 								uint bufferSize = App->fileSystem->FileToBuffer(payload_res->assetName.c_str(), &fileBuffer);
-								MeshImpo
-								go->GOmesh->meshData = payload_model->meshDatas[0];
+								MeshData* new_mesh_data = new MeshData(payload_res->assetName.c_str());
+								MeshImporter::Load(fileBuffer, new_mesh_data);
+								//go->GOmesh->meshData = payload_model->meshDatas[0];
+								go->GOmesh->meshData = new_mesh_data;
 								go->GOmesh->meshData->LoadBuffers();
 								
 								go->CreateComp(Component::Types::MATERIAL);
