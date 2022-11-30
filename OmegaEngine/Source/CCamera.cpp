@@ -77,3 +77,70 @@ void CCamera::NewFrBuffer()
 
 	glBindTexture(GL_TEXTURE_2D, 0);*/
 }
+
+void CCamera::UpdateFrustum()
+{
+
+}
+
+GLfloat* CCamera::GetGlLoadMat()
+{
+	return (GLfloat*)GetProjectionMatrixOpenGL();
+}
+
+void CCamera::Rotate()
+{
+
+}
+
+void CCamera::Look(const vec3& _Position, const vec3& _Reference, bool _RotateAroundReference)
+{
+	Position = _Position;
+	Reference = _Reference;
+	LookAt(Reference);
+}
+
+void CCamera::LookAt(const vec3& Spot)
+{
+	Reference = Spot;
+	cameraFrustum.front = (Reference - cameraFrustum.pos).Normalized();
+}
+
+void CCamera::Move(const vec3& Movement)
+{
+}
+
+void CCamera::Zoom()
+{
+}
+
+void CCamera::Orbit(float3 target)
+{
+}
+
+float* CCamera::GetViewMatrix()
+{
+	return nullptr;
+}
+
+float4x4* CCamera::GetViewMatrixOpenGL()
+{
+	return nullptr;
+}
+
+float4x4* CCamera::GetProjectionMatrixOpenGL()
+{
+	return nullptr;
+}
+
+void CCamera::CalculateViewMatrix()
+{
+}
+
+void CCamera::CalculateViewMatrixOpenGL()
+{
+}
+
+void CCamera::CalculateProjectionMatrixOpenGL()
+{
+}
