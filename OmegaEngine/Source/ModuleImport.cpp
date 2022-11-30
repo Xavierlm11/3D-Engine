@@ -16,7 +16,9 @@
 
 #include <iostream>
 
-
+#include "CTransform.h"
+//#include "glmath.h"
+#include "MathGeoLib/include/MathGeoLib.h"
 ModuleImport::ModuleImport(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
 
@@ -178,6 +180,19 @@ void ModuleImport::GetMeshDatasObj(const aiScene* scene ,const char* name) {
 			dobj->GOmesh->CompMesh = GetMeshDataObj(dobj->GOmesh->CompMesh, scene->mMeshes[i], scene, dobj);
 			dobj->GOmesh->CompMesh->LoadBuffers();
 
+			aiVector3D translation, scaling;
+			aiQuaternion rotation;
+			//rotation.GetEuler().
+			scene->mRootNode->mTransformation.Decompose(scaling, rotation, translation);
+			Quat a;
+			a.x = rotation.x;
+			a.y = rotation.y;
+			a.z = rotation.z;
+			a.w = rotation.w;
+			
+			dobj->GOtrans->SetPos({ translation.x, translation.y, translation.z });
+			dobj->GOtrans->SetRot({ a.ToEulerXYZ().x, a.ToEulerXYZ().y, a.ToEulerXYZ().z });
+			dobj->GOtrans->SetScale({ scaling.x, scaling.y, scaling.z });
 
 			//meshes->push_back(newMesh);
 

@@ -102,8 +102,8 @@ void CCamera::Look(const vec3& _Position, const vec3& _Reference, bool _RotateAr
 
 void CCamera::LookAt(const vec3& Spot)
 {
-	Reference = Spot;
-	cameraFrustum.front = (Reference - cameraFrustum.pos).Normalized();
+	//Reference = Spot;
+	//cameraFrustum.front = (Reference - cameraFrustum.pos).Normalized();
 }
 
 void CCamera::Move(const vec3& Movement)
