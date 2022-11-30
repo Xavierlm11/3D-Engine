@@ -11,8 +11,8 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="CCamera.cpp" />
     <ClCompile Include="Source\Application.cpp" />
+    <ClCompile Include="Source\CCamera.cpp" />
     <ClCompile Include="Source\CMaterial.cpp" />
     <ClCompile Include="Source\CMeshes.cpp" />
     <ClCompile Include="Source\Color.cpp" />
@@ -77,8 +77,8 @@
     <ClCompile Include="Source\Timer.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="CCamera.h" />
     <ClInclude Include="Source\Application.h" />
+    <ClInclude Include="Source\CCamera.h" />
     <ClInclude Include="Source\CMaterial.h" />
     <ClInclude Include="Source\CMeshes.h" />
     <ClInclude Include="Source\Color.h" />

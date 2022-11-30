@@ -23,7 +23,7 @@
 #include <string>
 #include <xstring>
 
-
+#include "CCamera.h"
 
 
 ModuleEditor::ModuleEditor(Application* app, bool start_enabled) : Module(app, start_enabled)
@@ -560,11 +560,11 @@ void ModuleEditor::DrawSceneViewport()
 		if ((ViewSize.x/ViewSize.y)!=AspRatioScene)
 		{
 			AspRatioScene = (float)(ViewSize.x / ViewSize.y);
-			App->camera->aspRatio = AspRatioScene;
-			App->camera->UpdateFrustum();
+			App->camera->ScnCam->aspRatio = AspRatioScene;
+			//App->camera->UpdateFrustum();
 
 		}
-		ImGui::Image((ImTextureID)App->camera->GetGlLoadMat(), ViewSize, ImVec2(0, 1), ImVec2(1, 0));
+		ImGui::Image((ImTextureID)App->camera->ScnCam->CCBuffer, ViewSize, ImVec2(0, 1), ImVec2(1, 0));
 	}
 	ImGui::End();
 }

@@ -1,7 +1,7 @@
 #include "Globals.h"
 #include "Application.h"
 #include "ModuleCamera3D.h"
-
+#include "CCamera.h"
 ModuleCamera3D::ModuleCamera3D(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
 	//CalculateViewMatrixOpenGL();
@@ -39,6 +39,9 @@ bool ModuleCamera3D::Start()
 	LOG("Setting up the camera");
 	bool ret = true;
 	App->camera->LookAt(vec3(0, 0, 0));
+
+	ScnCam = new CCamera(App->scene->RootParent);
+	ScnCam->cameraFrustum.pos = float3(0, 0, -10);
 	return ret;
 }
 
@@ -46,7 +49,8 @@ bool ModuleCamera3D::Start()
 bool ModuleCamera3D::CleanUp()
 {
 	LOG("Cleaning camera");
-
+	ScnCam = nullptr;
+	delete ScnCam;
 	return true;
 }
 

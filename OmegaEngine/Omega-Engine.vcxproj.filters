@@ -237,7 +237,7 @@
     <ClCompile Include="Source\Timer.cpp">
       <Filter>Files\Tools</Filter>
     </ClCompile>
-    <ClCompile Include="CCamera.cpp">
+    <ClCompile Include="Source\CCamera.cpp">
       <Filter>Files\GameObjects\Propierties</Filter>
     </ClCompile>
   </ItemGroup>
@@ -524,7 +524,7 @@
     <ClInclude Include="Source\MaterialImporter.h">
       <Filter>Files\Importers</Filter>
     </ClInclude>
-    <ClInclude Include="CCamera.h">
+    <ClInclude Include="Source\CCamera.h">
       <Filter>Files\GameObjects\Propierties</Filter>
     </ClInclude>
   </ItemGroup>

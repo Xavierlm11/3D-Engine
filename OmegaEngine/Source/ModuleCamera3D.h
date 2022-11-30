@@ -6,6 +6,9 @@
 #include"MathGeoLib/include/Math/float4x4.h"
 #include "MathGeoLib/include/Geometry/Frustum.h"
 
+//#include "CCamera.h"
+
+class CCamera;
 
 class ModuleCamera3D : public Module
 {
@@ -41,6 +44,8 @@ public:
 	Color background;
 
 	float camFOV = 60.0f, aspRatio = 1.6f;
+
+	CCamera* ScnCam ;
 	
 private:
 	mat4x4 ViewMatrix, ViewMatrixInverse;
@@ -51,4 +56,6 @@ private:
 	float nextRot = 0;
 
 	bool isMovingAround = false;
+
+	
 };
