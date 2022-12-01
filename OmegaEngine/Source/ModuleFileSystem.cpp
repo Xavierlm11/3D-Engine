@@ -49,6 +49,11 @@ bool ModuleFileSystem::Init()
 		LOG("Error adding the path: %s\n", PHYSFS_getLastError());
 	}
 
+	if (PHYSFS_mount("Library/Materials", nullptr, 1) == 0)
+	{
+		LOG("Error adding the path: %s\n", PHYSFS_getLastError());
+	}
+
 	return true;
 }
 
@@ -56,15 +61,6 @@ bool ModuleFileSystem::Init()
 uint ModuleFileSystem::FileToBuffer(const char* filePath, char** fileBuffer) const {
 
 	uint ret = 0;
-
-
-	/*std::string filedir_s = filePath;
-	std::string fileName_s = filedir_s.substr(filedir_s.find_last_of('\\') + 1);
-	std::string extension_s = fileName_s.substr(fileName_s.find_last_of('.') + 1);
-
-	std::string assetsPath_s = "Assets/";
-	const char* fileName = fileName_s.c_str();
-	std::string finalPath = assetsPath_s + fileName;*/
 
 	PHYSFS_file* pysfsFile = PHYSFS_openRead(filePath);
 
@@ -88,16 +84,14 @@ uint ModuleFileSystem::FileToBuffer(const char* filePath, char** fileBuffer) con
 		PHYSFS_close(pysfsFile);
 	}
 
-
-
 	return ret;
 }
 
-uint ModuleFileSystem::ImportFileToAssets(const char* filePath) {
+uint ModuleFileSystem::ImportFileToDir(const char* filePath, const char* newPath) {
 
 	uint size = 0;
 
-	std::string assetsDir = ASSETS_PATH;
+	std::string assetsDir = newPath;
 	//std::string libDir = "Library/";
 	
 
@@ -119,7 +113,6 @@ uint ModuleFileSystem::ImportFileToAssets(const char* filePath) {
 			std::string dropped_filedir_s = filePath;
 			std::string fileName_s = dropped_filedir_s.substr(dropped_filedir_s.find_last_of('\\') + 1);
 			std::string totalAssetsDir = assetsDir + fileName_s;
-			//std::string totalLibDir = libDir + fileName_s;
 			
 			PHYSFS_file* physfs_assets_file = nullptr;
 			physfs_assets_file = PHYSFS_openWrite(totalAssetsDir.c_str());
@@ -129,16 +122,6 @@ uint ModuleFileSystem::ImportFileToAssets(const char* filePath) {
 				PHYSFS_close(physfs_assets_file);
 
 			}
-
-			/*PHYSFS_file* physfs_library_file = nullptr;
-			physfs_library_file = PHYSFS_openWrite(totalLibDir.c_str());
-			if (physfs_library_file != nullptr) {
-
-				uint b = PHYSFS_writeBytes(physfs_library_file, (const void*)buffer, size);
-				PHYSFS_close(physfs_library_file);
-
-			}*/
-			
 
 
 			if (buffer != nullptr) {

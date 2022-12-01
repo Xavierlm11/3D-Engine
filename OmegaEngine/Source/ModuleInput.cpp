@@ -4,6 +4,7 @@
 #include "ModuleImport.h"
 #include "MeshImporter.h"
 #include "ModelImporter.h"
+#include "MaterialImporter.h"
 
 #include <iostream>
 
@@ -129,24 +130,33 @@ update_status ModuleInput::PreUpdate(float dt)
 				LOG("PATH: %s", finalAssetPath.c_str());
 				
 				if (extension_s == "png") {
-					if (App->editor->GOIndex > -1 && App->editor->GOIndex < App->scene->ListGO.size()) {
-						if (App->scene->ListGO[App->editor->GOIndex] != nullptr) {
-							//App->scene->ListGO[App->editor->GOIndex]->GOmat->materialData->texture_id = App->imp->ImportTexture(finalPath.c_str());
-							
-						}
-					}
-					App->imp->LoadFile(e.drop.file, Resource::Types::MATERIAL);
 					
+					MaterialData* new_material_data = (MaterialData*)App->imp->LoadFile(e.drop.file, Resource::Types::MATERIAL);
+					App->fileSystem->ImportFileToDir(dropped_filedir_s.c_str(), assetsPath_s.c_str());
+
+					std::string libraryPath_s = LIB_MATERIAL_PATH;
+
+					char* buffer = nullptr;
+
+					uint bufferSize = App->fileSystem->FileToBuffer(fileName_s.c_str(), &buffer);
+					
+					MaterialImporter::LoadTextureLump(buffer, bufferSize);
+					bufferSize = MaterialImporter::Save(&buffer);
+
+					std::string new_name = std::to_string(new_material_data->assetID) + ".chad";
+					std::string finalLibraryPath = libraryPath_s + new_name;
+					App->fileSystem->SaveFile(finalLibraryPath.c_str(), buffer, bufferSize);
+
+					if (buffer != nullptr) {
+						delete[] buffer;
+						buffer = nullptr;
+					}
+
 				}
 				else if (extension_s == "fbx")
 				{
-					//App->scene->LoadCustom(dropped_filedir.c_str(), &App->scene->models[0]->meshes);
-					
-					/*if()
-					App->scene->LoadCustom(dropped_filedir.c_str(), &App->scene);*/
-					//App->scene->LoadCustomObj(dropped_filedir_s.c_str(),fileName_s.c_str());
-					ModelData* new_model_data = App->imp->LoadFile(e.drop.file, Resource::Types::MODEL);
-					App->fileSystem->ImportFileToAssets(dropped_filedir_s.c_str());
+					ModelData* new_model_data = (ModelData*)App->imp->LoadFile(e.drop.file, Resource::Types::MODEL);
+					App->fileSystem->ImportFileToDir(dropped_filedir_s.c_str(), assetsPath_s.c_str());
 
 					std::string libraryPath_s = LIB_MESH_PATH;
 					
@@ -156,7 +166,7 @@ update_status ModuleInput::PreUpdate(float dt)
 					buffer = ModelImporter::Save(new_model_data, size);
 
 
-					std::string new_name = new_model_data->assetName + ".chad";
+					std::string new_name = std::to_string(new_model_data->assetID) + ".chad";
 					std::string finalLibraryPath = libraryPath_s + new_name;
 					App->fileSystem->SaveFile(finalLibraryPath.c_str(), buffer, size);
 

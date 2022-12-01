@@ -29,7 +29,7 @@ public:
 	bool CleanUp();
 
 	void GetFile(const char* path);
-	ModelData* LoadFile(const char* path, Resource::Types type);
+	Resource* LoadFile(const char* path, Resource::Types type);
 	void GetMeshDatas(const aiScene* scene, std::vector<MeshData*>* meshes);
 	void GetObjectResources(const aiScene* scene, const char* name);
 	//MeshData* GetMeshData(MeshData * meshData, aiMesh* mesh, const aiScene * scene);

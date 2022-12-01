@@ -155,8 +155,7 @@ void MeshData::DrawMesh(GLuint textureID, mat4x4 mat) {
 			glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 		//}
 
-		//LOG("Mesh Loaded! Num indices: %i. Num vertices: %i. ID Indices: %i. ID Vertices: %i.", num_indices, num_vertices, id_indices, id_vertices);
-
+		
 	}
 }
 

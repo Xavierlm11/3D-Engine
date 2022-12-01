@@ -16,6 +16,7 @@
 
 #include <iostream>
 #include "MeshImporter.h"
+#include "MaterialImporter.h"
 
 
 ModuleImport::ModuleImport(Application* app, bool start_enabled) : Module(app, start_enabled)
@@ -246,24 +247,59 @@ void ModuleImport::ImportModelResources(const aiScene* scene, ModelData* model) 
 	}
 }
 
-ModelData* ModuleImport::LoadFile(const char* file_path, Resource::Types type) {
+//void ModuleImport::ImportModelResources(const aiScene* scene, ModelData* model) {
+//
+//	ILuint size;
+//	ILubyte* data;
+//
+//	ilSetInteger(IL_DXTC_FORMAT, IL_DXT5); // To pick a specific DXT compression use
+//	size = ilSaveL(IL_DDS, nullptr, 0); // Get the size of the data buffer
+//
+//	if (size > 0) {
+//		data = new ILubyte[size]; // allocate data buffer
+//		if (ilSaveL(IL_DDS, data, size) > 0) // Save to buffer with the ilSaveIL function
+//			*fileBuffer = (char*)data
+//			RELEASE_ARRAY(data);
+//	}
+//		
+//}
+
+Resource* ModuleImport::LoadFile(const char* file_path, Resource::Types type) {
 
 	//Resource* new_res = new Resource(file_path, type);
 	
+	const aiScene* new_scene = aiImportFile(file_path, aiProcessPreset_TargetRealtime_MaxQuality);
 
-	if (type==Resource::Types::MODEL) {
-		const aiScene* new_scene = aiImportFile(file_path, aiProcessPreset_TargetRealtime_MaxQuality);
+	switch(type) {
+		case Resource::Types::MODEL:
+		{
+			ModelData* new_model = new ModelData(file_path);
+			ImportModelResources(new_scene, new_model);
+			App->scene->resourceList.push_back(new_model);
 
-		ModelData* new_model = new ModelData(file_path);
-		ImportModelResources(new_scene, new_model);
-		//App->scene->modelList.push_back(new_model);
-		App->scene->resourceList.push_back(new_model);
+			return new_model;
+			break;
+		}
+		case Resource::Types::MATERIAL:
+		{
+			MaterialData* new_material = new MaterialData(file_path);
 
-		
-		ReleaseFile(new_scene);
+			App->scene->resourceList.push_back(new_material);
 
-		return new_model;
+			return new_material;
+			break;
+		}
+		default: 
+		{
+			ReleaseFile(new_scene);
+			break;
+		}
+			
+			
 	}
+	
+		
+	
 
 	
 	

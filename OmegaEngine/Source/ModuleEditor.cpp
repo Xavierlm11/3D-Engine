@@ -25,6 +25,7 @@
 
 #include "MeshImporter.h"
 #include "ModuleFileSystem.h"
+#include "MaterialImporter.h"
 
 
 ModuleEditor::ModuleEditor(Application* app, bool start_enabled) : Module(app, start_enabled)
@@ -447,7 +448,7 @@ void ModuleEditor::AssetsWindow() {
 			ImGui::PushID(n);
 			if ((n % 3) != 0)
 				ImGui::SameLine();
-			ImGui::Button(App->scene->resourceList[n]->assetName.c_str(), ImVec2(110, 110));
+			ImGui::Button(App->scene->resourceList[n]->fileName.c_str(), ImVec2(110, 110));
 
 			// Our buttons are both drag sources and drag targets here!
 			if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_None))
@@ -1304,65 +1305,76 @@ void ModuleEditor::GOList()
 						//	/*IM_ASSERT(payload->DataSize == sizeof(int));
 						//	int payload_n = *(const int*)payload->Data;*/
 						int resource_ind = *(const int*)payload->Data;
-						Resource *payload_res = App->scene->resourceList[resource_ind];
-						if (payload_res->resourceType==Resource::Types::MODEL) {
-							ModelData * payload_model = (ModelData*)payload_res;
-							if (payload_model->meshDatas.size()==1) {
-								LOG("Dropped %s in scene", payload_res->assetName.c_str());
-								GameObject* go = App->scene->CreateGO(payload_res->assetName.c_str(), gameObjectsShowing[i]);
-								
-								
-								go->CreateComp(Component::Types::MESH);
-								//MeshImporter::Load();
-								char* fileBuffer = nullptr;
-								std::string libName = payload_res->assetName + ".chad";
-								uint bufferSize = App->fileSystem->FileToBuffer(libName.c_str(), &fileBuffer);//payload_res->assetName.c_str(), &fileBuffer);
-								MeshData* new_mesh_data = new MeshData(payload_res->assetName.c_str());
-								MeshImporter::Load(fileBuffer, new_mesh_data);
-								//go->GOmesh->meshData = payload_model->meshDatas[0];
-								go->GOmesh->meshData = new_mesh_data;
-								go->GOmesh->meshData->LoadBuffers();
-								
-								go->CreateComp(Component::Types::MATERIAL);
-								if (payload_model->meshDatas[0]->material != nullptr) {
-									go->GOmat->materialData = payload_model->meshDatas[0]->material;
+						Resource* payload_res = App->scene->resourceList[resource_ind];
+						switch (payload_res->resourceType) {
+						case Resource::Types::MODEL:
+						{
+							{
+								ModelData* payload_model = (ModelData*)payload_res;
+								if (payload_model->meshDatas.size() == 1) {
+									LOG("Dropped %s in scene", payload_res->assetName.c_str());
+									GameObject* go = App->scene->CreateGO(payload_res->assetName.c_str(), gameObjectsShowing[i]);
+
+
+									go->CreateComp(Component::Types::MESH);
+
+									char* fileBuffer = nullptr;
+									std::string libName = std::to_string(payload_res->assetID) + ".chad";
+									uint bufferSize = App->fileSystem->FileToBuffer(libName.c_str(), &fileBuffer);
+									MeshData* new_mesh_data = new MeshData(payload_res->assetName.c_str());
+									MeshImporter::Load(fileBuffer, new_mesh_data);
+
+									go->GOmesh->meshData = new_mesh_data;
+									go->GOmesh->meshData->LoadBuffers();
+
+									go->CreateComp(Component::Types::MATERIAL);
+									if (payload_model->meshDatas[0]->material != nullptr) {
+										go->GOmat->materialData = payload_model->meshDatas[0]->material;
+									}
+
 								}
-								
-								
-									/////////////////go->GOmesh->meshData = App->scene->modelList[resource_ind]->meshDatas[0];
-								//char* fileBuffer = nullptr;
-								//uint bufferSize = App->fileSystem->FileToBuffer(payload_res->assetName.c_str(), &fileBuffer);
-								//MeshImporter::Load(fileBuffer, go->GOmesh->meshData);
+								else {
+
+									LOG("Dropped %s in scene", payload_res->assetName.c_str());
+									GameObject* go = App->scene->CreateGO(payload_res->assetName.c_str(), gameObjectsShowing[i]);
+
+									for (int ind = 0; ind < payload_model->meshDatas.size(); ind++) {
+										GameObject* goChild = App->scene->CreateGO(payload_res->assetName.c_str(), go);
+										goChild->CreateComp(Component::Types::MESH);
+										goChild->GOmesh->meshData = payload_model->meshDatas[ind];
+										goChild->GOmesh->meshData->LoadBuffers();
+
+										goChild->CreateComp(Component::Types::MATERIAL);
+
+									}
+								}
+
+								break;
 							}
-							else {
-								LOG("Dropped %s in scene", payload_res->assetName.c_str());
-								GameObject* go = App->scene->CreateGO(payload_res->assetName.c_str(), gameObjectsShowing[i]);
+						case Resource::Types::MATERIAL:
+							{
+								if (App->editor->GOIndex > -1 && App->editor->GOIndex < App->scene->ListGO.size()) {
 
-								for (int ind = 0; ind < payload_model->meshDatas.size(); ind++) {
-									GameObject* goChild = App->scene->CreateGO(payload_res->assetName.c_str(), go);
-									goChild->CreateComp(Component::Types::MESH);
-									goChild->GOmesh->meshData = payload_model->meshDatas[ind];
-									goChild->GOmesh->meshData->LoadBuffers();
+									if (App->scene->ListGO[App->editor->GOIndex] != nullptr) {
+										//App->scene->ListGO[App->editor->GOIndex]->GOmat->materialData->texture_id = App->imp->ImportTexture(finalPath.c_str());
 
-									goChild->CreateComp(Component::Types::MATERIAL);
-									
+									}
 								}
-								
-
+								break;
 							}
 							
 						}
-						
+
 						//for (int ind = 0; ind < App->scene->ListGO.size(); ind++) {
 						//	if (App->scene->ListGO[ind] == gameObjectsShowing[k]) {
 						//		GOIndex = ind;
 						//	}
 						//}
+						}
+						
 					}
-					//LOG("Droppesssssssd");
 					ImGui::EndDragDropTarget();
 				}
-
 
 				if (test_drag_and_drop && ImGui::BeginDragDropSource())
 				{
@@ -1373,6 +1385,7 @@ void ModuleEditor::GOList()
 				if (i == showingGOIndex) {
 					node_flags = base_flags;
 				}
+
 			}
 			else {
 				//Parents
@@ -1486,6 +1499,63 @@ void ModuleEditor::GOList()
 						}
 					}
 
+					if (ImGui::BeginDragDropTarget())
+					{
+						if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("LOAD_ASSET_INTO_SCENE"))
+						{
+							//	/*IM_ASSERT(payload->DataSize == sizeof(int));
+							//	int payload_n = *(const int*)payload->Data;*/
+							int resource_ind = *(const int*)payload->Data;
+							Resource* payload_res = App->scene->resourceList[resource_ind];
+							switch (payload_res->resourceType) {
+								case Resource::Types::MODEL:
+								{
+									break;
+								}
+								
+								case Resource::Types::MATERIAL: 
+								{
+
+
+									gameObjectsShowing[i]->CreateComp(Component::Types::MATERIAL);
+
+									char* fileBuffer = nullptr;
+									std::string libName = std::to_string(payload_res->assetID) + ".chad";
+
+
+
+									uint bufferSize = App->fileSystem->FileToBuffer(libName.c_str(), &fileBuffer);
+									MaterialData* new_material_data = new MaterialData(payload_res->assetName.c_str());
+									MaterialImporter::Load(fileBuffer, new_material_data, bufferSize);
+
+									gameObjectsShowing[i]->GOmat->materialData = new_material_data;
+
+
+
+									//std::string assetsPath = ASSETS_PATH;
+									//const char* fileName = payload_res->fileName.c_str();
+
+									//std::string finalPath = assetsPath + fileName;
+									//		//App->scene->ListGO[App->editor->GOIndex]->GOmat->materialData->texture_id = App->imp->ImportTexture(finalPath.c_str());
+									//gameObjectsShowing[i]->GOmat->materialData->texture_id = App->imp->ImportTexture(finalPath.c_str());
+
+
+									
+									break;
+								}
+							}
+
+							//for (int ind = 0; ind < App->scene->ListGO.size(); ind++) {
+							//	if (App->scene->ListGO[ind] == gameObjectsShowing[k]) {
+							//		GOIndex = ind;
+							//	}
+							//}
+							
+							
+						}
+						ImGui::EndDragDropTarget();
+					}
+
 					if (test_drag_and_drop && ImGui::BeginDragDropSource())
 					{
 						ImGui::SetDragDropPayload("_TREENODE", NULL, 0);
@@ -1499,8 +1569,10 @@ void ModuleEditor::GOList()
 
 
 			}
-			if (align_label_with_current_x_position)
-				ImGui::Indent(ImGui::GetTreeNodeToLabelSpacing());
+				if (align_label_with_current_x_position) {
+
+					ImGui::Indent(ImGui::GetTreeNodeToLabelSpacing());
+				}
 		}
 		if (GOIndex == 0) {
 			GOIndex = -1;

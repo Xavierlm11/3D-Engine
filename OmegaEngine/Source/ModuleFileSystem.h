@@ -16,7 +16,7 @@ public:
 	bool Init();
 
 	uint FileToBuffer(const char* filePath, char** fileBuffer)const;
-	uint ImportFileToAssets(const char* fileName);
+	uint ImportFileToDir(const char* fileName, const char* newPath);
 	void SaveFile(const char* filePath, char* buffer, uint size);
 
 };

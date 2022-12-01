@@ -2,10 +2,12 @@
 #include "CMaterial.h"
 
 #include "Assimp/include/scene.h"
+#include "MaterialData.h"
+
 
 namespace MaterialImporter
 {
-	void Import(const aiMaterial* material, MaterialData* ourMaterial);
-	Uint64  Save(const MaterialData* ourMaterial, char** fileBuffer);
-	void Load(const char* fileBuffer, MaterialData* ourMaterial);
+	void LoadTextureLump(const char* buffer, uint size);
+	Uint64  Save(char** fileBuffer);
+	void Load(const char* fileBuffer, MaterialData* ourMaterial, uint size);
 };
