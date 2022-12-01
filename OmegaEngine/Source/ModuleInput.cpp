@@ -156,8 +156,7 @@ update_status ModuleInput::PreUpdate(float dt)
 					buffer = ModelImporter::Save(new_model_data, size);
 
 
-					std::string new_name = new_model_data->assetName.substr(0, new_model_data->assetName.find_last_of('.') + 1);
-					new_name += "chad";
+					std::string new_name = new_model_data->assetName + ".chad";
 					std::string finalLibraryPath = libraryPath_s + new_name;
 					App->fileSystem->SaveFile(finalLibraryPath.c_str(), buffer, size);
 

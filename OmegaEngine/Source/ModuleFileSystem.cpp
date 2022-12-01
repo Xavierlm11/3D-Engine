@@ -36,7 +36,17 @@ bool ModuleFileSystem::Init()
 
 	if (PHYSFS_mount("Assets", nullptr, 1) == 0)
 	{
-		LOG("Error adding a path: %s\n", PHYSFS_getLastError());
+		LOG("Error adding the path: %s\n", PHYSFS_getLastError());
+	}
+
+	if (PHYSFS_mount("Library", nullptr, 1) == 0)
+	{
+		LOG("Error adding the path: %s\n", PHYSFS_getLastError());
+	}
+
+	if (PHYSFS_mount("Library/Meshes", nullptr, 1) == 0)
+	{
+		LOG("Error adding the path: %s\n", PHYSFS_getLastError());
 	}
 
 	return true;
@@ -70,7 +80,7 @@ uint ModuleFileSystem::FileToBuffer(const char* filePath, char** fileBuffer) con
 			if (readData == size)
 			{
 				ret = readData;
-				*fileBuffer[size] = '\0';
+				(*fileBuffer)[size] = '\0';
 				
 			}
 		}

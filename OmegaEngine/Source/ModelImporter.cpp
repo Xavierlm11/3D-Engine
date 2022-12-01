@@ -85,17 +85,17 @@ char* ModelImporter::Save(const ModelData* model, uint& size) {//char*& buffer) 
 		cursor += bytes;
 
 		// Store vertices
-		bytes = sizeof(float) * mesh->num_vertices;
+		bytes = sizeof(float) * mesh->num_vertices*3;
 		memcpy(cursor, mesh->vertices, bytes);
 		cursor += bytes;
 
 		// Store normals
-		bytes = sizeof(float) * mesh->num_normals;
+		bytes = sizeof(float) * mesh->num_normals*3;
 		memcpy(cursor, mesh->normals, bytes);
 		cursor += bytes;
 
 		// Store texture_coords
-		bytes = sizeof(float) * mesh->num_textureCoords;
+		bytes = sizeof(float) * mesh->num_textureCoords*2;
 		memcpy(cursor, mesh->textureCoords, bytes);
 		cursor += bytes;
 	}

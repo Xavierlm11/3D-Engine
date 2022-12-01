@@ -463,7 +463,7 @@ void ModuleEditor::AssetsWindow() {
 				ImGui::EndDragDropSource();
 			}
 			if (ImGui::IsItemHovered()) {
-				ImGui::SetTooltip(App->scene->resourceList[n]->assetName.c_str());
+				ImGui::SetTooltip(App->scene->resourceList[n]->fileName.c_str());
 			}
 				
 			
@@ -1315,7 +1315,8 @@ void ModuleEditor::GOList()
 								go->CreateComp(Component::Types::MESH);
 								//MeshImporter::Load();
 								char* fileBuffer = nullptr;
-								uint bufferSize = App->fileSystem->FileToBuffer(payload_res->assetName.c_str(), &fileBuffer);
+								std::string libName = payload_res->assetName + ".chad";
+								uint bufferSize = App->fileSystem->FileToBuffer(libName.c_str(), &fileBuffer);//payload_res->assetName.c_str(), &fileBuffer);
 								MeshData* new_mesh_data = new MeshData(payload_res->assetName.c_str());
 								MeshImporter::Load(fileBuffer, new_mesh_data);
 								//go->GOmesh->meshData = payload_model->meshDatas[0];

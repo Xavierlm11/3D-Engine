@@ -319,7 +319,7 @@ void ModuleRenderer3D::GoRender()
 		//	//LOG("ID_TEX: %i", App->scene->meshes[i]->id_textures);
 		//}
 		//p.Render();
-		for (int i = 0; i <meshlist.size(); i++)
+		for (int i = 0; i < meshlist.size(); i++)
 		{
 			if (meshlist[i] != nullptr)
 			{

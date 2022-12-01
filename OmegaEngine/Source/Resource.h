@@ -16,10 +16,17 @@ public:
 	};
 
 	Resource(const char* path, Types type) {
+
 		assetPath = path;
+
 		std::string fileName_s = assetPath.substr(assetPath.find_last_of('\\') + 1);
-		assetName = fileName_s;
+		fileName = fileName_s;
+
+		std::string assetName_s = fileName.substr(0, fileName.find_last_of('.'));
+		assetName = assetName_s;
+
 		resourceType = type;
+
 		assetID = random.Int();
 	}	
 
@@ -37,6 +44,7 @@ public:
 
 public:
 	std::string assetName;
+	std::string fileName;
 	std::string assetPath;
 	Types resourceType;
 	Uint64 assetID=0;

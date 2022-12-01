@@ -128,8 +128,11 @@ void MeshData::DrawMesh(GLuint textureID, mat4x4 mat) {
 
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, id_indices);
 
-		/*glBindBuffer(GL_ARRAY_BUFFER, id_textures);
-		glTexCoordPointer(2, GL_FLOAT, 0, NULL);*/
+
+		glEnableClientState(GL_NORMAL_ARRAY);
+		glBindBuffer(GL_ARRAY_BUFFER, id_normals);
+		glNormalPointer(GL_FLOAT, 0, NULL);
+
 		//draw textutes
 		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 		glBindBuffer(GL_ARRAY_BUFFER, id_textureCoords);
