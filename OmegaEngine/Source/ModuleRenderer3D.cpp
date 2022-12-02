@@ -222,7 +222,7 @@ update_status ModuleRenderer3D::PreUpdate(float dt)
 			glClearColor(0.3, 0.3,0.3 , c.a);
 
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		glMatrixMode(GL_MODELVIEW);
+		//glMatrixMode(GL_MODELVIEW);
 
 		// App->camera->CalculateViewMatrixOpenGL();
 		//glLoadMatrixf((GLfloat*)App->camera->GetViewMatrixOpenGL());
@@ -396,7 +396,7 @@ void ModuleRenderer3D::OnResize(int x, int y, int width, int height)
 
 		glViewport(x, y, width, height);
 
-		glMatrixMode(GL_PROJECTION);
+		//glMatrixMode(GL_PROJECTION);
 		
 		glLoadIdentity();	
 		//mat4x4 ProjectionMatrix = perspective(60.0f, (float)width / (float)height, 0.125f, 512.0f);
@@ -404,7 +404,7 @@ void ModuleRenderer3D::OnResize(int x, int y, int width, int height)
 		// glMatrixMode(GL_PROJECTION);
 		//glLoadMatrixf((GLfloat*)App->camera->GetProjectionMatrixOpenGL());
 		
-		glMatrixMode(GL_MODELVIEW);
+		//glMatrixMode(GL_MODELVIEW);
 		glLoadIdentity();
 
 }

@@ -556,6 +556,7 @@ void ModuleEditor::DrawSceneViewport()
 
 	if (ImGui::Begin("Scene"))
 	{
+		//ImGui::IsWindowHovered();
 		ImVec2 ViewSize = ImGui::GetContentRegionAvail();
 		if ((ViewSize.x/ViewSize.y)!=AspRatioScene)
 		{

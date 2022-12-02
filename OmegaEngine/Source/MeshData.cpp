@@ -115,7 +115,7 @@ void MeshData::DrawMesh(GLuint textureID, mat4x4 mat) {
 		glTexCoordPointer(2, GL_FLOAT, 0, NULL);
 
 		//estas 2 funciones hacen el trnasform
-		glMatrixMode(GL_MODELVIEW);
+		//glMatrixMode(GL_MODELVIEW);
 		glPushMatrix();
 		glMultMatrixf(&mat);
 

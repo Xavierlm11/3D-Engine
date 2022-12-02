@@ -2,6 +2,7 @@
 #include "Module.h"
 #include "Globals.h"
 #include "glmath.h"
+#include "MathGeoLib/include/MathGeoLib.h"
 
 #include"MathGeoLib/include/Math/float4x4.h"
 #include "MathGeoLib/include/Geometry/Frustum.h"
@@ -20,23 +21,23 @@ public:
 	update_status Update(float dt);
 	bool CleanUp();
 
-	/*void UpdateFrustum();
-	GLfloat* GetGlLoadMat();
+	//void UpdateFrustum();
+	//GLfloat* GetGlLoadMat();
 	void Rotate();
-	void Look(const vec3 &Position, const vec3 &Reference, bool RotateAroundReference = false);
-	void LookAt(const vec3 &Spot);
-	void Move(const vec3 &Movement);
+	//void Look(const vec3 &Position, const vec3 &Reference, bool RotateAroundReference = false);
+	//void LookAt(const vec3 &Spot);
+	//void Move(const vec3 &Movement);
 	void Zoom();
 	void Orbit(float3 target);
 
-	float* GetViewMatrix();
-	float4x4 *GetViewMatrixOpenGL();
-	float4x4 *GetProjectionMatrixOpenGL();
+	//float* GetViewMatrix();
+	//float4x4 *GetViewMatrixOpenGL();
+	//float4x4 *GetProjectionMatrixOpenGL();
 
-	void CalculateViewMatrix();
-	void CalculateViewMatrixOpenGL();
+	//void CalculateViewMatrix();
+	//void CalculateViewMatrixOpenGL();
 
-	void CalculateProjectionMatrixOpenGL();*/
+	//void CalculateProjectionMatrixOpenGL();
 
 public:
 	

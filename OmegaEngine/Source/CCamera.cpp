@@ -136,31 +136,37 @@ unsigned int CCamera::GetFrameBuffer()
 	return NewFrameBuffer;
 }
 
-//void CCamera::Rotate()
-//{
-//
-//}
+void CCamera::Rotate()
+{
 
-//void CCamera::Look(const vec3& _Position, const vec3& _Reference, bool _RotateAroundReference)
-//{
-//	Position = _Position;
-//	Reference = _Reference;
-//	LookAt(Reference);
-//}
+}
 
-//void CCamera::LookAt(const vec3& Spot)
-//{
-//	//Reference = Spot;
-//	//cameraFrustum.front = (Reference - cameraFrustum.pos).Normalized();
-//}
+void CCamera::Look(const float3& _Position, const float3& _Reference, bool _RotateAroundReference)
+{
+	cameraFrustum.pos = _Position;
+	Reference = _Reference;
+	LookAt(Reference);
+}
 
-//void CCamera::Move(const vec3& Movement)
-//{
-//}
-//
-//void CCamera::Zoom()
-//{
-//}
+void CCamera::LookAt(const float3& Spot)
+{
+	float3 _y = {0, 1, 0};
+	Reference = Spot;
+	cameraFrustum.front = (Reference - cameraFrustum.pos).Normalized();
+	X = _y.Cross(cameraFrustum.front).Normalized();
+	cameraFrustum.up = cameraFrustum.front.Cross(X);
+
+}
+
+void CCamera::Move(const float3& Movement)
+{
+	cameraFrustum.pos += Movement;
+}
+
+void CCamera::Zoom()
+{
+ 
+}
 
 //void CCamera::Orbit(float3 target)
 //{
