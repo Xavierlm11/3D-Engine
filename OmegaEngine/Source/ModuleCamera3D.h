@@ -47,6 +47,8 @@ public:
 	float camFOV = 60.0f, aspRatio = 1.6f;*/
 
 	CCamera* ScnCam=nullptr ;
+
+	bool IsWindow = false;
 	
 private:
 	/*mat4x4 ViewMatrix, ViewMatrixInverse;

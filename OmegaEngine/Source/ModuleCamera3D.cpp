@@ -139,10 +139,10 @@ update_status ModuleCamera3D::Update(float dt)
 			}
 
 
-			/*if (App->input->GetMouseZ() != 0)
+			if (App->input->GetMouseZ() != 0 && IsWindow)
 			{
 				Zoom();
-			}*/
+			}
 
 
 			// Recalculate matrix -------------
@@ -195,19 +195,19 @@ void ModuleCamera3D::Rotate() {
 
 	/*if (dx != 0)
 	{
-		float DeltaX = (float)dx * Sensitivity;
+		float AngleX = (float)dx * Sensitivity;
 
-		X = rotate(X, DeltaX, vec3(0.0f, 1.0f, 0.0f));
-		Y = rotate(Y, DeltaX, vec3(0.0f, 1.0f, 0.0f));
-		Z = rotate(Z, DeltaX, vec3(0.0f, 1.0f, 0.0f));
+		X = rotate(X, AngleX, vec3(0.0f, 1.0f, 0.0f));
+		Y = rotate(Y, AngleX, vec3(0.0f, 1.0f, 0.0f));
+		Z = rotate(Z, AngleX, vec3(0.0f, 1.0f, 0.0f));
 	}
 
 	if (dy != 0)
 	{
-		float DeltaY = (float)dy * Sensitivity;
+		float AngleY = (float)dy * Sensitivity;
 
-		Y = rotate(Y, DeltaY, -X);
-		Z = rotate(Z, DeltaY, -X);
+		Y = rotate(Y, AngleY, -X);
+		Z = rotate(Z, AngleY, -X);
 
 		if (Y.y < 0.0f)
 		{
@@ -293,25 +293,25 @@ void ModuleCamera3D::Rotate() {
 
 // -----------------------------------------------------------------
 
-//void ModuleCamera3D::Zoom() {
-//
-//	//vec3 frontVec = (cameraFrustum.front.x, cameraFrustum.front.y, cameraFrustum.front.z);
-//	Position += Z * App->input->GetMouseZ() * 1.5f;
-//	Reference += Z * App->input->GetMouseZ() * 1.5f;
-//
-//	//cameraFrustum.nearPlaneDistance += App->input->GetMouseZ() * 0.8f;
-//	//cameraFrustum.nearPlaneDistance += 2;
-//
-//	UpdateFrustum();
-//	//CalculateViewMatrixOpenGL();
-//	
-//
-//	/*glMatrixMode(GL_PROJECTION);
-//	glLoadMatrixf((GLfloat*)GetProjectionMatrixOpenGL());
-//	glMatrixMode(GL_MODELVIEW);
-//	glLoadIdentity();*/
-//
-//}
+void ModuleCamera3D::Zoom() {
+
+	//vec3 frontVec = (cameraFrustum.front.x, cameraFrustum.front.y, cameraFrustum.front.z);
+	ScnCam->cameraFrustum.pos+= float3(0,0,1) * App->input->GetMouseZ() * 1.5f;
+	//Reference += Z * App->input->GetMouseZ() * 1.5f;
+
+	//cameraFrustum.nearPlaneDistance += App->input->GetMouseZ() * 0.8f;
+	//cameraFrustum.nearPlaneDistance += 2;
+
+	//UpdateFrustum();
+	//CalculateViewMatrixOpenGL();
+	
+
+	/*glMatrixMode(GL_PROJECTION);
+	glLoadMatrixf((GLfloat*)GetProjectionMatrixOpenGL());
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();*/
+
+}
 //
 //// -----------------------------------------------------------------
 //void ModuleCamera3D::Look(const vec3 &Position, const vec3 &Reference, bool RotateAroundReference)

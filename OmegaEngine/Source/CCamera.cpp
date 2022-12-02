@@ -163,10 +163,10 @@ void CCamera::Move(const float3& Movement)
 	cameraFrustum.pos += Movement;
 }
 
-void CCamera::Zoom()
-{
- 
-}
+//void CCamera::Zoom()
+//{
+// 
+//}
 
 //void CCamera::Orbit(float3 target)
 //{

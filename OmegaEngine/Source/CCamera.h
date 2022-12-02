@@ -36,14 +36,14 @@ public:
 	void Look(const float3& _Position, const float3& _Reference, bool _RotateAroundReference = false);
 	void LookAt(const float3& Spot);
 	void Move(const float3& Movement);
-	void Zoom();
+	//void Zoom();
 	void Orbit(float3 target);
 
-	float* GetViewMatrix();
+	//float* GetViewMatrix();
 	float* GetViewMatrixOpenGL();
 	float* GetProjectionMatrixOpenGL();
 
-	void CalculateViewMatrix();
+	//void CalculateViewMatrix();
 	void CalculateViewMatrixOpenGL();
 
 	void CalculateProjectionMatrixOpenGL();
