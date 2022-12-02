@@ -30,29 +30,35 @@ public:
 
 
 public:
-	void UpdateFrustum();
-	GLfloat* GetGlLoadMat();
-	void Rotate();
-	void Look(const vec3& _Position, const vec3& _Reference, bool _RotateAroundReference = false);
-	void LookAt(const vec3& Spot);
-	void Move(const vec3& Movement);
-	void Zoom();
+	//void UpdateFrustum();
+	GLfloat* GetGlLoadMatCC();
+	//void Rotate();
+	//void Look(const vec3& _Position, const vec3& _Reference, bool _RotateAroundReference = false);
+	//void LookAt(const vec3& Spot);
+	//void Move(const vec3& Movement);
+	//void Zoom();
 	void Orbit(float3 target);
 
 	float* GetViewMatrix();
-	float4x4* GetViewMatrixOpenGL();
-	float4x4* GetProjectionMatrixOpenGL();
+	float* GetViewMatrixOpenGL();
+	float* GetProjectionMatrixOpenGL();
 
 	void CalculateViewMatrix();
 	void CalculateViewMatrixOpenGL();
 
 	void CalculateProjectionMatrixOpenGL();
 
+	unsigned int GetCCamBuffer();
+
+	unsigned int GetFrameBuffer();
+
 	void NewFrBuffer();
+
+	void SetRatio(float ratio);
 
 public:
 
-	vec3 X, Y, Z, Position, Reference;
+	float3 X, Y, Z, Position, Reference;
 	Color background;
 
 	float camFOV = 60.0f, aspRatio = 1.6f;

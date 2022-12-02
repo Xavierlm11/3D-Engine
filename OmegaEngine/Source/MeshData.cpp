@@ -1,6 +1,7 @@
 #include "MeshData.h"
-
-
+#include "glmath.h"
+#include "External/MathGeoLib/include/Math/float3.h"
+#include "Glew/include/glew.h"
 
 MeshData::MeshData()
 {
@@ -100,14 +101,12 @@ void MeshData::DrawMesh(GLuint textureID, mat4x4 mat) {
 		//if (textureID != NULL) {
 			glBindTexture(GL_TEXTURE_2D, textureID);
 		//}
-
 		//draw vertex
 		glEnableClientState(GL_VERTEX_ARRAY);
 		glBindBuffer(GL_ARRAY_BUFFER, id_vertices);
 		glVertexPointer(3, GL_FLOAT, 0, NULL);
 
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, id_indices);
-
 		/*glBindBuffer(GL_ARRAY_BUFFER, id_textures);
 		glTexCoordPointer(2, GL_FLOAT, 0, NULL);*/
 		//draw textutes
@@ -116,15 +115,14 @@ void MeshData::DrawMesh(GLuint textureID, mat4x4 mat) {
 		glTexCoordPointer(2, GL_FLOAT, 0, NULL);
 
 		//estas 2 funciones hacen el trnasform
+		glMatrixMode(GL_MODELVIEW);
 		glPushMatrix();
 		glMultMatrixf(&mat);
 
 		glDrawElements(GL_TRIANGLES, num_indices, GL_UNSIGNED_INT, NULL);
-
 		//if (textureID != NULL) {
 			glBindTexture(GL_TEXTURE_2D, 0);
 		//}
-
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 		glDisableClientState(GL_VERTEX_ARRAY);
@@ -132,8 +130,9 @@ void MeshData::DrawMesh(GLuint textureID, mat4x4 mat) {
 		//if (num_textures != 0) {
 			glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 		//}
-
 		//LOG("Mesh Loaded! Num indices: %i. Num vertices: %i. ID Indices: %i. ID Vertices: %i.", num_indices, num_vertices, id_indices, id_vertices);
+
+
 
 	}
 }

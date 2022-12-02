@@ -18,7 +18,9 @@
 #pragma comment (lib, "Source/External/MathGeoLib/libx86/MGLRelease/MathGeoLib.lib")
 #endif
 
+#include "CCamera.h"
 #include "Primitive.h"
+
 
 ModuleRenderer3D::ModuleRenderer3D(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
@@ -207,24 +209,35 @@ void ModuleRenderer3D::LoadTextureBuffers() {
 // PreUpdate: clear buffer
 update_status ModuleRenderer3D::PreUpdate(float dt)
 {
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glLoadIdentity();
+	{
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		glLoadIdentity();
 
-	Color c = App->camera->background;
-	glClearColor(c.r, c.g, c.b, c.a);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glMatrixMode(GL_MODELVIEW);
-	App->camera->CalculateViewMatrixOpenGL();
-	glLoadMatrixf((GLfloat*)App->camera->GetViewMatrixOpenGL());
+		BindCamBuffer(App->camera->ScnCam);
+
+		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+		Color c = App->camera->ScnCam->background;
+		if (App->input->GetKey(SDL_SCANCODE_M) == KEY_REPEAT)
+			glClearColor(1, 0,0, c.a);
+
+		if (App->input->GetKey(SDL_SCANCODE_M) == KEY_IDLE)
+			glClearColor(0, 0, 1, c.a);
+
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		glMatrixMode(GL_MODELVIEW);
+		// App->camera->CalculateViewMatrixOpenGL();
+		//glLoadMatrixf((GLfloat*)App->camera->GetViewMatrixOpenGL());
+	}
 	//glMatrixMode(GL_PROJECTION);
 	//glLoadMatrixf((GLfloat*)App->camera->GetProjectionMatrixOpenGL());
 
-	
 
 	//glLoadMatrixf(App->camera->GetViewMatrix());
 
 	// light 0 on cam pos
-	lights[0].SetPos(App->camera->Position.x, App->camera->Position.y, App->camera->Position.z);
+	float3 camPos = App->camera->ScnCam->cameraFrustum.pos;
+	lights[0].SetPos(camPos.x, camPos.y, camPos.z);
 
 	for(uint i = 0; i < MAX_LIGHTS; ++i)
 		lights[i].Render();
@@ -274,7 +287,7 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 		App->camera->LookAt(vec3(0, 0, 0));
 	}
 
-
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	App->editor->Draw();
 
 	SDL_GL_SwapWindow(App->window->window);
@@ -285,40 +298,15 @@ void ModuleRenderer3D::GoRender()
 {
 	PrimPlane p(0, 0, 0, 0);
 	p.axis = true;
-
+	p.Render();
 	switch (mode)
 	{
 	case RenderMode::NONE:
 
 		break;
 	case RenderMode::NORMAL:
-		p.Render();
-		//for (int i = 0; i < App->scene->models[0]->meshes.size(); i++)
-		//{
-		//	if (App->scene->models[0]->meshes[i]->id_textureCoords != 0) {
-		//		//App->scene->models[0]->meshes[i]->DrawMesh(App->scene->models[0]->meshes[i]->id_textures);
-		//	}
-
-		//	if (App->scene->models[0]->meshes[i]->num_textureCoords > 0) {
-		//		//App->scene->models[0]->meshes[i]->DrawMesh(houseTexID);
-		//	}
-		//	else {
-		//		//App->scene->models[0]->meshes[i]->DrawMesh(checkersID);
-		//	}
-		//	//App->scene->models[0]->meshes[i]->DrawMesh(houseTexID);
-		//	//App->scene->models[0]->meshes[i]->DrawMesh(checkersID);
-		//	if (App->scene->models[0]->meshes[i]->material != nullptr) {
-		//		App->scene->models[0]->meshes[i]->DrawMesh(App->scene->models[0]->meshes[i]->material->texture_id);
-		//	}
-		//	else {
-
-		//		App->scene->models[0]->meshes[i]->DrawMesh(0);
-		//		//glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-		//	}
-
-		//	//LOG("ID_TEX: %i", App->scene->meshes[i]->id_textures);
-		//}
-		//p.Render();
+		
+		
 		for (int i = 0; i <meshlist.size(); i++)
 		{
 			if (meshlist[i] != nullptr)
@@ -332,12 +320,7 @@ void ModuleRenderer3D::GoRender()
 		//DrawCube();
 		break;
 	case RenderMode::CHECKERS:
-		p.Render();
-		/*for (int i = 0; i < App->scene->models[0]->meshes.size(); i++)
-		{
-			App->scene->models[0]->meshes[i]->DrawMesh(checkersID, GO->GOtrans->matrix);
-		}*/
-		//p.Render();
+	
 		for (int i = 0; i < meshlist.size(); i++)
 		{
 			if (meshlist[i] != nullptr)
@@ -351,20 +334,7 @@ void ModuleRenderer3D::GoRender()
 		//DrawCube();
 		break;
 	case RenderMode::WIREFRAME:
-		p.Render();
-		//for (int i = 0; i < App->scene->models[0]->meshes.size(); i++)
-		//{
-		//	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-		//	if (App->scene->models[0]->meshes[i]->material != nullptr) {
-		//		App->scene->models[0]->meshes[i]->DrawMesh(App->scene->models[0]->meshes[i]->material->texture_id);
-		//	}
-		//	else {
-
-		//		App->scene->models[0]->meshes[i]->DrawMesh(0);
-		//		//glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-		//	}
-		//	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-		//}
+		
 		for (int i = 0; i < meshlist.size(); i++)
 		{
 			glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
@@ -406,6 +376,18 @@ void ModuleRenderer3D::Draw() {
 GLuint ModuleRenderer3D::GetBuffCam()
 {
 	return checkersID;
+}
+
+void ModuleRenderer3D::BindCamBuffer(CCamera* _CCam)
+{
+	glMatrixMode(GL_PROJECTION);
+	glLoadMatrixf(_CCam->GetProjectionMatrixOpenGL());
+	
+	glMatrixMode(GL_MODELVIEW);
+	glLoadMatrixf(_CCam->GetViewMatrixOpenGL());
+
+	glBindFramebuffer(GL_FRAMEBUFFER, _CCam->GetFrameBuffer());
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
 void ModuleRenderer3D::OnResize(int x, int y, int width, int height)

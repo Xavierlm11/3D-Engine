@@ -6,12 +6,14 @@
 #include "Glew/include/glew.h"
 #include <vector>
 #include "CMeshes.h"
+//#include "CCamera.h"
 #define MAX_LIGHTS 8
 
 #define CHECKERS_HEIGHT 100
 #define CHECKERS_WIDTH 100
 
 class CMesh;
+class CCamera;
 
 class ModuleRenderer3D : public Module
 {
@@ -95,6 +97,8 @@ public:
 	};
 
 	GLuint GetBuffCam();
+
+	void BindCamBuffer(CCamera* _CCam);
 
 	bool hasLoadedMesh;
 

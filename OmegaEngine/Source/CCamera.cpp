@@ -2,12 +2,12 @@
 
 CCamera::CCamera(GameObject* obj) :Component(obj, Types::CAMERA)
 {
-	X = vec3(1.0f, 0.0f, 0.0f);
-	Y = vec3(0.0f, 1.0f, 0.0f);
-	Z = vec3(0.0f, 0.0f, 1.0f);
+	X = float3(1.0f, 0.0f, 0.0f);
+	Y = float3(0.0f, 1.0f, 0.0f);
+	Z = float3(0.0f, 0.0f, 1.0f);
 
-	Position = vec3(0.0f, 1.0f, 5.0f);
-	Reference = vec3(0.0f, 0.0f, 0.0f);
+	Position = float3(0.0f, 1.0f, 5.0f);
+	Reference = float3(0.0f, 0.0f, 0.0f);
 
 	cameraFrustum.type = math::PerspectiveFrustum;
 	cameraFrustum.verticalFov = camFOV * DEGTORAD;
@@ -31,8 +31,8 @@ CCamera::CCamera(GameObject* obj) :Component(obj, Types::CAMERA)
 CCamera::~CCamera()
 {
 	glDeleteFramebuffers(1, &NewFrameBuffer);
-	glDeleteFramebuffers(1, &CCBuffer);
-	glDeleteFramebuffers(1, &ObjRenderBuffer);
+	glDeleteTextures(1, &CCBuffer);
+	glDeleteRenderbuffers(1, &ObjRenderBuffer);
 }
 
 void CCamera::Update()
@@ -42,12 +42,12 @@ void CCamera::Update()
 
 void CCamera::NewFrBuffer()
 {
-	glGenFramebuffers(1, &NewFrameBuffer);
+	glGenFramebuffers(1, (GLuint*)&NewFrameBuffer);
 	glBindFramebuffer(GL_FRAMEBUFFER, NewFrameBuffer);
 
 	//glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
-	glGenTextures(1, &CCBuffer);
+	glGenTextures(1, (GLuint*)&CCBuffer);
 	glBindTexture(GL_TEXTURE_2D, CCBuffer);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
 
@@ -61,8 +61,8 @@ void CCamera::NewFrBuffer()
 
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, CCBuffer, 0);
 
-	// create render buffer object
-	glGenRenderbuffers(1, &ObjRenderBuffer);
+	
+	glGenRenderbuffers(1, (GLuint*)&ObjRenderBuffer);
 	glBindRenderbuffer(GL_RENDERBUFFER, ObjRenderBuffer);
 	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, width, height);
 	glBindRenderbuffer(GL_RENDERBUFFER, 0);
@@ -78,69 +78,103 @@ void CCamera::NewFrBuffer()
 	glBindTexture(GL_TEXTURE_2D, 0);*/
 }
 
-void CCamera::UpdateFrustum()
+void CCamera::SetRatio( float ratio)
 {
-
+	cameraFrustum.horizontalFov = 2.0f * atanf(tanf(cameraFrustum.verticalFov / 2.0f) * ratio);
 }
 
-GLfloat* CCamera::GetGlLoadMat()
+//void CCamera::UpdateFrustum()
+//{
+//
+//}
+
+GLfloat* CCamera::GetGlLoadMatCC()
 {
 	return (GLfloat*)GetProjectionMatrixOpenGL();
 }
 
-void CCamera::Rotate()
-{
+//void CCamera::Rotate()
+//{
+//
+//}
 
+//void CCamera::Look(const vec3& _Position, const vec3& _Reference, bool _RotateAroundReference)
+//{
+//	Position = _Position;
+//	Reference = _Reference;
+//	LookAt(Reference);
+//}
+
+//void CCamera::LookAt(const vec3& Spot)
+//{
+//	//Reference = Spot;
+//	//cameraFrustum.front = (Reference - cameraFrustum.pos).Normalized();
+//}
+
+//void CCamera::Move(const vec3& Movement)
+//{
+//}
+//
+//void CCamera::Zoom()
+//{
+//}
+
+//void CCamera::Orbit(float3 target)
+//{
+//}
+
+//float* CCamera::GetViewMatrix()
+//{
+//	return nullptr;
+//}
+
+
+//void CCamera::CalculateViewMatrix()
+//{
+//}
+float* CCamera::GetViewMatrixOpenGL()
+{
+	CalculateViewMatrixOpenGL();
+	return ViewMatrixOpenGL->ptr();
 }
 
-void CCamera::Look(const vec3& _Position, const vec3& _Reference, bool _RotateAroundReference)
+void CCamera::CalculateViewMatrixOpenGL() {
+
+	math::float4x4 view;
+	view = cameraFrustum.ViewMatrix();
+
+	view.Transpose();
+	ViewMatrixOpenGL = &view;
+}
+//void CCamera::CalculateViewMatrixOpenGL()
+//{
+//}
+//
+//void CCamera::CalculateProjectionMatrixOpenGL()
+//{
+//}
+
+float* CCamera::GetProjectionMatrixOpenGL()
 {
-	Position = _Position;
-	Reference = _Reference;
-	LookAt(Reference);
+	CalculateProjectionMatrixOpenGL();
+	return ProjectionMatrixOpenGL->ptr();
 }
 
-void CCamera::LookAt(const vec3& Spot)
-{
-	//Reference = Spot;
-	//cameraFrustum.front = (Reference - cameraFrustum.pos).Normalized();
+void CCamera::CalculateProjectionMatrixOpenGL() {
+
+	static float4x4 view;
+	view = cameraFrustum.ProjectionMatrix();
+
+	view.Transpose();
+	ProjectionMatrixOpenGL = &view;
 }
 
-void CCamera::Move(const vec3& Movement)
+unsigned int CCamera::GetCCamBuffer()
 {
+	return CCBuffer;
 }
 
-void CCamera::Zoom()
+unsigned int CCamera::GetFrameBuffer()
 {
-}
-
-void CCamera::Orbit(float3 target)
-{
-}
-
-float* CCamera::GetViewMatrix()
-{
-	return nullptr;
-}
-
-float4x4* CCamera::GetViewMatrixOpenGL()
-{
-	return nullptr;
-}
-
-float4x4* CCamera::GetProjectionMatrixOpenGL()
-{
-	return nullptr;
-}
-
-void CCamera::CalculateViewMatrix()
-{
-}
-
-void CCamera::CalculateViewMatrixOpenGL()
-{
-}
-
-void CCamera::CalculateProjectionMatrixOpenGL()
-{
+	return NewFrameBuffer;
 }

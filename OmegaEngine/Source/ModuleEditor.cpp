@@ -560,11 +560,11 @@ void ModuleEditor::DrawSceneViewport()
 		if ((ViewSize.x/ViewSize.y)!=AspRatioScene)
 		{
 			AspRatioScene = (float)(ViewSize.x / ViewSize.y);
-			App->camera->ScnCam->aspRatio = AspRatioScene;
+			App->camera->ScnCam->SetRatio(AspRatioScene) ;
 			//App->camera->UpdateFrustum();
 
 		}
-		ImGui::Image((ImTextureID)App->camera->ScnCam->CCBuffer, ViewSize, ImVec2(0, 1), ImVec2(1, 0));
+		ImGui::Image((ImTextureID)App->camera->ScnCam->GetCCamBuffer(), ViewSize, ImVec2(0, 1), ImVec2(1, 0));
 	}
 	ImGui::End();
 }

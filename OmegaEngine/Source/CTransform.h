@@ -35,6 +35,17 @@ public:
 	void SetRot(vec3 _rot) {  rot = _rot; TransformMatrix();}
 	void SetScale(vec3 _scl) {  scl = _scl; TransformMatrix(); }
 
+	//float4x4 GetMatrix() { return matrix; }
+
+	/*float4x4 GetGlobal()
+	{
+		if (GO->GetParent() == nullptr)
+		{
+			return;
+		}
+		return ;
+	}*/
+
 public:
 
 	vec3 pos={0,0,0};
