@@ -12,6 +12,7 @@
 #define CHECKERS_WIDTH 100
 
 class CMesh;
+class CCamera;
 
 class ModuleRenderer3D : public Module
 {
@@ -94,7 +95,9 @@ public:
 		
 	};
 
+	GLuint GetBuffCam();
 
+	void BindCamBuffer(CCamera* _CCam);
 
 	bool hasLoadedMesh;
 

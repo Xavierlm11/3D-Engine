@@ -251,6 +251,9 @@
     </ClCompile>
     <ClCompile Include="Source\ModuleResources.cpp">
       <Filter>Files\Modules</Filter>
+      </ClCompile>
+    <ClCompile Include="Source\CCamera.cpp">
+      <Filter>Files\GameObjects\Propierties</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -550,6 +553,9 @@
     </ClInclude>
     <ClInclude Include="Source\ModuleResources.h">
       <Filter>Files\Modules</Filter>
+      </ClInclude>
+    <ClInclude Include="Source\CCamera.h">
+      <Filter>Files\GameObjects\Propierties</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

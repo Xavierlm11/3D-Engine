@@ -58,6 +58,8 @@ public:
 
 	void Draw();
 
+	void DrawSceneViewport();
+
 	bool DrawMenuBar();
 
 	void AddLogs(const char* text);
@@ -123,7 +125,7 @@ public:
 	
 	std::vector<GameObject*> gameObjectsShowing;
 	std::vector<std::string> login;
-	
+	GameObject* selectedobj = nullptr;;
 	//ImGuiTextBuffer logs;
 
 	//int winWidth;
@@ -147,6 +149,8 @@ public:
 	float fog_color[4] = {0,0,0,0};
 	float fog_coord;
 
+	
+
 private:
 
 	const char* tdnow,
@@ -160,5 +164,11 @@ private:
 		*SSE3,
 		*SSE41,
 		*SSE42;
+
+private:
+
+	float AspRatioScene;
+
+	GLfloat* cam;
 	
 };

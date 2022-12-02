@@ -26,6 +26,7 @@
 #include "MeshImporter.h"
 #include "ModuleFileSystem.h"
 #include "MaterialImporter.h"
+#include "CCamera.h"
 
 
 ModuleEditor::ModuleEditor(Application* app, bool start_enabled) : Module(app, start_enabled)
@@ -232,6 +233,7 @@ update_status ModuleEditor::Update(float dt)
 			if (GOIndex == i && GOIndex != 0 && i!=0)
 			{
 				App->scene->ListGO[i]->Editor();
+			//LOG("PARENT: %s ",App->scene->ListGO[i]->GetParent()->name.c_str() );
 			}
 			
 		}
@@ -239,6 +241,8 @@ update_status ModuleEditor::Update(float dt)
 	}
 	ImGui::End();
 	CheckGLCapabilities();
+	
+
 	//CheckShapes();
 	GOList();
 	if (App->input->CallClose)
@@ -574,8 +578,30 @@ void ModuleEditor::Draw() {
 		AboutWindow();
 	}
 
+	DrawSceneViewport();
+
+
 	ImGui::Render();
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+}
+
+void ModuleEditor::DrawSceneViewport()
+{
+
+	if (ImGui::Begin("Scene"))
+	{
+		//ImGui::IsWindowHovered();
+		ImVec2 ViewSize = ImGui::GetContentRegionAvail();
+		if ((ViewSize.x/ViewSize.y)!=AspRatioScene)
+		{
+			AspRatioScene = (float)(ViewSize.x / ViewSize.y);
+			App->camera->ScnCam->SetRatio(AspRatioScene) ;
+			//App->camera->UpdateFrustum();
+
+		}
+		ImGui::Image((ImTextureID)App->camera->ScnCam->GetCCamBuffer(), ViewSize, ImVec2(0, 1), ImVec2(1, 0));
+	}
+	ImGui::End();
 }
 
 void ModuleEditor::BarFile() {

@@ -11,6 +11,7 @@ public:
 		TRANSFORM,
 		MESH,
 		MATERIAL,
+		CAMERA,
 		LIGHT
 	};
 	Component(GameObject* obj, Types type);
