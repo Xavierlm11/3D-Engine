@@ -15,9 +15,12 @@
 #include "DevIL/include/il.h"
 
 #include <iostream>
+#include "ModelImporter.h"
 #include "MeshImporter.h"
 #include "MaterialImporter.h"
 
+#include <Windows.h>
+#include "fileapi.h"
 
 ModuleImport::ModuleImport(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
@@ -42,7 +45,40 @@ bool ModuleImport::Init()
 	aiAttachLogStream(&stream);
 	LoadCheckerTexture();
 
+
 	return true;
+}
+
+vector<string> ModuleImport:: GetFilesInFolder(string folder)
+{
+	vector<string> names;
+	char search_path[200];
+	sprintf(search_path, "%s*.*", folder.c_str());
+	WIN32_FIND_DATA fd;
+	HANDLE hFind = ::FindFirstFile(search_path, &fd);
+	if (hFind != INVALID_HANDLE_VALUE)
+	{
+		do
+		{
+			// read all (real) files in current folder, delete '!' read other 2 default folder . and ..
+			if (!(fd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY))
+			{
+				string temp;
+				temp = fd.cFileName;
+				const char *filename = temp.c_str();
+				char fullFilename[MAX_PATH];
+
+				GetFullPathName(filename, MAX_PATH, fullFilename, nullptr);
+				string temp2 = fullFilename;
+				string filepath_s = temp2.substr(0,temp2.find_last_of('\\') + 1) + "Assets\\";// +temp;
+				filepath_s += temp;
+				names.push_back(filepath_s);
+			}
+
+		} while (::FindNextFile(hFind, &fd));
+		::FindClose(hFind);
+	}
+	return names;
 }
 
 void ModuleImport::LoadCheckerTexture() {
@@ -264,6 +300,83 @@ void ModuleImport::ImportModelResources(const aiScene* scene, ModelData* model) 
 //		
 //}
 
+void ModuleImport::ImportAsset(const char* filePath) {
+		/////////////[BEFORE]
+					//char* dropped_filedir;
+	std::string dropped_filedir_s = filePath;
+	std::string fileName_s = dropped_filedir_s.substr(dropped_filedir_s.find_last_of('\\') + 1);
+	std::string extension_s = fileName_s.substr(fileName_s.find_last_of('.') + 1);
+	std::string assetsPath_s = ASSETS_PATH;
+
+	const char* fileName = fileName_s.c_str();
+
+	std::string finalAssetPath = assetsPath_s + fileName;
+
+	LOG("PATH: %s", finalAssetPath.c_str());
+
+	if (extension_s == "png") {
+
+		MaterialData* new_material_data = (MaterialData*)App->imp->LoadFile(filePath, Resource::Types::MATERIAL);
+		App->fileSystem->ImportFileToDir(dropped_filedir_s.c_str(), assetsPath_s.c_str());
+
+		std::string libraryPath_s = LIB_MATERIAL_PATH;
+
+		char* buffer = nullptr;
+
+		uint bufferSize = App->fileSystem->FileToBuffer(fileName_s.c_str(), &buffer);
+
+		MaterialImporter::LoadTextureLump(buffer, bufferSize);
+		bufferSize = MaterialImporter::Save(&buffer);
+
+		std::string new_name = std::to_string(new_material_data->assetID) + ".chad";
+		std::string finalLibraryPath = libraryPath_s + new_name;
+		App->fileSystem->SaveFile(finalLibraryPath.c_str(), buffer, bufferSize);
+
+		if (buffer != nullptr) {
+			delete[] buffer;
+			buffer = nullptr;
+		}
+
+	}
+	else if (extension_s == "fbx")
+	{
+		ModelData* new_model_data = (ModelData*)App->imp->LoadFile(filePath, Resource::Types::MODEL);
+		App->fileSystem->ImportFileToDir(dropped_filedir_s.c_str(), assetsPath_s.c_str());
+
+		std::string libraryPath_s = LIB_MESH_PATH;
+
+
+		uint size = 0;
+		char* buffer = nullptr;
+		buffer = ModelImporter::Save(new_model_data, size);
+
+
+		std::string new_name = std::to_string(new_model_data->assetID) + ".chad";
+		std::string finalLibraryPath = libraryPath_s + new_name;
+		App->fileSystem->SaveFile(finalLibraryPath.c_str(), buffer, size);
+
+		if (buffer != nullptr) {
+			delete[] buffer;
+			buffer = nullptr;
+		}
+
+		//for (int i = 0; i < new_model_data->meshDatas.size(); i++) {
+		//	size = 0;
+		//	
+		//	std::string new_name = new_model_data->meshDatas[i]->assetName;//.substr(0, new_model_data->meshDatas[i]->assetName.find_last_of('.') + 1);
+		//	new_name += ".chad";
+		//	std::string finalLibraryPath = libraryPath_s + new_name;
+		//	App->fileSystem->SaveFile(finalLibraryPath.c_str(), buffer, size);
+		//	if (buffer != nullptr) {
+		//		delete[] buffer;
+		//		buffer = nullptr;
+		//	}
+		//}
+
+
+
+	}
+}
 Resource* ModuleImport::LoadFile(const char* file_path, Resource::Types type) {
 
 	//Resource* new_res = new Resource(file_path, type);

@@ -10,6 +10,8 @@
 #include "Assimp/include/scene.h"
 #include "Resource.h"
 #include "MeshData.h"
+
+using namespace std;
 class Component;
 
 class ModuleImport : public Module
@@ -36,7 +38,8 @@ public:
 	MeshData* GetMeshDataObj(MeshData* meshData, aiMesh* mesh, const aiScene* scene, GameObject* obj);
 	void ReleaseFile(const aiScene* scene);
 	void ImportModelResources(const aiScene* scene, ModelData* model);
-
+	void ImportAsset(const char* filePath);
+	vector<string> GetFilesInFolder(string folder);
 	//Textures
 	void LoadCheckerTexture();
 	

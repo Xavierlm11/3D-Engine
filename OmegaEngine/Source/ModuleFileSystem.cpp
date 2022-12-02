@@ -34,7 +34,7 @@ bool ModuleFileSystem::Init()
 	SDL_free(base_path);
 
 	string folder_name;
-		
+
 	folder_name = ".";
 	//Setting the working directory as the writing directory
 	if (PHYSFS_setWriteDir(folder_name.c_str()) == 0) {
@@ -96,6 +96,14 @@ bool ModuleFileSystem::Init()
 		CreateDirectory(folder_name.c_str(), attr);
 		PHYSFS_mount(folder_name.c_str(), nullptr, 1);
 	}
+
+	folder_name = ASSETS_PATH;
+	vector<string> assetFilesVec = App->imp->GetFilesInFolder(folder_name);
+	for (int i = 0; i < assetFilesVec.size(); i++) {
+		App->imp->ImportAsset(assetFilesVec[i].c_str());
+	}
+	
+
 
 	return true;
 }
