@@ -226,6 +226,7 @@ update_status ModuleRenderer3D::PreUpdate(float dt)
 
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		glMatrixMode(GL_MODELVIEW);
+
 		// App->camera->CalculateViewMatrixOpenGL();
 		//glLoadMatrixf((GLfloat*)App->camera->GetViewMatrixOpenGL());
 	}
@@ -244,6 +245,7 @@ update_status ModuleRenderer3D::PreUpdate(float dt)
 
 	return UPDATE_CONTINUE;
 }
+
 update_status ModuleRenderer3D::Update(float dt)
 {
 	//DrawDirectCube();
@@ -283,9 +285,9 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 	
 	GoRender();
 
-	if (App->input->GetKey(SDL_SCANCODE_F)==KEY_REPEAT) {
+	/*if (App->input->GetKey(SDL_SCANCODE_F)==KEY_REPEAT) {
 		App->camera->LookAt(vec3(0, 0, 0));
-	}
+	}*/
 
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	App->editor->Draw();

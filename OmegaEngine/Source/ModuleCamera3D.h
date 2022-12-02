@@ -20,7 +20,7 @@ public:
 	update_status Update(float dt);
 	bool CleanUp();
 
-	void UpdateFrustum();
+	/*void UpdateFrustum();
 	GLfloat* GetGlLoadMat();
 	void Rotate();
 	void Look(const vec3 &Position, const vec3 &Reference, bool RotateAroundReference = false);
@@ -36,22 +36,22 @@ public:
 	void CalculateViewMatrix();
 	void CalculateViewMatrixOpenGL();
 
-	void CalculateProjectionMatrixOpenGL();
+	void CalculateProjectionMatrixOpenGL();*/
 
 public:
 	
-	vec3 X, Y, Z, Position, Reference;
+	/*vec3 X, Y, Z, Position, Reference;
 	Color background;
 
-	float camFOV = 60.0f, aspRatio = 1.6f;
+	float camFOV = 60.0f, aspRatio = 1.6f;*/
 
 	CCamera* ScnCam ;
 	
 private:
-	mat4x4 ViewMatrix, ViewMatrixInverse;
+	/*mat4x4 ViewMatrix, ViewMatrixInverse;
 	float4x4* ViewMatrixOpenGL;
 	float4x4* ProjectionMatrixOpenGL;
-	Frustum cameraFrustum;
+	Frustum cameraFrustum;*/
 
 	float nextRot = 0;
 
