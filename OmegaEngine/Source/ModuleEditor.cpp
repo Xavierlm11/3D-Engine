@@ -1328,9 +1328,29 @@ void ModuleEditor::GOList()
 									go->GOmesh->meshData->LoadBuffers();
 
 									go->CreateComp(Component::Types::MATERIAL);
-									if (payload_model->meshDatas[0]->material != nullptr) {
-										go->GOmat->materialData = payload_model->meshDatas[0]->material;
+									if (payload_model->meshDatas[0]->materialAttachedID != 0) {
+										//go->GOmat->materialData = payload_model->meshDatas[0]->material;
+										char* fileBuffer = nullptr;
+										std::string libName = std::to_string(payload_model->meshDatas[0]->materialAttachedID) + ".chad";
+
+										uint bufferSize = App->fileSystem->FileToBuffer(libName.c_str(), &fileBuffer);
+										MaterialData* new_material_data = new MaterialData(payload_res->assetName.c_str());
+										MaterialImporter::Load(fileBuffer, new_material_data, bufferSize);
+
+										go->GOmat->materialData = new_material_data;
 									}
+
+									/*if (goChild->GOmesh->meshData->materialAttachedID != 0) {
+
+										char* fileBuffer = nullptr;
+										std::string libName = std::to_string(payload_res->assetID) + ".chad";
+
+										uint bufferSize = App->fileSystem->FileToBuffer(libName.c_str(), &fileBuffer);
+										MaterialData* new_material_data = new MaterialData(payload_res->assetName.c_str());
+										MaterialImporter::Load(fileBuffer, new_material_data, bufferSize);
+
+										goChild->GOmat->materialData = new_material_data;
+									}*/
 
 								}
 								else {
@@ -1345,6 +1365,18 @@ void ModuleEditor::GOList()
 										goChild->GOmesh->meshData->LoadBuffers();
 
 										goChild->CreateComp(Component::Types::MATERIAL);
+
+										if (goChild->GOmesh->meshData->materialAttachedID != 0) {
+											
+											char* fileBuffer = nullptr;
+											std::string libName = std::to_string(goChild->GOmesh->meshData->materialAttachedID) + ".chad";
+
+											uint bufferSize = App->fileSystem->FileToBuffer(libName.c_str(), &fileBuffer);
+											MaterialData* new_material_data = new MaterialData(payload_res->assetName.c_str());
+											MaterialImporter::Load(fileBuffer, new_material_data, bufferSize);
+
+											goChild->GOmat->materialData = new_material_data;
+										}
 
 									}
 								}
@@ -1412,8 +1444,6 @@ void ModuleEditor::GOList()
 
 									char* fileBuffer = nullptr;
 									std::string libName = std::to_string(payload_res->assetID) + ".chad";
-
-
 
 									uint bufferSize = App->fileSystem->FileToBuffer(libName.c_str(), &fileBuffer);
 									MaterialData* new_material_data = new MaterialData(payload_res->assetName.c_str());

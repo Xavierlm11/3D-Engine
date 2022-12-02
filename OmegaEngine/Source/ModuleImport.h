@@ -38,8 +38,13 @@ public:
 	//MeshData* GetMeshData(MeshData * meshData, aiMesh* mesh, const aiScene * scene);
 	MeshData* GetMeshDataObj(MeshData* meshData, aiMesh* mesh, const aiScene* scene, GameObject* obj);
 	void ReleaseFile(const aiScene* scene);
+
 	void ImportModelResources(const aiScene* scene, ModelData* model);
+
+	void GetMaterialsID(const char* path, ModelData* filePath);
+
 	void ImportAsset(const char* filePath);
+
 	vector<string> GetFilesInFolder(string folder);
 	//Textures
 	void LoadCheckerTexture();

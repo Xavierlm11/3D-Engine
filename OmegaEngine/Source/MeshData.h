@@ -39,7 +39,7 @@ public:
 
 	MaterialData* material = nullptr;
 
-
+	Uint64 materialAttachedID = 0;
 
 	//GameObject* obj;
 };

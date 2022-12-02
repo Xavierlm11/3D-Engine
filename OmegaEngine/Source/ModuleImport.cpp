@@ -230,54 +230,62 @@ void ModuleImport::ImportModelResources(const aiScene* scene, ModelData* model) 
 				LOG("Assets path: %s", finalPath.c_str());
 
 				ImportTexture(finalPath.c_str());
-				model->materialDatas.push_back(new MaterialData(finalPath.c_str()));
+
+				MaterialData* mat = new MaterialData(finalPath.c_str());
+				model->materialDatas.push_back(mat);
 			}
 		}
 
-		if (scene->HasMeshes())
-		{
-			for (unsigned int j = 0; j < scene->mNumMeshes; j++) {
-				//If the mesh has a material assigned
-				if (scene->mMeshes[j]->mMaterialIndex != -1) {
-
-					aiMaterial* meshMat = scene->mMaterials[scene->mMeshes[j]->mMaterialIndex];
-
-					aiString path;
-					meshMat->GetTexture(aiTextureType_DIFFUSE, 0, &path);
-
-					const char* filePath = path.C_Str();
-					LOG("File path: %s", filePath);
-
-					std::string assetsPath = ASSETS_PATH;
-					std::string finalPath = assetsPath + filePath;
-					LOG("Assets path: %s", finalPath.c_str());
-
-					for (unsigned int k = 0; k < model->materialDatas.size(); k++) {
-
-						//If material of mesh is the same as one of the model materials list
-						if (finalPath == model->materialDatas[k]->assetPath) {
-
-							for (unsigned int l = 0; l < model->meshDatas.size(); l++) {
-
-								//Find the mesh in model meshes list
-								if (model->meshDatas[l]->assetName == scene->mMeshes[j]->mName.C_Str()) 
-								{
-									//Now we need to find the game object of the mesh data and assign it the texture
-									//model->meshDatas[l]
-								}
-
-							}
-
-
-						}
-					}
-				}
-			}
-		}
+		
 		
 
 	}
 }
+//
+//void ModuleImport::GetMaterialsID(const aiScene* scene, ModelData* model) {
+//
+//	//if (scene->HasMeshes())
+//	//{
+//	//	for (unsigned int j = 0; j < scene->mNumMeshes; j++) {
+//
+//	//		//If the mesh has a material assigned
+//	//		if (scene->mMeshes[j]->mMaterialIndex != -1) {
+//
+//	//			aiMaterial* meshMat = scene->mMaterials[scene->mMeshes[j]->mMaterialIndex];
+//
+//	//			aiString path;
+//	//			meshMat->GetTexture(aiTextureType_DIFFUSE, 0, &path);
+//
+//	//			const char* filePath = path.C_Str();
+//	//			LOG("File path: %s", filePath);
+//
+//	//			std::string assetsPath = ASSETS_PATH;
+//	//			std::string finalPath = assetsPath + filePath;
+//	//			LOG("Assets path: %s", finalPath.c_str());
+//
+//	//			for (unsigned int k = 0; k < model->materialDatas.size(); k++) {
+//
+//	//				//If material of mesh is the same as one of the model materials list
+//	//				if (finalPath == model->materialDatas[k]->assetPath) {
+//
+//	//					for (unsigned int l = 0; l < model->meshDatas.size(); l++) {
+//
+//	//						//Find the mesh in model meshes list
+//	//						if (model->meshDatas[l]->assetName == scene->mMeshes[j]->mName.C_Str())
+//	//						{
+//	//							model->meshDatas[l]->materialAttachedID = model->materialDatas[k]->assetID;
+//	//							//Now we need to find the game object of the mesh data and assign it the texture
+//	//						}
+//
+//	//					}
+//
+//
+//	//				}
+//	//			}
+//	//		}
+//	//	}
+//	//}
+//}
 
 update_status ModuleImport::Update(float dt) {
 	if (hasToLoadAssets==false) {
@@ -287,8 +295,15 @@ update_status ModuleImport::Update(float dt) {
 
 		for (int i = 0; i < assetFilesVec.size(); i++) {
 			ImportAsset(assetFilesVec[i].c_str());
-
 		}
+
+		for (int i = 0; i < App->scene->resourceList.size(); i++) {
+			//GetAssetMaterial(App->scene->resourceList[i]);
+			if (App->scene->resourceList[i]->resourceType == Resource::Types::MODEL) {
+				GetMaterialsID(assetFilesVec[i].c_str(), (ModelData*)App->scene->resourceList[i]);
+			}
+		}
+		
 
 		hasToLoadAssets = true;
 	}
@@ -390,6 +405,7 @@ void ModuleImport::ImportAsset(const char* filePath) {
 
 	}
 }
+
 Resource* ModuleImport::LoadFile(const char* file_path, Resource::Types type) {
 
 	//Resource* new_res = new Resource(file_path, type);
@@ -401,6 +417,7 @@ Resource* ModuleImport::LoadFile(const char* file_path, Resource::Types type) {
 		{
 			ModelData* new_model = new ModelData(file_path);
 			ImportModelResources(new_scene, new_model);
+			
 			App->scene->resourceList.push_back(new_model);
 
 			return new_model;
@@ -423,12 +440,107 @@ Resource* ModuleImport::LoadFile(const char* file_path, Resource::Types type) {
 			
 			
 	}
-	
-		
-	
+}
+//if (scene->HasMeshes())
+//{
+//	for (unsigned int j = 0; j < scene->mNumMeshes; j++) {
+//
+//		If the mesh has a material assigned
+//		if (scene->mMeshes[j]->mMaterialIndex != -1) {
+//
+//			aiMaterial* meshMat = scene->mMaterials[scene->mMeshes[j]->mMaterialIndex];
+//
+//			aiString path;
+//			meshMat->GetTexture(aiTextureType_DIFFUSE, 0, &path);
+//
+//			const char* filePath = path.C_Str();
+//			LOG("File path: %s", filePath);
+//
+//			std::string assetsPath = ASSETS_PATH;
+//			std::string finalPath = assetsPath + filePath;
+//			LOG("Assets path: %s", finalPath.c_str());
+//
+//			for (unsigned int k = 0; k < model->materialDatas.size(); k++) {
+//
+//				If material of mesh is the same as one of the model materials list
+//				if (finalPath == model->materialDatas[k]->assetPath) {
+//
+//					for (unsigned int l = 0; l < model->meshDatas.size(); l++) {
+//
+//						Find the mesh in model meshes list
+//						if (model->meshDatas[l]->assetName == scene->mMeshes[j]->mName.C_Str())
+//						{
+//							model->meshDatas[l]->materialAttachedID = model->materialDatas[k]->assetID;
+//							Now we need to find the game object of the mesh data and assign it the texture
+//							model->meshDatas[l]
+//						}
+//
+//					}
+//
+//
+//				}
+//			}
+//		}
+//	}
+//}
+void ModuleImport::GetMaterialsID(const char* path, ModelData* model) {
 
-	
-	
+	const aiScene* scene = aiImportFile(path, aiProcessPreset_TargetRealtime_MaxQuality);
+
+	if (scene->HasMaterials())
+	{
+		if (scene->HasMeshes())
+		{
+			for (unsigned int j = 0; j < scene->mNumMeshes; j++) {
+
+				//If the mesh has a material assigned
+				if (scene->mMeshes[j]->mMaterialIndex != -1) {
+
+					aiMaterial* meshMat = scene->mMaterials[scene->mMeshes[j]->mMaterialIndex];
+
+					aiString path;
+					meshMat->GetTexture(aiTextureType_DIFFUSE, 0, &path);
+
+					const char* filePath = path.C_Str();
+					LOG("File path: %s", filePath);
+
+					std::string assetsPath = ASSETS_PATH;
+					std::string finalPath = assetsPath + filePath;
+					LOG("Assets path: %s", finalPath.c_str());
+
+					for (unsigned int k = 0; k < model->materialDatas.size(); k++) {
+
+						for (unsigned int l = 0; l < App->scene->resourceList.size(); l++) {
+
+							if (App->scene->resourceList[l]->resourceType == Resource::Types::MATERIAL) {
+
+								if (model->materialDatas[k]->assetName == ((MaterialData*)App->scene->resourceList[l])->assetName) {
+
+									if (App->scene->resourceList[l]->fileName == filePath) {
+
+										for (unsigned int m = 0; m < model->meshDatas.size(); m++) {
+
+											//Find the mesh in model meshes list
+											if (model->meshDatas[m]->assetName == scene->mMeshes[j]->mName.C_Str())
+											{
+												model->meshDatas[m]->materialAttachedID = App->scene->resourceList[l]->assetID;
+												//Now we need to find the game object of the mesh data and assign it the texture
+											}
+
+										}
+									}
+								}
+							}
+							
+						}
+					}
+				}
+			}
+		}
+	}
+
+	ReleaseFile(scene);
+
 }
 //
 //void ModuleImport::GetMeshDatas(const aiScene* scene, std::vector<MeshData*>* meshes){

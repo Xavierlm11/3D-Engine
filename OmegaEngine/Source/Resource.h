@@ -20,6 +20,7 @@ public:
 		assetPath = path;
 
 		std::string fileName_s = assetPath.substr(assetPath.find_last_of('\\') + 1);
+		fileName_s = fileName_s.substr(fileName_s.find_last_of('/') + 1);
 		fileName = fileName_s;
 
 		std::string assetName_s = fileName.substr(0, fileName.find_last_of('.'));
