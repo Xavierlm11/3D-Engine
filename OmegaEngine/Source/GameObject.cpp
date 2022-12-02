@@ -1,6 +1,6 @@
 #include "GameObject.h"
 #include "CMaterial.h"
-#include "CMeshes.h"
+#include "CMesh.h"
 #include "CTransform.h"
 
 GameObject::GameObject(const char* name, GameObject* parent):name(name)
@@ -28,12 +28,12 @@ GameObject::~GameObject()
 	}
 	components.clear();
 	//External->CleanVec(components);
-	for (uint i = 0; i < childrens.size(); ++i)
+	for (uint i = 0; i < children.size(); ++i)
 	{
-		delete childrens[i];
-		childrens[i] = nullptr;
+		delete children[i];
+		children[i] = nullptr;
 	}
-	childrens.clear();
+	children.clear();
 
 	parent = nullptr;
 	delete parent;
@@ -43,6 +43,8 @@ GameObject::~GameObject()
 
 	GOtrans = nullptr;
 	delete GOtrans;
+	GOmesh = nullptr;
+	delete GOmesh;
 	//External->CleanVec(childrens);
 }
 
@@ -60,7 +62,7 @@ void GameObject::SetParent(GameObject* newparent)
 
 	if (newparent)
 	{
-		newparent->childrens.push_back(this);
+		newparent->children.push_back(this);
 	}
 	//set transform
 
@@ -68,11 +70,11 @@ void GameObject::SetParent(GameObject* newparent)
 
 void GameObject::DeleteChild(GameObject* delchild)
 {
-	for (uint i=0;i<childrens.size();++i)
+	for (uint i=0;i<children.size();++i)
 	{
-		if (childrens[i]==delchild)
+		if (children[i]==delchild)
 		{
-			childrens.erase(childrens.begin() + i);
+			children.erase(children.begin() + i);
 		}
 
 	}
@@ -113,7 +115,21 @@ GameObject* GameObject::GetParent()
 
 std::vector<GameObject*> GameObject::GetChildrens()
 {
-	return childrens;
+	return children;
+}
+
+int GameObject::GetLayer() {
+	int deepLayer = 0;
+	bool hasParent = true;
+	while (hasParent == true) {
+		if (parent != nullptr) {
+			deepLayer++;
+		}
+		else {
+			hasParent = false;
+		}
+	}
+	return deepLayer;
 }
 
 Component* GameObject::CreateComp(Component::Types type)
@@ -143,7 +159,7 @@ Component* GameObject::CreateComp(Component::Types type)
 			break;
 		case Component::Types::MESH:
 		{
-			CMeshes * cmesh = new CMeshes(this);
+			CMesh * cmesh = new CMesh(this);
 			GOmesh = cmesh;
 			comp = cmesh;
 			//GOmesh = (CMeshes*)comp;
@@ -175,5 +191,55 @@ void GameObject::Update(float dt)
 	}
 }
 
+void GameObject::Editor()
+{
+	for (uint i = 0; i < components.size(); ++i)
+	{
+		if (components[i]->IsEnable())
+		{
+
+			components[i]->OnInspector();
+
+		}
+
+	}
+}
 
 
+void GameObject::Remove()
+{
+	if (parent != nullptr) {
+		if (!components.empty())
+		{
+			for (uint i = 0; i < components.size(); ++i)
+			{
+				delete components[i];
+				components[i] = nullptr;
+			}
+			components.clear();
+		}
+		//External->CleanVec(components);
+		if (!children.empty()) {
+			for (uint i = 0; i < children.size(); ++i)
+			{
+				delete children[i];
+				children[i] = nullptr;
+			}
+			children.clear();
+		}
+		parent = nullptr;
+		delete parent;
+
+		GOmat = nullptr;
+		delete GOmat;
+
+		GOtrans = nullptr;
+		delete GOtrans;
+		GOmesh = nullptr;
+		delete GOmesh;
+		
+		
+
+	}
+
+}

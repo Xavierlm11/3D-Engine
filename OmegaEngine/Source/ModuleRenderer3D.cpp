@@ -293,33 +293,33 @@ void ModuleRenderer3D::GoRender()
 		break;
 	case RenderMode::NORMAL:
 		p.Render();
-		for (int i = 0; i < App->scene->models[0]->meshes.size(); i++)
-		{
-			if (App->scene->models[0]->meshes[i]->id_textureCoords != 0) {
-				//App->scene->models[0]->meshes[i]->DrawMesh(App->scene->models[0]->meshes[i]->id_textures);
-			}
+		//for (int i = 0; i < App->scene->models[0]->meshes.size(); i++)
+		//{
+		//	if (App->scene->models[0]->meshes[i]->id_textureCoords != 0) {
+		//		//App->scene->models[0]->meshes[i]->DrawMesh(App->scene->models[0]->meshes[i]->id_textures);
+		//	}
 
-			if (App->scene->models[0]->meshes[i]->num_textureCoords > 0) {
-				//App->scene->models[0]->meshes[i]->DrawMesh(houseTexID);
-			}
-			else {
-				//App->scene->models[0]->meshes[i]->DrawMesh(checkersID);
-			}
-			//App->scene->models[0]->meshes[i]->DrawMesh(houseTexID);
-			//App->scene->models[0]->meshes[i]->DrawMesh(checkersID);
-			if (App->scene->models[0]->meshes[i]->material != nullptr) {
-				App->scene->models[0]->meshes[i]->DrawMesh(App->scene->models[0]->meshes[i]->material->texture_id);
-			}
-			else {
+		//	if (App->scene->models[0]->meshes[i]->num_textureCoords > 0) {
+		//		//App->scene->models[0]->meshes[i]->DrawMesh(houseTexID);
+		//	}
+		//	else {
+		//		//App->scene->models[0]->meshes[i]->DrawMesh(checkersID);
+		//	}
+		//	//App->scene->models[0]->meshes[i]->DrawMesh(houseTexID);
+		//	//App->scene->models[0]->meshes[i]->DrawMesh(checkersID);
+		//	if (App->scene->models[0]->meshes[i]->material != nullptr) {
+		//		App->scene->models[0]->meshes[i]->DrawMesh(App->scene->models[0]->meshes[i]->material->texture_id);
+		//	}
+		//	else {
 
-				App->scene->models[0]->meshes[i]->DrawMesh(0);
-				//glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-			}
+		//		App->scene->models[0]->meshes[i]->DrawMesh(0);
+		//		//glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+		//	}
 
-			//LOG("ID_TEX: %i", App->scene->meshes[i]->id_textures);
-		}
+		//	//LOG("ID_TEX: %i", App->scene->meshes[i]->id_textures);
+		//}
 		//p.Render();
-		for (int i = 0; i <meshlist.size(); i++)
+		for (int i = 0; i < meshlist.size(); i++)
 		{
 			if (meshlist[i] != nullptr)
 			{
@@ -333,10 +333,10 @@ void ModuleRenderer3D::GoRender()
 		break;
 	case RenderMode::CHECKERS:
 		p.Render();
-		for (int i = 0; i < App->scene->models[0]->meshes.size(); i++)
+		/*for (int i = 0; i < App->scene->models[0]->meshes.size(); i++)
 		{
-			App->scene->models[0]->meshes[i]->DrawMesh(checkersID);
-		}
+			App->scene->models[0]->meshes[i]->DrawMesh(checkersID, GO->GOtrans->matrix);
+		}*/
 		//p.Render();
 		for (int i = 0; i < meshlist.size(); i++)
 		{
@@ -352,19 +352,19 @@ void ModuleRenderer3D::GoRender()
 		break;
 	case RenderMode::WIREFRAME:
 		p.Render();
-		for (int i = 0; i < App->scene->models[0]->meshes.size(); i++)
-		{
-			glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-			if (App->scene->models[0]->meshes[i]->material != nullptr) {
-				App->scene->models[0]->meshes[i]->DrawMesh(App->scene->models[0]->meshes[i]->material->texture_id);
-			}
-			else {
+		//for (int i = 0; i < App->scene->models[0]->meshes.size(); i++)
+		//{
+		//	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+		//	if (App->scene->models[0]->meshes[i]->material != nullptr) {
+		//		App->scene->models[0]->meshes[i]->DrawMesh(App->scene->models[0]->meshes[i]->material->texture_id);
+		//	}
+		//	else {
 
-				App->scene->models[0]->meshes[i]->DrawMesh(0);
-				//glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-			}
-			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-		}
+		//		App->scene->models[0]->meshes[i]->DrawMesh(0);
+		//		//glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+		//	}
+		//	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+		//}
 		for (int i = 0; i < meshlist.size(); i++)
 		{
 			glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);

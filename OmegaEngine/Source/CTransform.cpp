@@ -62,21 +62,21 @@ void CTransform::OnInspector()
 		ImGui::Text("Y	");
 		ImGui::SameLine();
 		ImGui::Text("Z	");
-		ImGui::InputFloat3("Pos.",&pos);
+		ImGui::DragFloat3("Pos.",&pos);
 
 		ImGui::Text("X	");
 		ImGui::SameLine();
 		ImGui::Text("Y	");
 		ImGui::SameLine();
 		ImGui::Text("Z	");
-		ImGui::InputFloat3("Rotation.", &rot);
-
+		ImGui::DragFloat3("Rotation.", &rot);
+		
 		ImGui::Text("X	");
 		ImGui::SameLine();
 		ImGui::Text("Y	");
 		ImGui::SameLine();
 		ImGui::Text("Z	");
-		ImGui::InputFloat3("Scale.", &scl);
+		ImGui::DragFloat3("Scale.", &scl);
 
 
 

@@ -1,26 +1,20 @@
+#pragma once
 #include "Globals.h"
 #include "External/MathGeoLib/include/Math/float3.h"
 #include "Glew/include/glew.h"
 #include "Assimp/include/scene.h"
 #include "MaterialData.h"
-//
-//class ModelData {
-//
-//public:
-//	ModelData();
-//	~ModelData();
-//
-//	MeshData mesh;
-//};
+#include "glmath.h"
+#include "Resource.h"
 
-class MeshData {
+class MeshData: public Resource{
 
 public:
-	MeshData();
+	MeshData(const char* path);
 	~MeshData();
 
 	void LoadBuffers();
-	void DrawMesh(GLuint textureID);
+	void DrawMesh(GLuint textureID, mat4x4 mat);
 	void UnloadMesh();
 
 	uint id_indices = 0; // index in VRAM
@@ -31,11 +25,21 @@ public:
 	uint num_vertices = 0;
 	float* vertices = nullptr;
 
+	uint id_normals = 0;
+	uint num_normals = 0;
+	float* normals = nullptr;
+
 	uint id_textureCoords = 0;
 	uint num_textureCoords = 0;
 	float* textureCoords = nullptr;
 
+	
+
 	bool hasLoadedBuffers;
 
 	MaterialData* material = nullptr;
+
+	Uint64 materialAttachedID = 0;
+
+	//GameObject* obj;
 };

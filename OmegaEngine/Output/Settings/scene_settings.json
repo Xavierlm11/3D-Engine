@@ -1,1 +1,26 @@
-{"screen_width":1601,"screen_height":793,"engine_name":"Omega Engine","org_name":"Omega Engine","show_demo_window":false,"show_console_window":true,"show_render3d_window":true,"show_config_window":false,"show_about_window":false,"gl_depthTestEnabled":true,"gl_cullFaceEnabled":true,"gl_lightingEnabled":true,"gl_colorMaterialEnabled":true,"gl_texture2dEnabled":true,"gl_lineSmoothEnabled":false,"gl_fogEnabled":false,"fog_density":0.070000000298023224,"fog_start":0,"fog_end":33.330001831054688,"fog_color_0":0,"fog_color_1":0,"fog_color_2":0,"fog_color_3":0}
+{
+    "screen_width": 1028,
+    "screen_height": 557,
+    "engine_name": "Omega Engine",
+    "org_name": "Omega Engine",
+    "show_demo_window": false,
+    "show_console_window": true,
+    "show_assets_window": true,
+    "show_render3d_window": true,
+    "show_config_window": false,
+    "show_about_window": false,
+    "gl_depthTestEnabled": true,
+    "gl_cullFaceEnabled": true,
+    "gl_lightingEnabled": true,
+    "gl_colorMaterialEnabled": true,
+    "gl_texture2dEnabled": true,
+    "gl_lineSmoothEnabled": false,
+    "gl_fogEnabled": false,
+    "fog_density": 0.070000000298023224,
+    "fog_start": 0,
+    "fog_end": 33.330001831054688,
+    "fog_color_0": 0,
+    "fog_color_1": 0,
+    "fog_color_2": 0,
+    "fog_color_3": 0
+}

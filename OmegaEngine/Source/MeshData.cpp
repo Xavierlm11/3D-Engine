@@ -1,6 +1,6 @@
 #include "MeshData.h"
 
-MeshData::MeshData()
+MeshData::MeshData(const char* name) : Resource(Resource::Types::MESH)
 {
 	id_indices = 0; // index in VRAM
 	num_indices = 0;
@@ -10,13 +10,19 @@ MeshData::MeshData()
 	num_vertices = 0;
 	vertices = nullptr;
 
-	id_textureCoords = 0; 
+	id_normals = 0;
+	num_normals = 0;
+	normals = nullptr;
+
+	id_textureCoords = 0;
 	num_textureCoords = 0;
 	textureCoords = nullptr;
 
 	material = nullptr;
 
 	hasLoadedBuffers = false;
+
+	assetName = name;
 }
 
 MeshData::~MeshData()
@@ -26,6 +32,9 @@ MeshData::~MeshData()
 
 	vertices = nullptr;
 	delete vertices;
+
+	normals = nullptr;
+	delete normals;
 
 	textureCoords = nullptr;
 	delete textureCoords;
@@ -45,6 +54,10 @@ void MeshData::LoadBuffers() {
 		glGenBuffers(1, (GLuint*)&(id_indices));
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, id_indices);
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * num_indices, &indices[0], GL_STATIC_DRAW);
+
+		glGenBuffers(1, (GLuint*)&(id_normals));
+		glBindBuffer(GL_ARRAY_BUFFER, id_normals);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(float) * num_normals * 3, &normals[0], GL_STATIC_DRAW);
 
 		glGenBuffers(1, (GLuint*)&(id_textureCoords));
 		glBindBuffer(GL_ARRAY_BUFFER, id_textureCoords);
@@ -67,6 +80,10 @@ void MeshData::UnloadMesh() {
 			glDeleteBuffers(1, &id_vertices);
 		}
 
+		if (id_normals != NULL) {
+			glDeleteBuffers(1, &id_normals);
+		}
+
 		if (id_textureCoords != NULL) {
 			glDeleteBuffers(1, &id_textureCoords);
 		}
@@ -82,17 +99,22 @@ void MeshData::UnloadMesh() {
 		delete[] vertices;
 	}
 
+	if (normals != nullptr) {
+		delete[] normals;
+	}
+
 	if (textureCoords != nullptr) {
 		delete[] textureCoords;
 	}
 
 	indices = nullptr;
 	vertices = nullptr;
+	normals = nullptr;
 	textureCoords = nullptr;
 
 }
 
-void MeshData::DrawMesh(GLuint textureID) {
+void MeshData::DrawMesh(GLuint textureID, mat4x4 mat) {
 	if (hasLoadedBuffers == true) {
 
 		//if (textureID != NULL) {
@@ -106,13 +128,18 @@ void MeshData::DrawMesh(GLuint textureID) {
 
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, id_indices);
 
-		/*glBindBuffer(GL_ARRAY_BUFFER, id_textures);
-		glTexCoordPointer(2, GL_FLOAT, 0, NULL);*/
+
+		glEnableClientState(GL_NORMAL_ARRAY);
+		glBindBuffer(GL_ARRAY_BUFFER, id_normals);
+		glNormalPointer(GL_FLOAT, 0, NULL);
+
 		//draw textutes
 		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 		glBindBuffer(GL_ARRAY_BUFFER, id_textureCoords);
 		glTexCoordPointer(2, GL_FLOAT, 0, NULL);
 
+		glPushMatrix();
+		glMultMatrixf(&mat);
 
 		glDrawElements(GL_TRIANGLES, num_indices, GL_UNSIGNED_INT, NULL);
 
@@ -128,8 +155,7 @@ void MeshData::DrawMesh(GLuint textureID) {
 			glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 		//}
 
-		//LOG("Mesh Loaded! Num indices: %i. Num vertices: %i. ID Indices: %i. ID Vertices: %i.", num_indices, num_vertices, id_indices, id_vertices);
-
+		
 	}
 }
 

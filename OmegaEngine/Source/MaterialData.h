@@ -1,11 +1,13 @@
+#pragma once
 #include "Globals.h"
 #include "External/MathGeoLib/include/Math/float3.h"
 #include "Glew/include/glew.h"
+#include "Resource.h"
 
-class MaterialData {
+class MaterialData : public Resource {
 
 public:
-	MaterialData();
+	MaterialData(const char* path);
 	~MaterialData() {};
 
 	GLuint texture_id;

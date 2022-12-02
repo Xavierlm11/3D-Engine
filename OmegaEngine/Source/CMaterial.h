@@ -25,6 +25,6 @@ public:
 	bool active = true;
 public:
 
-	MaterialData* CmMat = nullptr;
+	MaterialData* materialData = nullptr;
 };
 

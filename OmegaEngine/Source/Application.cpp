@@ -14,6 +14,8 @@ Application::Application()
 	camera = new ModuleCamera3D(this);
 	scene = new ModuleScene(this);
 	editor = new ModuleEditor(this);
+	fileSystem = new ModuleFileSystem(this);
+	resources = new ModuleResources(this);
 
 	// The order of calls is very important!
 	// Modules will Init() Start() and Update in this order
@@ -21,6 +23,8 @@ Application::Application()
 
 	// Main Modules
 
+	AddModule(fileSystem);
+	AddModule(resources);
 	AddModule(imp);
 
 	AddModule(window);

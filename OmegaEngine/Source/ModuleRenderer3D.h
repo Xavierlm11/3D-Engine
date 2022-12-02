@@ -5,13 +5,13 @@
 #include "Light.h"
 #include "Glew/include/glew.h"
 #include <vector>
-#include "CMeshes.h"
+#include "CMesh.h"
 #define MAX_LIGHTS 8
 
 #define CHECKERS_HEIGHT 100
 #define CHECKERS_WIDTH 100
 
-class CMeshes;
+class CMesh;
 
 class ModuleRenderer3D : public Module
 {
@@ -105,7 +105,7 @@ public:
 
 	GLuint houseTexID;
 
-	std::vector<CMeshes*> meshlist;
+	std::vector<CMesh*> meshlist;
 
 public:
 
