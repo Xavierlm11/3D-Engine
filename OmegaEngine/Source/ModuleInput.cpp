@@ -115,7 +115,6 @@ update_status ModuleInput::PreUpdate(float dt)
 			case SDL_DROPFILE:
 			{
 				App->imp->ImportAsset(e.drop.file);
-
 				break;
 			}
 

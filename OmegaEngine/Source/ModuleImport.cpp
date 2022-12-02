@@ -45,7 +45,8 @@ bool ModuleImport::Init()
 	aiAttachLogStream(&stream);
 	LoadCheckerTexture();
 
-
+	
+	
 	return true;
 }
 
@@ -151,11 +152,6 @@ bool ModuleImport::CleanUp()
 	return true;
 }
 
-void ModuleImport::GetFile(const char* file_path) {
-	
-
-
-}
 
 //const aiScene* ModuleImport::LoadFile(const char* file_path) {
 //	const aiScene* scene = aiImportFile(file_path, aiProcessPreset_TargetRealtime_MaxQuality);
@@ -227,11 +223,11 @@ void ModuleImport::ImportModelResources(const aiScene* scene, ModelData* model) 
 				material->GetTexture(aiTextureType_DIFFUSE, 0, &path);
 				
 				const char* filePath = path.C_Str();
-				LOG("PATH: %s", filePath);
+				LOG("File path: %s", filePath);
 				
 				std::string assetsPath = ASSETS_PATH;
 				std::string finalPath = assetsPath + filePath;
-				LOG("PATH: %s", finalPath.c_str());
+				LOG("Assets path: %s", finalPath.c_str());
 
 				ImportTexture(finalPath.c_str());
 				model->materialDatas.push_back(new MaterialData(finalPath.c_str()));
@@ -250,11 +246,11 @@ void ModuleImport::ImportModelResources(const aiScene* scene, ModelData* model) 
 					meshMat->GetTexture(aiTextureType_DIFFUSE, 0, &path);
 
 					const char* filePath = path.C_Str();
-					LOG("PATH: %s", filePath);
+					LOG("File path: %s", filePath);
 
 					std::string assetsPath = ASSETS_PATH;
 					std::string finalPath = assetsPath + filePath;
-					LOG("PATH: %s", finalPath.c_str());
+					LOG("Assets path: %s", finalPath.c_str());
 
 					for (unsigned int k = 0; k < model->materialDatas.size(); k++) {
 
@@ -281,6 +277,23 @@ void ModuleImport::ImportModelResources(const aiScene* scene, ModelData* model) 
 		
 
 	}
+}
+
+update_status ModuleImport::Update(float dt) {
+	if (hasToLoadAssets==false) {
+
+		const char* folder_name = ASSETS_PATH;
+		vector<string> assetFilesVec = App->imp->GetFilesInFolder(folder_name);
+
+		for (int i = 0; i < assetFilesVec.size(); i++) {
+			ImportAsset(assetFilesVec[i].c_str());
+
+		}
+
+		hasToLoadAssets = true;
+	}
+
+	return update_status::UPDATE_CONTINUE;
 }
 
 //void ModuleImport::ImportModelResources(const aiScene* scene, ModelData* model) {

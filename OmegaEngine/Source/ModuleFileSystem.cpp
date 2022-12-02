@@ -97,12 +97,10 @@ bool ModuleFileSystem::Init()
 		PHYSFS_mount(folder_name.c_str(), nullptr, 1);
 	}
 
-	folder_name = ASSETS_PATH;
-	vector<string> assetFilesVec = App->imp->GetFilesInFolder(folder_name);
-	for (int i = 0; i < assetFilesVec.size(); i++) {
-		App->imp->ImportAsset(assetFilesVec[i].c_str());
-	}
 	
+
+	//App->imp->ImportAsset(assetFilesVec[i].c_str());
+	//App->imp->ImportAsset("C:\\Users\\xaviercb12\\Documents\\GitHub\\3D - Engine\\OmegaEngine\\Output\\Assets\\Cube.fbx");
 
 
 	return true;

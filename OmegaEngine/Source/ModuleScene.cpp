@@ -44,6 +44,9 @@ bool ModuleScene::Start()
     {
         meshes[i]->LoadBuffers();
     }*/
+
+    //App->imp->ImportAsset("C:\\Users\\xaviercb12\\Documents\\GitHub\\3D - Engine\\OmegaEngine\\Output\\Assets\\BakerHouse.fbx");
+
 	return ret;
 }
 
