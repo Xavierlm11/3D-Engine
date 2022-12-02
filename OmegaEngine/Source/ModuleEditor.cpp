@@ -448,7 +448,7 @@ void ModuleEditor::AssetsWindow() {
 			ImGui::PushID(n);
 			if ((n % 3) != 0)
 				ImGui::SameLine();
-			ImGui::Button(App->scene->resourceList[n]->fileName.c_str(), ImVec2(110, 110));
+			ImGui::Button(App->scene->resourceList[n]->fileName.c_str(), ImVec2(120, 120));
 
 			// Our buttons are both drag sources and drag targets here!
 			if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_None))

@@ -7,9 +7,19 @@
 #include <iostream>
 #include "SDL/include/SDL_filesystem.h"
 
+#include <filesystem>
+
+#include <iostream>
+#include <windows.h>
+#include <string>
+
+using namespace std;
+
 ModuleFileSystem::ModuleFileSystem(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
+	
 
+	
 }
 
 ModuleFileSystem::~ModuleFileSystem()
@@ -23,35 +33,68 @@ bool ModuleFileSystem::Init()
 	PHYSFS_init(nullptr);
 	SDL_free(base_path);
 
-	//Setting the working directory as the writing directory
-	if (PHYSFS_setWriteDir(".") == 0) {
-		LOG("Error creating write directory: %s\n", PHYSFS_getLastError());
-
-	}
+	string folder_name;
 		
-	if (PHYSFS_mount(".", nullptr, 1) == 0)
+	folder_name = ".";
+	//Setting the working directory as the writing directory
+	if (PHYSFS_setWriteDir(folder_name.c_str()) == 0) {
+		LPSECURITY_ATTRIBUTES attr;
+		attr = NULL;
+
+		CreateDirectory(folder_name.c_str(), attr);
+		PHYSFS_mount(folder_name.c_str(), nullptr, 1);
+	}
+	
+	
+	if (PHYSFS_mount(folder_name.c_str(), nullptr, 1) == 0)
 	{
-		LOG("Error adding a path: %s\n", PHYSFS_getLastError());
+		LPSECURITY_ATTRIBUTES attr;
+		attr = NULL;
+
+		CreateDirectory(folder_name.c_str(), attr);
+		PHYSFS_mount(folder_name.c_str(), nullptr, 1);
 	}
 
-	if (PHYSFS_mount("Assets", nullptr, 1) == 0)
+	folder_name = ASSETS_PATH;
+	if (PHYSFS_mount(folder_name.c_str(), nullptr, 1) == 0)
 	{
-		LOG("Error adding the path: %s\n", PHYSFS_getLastError());
+		LPSECURITY_ATTRIBUTES attr;
+		attr = NULL;
+
+		CreateDirectory(folder_name.c_str(), attr);
+		PHYSFS_mount(folder_name.c_str(), nullptr, 1);
+	}
+	
+	folder_name = LIBRARY_PATH;
+	if (PHYSFS_mount(folder_name.c_str(), nullptr, 1) == 0)
+	{
+		LPSECURITY_ATTRIBUTES attr;
+		attr = NULL;
+
+		CreateDirectory(folder_name.c_str(), attr);
+		PHYSFS_mount(folder_name.c_str(), nullptr, 1);
 	}
 
-	if (PHYSFS_mount("Library", nullptr, 1) == 0)
+	folder_name = LIB_MESH_PATH;
+	if (PHYSFS_mount(folder_name.c_str(), nullptr, 1) == 0)
 	{
-		LOG("Error adding the path: %s\n", PHYSFS_getLastError());
+		//LOG("Error adding the path: %s\n", PHYSFS_getLastError());
+		LPSECURITY_ATTRIBUTES attr;
+		attr = NULL;
+		
+		CreateDirectory(folder_name.c_str(), attr);
+		PHYSFS_mount(folder_name.c_str(), nullptr, 1);
 	}
 
-	if (PHYSFS_mount("Library/Meshes", nullptr, 1) == 0)
+	folder_name = LIB_MATERIAL_PATH;
+	if (PHYSFS_mount(folder_name.c_str(), nullptr, 1) == 0)
 	{
-		LOG("Error adding the path: %s\n", PHYSFS_getLastError());
-	}
+		//LOG("Error adding the path: %s\n", PHYSFS_getLastError());
+		LPSECURITY_ATTRIBUTES attr;
+		attr = NULL;
 
-	if (PHYSFS_mount("Library/Materials", nullptr, 1) == 0)
-	{
-		LOG("Error adding the path: %s\n", PHYSFS_getLastError());
+		CreateDirectory(folder_name.c_str(), attr);
+		PHYSFS_mount(folder_name.c_str(), nullptr, 1);
 	}
 
 	return true;
