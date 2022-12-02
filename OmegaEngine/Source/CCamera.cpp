@@ -42,6 +42,9 @@ void CCamera::Update()
 
 void CCamera::NewFrBuffer()
 {
+
+
+
 	glGenFramebuffers(1, (GLuint*)&NewFrameBuffer);
 	glBindFramebuffer(GL_FRAMEBUFFER, NewFrameBuffer);
 
@@ -93,6 +96,46 @@ GLfloat* CCamera::GetGlLoadMatCC()
 	return (GLfloat*)GetProjectionMatrixOpenGL();
 }
 
+float* CCamera::GetViewMatrixOpenGL()
+{
+	CalculateViewMatrixOpenGL();
+	return ViewMatrixOpenGL->ptr();
+}
+
+void CCamera::CalculateViewMatrixOpenGL() {
+
+	math::float4x4 view;
+	view = cameraFrustum.ViewMatrix();
+
+	view.Transpose();
+	ViewMatrixOpenGL = &view;
+}
+
+float* CCamera::GetProjectionMatrixOpenGL()
+{
+	CalculateProjectionMatrixOpenGL();
+	return ProjectionMatrixOpenGL->ptr();
+}
+
+void CCamera::CalculateProjectionMatrixOpenGL() {
+
+	static float4x4 view;
+	view = cameraFrustum.ProjectionMatrix();
+
+	view.Transpose();
+	ProjectionMatrixOpenGL = &view;
+}
+
+unsigned int CCamera::GetCCamBuffer()
+{
+	return CCBuffer;
+}
+
+unsigned int CCamera::GetFrameBuffer()
+{
+	return NewFrameBuffer;
+}
+
 //void CCamera::Rotate()
 //{
 //
@@ -132,20 +175,6 @@ GLfloat* CCamera::GetGlLoadMatCC()
 //void CCamera::CalculateViewMatrix()
 //{
 //}
-float* CCamera::GetViewMatrixOpenGL()
-{
-	CalculateViewMatrixOpenGL();
-	return ViewMatrixOpenGL->ptr();
-}
-
-void CCamera::CalculateViewMatrixOpenGL() {
-
-	math::float4x4 view;
-	view = cameraFrustum.ViewMatrix();
-
-	view.Transpose();
-	ViewMatrixOpenGL = &view;
-}
 //void CCamera::CalculateViewMatrixOpenGL()
 //{
 //}
@@ -153,28 +182,3 @@ void CCamera::CalculateViewMatrixOpenGL() {
 //void CCamera::CalculateProjectionMatrixOpenGL()
 //{
 //}
-
-float* CCamera::GetProjectionMatrixOpenGL()
-{
-	CalculateProjectionMatrixOpenGL();
-	return ProjectionMatrixOpenGL->ptr();
-}
-
-void CCamera::CalculateProjectionMatrixOpenGL() {
-
-	static float4x4 view;
-	view = cameraFrustum.ProjectionMatrix();
-
-	view.Transpose();
-	ProjectionMatrixOpenGL = &view;
-}
-
-unsigned int CCamera::GetCCamBuffer()
-{
-	return CCBuffer;
-}
-
-unsigned int CCamera::GetFrameBuffer()
-{
-	return NewFrameBuffer;
-}

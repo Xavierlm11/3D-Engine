@@ -40,8 +40,8 @@ bool ModuleCamera3D::Start()
 	bool ret = true;
 	//App->camera->LookAt(vec3(0, 0, 0));
 
-	ScnCam = new CCamera(App->scene->RootParent);
-	//ScnCam = new CCamera(NULL);
+	//ScnCam = new CCamera(App->scene->RootParent);
+	ScnCam = new CCamera(NULL);
 	ScnCam->cameraFrustum.pos = float3(0, 0, -10);
 	return ret;
 }

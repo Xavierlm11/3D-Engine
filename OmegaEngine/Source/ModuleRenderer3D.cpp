@@ -215,14 +215,11 @@ update_status ModuleRenderer3D::PreUpdate(float dt)
 
 		BindCamBuffer(App->camera->ScnCam);
 
-		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+		//glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
 		Color c = App->camera->ScnCam->background;
-		if (App->input->GetKey(SDL_SCANCODE_M) == KEY_REPEAT)
-			glClearColor(1, 0,0, c.a);
-
-		if (App->input->GetKey(SDL_SCANCODE_M) == KEY_IDLE)
-			glClearColor(0, 0, 1, c.a);
+		
+			glClearColor(0.3, 0.3,0.3 , c.a);
 
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		glMatrixMode(GL_MODELVIEW);

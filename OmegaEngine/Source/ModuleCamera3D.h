@@ -45,7 +45,7 @@ public:
 
 	float camFOV = 60.0f, aspRatio = 1.6f;*/
 
-	CCamera* ScnCam ;
+	CCamera* ScnCam=nullptr ;
 	
 private:
 	/*mat4x4 ViewMatrix, ViewMatrixInverse;

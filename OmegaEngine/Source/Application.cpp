@@ -35,8 +35,8 @@ Application::Application()
 
 
 	// Renderer before editor!(Editor uses implOpenGl, which is initialized in Renderer3D)
-	AddModule(renderer3D);
 	AddModule(camera);
+	AddModule(renderer3D);
 
 	AddModule(editor);
 	
