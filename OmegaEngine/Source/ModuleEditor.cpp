@@ -1351,18 +1351,6 @@ void ModuleEditor::GOList()
 
 								break;
 							}
-						case Resource::Types::MATERIAL:
-							{
-								if (App->editor->GOIndex > -1 && App->editor->GOIndex < App->scene->ListGO.size()) {
-
-									if (App->scene->ListGO[App->editor->GOIndex] != nullptr) {
-										//App->scene->ListGO[App->editor->GOIndex]->GOmat->materialData->texture_id = App->imp->ImportTexture(finalPath.c_str());
-
-									}
-								}
-								break;
-							}
-							
 						}
 
 						//for (int ind = 0; ind < App->scene->ListGO.size(); ind++) {
@@ -1402,6 +1390,43 @@ void ModuleEditor::GOList()
 								GOIndex = ind;
 							}
 						}
+					}
+
+					if (ImGui::BeginDragDropTarget())
+					{
+						if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("LOAD_ASSET_INTO_SCENE"))
+						{
+							int resource_ind = *(const int*)payload->Data;
+							Resource* payload_res = App->scene->resourceList[resource_ind];
+							switch (payload_res->resourceType) {
+							case Resource::Types::MODEL:
+								{
+									break;
+								}
+
+							case Resource::Types::MATERIAL:
+
+								{
+
+									gameObjectsShowing[i]->CreateComp(Component::Types::MATERIAL);
+
+									char* fileBuffer = nullptr;
+									std::string libName = std::to_string(payload_res->assetID) + ".chad";
+
+
+
+									uint bufferSize = App->fileSystem->FileToBuffer(libName.c_str(), &fileBuffer);
+									MaterialData* new_material_data = new MaterialData(payload_res->assetName.c_str());
+									MaterialImporter::Load(fileBuffer, new_material_data, bufferSize);
+
+									gameObjectsShowing[i]->GOmat->materialData = new_material_data;
+
+									break;
+								}
+							}
+
+						}
+						ImGui::EndDragDropTarget();
 					}
 
 					if (test_drag_and_drop && ImGui::BeginDragDropSource())
@@ -1444,6 +1469,41 @@ void ModuleEditor::GOList()
 													GOIndex = ind;
 												}
 											}
+										}
+
+										if (ImGui::BeginDragDropTarget())
+										{
+											if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("LOAD_ASSET_INTO_SCENE"))
+											{
+												int resource_ind = *(const int*)payload->Data;
+												Resource* payload_res = App->scene->resourceList[resource_ind];
+												switch (payload_res->resourceType) {
+												case Resource::Types::MODEL:
+													{
+														break;
+													}
+
+												case Resource::Types::MATERIAL:
+
+													{
+
+														gameObjectsShowing[k]->CreateComp(Component::Types::MATERIAL);
+
+														char* fileBuffer = nullptr;
+														std::string libName = std::to_string(payload_res->assetID) + ".chad";
+
+														uint bufferSize = App->fileSystem->FileToBuffer(libName.c_str(), &fileBuffer);
+														MaterialData* new_material_data = new MaterialData(payload_res->assetName.c_str());
+														MaterialImporter::Load(fileBuffer, new_material_data, bufferSize);
+
+														gameObjectsShowing[k]->GOmat->materialData = new_material_data;
+
+														break;
+													}
+												}
+
+											}
+											ImGui::EndDragDropTarget();
 										}
 
 										if (test_drag_and_drop && ImGui::BeginDragDropSource())
