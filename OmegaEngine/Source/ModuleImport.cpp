@@ -340,8 +340,8 @@ void ModuleImport::ImportAsset(const char* filePath) {
 
 	LOG("PATH: %s", finalAssetPath.c_str());
 
-	if (extension_s == "png") {
-
+	if (extension_s == "png" || extension_s == "PNG")
+	{
 		MaterialData* new_material_data = (MaterialData*)App->imp->LoadFile(filePath, Resource::Types::MATERIAL);
 		App->fileSystem->ImportFileToDir(dropped_filedir_s.c_str(), assetsPath_s.c_str());
 
@@ -364,7 +364,7 @@ void ModuleImport::ImportAsset(const char* filePath) {
 		}
 
 	}
-	else if (extension_s == "fbx")
+	else if (extension_s == "fbx" || extension_s == "FBX")
 	{
 		ModelData* new_model_data = (ModelData*)App->imp->LoadFile(filePath, Resource::Types::MODEL);
 		App->fileSystem->ImportFileToDir(dropped_filedir_s.c_str(), assetsPath_s.c_str());
