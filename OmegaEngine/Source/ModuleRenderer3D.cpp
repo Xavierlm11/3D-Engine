@@ -219,7 +219,7 @@ update_status ModuleRenderer3D::PreUpdate(float dt)
 
 		Color c = App->camera->ScnCam->background;
 		
-			glClearColor(0.3, 0.3,0.3 , c.a);
+		glClearColor(c.r, c.g, c.b, c.a);
 
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		//glMatrixMode(GL_MODELVIEW);
