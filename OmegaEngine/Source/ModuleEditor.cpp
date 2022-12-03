@@ -228,6 +228,7 @@ update_status ModuleEditor::Update(float dt)
 		//}
 		//App->scene->CreateGO();
 	}
+	//selectedObj = nullptr;
 	if(ImGui::Begin("inspector"))
 	{
 		for (uint i = 0; i< App->scene->ListGO.size(); ++i)
@@ -836,6 +837,7 @@ void ModuleEditor::BarShapes() {
 
 		if (ImGui::Button("Clear Shapes"))
 		{
+			selectedObj = nullptr;
 			DeleteGo();
 		}
 
@@ -858,7 +860,7 @@ void ModuleEditor::BarXXX() {
 
 			ConfigPathXXX();
 
-			ConfigAudioXXX();
+			
 	}
 	ImGui::End();
 
@@ -1040,13 +1042,6 @@ void ModuleEditor::ConfigPathXXX()
 	}
 }
 
-void ModuleEditor::ConfigAudioXXX()
-{
-	if (ImGui::CollapsingHeader("Audio"))
-	{
-		ImGui::Text("Work in progress");
-	}
-}
 
 void ModuleEditor::CloseEngine()
 {

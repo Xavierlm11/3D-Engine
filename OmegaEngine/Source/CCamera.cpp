@@ -136,10 +136,10 @@ unsigned int CCamera::GetFrameBuffer()
 	return NewFrameBuffer;
 }
 
-void CCamera::Rotate()
-{
-
-}
+//void CCamera::Rotate()
+//{
+//
+//}
 
 void CCamera::Look(const float3& _Position, const float3& _Reference, bool _RotateAroundReference)
 {

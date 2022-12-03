@@ -23,17 +23,17 @@ public:
 
 	void Update() override;
 
-	void TransformMatrix();
+	void TransformMatrix(float3 _pos, float3 _rot, float3 _scl);
 
 	void OnInspector() override;
 
-	vec3 GetPos() { return pos; }
-	vec3 GetRot() { return rot; }
-	vec3 GetScale() { return scl; }
+	float3 GetPos() { return pos; }
+	float3 GetRot() { return rot; }
+	float3 GetScale() { return scl; }
 
-	void SetPos(vec3 _pos) { pos = _pos; TransformMatrix(); }
-	void SetRot(vec3 _rot) {  rot = _rot; TransformMatrix();}
-	void SetScale(vec3 _scl) {  scl = _scl; TransformMatrix(); }
+	void SetPos(float3 _pos) { pos = _pos; TransformMatrix(pos, rot,scl); }
+	void SetRot(float3 _rot) { rot = _rot; TransformMatrix(pos, rot, scl);}
+	void SetScale(float3 _scl) { scl = _scl; TransformMatrix(pos, rot, scl); }
 
 	//float4x4 GetMatrix() { return matrix; }
 
@@ -48,9 +48,9 @@ public:
 
 public:
 
-	vec3 pos={0,0,0};
-	vec3 rot = { 0,0,0 };
-	vec3 scl = { 1,1,1 };
+	float3 pos={0,0,0};
+	float3 rot = { 0,0,0 };
+	float3 scl = { 1,1,1 };
 	
 	mat4x4 matrix;
 	

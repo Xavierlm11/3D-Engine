@@ -32,7 +32,7 @@ public:
 public:
 	//void UpdateFrustum();
 	GLfloat* GetGlLoadMatCC();
-	void Rotate();
+	//void Rotate();
 	void Look(const float3& _Position, const float3& _Reference, bool _RotateAroundReference = false);
 	void LookAt(const float3& Spot);
 	void Move(const float3& Movement);

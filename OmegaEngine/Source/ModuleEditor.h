@@ -102,7 +102,6 @@ private:
 
 	void ConfigPathXXX();
 
-	void ConfigAudioXXX();
 
 	void CloseEngine();
 
@@ -137,7 +136,7 @@ public:
 	
 	std::vector<GameObject*> gameObjectsShowing;
 	std::vector<std::string> login;
-	GameObject* selectedobj = nullptr;;
+	//GameObject* selectedobj = nullptr;;
 	//ImGuiTextBuffer logs;
 
 	//int winWidth;
@@ -160,6 +159,8 @@ public:
 	float fog_index;
 	float fog_color[4] = {0,0,0,0};
 	float fog_coord;
+
+	GameObject* selectedObj = nullptr;
 
 private:
 
