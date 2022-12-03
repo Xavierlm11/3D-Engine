@@ -51,12 +51,14 @@ ModuleEditor::ModuleEditor(Application* app, bool start_enabled) : Module(app, s
 	fog_color[3] = 0;
 	selectedFogMode = 1;
 
-	GOIndex = 0;
-	showingGOIndex = 0;
+	GOIndex = -1;
+	showingGOIndex = -1;
+	assetSelelected = -1;
 	selection_mask = 2;
 
 	ModuleScene::Shapes::NONE;
 	selectedShape = ModuleScene::Shapes::NONE;
+	inspectorShowing = InspectorShow::NONE;
 
 	tdnow =  " ";
 	
@@ -230,11 +232,34 @@ update_status ModuleEditor::Update(float dt)
 	{
 		for (uint i = 0; i< App->scene->ListGO.size(); ++i)
 		{
-			if (GOIndex == i && GOIndex != 0 && i!=0)
+			
+			switch(inspectorShowing)
 			{
-				App->scene->ListGO[i]->Editor();
-			//LOG("PARENT: %s ",App->scene->ListGO[i]->GetParent()->name.c_str() );
+				case InspectorShow::NONE:
+				{
+						
+					break;
+				}
+
+				case InspectorShow::GAMEOBJECT:
+				{
+					if (GOIndex == i && GOIndex != 0 && i != 0)
+					{
+						App->scene->ListGO[i]->Editor();
+					}
+					break;
+				}
+
+				case InspectorShow::ASSET:
+				{
+					ShowAssetInfo();
+					break;
+				}
+					
 			}
+				
+			//LOG("PARENT: %s ",App->scene->ListGO[i]->GetParent()->name.c_str() );
+			
 			
 		}
 		//ImGui::Text("aaaaaaaaaa");
@@ -254,6 +279,97 @@ update_status ModuleEditor::Update(float dt)
 	return UPDATE_CONTINUE;
 }
 
+void ModuleEditor::ShowAssetInfo() {
+
+	if (assetSelelected <= -1) {
+		return;
+	}
+
+	Resource* res = App->scene->resourceList[assetSelelected];
+		
+	res->fileName;
+
+
+	ImGui::Text("");
+
+	string textString = "Name:" + res->assetName;
+	
+	ImGui::BulletText(""); 
+	ImGui::SameLine();
+	ImGui::TextWrapped(textString.c_str());
+
+	switch (res->resourceType) {
+
+		case Resource::Types::MODEL:
+		{
+			textString = "Type: Model";
+			break;
+		}
+
+		case Resource::Types::MATERIAL:
+		{
+			textString = "Type: Material";
+			break;
+		}
+	}
+
+	ImGui::Text(" ");
+	ImGui::BulletText("");
+	ImGui::SameLine();
+	ImGui::TextWrapped(textString.c_str());
+
+	textString = "Path:" + res->assetPath;
+
+	ImGui::Text("");
+	ImGui::BulletText("");
+	ImGui::SameLine();
+	ImGui::TextWrapped(textString.c_str());
+
+	ImGui::Text(" ");
+	if (ImGui::Button("Delete Asset", ImVec2(120, 60))) {
+		textString = ASSETS_PATH;
+		textString += res->fileName;
+		App->scene->resourceList.erase(App->scene->resourceList.begin() + assetSelelected);
+	
+		assetSelelected =-1;
+		
+		
+
+		if (remove(textString.c_str())==0) 
+		{
+			//meshesVec->erase(meshesVec->begin()), meshesVec->end();
+			LOG("Asset removed");
+		}
+	}
+
+}
+//if (ImGui::CollapsingHeader("Transform"))
+//{
+//
+//	ImGui::Text("X	");
+//	ImGui::SameLine();
+//	ImGui::Text("Y	");
+//	ImGui::SameLine();
+//	ImGui::Text("Z	");
+//	ImGui::DragFloat3("Pos.", &pos);
+//
+//	ImGui::Text("X	");
+//	ImGui::SameLine();
+//	ImGui::Text("Y	");
+//	ImGui::SameLine();
+//	ImGui::Text("Z	");
+//	ImGui::DragFloat3("Rotation.", &rot);
+//
+//	ImGui::Text("X	");
+//	ImGui::SameLine();
+//	ImGui::Text("Y	");
+//	ImGui::SameLine();
+//	ImGui::Text("Z	");
+//	ImGui::DragFloat3("Scale.", &scl);
+//
+//
+//
+//}
 // Called before quitting
 bool ModuleEditor::CleanUp()
 {
@@ -447,12 +563,21 @@ void ModuleEditor::AssetsWindow() {
 	if (ImGui::Begin("Assets", &show_assets_window)) {
 
 		
-			for (int n = 0; n < App->scene->resourceList.size(); n++)
-			{
-				ImGui::PushID(n);
-				if ((n % 3) != 0)
-					ImGui::SameLine();
-				ImGui::Button(App->scene->resourceList[n]->fileName.c_str(), ImVec2(120, 120));
+		for (int n = 0; n < App->scene->resourceList.size(); n++)
+		{
+			ImGui::PushID(n);
+			if ((n % 4) != 0)
+				ImGui::SameLine();
+
+			if (ImGui::Button(App->scene->resourceList[n]->fileName.c_str(), ImVec2(120, 120)) ){
+				assetSelelected = n;
+				inspectorShowing = InspectorShow::ASSET;
+			}
+
+			/*const ImGuiStyle& style = context.Style;
+			ImGui::PushStyleVar(ImGuiStyleVar_SelectableTextAlign, style.FramePadding);
+			ImGui::Selectable(name, &selected[3 * y + x], ImGuiSelectableFlags_None, ImVec2(80, 80));
+			ImGui::PopStyleVar();*/
 
 				// Our buttons are both drag sources and drag targets here!
 				if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_None))
@@ -587,7 +712,6 @@ void ModuleEditor::Draw() {
 
 void ModuleEditor::DrawSceneViewport()
 {
-
 	if (ImGui::Begin("Scene"))
 	{
 		if (ImGui::IsWindowHovered())App->camera->IsWindow = true;
@@ -1304,28 +1428,46 @@ void ModuleEditor::GOList()
 			if (align_label_with_current_x_position)
 				ImGui::Unindent(ImGui::GetTreeNodeToLabelSpacing());
 
+		/////
+		//static const char* item_names[] = { "Item One", "Item Two", "Item Three", "Item Four", "Item Five" };
+		/*for (int n = 0; n < IM_ARRAYSIZE(item_names); n++)
+		{*/
+			//const char* item = item_names[n];
+			//ImGui::Selectable(item);
 
-			//selection_mask = (1 << 2);
-			for (int i = 0; i < gameObjectsShowing.size(); i++)
+			/*if (ImGui::IsItemActive() && !ImGui::IsItemHovered())
 			{
-				ImGuiTreeNodeFlags node_flags = base_flags;
-
-				//Root
-				if (gameObjectsShowing[i]->parent == nullptr)
+				int n_next = n + (ImGui::GetMouseDragDelta(0).y < 0.f ? -1 : 1);
+				if (n_next >= 0 && n_next < IM_ARRAYSIZE(item_names))
 				{
-					if (i == showingGOIndex) {
-						node_flags |= ImGuiTreeNodeFlags_Selected;
-					}
-					node_flags |= ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_NoTreePushOnOpen;
-					ImGui::TreeNodeEx((void*)(intptr_t)i, node_flags, gameObjectsShowing[i]->name.c_str(), i);
-					if (ImGui::IsItemClicked() && !ImGui::IsItemToggledOpen()) {
-						showingGOIndex = i;
-						for (int ind = 0; ind < App->scene->ListGO.size(); ind++) {
-							if (App->scene->ListGO[ind] == gameObjectsShowing[i]) {
-								GOIndex = ind;
-							}
+					item_names[n] = item_names[n_next];
+					item_names[n_next] = item;
+					ImGui::ResetMouseDragDelta();
+				}
+			}*/
+		//}
+
+		//selection_mask = (1 << 2);
+		for (int i = 0; i < gameObjectsShowing.size(); i++)
+		{
+			ImGuiTreeNodeFlags node_flags = base_flags;
+
+			//Root
+			if (gameObjectsShowing[i]->parent == nullptr)
+			{
+				if (i == showingGOIndex) {
+					node_flags |= ImGuiTreeNodeFlags_Selected;
+				}
+				node_flags |= ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_NoTreePushOnOpen;
+				ImGui::TreeNodeEx((void*)(intptr_t)i, node_flags, gameObjectsShowing[i]->name.c_str(), i);
+				if (ImGui::IsItemClicked() && !ImGui::IsItemToggledOpen()) {
+					showingGOIndex = i;
+					for (int ind = 0; ind < App->scene->ListGO.size(); ind++) {
+						if (App->scene->ListGO[ind] == gameObjectsShowing[i]) {
+							GOIndex = ind;
 						}
 					}
+				}
 
 					if (ImGui::BeginDragDropTarget())
 					{
@@ -1435,23 +1577,23 @@ void ModuleEditor::GOList()
 						node_flags = base_flags;
 					}
 
-				}
-				else {
-					//Parents
-					if (gameObjectsShowing[i]->parent->parent == nullptr && gameObjectsShowing[i]->children.size() > 0)
-					{
-						if (i == showingGOIndex) {
-							node_flags |= ImGuiTreeNodeFlags_Selected;
-						}
-						bool node_open = ImGui::TreeNodeEx((void*)(intptr_t)i, node_flags, gameObjectsShowing[i]->name.c_str(), i);
-						if (ImGui::IsItemClicked() && !ImGui::IsItemToggledOpen()) {
-							showingGOIndex = i;
-							for (int ind = 0; ind < App->scene->ListGO.size(); ind++) {
-								if (App->scene->ListGO[ind] == gameObjectsShowing[i]) {
-									GOIndex = ind;
-								}
+			}
+			else {
+				//Parents
+				if (gameObjectsShowing[i]->parent->parent == nullptr && gameObjectsShowing[i]->children.size() > 0)
+				{
+					if (i == showingGOIndex) {
+						node_flags |= ImGuiTreeNodeFlags_Selected;
+					}
+					bool node_open = ImGui::TreeNodeEx((void*)(intptr_t)i, node_flags, gameObjectsShowing[i]->name.c_str(), i);
+					if (ImGui::IsItemClicked() && !ImGui::IsItemToggledOpen()) {
+						showingGOIndex = i;
+						for (int ind = 0; ind < App->scene->ListGO.size(); ind++) {
+							if (App->scene->ListGO[ind] == gameObjectsShowing[i]) {
+								GOIndex = ind;
 							}
 						}
+					}
 
 						if (ImGui::BeginDragDropTarget())
 						{
@@ -1514,21 +1656,21 @@ void ModuleEditor::GOList()
 								}
 								else {
 
-									for (int k = 0; k < gameObjectsShowing.size(); k++) {
-										if (gameObjectsShowing[i]->children[j] == gameObjectsShowing[k]) {
-											if (k == showingGOIndex) {
-												node_flags |= ImGuiTreeNodeFlags_Selected;
-											}
-											node_flags |= ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_NoTreePushOnOpen;
-											ImGui::TreeNodeEx((void*)(intptr_t)k, node_flags, gameObjectsShowing[k]->name.c_str(), k);
-											if (ImGui::IsItemClicked() && !ImGui::IsItemToggledOpen()) {
-												showingGOIndex = k;
-												for (int ind = 0; ind < App->scene->ListGO.size(); ind++) {
-													if (App->scene->ListGO[ind] == gameObjectsShowing[k]) {
-														GOIndex = ind;
-													}
+								for (int k = 0; k < gameObjectsShowing.size(); k++) {
+									if (gameObjectsShowing[i]->children[j] == gameObjectsShowing[k]) {
+										if (k == showingGOIndex) {
+											node_flags |= ImGuiTreeNodeFlags_Selected;
+										}
+										node_flags |= ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_NoTreePushOnOpen;
+										ImGui::TreeNodeEx((void*)(intptr_t)k, node_flags, gameObjectsShowing[k]->name.c_str(), k);
+										if (ImGui::IsItemClicked() && !ImGui::IsItemToggledOpen()) {
+											showingGOIndex = k;
+											for (int ind = 0; ind < App->scene->ListGO.size(); ind++) {
+												if (App->scene->ListGO[ind] == gameObjectsShowing[k]) {
+													GOIndex = ind;
 												}
 											}
+										}
 
 											if (ImGui::BeginDragDropTarget())
 											{
@@ -1600,23 +1742,23 @@ void ModuleEditor::GOList()
 							}
 						}
 
+				}
+				//Direct childs
+				else if (gameObjectsShowing[i]->parent->parent == nullptr)
+				{
+					if (i == showingGOIndex) {
+						node_flags |= ImGuiTreeNodeFlags_Selected;
 					}
-					//Direct childs
-					else if (gameObjectsShowing[i]->parent->parent == nullptr)
-					{
-						if (i == showingGOIndex) {
-							node_flags |= ImGuiTreeNodeFlags_Selected;
-						}
-						node_flags |= ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_NoTreePushOnOpen; // ImGuiTreeNodeFlags_Bullet
-						ImGui::TreeNodeEx((void*)(intptr_t)i, node_flags, gameObjectsShowing[i]->name.c_str(), i);
-						if (ImGui::IsItemClicked() && !ImGui::IsItemToggledOpen()) {
-							showingGOIndex = i;
-							for (int ind = 0; ind < App->scene->ListGO.size(); ind++) {
-								if (App->scene->ListGO[ind] == gameObjectsShowing[i]) {
-									GOIndex = ind;
-								}
+					node_flags |= ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_NoTreePushOnOpen; // ImGuiTreeNodeFlags_Bullet
+					ImGui::TreeNodeEx((void*)(intptr_t)i, node_flags, gameObjectsShowing[i]->name.c_str(), i);
+					if (ImGui::IsItemClicked() && !ImGui::IsItemToggledOpen()) {
+						showingGOIndex = i;
+						for (int ind = 0; ind < App->scene->ListGO.size(); ind++) {
+							if (App->scene->ListGO[ind] == gameObjectsShowing[i]) {
+								GOIndex = ind;
 							}
 						}
+					}
 
 						if (ImGui::BeginDragDropTarget())
 						{

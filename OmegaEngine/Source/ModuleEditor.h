@@ -25,6 +25,13 @@
 class ModuleEditor : public Module
 {
 public:
+
+	enum class InspectorShow
+	{
+		NONE,
+		GAMEOBJECT,
+		ASSET,
+	};
 	
 	ModuleEditor(Application* app, bool start_enabled = true);
 	~ModuleEditor();
@@ -102,6 +109,8 @@ private:
 	void CheckGLCapabilities();
 	void CheckShapes();
 
+	void ShowAssetInfo();
+
 	void GOList();
 
 	
@@ -118,6 +127,9 @@ private:
 public:
 	int GOIndex;
 	int showingGOIndex;
+	int assetSelelected;
+	InspectorShow inspectorShowing;
+
 	bool close=false;
 	bool scroll = false;
 	LCG randomLCG;
@@ -148,8 +160,6 @@ public:
 	float fog_index;
 	float fog_color[4] = {0,0,0,0};
 	float fog_coord;
-
-	
 
 private:
 
