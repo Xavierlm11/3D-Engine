@@ -147,6 +147,8 @@ void MeshData::DrawMesh(GLuint textureID, mat4x4 mat) {
 
 		glDrawElements(GL_TRIANGLES, num_indices, GL_UNSIGNED_INT, NULL);
 		//if (textureID != NULL) {
+
+		glPopMatrix();
 			glBindTexture(GL_TEXTURE_2D, 0);
 		//}
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
