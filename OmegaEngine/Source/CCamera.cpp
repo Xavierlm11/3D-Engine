@@ -110,33 +110,26 @@ GLfloat* CCamera::GetGlLoadMatCC()
 
 float* CCamera::GetViewMatrixOpenGL()
 {
-	CalculateViewMatrixOpenGL();
-	return ViewMatrixOpenGL->ptr();
+	
+	ViewMatrixOpenGL = cameraFrustum.ViewMatrix();
+
+	ViewMatrixOpenGL.Transpose();
+	
+
+	return ViewMatrixOpenGL.ptr();
 }
 
-void CCamera::CalculateViewMatrixOpenGL() {
-
-	math::float4x4 view;
-	view = cameraFrustum.ViewMatrix();
-
-	view.Transpose();
-	ViewMatrixOpenGL = &view;
-}
 
 float* CCamera::GetProjectionMatrixOpenGL()
 {
-	CalculateProjectionMatrixOpenGL();
-	return ProjectionMatrixOpenGL->ptr();
+	
+	ProjectionMatrixOpenGL = cameraFrustum.ProjectionMatrix();
+
+	ProjectionMatrixOpenGL.Transpose();
+
+	return ProjectionMatrixOpenGL.ptr();
 }
 
-void CCamera::CalculateProjectionMatrixOpenGL() {
-
-	static float4x4 view;
-	view = cameraFrustum.ProjectionMatrix();
-
-	view.Transpose();
-	ProjectionMatrixOpenGL = &view;
-}
 
 unsigned int CCamera::GetCCamBuffer()
 {

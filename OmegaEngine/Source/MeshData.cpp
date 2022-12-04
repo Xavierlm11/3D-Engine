@@ -120,14 +120,14 @@ void MeshData::UnloadMesh() {
 void MeshData::DrawMesh(GLuint textureID, mat4x4 mat) {
 	if (hasLoadedBuffers == true) {
 
+		//}
 		//if (textureID != NULL) {
 			glBindTexture(GL_TEXTURE_2D, textureID);
-		//}
+
 		//draw vertex
 		glEnableClientState(GL_VERTEX_ARRAY);
 		glBindBuffer(GL_ARRAY_BUFFER, id_vertices);
 		glVertexPointer(3, GL_FLOAT, 0, NULL);
-
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, id_indices);
 
 
@@ -146,6 +146,8 @@ void MeshData::DrawMesh(GLuint textureID, mat4x4 mat) {
 		glMultMatrixf(&mat);
 
 		glDrawElements(GL_TRIANGLES, num_indices, GL_UNSIGNED_INT, NULL);
+
+		glPopMatrix();
 		//if (textureID != NULL) {
 			glBindTexture(GL_TEXTURE_2D, 0);
 		//}

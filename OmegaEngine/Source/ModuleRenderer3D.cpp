@@ -219,9 +219,9 @@ update_status ModuleRenderer3D::PreUpdate(float dt)
 
 		Color c = App->camera->ScnCam->background;
 		
-		glClearColor(c.r, c.g, c.b, c.a);
 
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		glClearColor(c.r, c.g, c.b, c.a);
 		//glMatrixMode(GL_MODELVIEW);
 
 		// App->camera->CalculateViewMatrixOpenGL();
@@ -235,8 +235,8 @@ update_status ModuleRenderer3D::PreUpdate(float dt)
 
 	// light 0 on cam pos
 	float3 camPos = App->camera->ScnCam->cameraFrustum.pos;
+	//lights[0].SetPos(camPos.x, camPos.y, camPos.z);
 	lights[0].SetPos(camPos.x, camPos.y, camPos.z);
-
 	for(uint i = 0; i < MAX_LIGHTS; ++i)
 		lights[i].Render();
 
@@ -379,10 +379,13 @@ GLuint ModuleRenderer3D::GetBuffCam()
 
 void ModuleRenderer3D::BindCamBuffer(CCamera* _CCam)
 {
+
 	glMatrixMode(GL_PROJECTION);
+	
 	glLoadMatrixf(_CCam->GetProjectionMatrixOpenGL());
 	
 	glMatrixMode(GL_MODELVIEW);
+
 	glLoadMatrixf(_CCam->GetViewMatrixOpenGL());
 
 	glBindFramebuffer(GL_FRAMEBUFFER, _CCam->GetFrameBuffer());
