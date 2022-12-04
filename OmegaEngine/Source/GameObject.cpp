@@ -216,24 +216,27 @@ void GameObject::Editor()
 void GameObject::Remove()
 {
 	if (parent != nullptr) {
+
 		if (!components.empty())
 		{
 			for (uint i = 0; i < components.size(); ++i)
 			{
-				delete components[i];
 				components[i] = nullptr;
+				delete components[i];
 			}
 			components.clear();
 		}
 		//External->CleanVec(components);
 		if (!children.empty()) {
+
 			for (uint i = 0; i < children.size(); ++i)
 			{
-				delete children[i];
 				children[i] = nullptr;
+				delete children[i];
 			}
 			children.clear();
 		}
+
 		parent = nullptr;
 		delete parent;
 
