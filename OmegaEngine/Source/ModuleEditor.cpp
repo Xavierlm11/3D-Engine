@@ -248,29 +248,56 @@ update_status ModuleEditor::Update(float dt)
 						if (GOIndex == i && GOIndex != 0 && i != 0)
 						{
 							App->scene->ListGO[i]->Editor();
-							//if (assetSelelected <= -1) {
-							//	return;
-							//}
 
 							//GameObject* go = App->scene->ListGO[i];
 
-							//ImGui::Text(" ");
+							ImGui::Text(" ");
 
-							//if (ImGui::Button("Delete GameObject", ImVec2(120, 60))) {
-							//	//go. = ASSETS_PATH;
-							//	textString += res->fileName;
-							//	App->scene->resourceList.erase(App->scene->resourceList.begin() + assetSelelected);
+							if (ImGui::Button("Delete GameObject", ImVec2(140, 60))) {
 
-							//	assetSelelected = -1;
+								GameObject* goPtr = App->scene->ListGO[GOIndex];
+								
+								std::vector<int> goToDelete;
 
+								for (int k = 0; k < App->scene->ListGO.size(); k++) {
+									if (goPtr == App->scene->ListGO[k]) {
 
+										goToDelete.push_back(k);
 
-							//	if (remove(textString.c_str()) == 0)
-							//	{
-							//		//meshesVec->erase(meshesVec->begin()), meshesVec->end();
-							//		LOG("Asset removed");
-							//	}
-							//}
+									}
+								}
+
+								for (int j = 0; j < goPtr->children.size();j++) {
+
+									for (int k = 0; k < App->scene->ListGO.size(); k++) {
+
+										if (goPtr->children[j] == App->scene->ListGO[k]) {
+
+											goToDelete.push_back(k);
+
+										}
+										
+									}
+								}
+
+								sort(goToDelete.begin(), goToDelete.end(), greater<int>());
+
+								//for (int j = childrenToDelete.size() - 1; j > -1; j--) {
+
+								for (int j = 0; j < goToDelete.size(); j++) {
+									GameObject* goToDel = App->scene->ListGO[goToDelete[j]];
+									
+									App->scene->ListGO.erase(App->scene->ListGO.begin() + goToDelete[j]);
+									//LOG("MESHLIST: %s", App->scene->)
+									goToDel->Remove();
+								}
+
+								//App->scene->ListGO.erase(App->scene->ListGO.begin() + GOIndex);
+								//GOIndex=-1;
+
+								
+
+							}
 						}
 						
 					}
