@@ -1499,26 +1499,6 @@ void ModuleEditor::GOList()
 			if (align_label_with_current_x_position)
 				ImGui::Unindent(ImGui::GetTreeNodeToLabelSpacing());
 
-		/////
-		//static const char* item_names[] = { "Item One", "Item Two", "Item Three", "Item Four", "Item Five" };
-		/*for (int n = 0; n < IM_ARRAYSIZE(item_names); n++)
-		{*/
-			//const char* item = item_names[n];
-			//ImGui::Selectable(item);
-
-			/*if (ImGui::IsItemActive() && !ImGui::IsItemHovered())
-			{
-				int n_next = n + (ImGui::GetMouseDragDelta(0).y < 0.f ? -1 : 1);
-				if (n_next >= 0 && n_next < IM_ARRAYSIZE(item_names))
-				{
-					item_names[n] = item_names[n_next];
-					item_names[n_next] = item;
-					ImGui::ResetMouseDragDelta();
-				}
-			}*/
-		//}
-
-		//selection_mask = (1 << 2);
 		for (int i = 0; i < gameObjectsShowing.size(); i++)
 		{
 			ImGuiTreeNodeFlags node_flags = base_flags;
@@ -1545,8 +1525,7 @@ void ModuleEditor::GOList()
 					{
 						if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("LOAD_ASSET_INTO_SCENE"))
 						{
-							//	/*IM_ASSERT(payload->DataSize == sizeof(int));
-							//	int payload_n = *(const int*)payload->Data;*/
+
 							int resource_ind = *(const int*)payload->Data;
 							Resource* payload_res = App->scene->resourceList[resource_ind];
 							switch (payload_res->resourceType) {
@@ -1572,7 +1551,7 @@ void ModuleEditor::GOList()
 
 										go->CreateComp(Component::Types::MATERIAL);
 										if (payload_model->meshDatas[0]->materialAttachedID != 0) {
-											//go->GOmat->materialData = payload_model->meshDatas[0]->material;
+
 											char* fileBuffer = nullptr;
 											std::string libName = std::to_string(payload_model->meshDatas[0]->materialAttachedID) + ".chad";
 
@@ -1583,17 +1562,6 @@ void ModuleEditor::GOList()
 											go->GOmat->materialData = new_material_data;
 										}
 
-										/*if (goChild->GOmesh->meshData->materialAttachedID != 0) {
-
-											char* fileBuffer = nullptr;
-											std::string libName = std::to_string(payload_res->assetID) + ".chad";
-
-											uint bufferSize = App->fileSystem->FileToBuffer(libName.c_str(), &fileBuffer);
-											MaterialData* new_material_data = new MaterialData(payload_res->assetName.c_str());
-											MaterialImporter::Load(fileBuffer, new_material_data, bufferSize);
-
-											goChild->GOmat->materialData = new_material_data;
-										}*/
 
 									}
 									else {

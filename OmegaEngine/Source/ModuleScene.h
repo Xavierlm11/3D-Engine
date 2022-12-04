@@ -35,6 +35,8 @@ public:
 	void LoadPyramid(std::vector<MeshData*>* meshes);
 	void LoadCylinder(std::vector<MeshData*>* meshes);
 
+	void LoadSpecific(uint id);
+
 	void CleanMeshes(std::vector<MeshData*>* meshes);
 
 	GameObject* CreateGO( const char* name, GameObject* parent);

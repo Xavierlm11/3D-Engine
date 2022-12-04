@@ -8,6 +8,8 @@
 #include <string>
 
 #include "Assimp/include/cimport.h"
+#include "MeshImporter.h"
+#include "MaterialImporter.h"
 
 ModuleScene::ModuleScene(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
@@ -46,6 +48,8 @@ bool ModuleScene::Start()
     }*/
 
     //App->imp->ImportAsset("C:\\Users\\xaviercb12\\Documents\\GitHub\\3D - Engine\\OmegaEngine\\Output\\Assets\\BakerHouse.fbx");
+
+   // LoadSpecific(App->imp->firstID);
 
 	return ret;
 }
@@ -187,6 +191,75 @@ void ModuleScene::LoadCylinder(std::vector<MeshData*>* meshesVec) {
    ////////     newScene = nullptr;
    ////////     delete newScene;
    //////// }*/
+}
+
+void ModuleScene::LoadSpecific(uint uid)
+{
+    for (int i = 0; i < App->scene->resourceList.size(); i++) {
+        if (uid == resourceList[i]->assetID) {
+            Resource* payload_res = App->scene->resourceList[i];
+            ModelData* payload_model = (ModelData*)payload_res;
+            if (payload_model->meshDatas.size() == 1) {
+                LOG("Dropped %s in scene", payload_res->assetName.c_str());
+                GameObject* go = App->scene->CreateGO(payload_res->assetName.c_str(), ListGO[0]);
+
+
+                go->CreateComp(Component::Types::MESH);
+
+                char* fileBuffer = nullptr;
+                std::string libName = std::to_string(payload_res->assetID) + ".chad";
+                uint bufferSize = App->fileSystem->FileToBuffer(libName.c_str(), &fileBuffer);
+                MeshData* new_mesh_data = new MeshData(payload_res->assetName.c_str());
+                MeshImporter::Load(fileBuffer, new_mesh_data);
+
+                go->GOmesh->meshData = new_mesh_data;
+                go->GOmesh->meshData->LoadBuffers();
+
+                go->CreateComp(Component::Types::MATERIAL);
+                if (payload_model->meshDatas[0]->materialAttachedID != 0) {
+
+                    char* fileBuffer = nullptr;
+                    std::string libName = std::to_string(payload_model->meshDatas[0]->materialAttachedID) + ".chad";
+
+                    uint bufferSize = App->fileSystem->FileToBuffer(libName.c_str(), &fileBuffer);
+                    MaterialData* new_material_data = new MaterialData(payload_res->assetName.c_str());
+                    MaterialImporter::Load(fileBuffer, new_material_data, bufferSize);
+
+                    go->GOmat->materialData = new_material_data;
+                }
+
+
+            }
+            else {
+
+                LOG("Dropped %s in scene", payload_res->assetName.c_str());
+                GameObject* go = App->scene->CreateGO(payload_res->assetName.c_str(), ListGO[0]);
+
+                for (int ind = 0; ind < payload_model->meshDatas.size(); ind++) {
+                    GameObject* goChild = App->scene->CreateGO(payload_res->assetName.c_str(), go);
+                    goChild->CreateComp(Component::Types::MESH);
+                    goChild->GOmesh->meshData = payload_model->meshDatas[ind];
+                    goChild->GOmesh->meshData->LoadBuffers();
+
+                    goChild->CreateComp(Component::Types::MATERIAL);
+
+                    if (goChild->GOmesh->meshData->materialAttachedID != 0) {
+
+                        char* fileBuffer = nullptr;
+                        std::string libName = std::to_string(goChild->GOmesh->meshData->materialAttachedID) + ".chad";
+
+                        uint bufferSize = App->fileSystem->FileToBuffer(libName.c_str(), &fileBuffer);
+                        MaterialData* new_material_data = new MaterialData(payload_res->assetName.c_str());
+                        MaterialImporter::Load(fileBuffer, new_material_data, bufferSize);
+
+                        goChild->GOmat->materialData = new_material_data;
+                    }
+
+                }
+            }
+        }
+    }
+
 }
 
 // Load assets
