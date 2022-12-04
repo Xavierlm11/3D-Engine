@@ -19,8 +19,7 @@ CCamera::CCamera(GameObject* obj) :Component(obj, Types::CAMERA)
 	cameraFrustum.up = float3(Y.x, Y.y, Y.z);
 
 
-	width = External->window->winWidth;
-	height = External->window->winHeight;
+	
 
 	NewFrBuffer();
 	
@@ -43,7 +42,12 @@ void CCamera::Update()
 void CCamera::NewFrBuffer()
 {
 
+	width = External->window->winWidth;
+	height = External->window->winHeight;
 
+	glDeleteFramebuffers(1, &NewFrameBuffer);
+	glDeleteTextures(1, &CCBuffer);
+	glDeleteRenderbuffers(1, &ObjRenderBuffer);
 
 	glGenFramebuffers(1, (GLuint*)&NewFrameBuffer);
 	glBindFramebuffer(GL_FRAMEBUFFER, NewFrameBuffer);
@@ -84,6 +88,14 @@ void CCamera::NewFrBuffer()
 void CCamera::SetRatio( float ratio)
 {
 	cameraFrustum.horizontalFov = 2.0f * atanf(tanf(cameraFrustum.verticalFov / 2.0f) * ratio);
+	cameraFrustum.verticalFov =  DEGTORAD * camFOV ;
+}
+
+void CCamera::LoadBuffer(int _width, int _height)
+{
+	SetRatio((float)_width/ (float)_height);
+	NewFrBuffer();
+
 }
 
 //void CCamera::UpdateFrustum()

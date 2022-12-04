@@ -396,16 +396,22 @@ void ModuleRenderer3D::OnResize(int x, int y, int width, int height)
 
 		glViewport(x, y, width, height);
 
+		if (App->camera!=nullptr)
+		{
+			if (App->camera->ScnCam != nullptr)
+				App->camera->ScnCam->LoadBuffer(width, height);
+		}
+
 		//glMatrixMode(GL_PROJECTION);
 		
-		glLoadIdentity();	
+		//glLoadIdentity();	
 		//mat4x4 ProjectionMatrix = perspective(60.0f, (float)width / (float)height, 0.125f, 512.0f);
 		//glLoadMatrixf((GLfloat*)&ProjectionMatrix);
 		// glMatrixMode(GL_PROJECTION);
-		//glLoadMatrixf((GLfloat*)App->camera->GetProjectionMatrixOpenGL());
+		//glLoadMatrixf((GLfloat*)App->camera->ScnCam->cameraFrustum.ProjectionMatrix().Transposed().ptr());
 		
 		//glMatrixMode(GL_MODELVIEW);
-		glLoadIdentity();
+		//glLoadIdentity();
 
 }
 

@@ -58,6 +58,8 @@ private:
 	float4x4* ProjectionMatrixOpenGL;
 	Frustum cameraFrustum;*/
 
+	CCamera* regenBuff = nullptr;
+
 	float nextRot = 0;
 
 	bool isMovingAround = false;

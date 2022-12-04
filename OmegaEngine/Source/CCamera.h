@@ -56,6 +56,8 @@ public:
 
 	void SetRatio(float ratio);
 
+	void LoadBuffer(int _width, int _height);
+
 public:
 
 	float3 X, Y, Z, Position, Reference;
