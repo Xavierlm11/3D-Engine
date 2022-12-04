@@ -222,16 +222,9 @@ update_status ModuleRenderer3D::PreUpdate(float dt)
 		glClearColor(c.r, c.g, c.b, c.a);
 
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		//glMatrixMode(GL_MODELVIEW);
-
-		// App->camera->CalculateViewMatrixOpenGL();
-		//glLoadMatrixf((GLfloat*)App->camera->GetViewMatrixOpenGL());
+		
 	}
-	//glMatrixMode(GL_PROJECTION);
-	//glLoadMatrixf((GLfloat*)App->camera->GetProjectionMatrixOpenGL());
-
-
-	//glLoadMatrixf(App->camera->GetViewMatrix());
+	
 
 	// light 0 on cam pos
 	float3 camPos = App->camera->ScnCam->cameraFrustum.pos;
@@ -282,9 +275,7 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 	
 	GoRender();
 
-	/*if (App->input->GetKey(SDL_SCANCODE_F)==KEY_REPEAT) {
-		App->camera->LookAt(vec3(0, 0, 0));
-	}*/
+	
 
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	App->editor->Draw();
@@ -402,16 +393,6 @@ void ModuleRenderer3D::OnResize(int x, int y, int width, int height)
 				App->camera->ScnCam->LoadBuffer(width, height);
 		}
 
-		//glMatrixMode(GL_PROJECTION);
-		
-		//glLoadIdentity();	
-		//mat4x4 ProjectionMatrix = perspective(60.0f, (float)width / (float)height, 0.125f, 512.0f);
-		//glLoadMatrixf((GLfloat*)&ProjectionMatrix);
-		// glMatrixMode(GL_PROJECTION);
-		//glLoadMatrixf((GLfloat*)App->camera->ScnCam->cameraFrustum.ProjectionMatrix().Transposed().ptr());
-		
-		//glMatrixMode(GL_MODELVIEW);
-		//glLoadIdentity();
 
 }
 

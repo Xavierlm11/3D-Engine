@@ -82,6 +82,15 @@ update_status ModuleCamera3D::Update(float dt)
 			Zoom(speed);
 		}
 
+		if (App->input->GetKey(SDL_SCANCODE_F)==KEY_REPEAT) {
+			if(App->editor->selectedObj != nullptr)
+			{
+				float3 objectPosF = App->editor->selectedObj->GOtrans->pos;
+				ScnCam->LookAt(App->editor->selectedObj->GOtrans->pos);
+				//ScnCam->cameraFrustum.pos(objectPosF.x, objectPosF.y, objectPosF.z - 10);
+
+			}
+		}
 
 	}
 
