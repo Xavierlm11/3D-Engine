@@ -218,11 +218,16 @@ update_status ModuleImport::Update(float dt) {
 				GetMaterialsID(assetFilesVec[i].c_str(), (ModelData*)App->scene->resourceList[i]);
 			}
 		}
-		
 
 		hasToLoadAssets = true;
 
 
+		for (int i = 0; i < App->scene->resourceList.size(); i++) {
+			if (App->scene->resourceList[i]->assetName == "street2") {
+				App->scene->LoadSpecific(App->scene->resourceList[i]->assetID);
+			}
+			
+		}
 	}
 
 	
