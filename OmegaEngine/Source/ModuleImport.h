@@ -57,5 +57,7 @@ public:
 	//Component::Types type;
 
 	bool hasToLoadAssets = false;
+
+	uint firstID = 0;
 	
 };
