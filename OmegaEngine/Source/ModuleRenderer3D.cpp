@@ -157,21 +157,7 @@ bool ModuleRenderer3D::Init()
 		
 	}
 	
-
-	//Load Cube Buffer
-	/*num_vertices = 8;
-
-	my_id = 0;
-	glGenBuffers(1, (GLuint*)&(my_id));
-	glBindBuffer(GL_ARRAY_BUFFER, my_id);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(float)* num_vertices * 3, vertices, GL_STATIC_DRAW);
-
-	num_indices = 36;
-
-	my_indices = 0;
-	glGenBuffers(1, (GLuint*)&(my_indices));
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, my_indices);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint)* num_indices, indices, GL_STATIC_DRAW);*/
+	
 
 	return ret;
 }
@@ -215,13 +201,15 @@ update_status ModuleRenderer3D::PreUpdate(float dt)
 
 		BindCamBuffer(App->camera->ScnCam);
 
+		
+
 		//glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
-		Color c = App->camera->ScnCam->background;
 		
-		glClearColor(c.r, c.g, c.b, c.a);
+		
+		/*glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		glClearColor(c.r, c.g, c.b, c.a);*/
 
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		
 	}
 	
@@ -276,8 +264,16 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 	GoRender();
 
 	
+	//glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
+	if (MainCam != nullptr)
+	{
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+		BindCamBuffer(MainCam);
+		GoRender();
+	}
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
 	App->editor->Draw();
 
 	SDL_GL_SwapWindow(App->window->window);
@@ -377,6 +373,9 @@ void ModuleRenderer3D::BindCamBuffer(CCamera* _CCam)
 	glLoadMatrixf(_CCam->GetViewMatrixOpenGL());
 
 	glBindFramebuffer(GL_FRAMEBUFFER, _CCam->GetFrameBuffer());
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	Color c ;
+	glClearColor(c.r, c.g, c.b, c.a);
 //	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
@@ -392,7 +391,11 @@ void ModuleRenderer3D::OnResize(int x, int y, int width, int height)
 			if (App->camera->ScnCam != nullptr)
 				App->camera->ScnCam->LoadBuffer(width, height);
 		}
-
+		if (App->renderer3D != nullptr)
+		{
+			if (App->renderer3D->MainCam != nullptr)
+				App->renderer3D->MainCam->LoadBuffer(width, height);
+		}
 
 }
 

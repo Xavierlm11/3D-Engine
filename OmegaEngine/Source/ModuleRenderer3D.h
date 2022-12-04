@@ -6,6 +6,10 @@
 #include "Glew/include/glew.h"
 #include <vector>
 #include "CMesh.h"
+#include "CCamera.h"
+#include "Component.h"
+
+
 #define MAX_LIGHTS 8
 
 #define CHECKERS_HEIGHT 100
@@ -115,6 +119,9 @@ public:
 	Light lights[MAX_LIGHTS];
 	SDL_GLContext context;
 	mat3x3 NormalMatrix;
+
+	GameObject* GameCam = nullptr;
+	CCamera* MainCam = nullptr;
 	//mat4x4 ModelMatrix, ViewMatrix, ProjectionMatrix;
 };
 

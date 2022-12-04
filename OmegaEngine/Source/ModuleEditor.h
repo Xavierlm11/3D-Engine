@@ -67,6 +67,8 @@ public:
 
 	void DrawSceneViewport();
 
+	void DrawGameViewport();
+
 	bool DrawMenuBar();
 
 	void AddLogs(const char* text);
@@ -175,7 +177,7 @@ private:
 
 private:
 
-	float AspRatioScene;
+	float AspRatioScene, AspRatioGame;
 
 	GLfloat* cam;
 	
