@@ -286,14 +286,38 @@ update_status ModuleEditor::Update(float dt)
 
 								for (int j = 0; j < goToDelete.size(); j++) {
 									GameObject* goToDel = App->scene->ListGO[goToDelete[j]];
-									
+
+									std::vector<int> meshesToDelete;
+
 									App->scene->ListGO.erase(App->scene->ListGO.begin() + goToDelete[j]);
 									//LOG("MESHLIST: %s", App->scene->)
+
+									for (int k = 0; k < App->renderer3D->meshlist.size(); k++)
+									{
+										for (int l = 0; l < goToDel->components.size(); l++)
+										{
+											if (App->renderer3D->meshlist[k] == goToDel->components[l])
+											{
+												meshesToDelete.push_back(k);
+
+											}
+										}
+
+									}
+
+									sort(meshesToDelete.begin(), meshesToDelete.end(), greater<int>());
+
+									for (int k = 0; k < meshesToDelete.size(); k++)
+									{
+										App->renderer3D->meshlist.erase(App->renderer3D->meshlist.begin() + meshesToDelete[k]);
+									}
+
 									goToDel->Remove();
+
+									GOIndex = -1;
+									showingGOIndex = -1;
 								}
 
-								//App->scene->ListGO.erase(App->scene->ListGO.begin() + GOIndex);
-								//GOIndex=-1;
 
 								
 
