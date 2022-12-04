@@ -2,7 +2,7 @@
 #include "glmath.h"
 #include "External/MathGeoLib/include/Math/float3.h"
 #include "Glew/include/glew.h"
-#include"MathGeoLib/include/Math/float4x4.h"
+
 MeshData::MeshData(const char* name) : Resource(Resource::Types::MESH)
 {
 	id_indices = 0; // index in VRAM

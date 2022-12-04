@@ -18,7 +18,6 @@
 #pragma comment (lib, "Source/External/MathGeoLib/libx86/MGLRelease/MathGeoLib.lib")
 #endif
 
-#include"MathGeoLib/include/Math/float4x4.h"
 #include "CCamera.h"
 #include "Primitive.h"
 

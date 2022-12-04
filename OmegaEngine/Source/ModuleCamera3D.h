@@ -28,7 +28,7 @@ public:
 	//void LookAt(const vec3 &Spot);
 	//void Move(const vec3 &Movement);
 	void Zoom(float _speed);
-	void Orbit(float3 target);
+	//void Orbit(float3 target);
 
 	//float* GetViewMatrix();
 	//float4x4 *GetViewMatrixOpenGL();

@@ -2,7 +2,6 @@
 #include "Application.h"
 #include "ModuleCamera3D.h"
 #include "CCamera.h"
-#include"MathGeoLib/include/Math/float4x4.h"
 ModuleCamera3D::ModuleCamera3D(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
 	//CalculateViewMatrixOpenGL();
@@ -93,7 +92,7 @@ update_status ModuleCamera3D::Update(float dt)
 			float3 objectPosF = App->editor->selectedObj->GOtrans->pos;
 			float3 objectPosV(objectPosF.x, objectPosF.y, objectPosF.z);
 			ScnCam->LookAt(objectPosV);
-			Orbit(objectPosF);
+			//Orbit(objectPosF);
 		}
 		else if(App->input->GetMouseButton(SDL_BUTTON_RIGHT) == KEY_REPEAT)
 		{
@@ -209,51 +208,49 @@ void ModuleCamera3D::Rotate() {
 //
 //}
 //
-void ModuleCamera3D::Orbit(float3 target) {
-
-	int dx = -App->input->GetMouseXMotion();
-	int dy = -App->input->GetMouseYMotion();
-
-	float Sensitivity = 0.15f;
-
-	float distance = ScnCam->cameraFrustum.pos.Distance(target);
-
-	Rotate();
-	ScnCam->cameraFrustum.pos = target + (ScnCam->cameraFrustum.front * -distance);
-	//if (dx != 0)
-	//{
-	//	float DeltaX = (float)dx * Sensitivity;
-
-	//	X = rotate(X, DeltaX, vec3(0.0f, 1.0f, 0.0f));
-	//	Y = rotate(Y, DeltaX, vec3(0.0f, 1.0f, 0.0f));
-	//	Z = rotate(Z, DeltaX, vec3(0.0f, 1.0f, 0.0f));
-	//}
-
-	//if (dy != 0)
-	//{
-	//	float DeltaY = (float)dy * Sensitivity;
-
-	//	Y = rotate(Y, DeltaY, -X);
-	//	Z = rotate(Z, DeltaY, -X);
-
-	//	if (Y.y < 0.0f)
-	//	{
-	//		Z = vec3(0.0f, Z.y > 0.0f ? 1.0f : -1.0f, 0.0f);
-	//		Y = cross(Z, X);
-	//	}
-	//}
-
-	////UpdateFrustum();
-	////UpdateFrustum();
-	//
-	//float3 posFloat = target - distance * cameraFrustum.front.Normalized();
-	//posFloat = target - distance * cameraFrustum.front.Normalized();
-	//Position.x = posFloat.x;
-	//Position.y = posFloat.y;
-	//Position.z = posFloat.z;
-	//UpdateFrustum();
-}
-
+//void ModuleCamera3D::Orbit(float3 target) {
+//
+//	int dx = -App->input->GetMouseXMotion();
+//	int dy = -App->input->GetMouseYMotion();
+//
+//	float Sensitivity = 0.15f;
+//
+//	float distance = cameraFrustum.pos.Distance(target);
+//
+//	if (dx != 0)
+//	{
+//		float DeltaX = (float)dx * Sensitivity;
+//
+//		X = rotate(X, DeltaX, vec3(0.0f, 1.0f, 0.0f));
+//		Y = rotate(Y, DeltaX, vec3(0.0f, 1.0f, 0.0f));
+//		Z = rotate(Z, DeltaX, vec3(0.0f, 1.0f, 0.0f));
+//	}
+//
+//	if (dy != 0)
+//	{
+//		float DeltaY = (float)dy * Sensitivity;
+//
+//		Y = rotate(Y, DeltaY, -X);
+//		Z = rotate(Z, DeltaY, -X);
+//
+//		if (Y.y < 0.0f)
+//		{
+//			Z = vec3(0.0f, Z.y > 0.0f ? 1.0f : -1.0f, 0.0f);
+//			Y = cross(Z, X);
+//		}
+//	}
+//
+//	//UpdateFrustum();
+//	UpdateFrustum();
+//	
+//	float3 posFloat = target - distance * cameraFrustum.front.Normalized();
+//	posFloat = target - distance * cameraFrustum.front.Normalized();
+//	Position.x = posFloat.x;
+//	Position.y = posFloat.y;
+//	Position.z = posFloat.z;
+//	UpdateFrustum();
+//}
+//
 
 // -----------------------------------------------------------------
 
