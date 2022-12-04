@@ -136,11 +136,8 @@ public:
 	
 	std::vector<GameObject*> gameObjectsShowing;
 	std::vector<std::string> login;
-	//GameObject* selectedobj = nullptr;;
-	//ImGuiTextBuffer logs;
 
-	//int winWidth;
-	//int winHeight;
+
 	int selectedRenderMode;
 
 	bool gl_depthTestEnabled;
