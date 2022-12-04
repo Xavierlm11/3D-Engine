@@ -839,6 +839,88 @@ void ModuleEditor::BarWindows() {
 	
 }
 
+void ModuleEditor::LoadShape(const char* resName) {
+
+	ModelData* res = nullptr;
+	for (int i = 0; i < App->scene->resourceList.size(); i++) {
+		if (App->scene->resourceList[i]->assetName == resName) {
+			res = (ModelData*)App->scene->resourceList[i];
+		}
+	}
+
+
+	if (res != nullptr) {
+
+
+		if (res->meshDatas.size() == 1) {
+			LOG("Dropped %s in scene", res->assetName.c_str());
+			GameObject* go = App->scene->CreateGO(res->assetName.c_str(), gameObjectsShowing[0]);
+
+
+			go->CreateComp(Component::Types::MESH);
+
+			char* fileBuffer = nullptr;
+			std::string libName = std::to_string(res->assetID) + ".chad";
+			uint bufferSize = App->fileSystem->FileToBuffer(libName.c_str(), &fileBuffer);
+			MeshData* new_mesh_data = new MeshData(res->assetName.c_str());
+			MeshImporter::Load(fileBuffer, new_mesh_data);
+
+			go->GOmesh->meshData = new_mesh_data;
+			go->GOmesh->meshData->LoadBuffers();
+
+			go->CreateComp(Component::Types::MATERIAL);
+			if (res->meshDatas[0]->materialAttachedID != 0) {
+
+				char* fileBuffer = nullptr;
+				std::string libName = std::to_string(res->meshDatas[0]->materialAttachedID) + ".chad";
+
+				uint bufferSize = App->fileSystem->FileToBuffer(libName.c_str(), &fileBuffer);
+				MaterialData* new_material_data = new MaterialData(res->assetName.c_str());
+				MaterialImporter::Load(fileBuffer, new_material_data, bufferSize);
+
+				go->GOmat->materialData = new_material_data;
+			}
+
+
+		}
+		else {
+
+			LOG("Dropped %s in scene", res->assetName.c_str());
+			GameObject* go = App->scene->CreateGO(res->assetName.c_str(), gameObjectsShowing[0]);
+
+
+			char* fileBufferMesh = nullptr;
+			std::string libName = std::to_string(res->assetID) + ".chad";
+			uint bufferSize = App->fileSystem->FileToBuffer(libName.c_str(), &fileBufferMesh);
+
+			ModelImporter::Load(fileBufferMesh, res);
+
+
+			for (int ind = 0; ind < res->meshDatas.size(); ind++)
+			{
+				GameObject* goChild = App->scene->CreateGO(res->assetName.c_str(), go);
+				goChild->CreateComp(Component::Types::MESH);
+				goChild->GOmesh->meshData = res->meshDatas[ind];
+				goChild->GOmesh->meshData->LoadBuffers();
+
+				goChild->CreateComp(Component::Types::MATERIAL);
+
+				if (goChild->GOmesh->meshData->materialAttachedID != 0) {
+
+					char* fileBufferMat = nullptr;
+					std::string libNameMat = std::to_string(goChild->GOmesh->meshData->materialAttachedID) + ".chad";
+
+					uint bufferSizeMat = App->fileSystem->FileToBuffer(libNameMat.c_str(), &fileBufferMat);
+					MaterialData* new_material_data = new MaterialData(res->assetName.c_str());
+					MaterialImporter::Load(fileBufferMat, new_material_data, bufferSizeMat);
+
+					goChild->GOmat->materialData = new_material_data;
+				}
+			}
+		}
+	}
+}
+
 void ModuleEditor::BarShapes() {
 	if (ImGui::BeginMenu("Shapes"))
 	{
@@ -847,23 +929,23 @@ void ModuleEditor::BarShapes() {
 
 		if (ImGui::MenuItem(shapes[0]))
 		{
-			App->scene->LoadCustomObj("Assets/Cube.fbx", shapes[0]);
+				LoadShape(shapes[0]);
 		}
 		if (ImGui::MenuItem(shapes[1]))
 		{
-			App->scene->LoadCustomObj("Assets/Sphere.fbx", shapes[1]);
+			LoadShape(shapes[1]);
 		}
 		if (ImGui::MenuItem(shapes[2]))
 		{
-			App->scene->LoadCustomObj("Assets/Pyramid.fbx", shapes[2]);
+			LoadShape(shapes[2]);
 		}
 		if (ImGui::MenuItem(shapes[3]))
 		{
-			App->scene->LoadCustomObj("Assets/Cylinder.fbx", shapes[3]);
+			LoadShape(shapes[3]);
 		}
 
 
-		if (ImGui::Button("Clear Shapes"))
+		if (ImGui::Button("Clear GameObjects"))
 		{
 			selectedObj = nullptr;
 			DeleteGo();
@@ -962,24 +1044,11 @@ void ModuleEditor::ConfigWindowXXX()
 		ImGui::Text("Width:");
 		ImGui::SameLine();
 		ImGui::TextColored({ 255,0,0,1 }, "%ipx", App->window->winWidth);
-		/*int width = App->window->winWidth;
-		if (ImGui::SliderInt("Width", (int*)&width, MIN_WIDTH, MAX_WIDTH))
-		{
-			App->window->winWidth = width;
-			SDL_SetWindowSize(App->window->window, width, App->window->winHeight);
-
 		
-		}*/
 		ImGui::Text("Height:");
 		ImGui::SameLine();
 		ImGui::TextColored({ 255,0,0,1 }, "%ipx", App->window->winHeight);
-		/*int height = App->window->winHeight;
-		if (ImGui::SliderInt("Height", (int*)&height, MIN_HEIGHT, MAX_HEIGHT))
-		{
-			App->window->winHeight = height;
-			SDL_SetWindowSize(App->window->window, App->window->winWidth, height);
-			
-		}*/
+		
 		if (ImGui::Button("Reset"))
 		{
 			SDL_SetWindowSize(App->window->window, SCREEN_WIDTH, SCREEN_HEIGHT);
@@ -997,12 +1066,9 @@ void ModuleEditor::ConfigHardwareXXX()
 	SDL_VERSION(&compiled);
 	SDL_GetVersion(&linked);
 
-	const GLubyte* vendor = glGetString(GL_VENDOR); // Returns the vendor
-	const GLubyte* renderer = glGetString(GL_RENDERER); // Returns a hint to the model
-														// const GLubyte* vram = glGetIntegerv(GL_GPU_MEMORY_INFO_CURRENT_AVAILABLE_VIDMEM_NVX); // Returns a hint to the model
-
-														//const GLubyte* version = glGetString(GL_VERSION); // Returns a hint to the model
-
+	const GLubyte* vendor = glGetString(GL_VENDOR); 
+	const GLubyte* renderer = glGetString(GL_RENDERER); 
+														
 	if (ImGui::CollapsingHeader("Hardware"))
 	{
 		
@@ -1739,18 +1805,7 @@ void ModuleEditor::GOList()
 
 
 	}
-	if (ImGui::BeginDragDropTarget())
-	{
-		if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("LOAD_ASSET_INTO_SCENE"))
-		{
-			/*IM_ASSERT(payload->DataSize == sizeof(int));
-			int payload_n = *(const int*)payload->Data;*/
-			//LOG("DROPPED");
 
-		}
-		ImGui::EndDragDropTarget();
-	}
-	
 	ImGui::End();
 
 }
