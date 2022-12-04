@@ -304,11 +304,7 @@ update_status ModuleImport::Update(float dt) {
 		
 
 		hasToLoadAssets = true;
-
-		App->scene->LoadSpecific(App->imp->firstID);
 	}
-
-	
 
 	return update_status::UPDATE_CONTINUE;
 }
@@ -382,11 +378,6 @@ void ModuleImport::ImportAsset(const char* filePath) {
 
 
 		std::string new_name = std::to_string(new_model_data->assetID) + ".chad";
-		if (firstID == 0)
-		{
-			firstID = new_model_data->assetID;
-		}
-		
 		std::string finalLibraryPath = libraryPath_s + new_name;
 		App->fileSystem->SaveFile(finalLibraryPath.c_str(), buffer, size);
 

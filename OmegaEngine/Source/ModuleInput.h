@@ -22,6 +22,7 @@ public:
 	bool Init();
 	update_status PreUpdate(float dt);
 	bool CleanUp();
+	int a=0;
 
 	bool close=false;//to close the engine
 	bool CallClose = false;
