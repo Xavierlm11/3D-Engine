@@ -29,10 +29,16 @@ bool ModuleScene::Start()
 	LOG("Loading scene");
 	bool ret = true;
 
-    RootParent = new GameObject("RootParent", nullptr);
 
+    //CreateGORoot(RootParent,"RootParent",nullptr);
+    RootParent = new GameObject("RootParent", nullptr);
+    //RootParent->showingInHierarchy = false;
     AddGOList(RootParent);
 
+    App->renderer3D->GameCam = App->scene->CreateGO("Cam", App->scene->RootParent);
+    App->renderer3D->GameCam->CreateComp(Component::Types::CAMERA);
+    App->renderer3D->MainCam = App->renderer3D->GameCam->GOcam;
+    App->renderer3D->GameCam->GOtrans->SetPos({ 0,5,10 });
 	return ret;
 }
 

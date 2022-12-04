@@ -654,6 +654,8 @@ void ModuleEditor::Draw() {
 	}
 
 	DrawSceneViewport();
+	if(App->renderer3D->MainCam!=nullptr)
+		DrawGameViewport();
 
 
 	ImGui::Render();
@@ -772,6 +774,26 @@ void ModuleEditor::DrawSceneViewport()
 			ImGui::EndDragDropTarget();
 			
 		}
+	}
+	ImGui::End();
+}
+
+void ModuleEditor::DrawGameViewport()
+{
+	if (ImGui::Begin("Game"))
+	{
+		if (ImGui::IsWindowHovered())App->camera->IsWindow = true;
+		else App->camera->IsWindow = false;
+
+		ImVec2 ViewSize = ImGui::GetContentRegionAvail();
+		AspRatioGame = (float)(ViewSize.x / ViewSize.y);
+		App->renderer3D->MainCam->SetRatio(AspRatioGame);
+		if ((ViewSize.x / ViewSize.y) != AspRatioGame)
+		{
+			//App->camera->UpdateFrustum();
+
+		}
+		ImGui::Image((ImTextureID)App->renderer3D->MainCam->GetCCamBuffer(), ImGui::GetContentRegionAvail(), ImVec2(0, 1), ImVec2(1, 0));
 	}
 	ImGui::End();
 }
@@ -1809,9 +1831,22 @@ void ModuleEditor::DeleteGo()
 {
 	for (uint i = 1; i < App->scene->ListGO.size(); ++i) {
 			
-			App->scene->ListGO.at(i)->Remove();
-			App->scene->ListGO.erase(App->scene->ListGO.begin()+1, App->scene->ListGO.end());
-	}
+			if(App->scene->ListGO[i]->GOcam!=nullptr)
+			{
+				App->scene->ListGO.at(i)->Remove();
+				App->scene->ListGO.erase(App->scene->ListGO.begin() + 1, App->scene->ListGO.end());
+			}
+				//App->scene->ListGO.at(i) = nullptr;
+				//delete App->scene->ListGO.at(i);
+				
+		}
+		/*for (uint i = 1; i < App->scene->ListGO.size(); ++i) {
+			App->scene->ListGO[i] = nullptr;
+			delete App->scene->ListGO[i];
+
+		}
+			App->scene->ListGO.clear();*/
+
 }
 
 void ModuleEditor::CheckGLCapabilities() {
