@@ -4,30 +4,7 @@
 #include "CCamera.h"
 ModuleCamera3D::ModuleCamera3D(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
-	//CalculateViewMatrixOpenGL();
 
-	//X = vec3(1.0f, 0.0f, 0.0f);
-	//Y = vec3(0.0f, 1.0f, 0.0f);
-	//Z = vec3(0.0f, 0.0f, 1.0f);
-
-	//Position = vec3(0.0f, 1.0f, 5.0f);
-	//Reference = vec3(0.0f, 0.0f, 0.0f);
-
-	//cameraFrustum.type = math::PerspectiveFrustum;
-	//cameraFrustum.verticalFov = camFOV * DEGTORAD;
-	//cameraFrustum.horizontalFov = 2.0f * atanf(tanf(cameraFrustum.verticalFov / 2.0f) * 1.6f);
-	//cameraFrustum.nearPlaneDistance = 0.01f;
-	//cameraFrustum.farPlaneDistance = 1000.0f;
-	//cameraFrustum.pos = float3(Position.x, Position.y, Position.z);
-	//cameraFrustum.front = float3(Z.x, Z.y, Z.z);
-	//cameraFrustum.up = float3(Y.x, Y.y, Y.z);
-
-	////LookAt(0, 0, 0);
-	//
-
-	//CalculateViewMatrixOpenGL();
-	//CalculateProjectionMatrixOpenGL();
-	
 }
 
 ModuleCamera3D::~ModuleCamera3D()
@@ -106,46 +83,11 @@ update_status ModuleCamera3D::Update(float dt)
 		}
 
 
-			// Recalculate matrix -------------
-			////UpdateFrustum();
 	}
 
 	return UPDATE_CONTINUE;
 }
-//
-//void ModuleCamera3D::UpdateFrustum() {
-//
-//
-//
-//
-//	cameraFrustum.pos = float3(Position.x, Position.y, Position.z);
-//	cameraFrustum.type = math::PerspectiveFrustum;
-//	cameraFrustum.front = float3(Z.x, Z.y, Z.z);
-//	cameraFrustum.up = float3(Y.x, Y.y, Y.z);
-//	cameraFrustum.pos = float3(Position.x, Position.y, Position.z);
-//
-//	cameraFrustum.verticalFov = camFOV * DEGTORAD;
-//	//cameraFrustum.horizontalFov = 2.0f * atanf(tanf(cameraFrustum.verticalFov / 2.0f) * App->window->winWidth/ App->window->winHeight);
-//	cameraFrustum.horizontalFov = 2.0f * atanf(tanf(cameraFrustum.verticalFov / 2.0f) * aspRatio);
-//	/*cameraFrustum.nearPlaneDistance = 0.1f;
-//	cameraFrustum.farPlaneDistance = 1000.0f;
-//	cameraFrustum.verticalFov = 60.0f * DEGTORAD;
-//	cameraFrustum.horizontalFov = 2.0f * atanf(tanf(cameraFrustum.verticalFov / 2.0f) * 1.6f);*/
-//	glMatrixMode(GL_PROJECTION);
-//	glLoadMatrixf((GLfloat*)App->camera->GetProjectionMatrixOpenGL());
-//	GetGlLoadMat();
-//
-//	//CalculateViewMatrixOpenGL();
-//	//CalculateProjectionMatrixOpenGL();
-//}
-//
-//GLfloat* ModuleCamera3D::GetGlLoadMat()
-//{
-//
-//	return (GLfloat*)App->camera->GetProjectionMatrixOpenGL();
-//}
-//
-// 
+
 
 void ModuleCamera3D::Rotate() {
 
@@ -154,28 +96,6 @@ void ModuleCamera3D::Rotate() {
 
 	float Sensitivity = 0.15f;
 
-		/*if (dx != 0)
-		{
-			float AngleX = (float)dx * Sensitivity;
-
-			X = rotate(X, AngleX, vec3(0.0f, 1.0f, 0.0f));
-			Y = rotate(Y, AngleX, vec3(0.0f, 1.0f, 0.0f));
-			Z = rotate(Z, AngleX, vec3(0.0f, 1.0f, 0.0f));
-		}
-
-		if (dy != 0)
-		{
-			float AngleY = (float)dy * Sensitivity;
-
-			Y = rotate(Y, AngleY, -X);
-			Z = rotate(Z, AngleY, -X);
-
-			if (Y.y < 0.0f)
-			{
-				Z = vec3(0.0f, Z.y > 0.0f ? 1.0f : -1.0f, 0.0f);
-				Y = cross(Z, X);
-			}
-		}*/
 
 	Quat dir;
 	ScnCam->cameraFrustum.WorldMatrix().Decompose(float3(), dir, float3());
@@ -203,11 +123,7 @@ void ModuleCamera3D::Rotate() {
 	ScnCam->cameraFrustum.SetWorldMatrix(matrix.Float3x4Part());
 
 }
-//
-//	UpdateFrustum();
-//
-//}
-//
+
 void ModuleCamera3D::Orbit(float3 target) {
 
 	int dx = -App->input->GetMouseXMotion();
@@ -234,90 +150,3 @@ void ModuleCamera3D::Zoom(float _speed) {
 }
 
 
-
-//
-//// -----------------------------------------------------------------
-//void ModuleCamera3D::Look(const vec3 &Position, const vec3 &Reference, bool RotateAroundReference)
-//{
-//	this->Position = Position;
-//	this->Reference = Reference;
-//
-//	Z = normalize(Position - Reference);
-//	X = normalize(cross(vec3(0.0f, 1.0f, 0.0f), Z));
-//	Y = cross(Z, X);
-//
-//	if(!RotateAroundReference)
-//	{
-//		this->Reference = this->Position;
-//		this->Position += Z * 0.05f;
-//	}
-//
-//	UpdateFrustum();
-//}
-//
-//// -----------------------------------------------------------------
-//void ModuleCamera3D::LookAt( const vec3 &Spot)
-//{
-//	Reference = Spot;
-//
-//	Z = normalize(Reference - Position);
-//	X = normalize(cross(vec3(0.0f, 1.0f, 0.0f), Z));
-//	Y = cross(Z, X);
-//
-//	UpdateFrustum();
-//}
-//
-//
-//// -----------------------------------------------------------------
-//void ModuleCamera3D::Move(const vec3 &Movement)
-//{
-//	Position += Movement;
-//	Reference += Movement;
-//
-//	UpdateFrustum();
-//}
-//
-//// -----------------------------------------------------------------
-//float* ModuleCamera3D::GetViewMatrix()
-//{
-//	return &ViewMatrix;
-//}
-//
-//
-//
-//// -----------------------------------------------------------------
-//void ModuleCamera3D::CalculateViewMatrix()
-//{
-//	ViewMatrix = mat4x4(X.x, Y.x, Z.x, 0.0f, X.y, Y.y, Z.y, 0.0f, X.z, Y.z, Z.z, 0.0f, -dot(X, Position), -dot(Y, Position), -dot(Z, Position), 1.0f);
-//	ViewMatrixInverse = inverse(ViewMatrix);
-//}
-//
-//float4x4 *ModuleCamera3D::GetViewMatrixOpenGL()
-//{
-//	CalculateViewMatrixOpenGL();
-//	return ViewMatrixOpenGL;
-//}
-//
-//void ModuleCamera3D::CalculateViewMatrixOpenGL() {
-//
-//	math::float4x4 view;
-//	view = cameraFrustum.ViewMatrix();
-//	
-//	view.Transpose();
-//	ViewMatrixOpenGL = &view;
-//}
-//
-//float4x4 *ModuleCamera3D::GetProjectionMatrixOpenGL()
-//{
-//	CalculateProjectionMatrixOpenGL();
-//	return ViewMatrixOpenGL;
-//}
-//
-//void ModuleCamera3D::CalculateProjectionMatrixOpenGL() {
-//
-//	static float4x4 view;
-//	view = cameraFrustum.ProjectionMatrix();
-//
-//	view.Transpose();
-//	ViewMatrixOpenGL = &view;
-//}
