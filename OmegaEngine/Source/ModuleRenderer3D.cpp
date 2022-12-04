@@ -386,7 +386,7 @@ void ModuleRenderer3D::BindCamBuffer(CCamera* _CCam)
 	glLoadMatrixf(_CCam->GetViewMatrixOpenGL());
 
 	glBindFramebuffer(GL_FRAMEBUFFER, _CCam->GetFrameBuffer());
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+//	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
 void ModuleRenderer3D::OnResize(int x, int y, int width, int height)
