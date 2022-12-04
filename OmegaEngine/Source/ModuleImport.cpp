@@ -305,7 +305,7 @@ update_status ModuleImport::Update(float dt) {
 
 		hasToLoadAssets = true;
 
-		App->scene->LoadSpecific(App->imp->firstID);
+		//App->scene->LoadSpecific(App->imp->firstID);
 	}
 
 	
