@@ -231,13 +231,5 @@ bool ModuleFileSystem::CleanUp() {
 
 	}
 
-	folder_name = LIB_MATERIAL_PATH;
-
-	if (remove(folder_name.c_str()) == 0)
-	{
-		LOG("Library folder removed");
-	}
-	
-
 	return true;
 }
