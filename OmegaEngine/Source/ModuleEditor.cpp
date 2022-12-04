@@ -255,7 +255,7 @@ update_status ModuleEditor::Update(float dt)
 							ImGui::Text(" ");
 
 							if (ImGui::Button("Delete GameObject", ImVec2(140, 60))) {
-
+								selectedObj = nullptr;
 								GameObject* goPtr = App->scene->ListGO[GOIndex];
 								
 								std::vector<int> goToDelete;
@@ -1524,6 +1524,7 @@ void ModuleEditor::GOList()
 					for (int ind = 0; ind < App->scene->ListGO.size(); ind++) {
 						if (App->scene->ListGO[ind] == gameObjectsShowing[i]) {
 							GOIndex = ind;
+							selectedObj = App->scene->ListGO[ind];
 						}
 					}
 					inspectorShowing = InspectorShow::GAMEOBJECT;
@@ -1698,6 +1699,7 @@ void ModuleEditor::GOList()
 						for (int ind = 0; ind < App->scene->ListGO.size(); ind++) {
 							if (App->scene->ListGO[ind] == gameObjectsShowing[i]) {
 								GOIndex = ind;
+								selectedObj = App->scene->ListGO[ind];
 							}
 						}
 						inspectorShowing = InspectorShow::GAMEOBJECT;
@@ -1784,6 +1786,7 @@ void ModuleEditor::GOList()
 											for (int ind = 0; ind < App->scene->ListGO.size(); ind++) {
 												if (App->scene->ListGO[ind] == gameObjectsShowing[k]) {
 													GOIndex = ind;
+													selectedObj = App->scene->ListGO[ind];
 												}
 											}
 											inspectorShowing = InspectorShow::GAMEOBJECT;
@@ -1882,6 +1885,7 @@ void ModuleEditor::GOList()
 						for (int ind = 0; ind < App->scene->ListGO.size(); ind++) {
 							if (App->scene->ListGO[ind] == gameObjectsShowing[i]) {
 								GOIndex = ind;
+								selectedObj = App->scene->ListGO[ind];
 							}
 						}
 						inspectorShowing = InspectorShow::GAMEOBJECT;

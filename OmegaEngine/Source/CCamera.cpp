@@ -22,9 +22,7 @@ CCamera::CCamera(GameObject* obj) :Component(obj, Types::CAMERA)
 	
 
 	NewFrBuffer();
-	
-	//CalculateViewMatrixOpenGL();
-	//CalculateProjectionMatrixOpenGL();
+
 }
 
 CCamera::~CCamera()
@@ -52,8 +50,6 @@ void CCamera::NewFrBuffer()
 	glGenFramebuffers(1, (GLuint*)&NewFrameBuffer);
 	glBindFramebuffer(GL_FRAMEBUFFER, NewFrameBuffer);
 
-	//glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-
 	glGenTextures(1, (GLuint*)&CCBuffer);
 	glBindTexture(GL_TEXTURE_2D, CCBuffer);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
@@ -79,10 +75,6 @@ void CCamera::NewFrBuffer()
 
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
-	/*glGenerateMipmap(GL_TEXTURE_2D);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, CHECKERS_WIDTH, CHECKERS_HEIGHT, 0, GL_RGBA, GL_UNSIGNED_BYTE, checkerImage);
-
-	glBindTexture(GL_TEXTURE_2D, 0);*/
 }
 
 void CCamera::SetRatio( float ratio)
@@ -98,10 +90,6 @@ void CCamera::LoadBuffer(int _width, int _height)
 
 }
 
-//void CCamera::UpdateFrustum()
-//{
-//
-//}
 
 GLfloat* CCamera::GetGlLoadMatCC()
 {
@@ -113,9 +101,6 @@ float* CCamera::GetViewMatrixOpenGL()
 	static float4x4 view;
 	view = cameraFrustum.ViewMatrix();
 
-	//ViewMatrixOpenGL = cameraFrustum.ViewMatrix();
-
-	//ViewMatrixOpenGL.Transpose();
 	view.Transpose();
 	ViewMatrixOpenGL = &view;
 
@@ -128,9 +113,6 @@ float* CCamera::GetProjectionMatrixOpenGL()
 	static float4x4 view;
 	view = cameraFrustum.ProjectionMatrix();
 
-	/*ProjectionMatrixOpenGL = cameraFrustum.ProjectionMatrix();
-
-	ProjectionMatrixOpenGL.Transpose();*/
 
 	view.Transpose();
 	ProjectionMatrixOpenGL = &view;
@@ -147,11 +129,6 @@ unsigned int CCamera::GetFrameBuffer()
 {
 	return NewFrameBuffer;
 }
-
-//void CCamera::Rotate()
-//{
-//
-//}
 
 void CCamera::Look(const float3& _Position, const float3& _Reference, bool _RotateAroundReference)
 {
@@ -175,28 +152,4 @@ void CCamera::Move(const float3& Movement)
 	cameraFrustum.pos += Movement;
 }
 
-//void CCamera::Zoom()
-//{
-// 
-//}
 
-//void CCamera::Orbit(float3 target)
-//{
-//}
-
-//float* CCamera::GetViewMatrix()
-//{
-//	return nullptr;
-//}
-
-
-//void CCamera::CalculateViewMatrix()
-//{
-//}
-//void CCamera::CalculateViewMatrixOpenGL()
-//{
-//}
-//
-//void CCamera::CalculateProjectionMatrixOpenGL()
-//{
-//}
