@@ -2,7 +2,7 @@
 
 Component::Component(GameObject* obj, Types type):GO(obj),type(type),active(true)
 {
-
+	//this->GO = obj;
 }
 Component::~Component()
 {

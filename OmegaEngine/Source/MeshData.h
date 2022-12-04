@@ -6,7 +6,7 @@
 #include "MaterialData.h"
 #include "glmath.h"
 #include "Resource.h"
-
+#include "MathGeoLib/include/Math/float4x4.h"
 class MeshData: public Resource{
 
 public:
@@ -14,7 +14,7 @@ public:
 	~MeshData();
 
 	void LoadBuffers();
-	void DrawMesh(GLuint textureID, mat4x4 mat);
+	void DrawMesh(GLuint textureID, float4x4 mat);
 	void UnloadMesh();
 
 	uint id_indices = 0; // index in VRAM

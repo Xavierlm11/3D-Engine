@@ -117,7 +117,7 @@ void MeshData::UnloadMesh() {
 
 }
 
-void MeshData::DrawMesh(GLuint textureID, mat4x4 mat) {
+void MeshData::DrawMesh(GLuint textureID, float4x4 mat) {
 	if (hasLoadedBuffers == true) {
 
 		//if (textureID != NULL) {
@@ -143,7 +143,7 @@ void MeshData::DrawMesh(GLuint textureID, mat4x4 mat) {
 		//estas 2 funciones hacen el trnasform
 		//glMatrixMode(GL_MODELVIEW);
 		glPushMatrix();
-		glMultMatrixf(&mat);
+		glMultMatrixf(mat.ptr());
 
 		glDrawElements(GL_TRIANGLES, num_indices, GL_UNSIGNED_INT, NULL);
 		//if (textureID != NULL) {

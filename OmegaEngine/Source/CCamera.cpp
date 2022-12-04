@@ -23,6 +23,8 @@ CCamera::CCamera(GameObject* obj) :Component(obj, Types::CAMERA)
 
 	NewFrBuffer();
 
+	this->GO = obj;
+
 }
 
 CCamera::~CCamera()
@@ -34,7 +36,14 @@ CCamera::~CCamera()
 
 void CCamera::Update()
 {
-	//GO.
+	/*if (GO!=nullptr)
+	{
+		cameraFrustum.pos = GO->GOtrans->GetPos();
+		float4x4 mat;
+		mat = GO->GOtrans->GetGlobal();
+		cameraFrustum.front = mat.RotatePart().Col(2).Normalized();
+		cameraFrustum.up = mat.RotatePart().Col(1).Normalized();
+	}*/
 }
 
 void CCamera::NewFrBuffer()
