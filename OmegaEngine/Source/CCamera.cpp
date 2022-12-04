@@ -79,8 +79,16 @@ void CCamera::NewFrBuffer()
 
 void CCamera::SetRatio( float ratio)
 {
+	aspRatio = ratio;
 	cameraFrustum.horizontalFov = 2.0f * atanf(tanf(cameraFrustum.verticalFov / 2.0f) * ratio);
 	cameraFrustum.verticalFov =  DEGTORAD * camFOV ;
+}
+
+void CCamera::SetFOV(float FOV)
+{
+	 camFOV=FOV;
+	cameraFrustum.horizontalFov = 2.0f * atanf(tanf(cameraFrustum.verticalFov / 2.0f) * 1.6f);
+	cameraFrustum.verticalFov = DEGTORAD * FOV;
 }
 
 void CCamera::LoadBuffer(int _width, int _height)
@@ -90,6 +98,34 @@ void CCamera::LoadBuffer(int _width, int _height)
 
 }
 
+
+void CCamera::OnInspector()
+{
+	if (ImGui::CollapsingHeader("Camera"))
+	{
+		ImGui::SliderFloat("Near Distance",&cameraFrustum.nearPlaneDistance, 0.1f, cameraFrustum.farPlaneDistance );
+		if (ImGui::Button("reset "))
+		{
+			cameraFrustum.nearPlaneDistance = 0.01f;
+		}
+		/*ImGui::SliderFloat("Far Distance", &cameraFrustum.farPlaneDistance, 0.1f, cameraFrustum.nearPlaneDistance);
+		if (ImGui::Button("reset "))
+		{
+			cameraFrustum.farPlaneDistance = 1000.0f;
+		}*/
+
+		if (ImGui::SliderFloat("FOV", &camFOV, 10, 200))
+		{
+			SetFOV(camFOV);
+		}
+
+		if (ImGui::Button("reset FOV "))
+		{
+			SetFOV(60.0f);
+		}
+
+	}
+}
 
 GLfloat* CCamera::GetGlLoadMatCC()
 {

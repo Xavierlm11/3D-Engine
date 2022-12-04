@@ -38,7 +38,9 @@ bool ModuleScene::Start()
     App->renderer3D->GameCam = App->scene->CreateGO("Cam", App->scene->RootParent);
     App->renderer3D->GameCam->CreateComp(Component::Types::CAMERA);
     App->renderer3D->MainCam = App->renderer3D->GameCam->GOcam;
-    App->renderer3D->GameCam->GOtrans->SetPos({ 0,5,10 });
+   /* App->renderer3D->MainCam->cameraFrustum.pos =float3(0,5,-200);
+    App->renderer3D->GameCam->GOtrans->SetPos({ 0,5,-20 });
+    App->renderer3D->GameCam->GOtrans->SetRot({180,0,180});*/
 	return ret;
 }
 
