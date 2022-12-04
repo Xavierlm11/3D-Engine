@@ -15,7 +15,6 @@ ModuleScene::ModuleScene(Application* app, bool start_enabled) : Module(app, sta
 {
     modelScene = nullptr;
     modelMesh = nullptr;
-    //models.push_back(new ModelData());
 
 }
 
@@ -30,26 +29,9 @@ bool ModuleScene::Start()
 	LOG("Loading scene");
 	bool ret = true;
 
-
-    //CreateGORoot(RootParent,"RootParent",nullptr);
     RootParent = new GameObject("RootParent", nullptr);
-    //RootParent->showingInHierarchy = false;
+
     AddGOList(RootParent);
-
-  //RootParent->components[1].
-    //LoadCustom("Assets/BakerHouse.fbx", &meshes);
-   /* LoadCube(meshes);
-    LoadSphere(meshes);
-    LoadPyramid(meshes);
-    LoadCylinder(meshes);*/
-   /* for (int i = 0; i < meshes.size(); i++)
-    {
-        meshes[i]->LoadBuffers();
-    }*/
-
-    //App->imp->ImportAsset("C:\\Users\\xaviercb12\\Documents\\GitHub\\3D - Engine\\OmegaEngine\\Output\\Assets\\BakerHouse.fbx");
-
-   // LoadSpecific(App->imp->firstID);
 
 	return ret;
 }
@@ -70,13 +52,12 @@ void ModuleScene::CleanMeshes(std::vector<MeshData*>* meshesVec) {
 
 void ModuleScene::CreateGORoot(GameObject* obj, const char* name, GameObject* parent)
 {
-   /* obj = new GameObject(name,parent);
-    AddGOList(obj);*/
+
 }
 
 GameObject* ModuleScene::CreateGO( const char* name, GameObject* parent)
 {
-    //new GameObject(name, parent);
+
     GameObject* obj;
     obj = new GameObject(name, parent);
     
@@ -90,108 +71,6 @@ void ModuleScene::AddGOList(GameObject* objlist)
     ListGO.push_back(objlist);
 }
 
-void ModuleScene::LoadCustom(const char* path, std::vector<MeshData*>* meshesVec) {
-
-   //////// const aiScene* newScene;
-   //////// newScene = App->imp->LoadFile(path);
-   //////// 
-   //////// App->imp->GetMeshDatas(newScene, meshesVec);//aqui obtienes la mesh
-   //////// aiReleaseImport(newScene);
-   //////// newScene = nullptr;
-   //////// delete newScene;
-
-   /////////* if (house_loaded == false) {
-   ////////     const aiScene* newScene;
-   ////////     newScene = App->imp->LoadFile(path);
-   ////////     App->imp->GetMeshDatas(newScene, meshesVec);
-   ////////     aiReleaseImport(newScene);
-   ////////     App->editor->selectedShape = Shapes::NONE;
-   ////////     house_loaded = true;
-   ////////     newScene = nullptr;
-   ////////     delete newScene;
-   //////// }*/
-}
-void ModuleScene::LoadCustomObj(const char* path, const char* name) {
-    
-   
-   // const aiScene* newScene;
-   // newScene = App->imp->LoadFile(path);
-   // //for(uint i=0;newScene)
-   //// GameObject* newGo = App->scene->CreateGO();
-   // 
-   // if (newScene!=nullptr)
-   // {
-   //     App->imp->GetObjectResources(newScene, name);//aqui obtienes la mesh
-   //     aiReleaseImport(newScene);
-   // }
-   // else if(newScene == nullptr)
-   // {
-   //     LOG("IMPOSIBLE TO LOAD THIS OBJECT, TRY EXPORTING THE FBX WITH BLENDER");
-   // }
-   // newScene = nullptr;
-   // delete newScene;
-    
-    
-}
-
-void ModuleScene::LoadHouse(std::vector<MeshData*>* meshesVec) {
-
-   ///////////* if (house_loaded == false) {
-   //////////     const aiScene* newScene;
-   //////////     newScene = App->imp->LoadFile("Assets/BakerHouse.fbx");
-   //////////     App->imp->GetMeshDatas(newScene, meshesVec);
-   //////////     aiReleaseImport(newScene);
-   //////////     App->editor->selectedShape = Shapes::HOUSE;
-   //////////     house_loaded = true;
-   //////////     newScene = nullptr;
-   //////////     delete newScene;
-   ////////// }*/
-}
-
-void ModuleScene::LoadCube(std::vector<MeshData*>* meshesVec) {
-   ///////* if (cube_loaded == false) {
-   //////     const aiScene* newScene;
-   //////     newScene = App->imp->LoadFile("Assets/Cube.fbx");
-   //////     App->imp->GetMeshDatas(newScene, meshesVec);
-   //////     App->editor->selectedShape = Shapes::CUBE;
-   //////     cube_loaded = true;
-   //////     newScene = nullptr;
-   //////     delete newScene;
-   ////// }*/
-}
-void ModuleScene::LoadSphere(std::vector<MeshData*>* meshesVec) {
-    ///////*if (sphere_loaded == false) {
-    //////    const aiScene* newScene;
-    //////    newScene = App->imp->LoadFile("Assets/Sphere.fbx");
-    //////    App->imp->GetMeshDatas(newScene, meshesVec);
-    //////    App->editor->selectedShape = Shapes::SPHERE;
-    //////    sphere_loaded = true;
-    //////    newScene = nullptr;
-    //////    delete newScene;
-    //////}*/
-}
-void ModuleScene::LoadPyramid(std::vector<MeshData*>* meshesVec) {
-   ///////* if (pyramid_loaded == false) {
-   //////     const aiScene* newScene;
-   //////     newScene = App->imp->LoadFile("Assets/Pyramid.fbx");
-   //////     App->imp->GetMeshDatas(newScene, meshesVec);
-   //////     App->editor->selectedShape = Shapes::PYRAMID;
-   //////     pyramid_loaded = true;
-   //////     newScene = nullptr;
-   //////     delete newScene;
-   ////// }*/
-}
-void ModuleScene::LoadCylinder(std::vector<MeshData*>* meshesVec) {
-   /////////* if (cylinder_loaded == false) {
-   ////////     const aiScene* newScene;
-   ////////     newScene = App->imp->LoadFile("Assets/Cylinder.fbx");
-   ////////     App->imp->GetMeshDatas(newScene, meshesVec);
-   ////////     App->editor->selectedShape = Shapes::CYLINDER;
-   ////////     cylinder_loaded = true;
-   ////////     newScene = nullptr;
-   ////////     delete newScene;
-   //////// }*/
-}
 
 void ModuleScene::LoadSpecific(uint uid)
 {

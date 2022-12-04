@@ -18,8 +18,6 @@ using namespace std;
 ModuleFileSystem::ModuleFileSystem(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
 	
-
-	
 }
 
 ModuleFileSystem::~ModuleFileSystem()
@@ -36,7 +34,7 @@ bool ModuleFileSystem::Init()
 	string folder_name;
 
 	folder_name = ".";
-	//Setting the working directory as the writing directory
+
 	if (PHYSFS_setWriteDir(folder_name.c_str()) == 0) {
 		LPSECURITY_ATTRIBUTES attr;
 		attr = NULL;
@@ -78,7 +76,6 @@ bool ModuleFileSystem::Init()
 	folder_name = LIB_MESH_PATH;
 	if (PHYSFS_mount(folder_name.c_str(), nullptr, 1) == 0)
 	{
-		//LOG("Error adding the path: %s\n", PHYSFS_getLastError());
 		LPSECURITY_ATTRIBUTES attr;
 		attr = NULL;
 		
@@ -89,18 +86,12 @@ bool ModuleFileSystem::Init()
 	folder_name = LIB_MATERIAL_PATH;
 	if (PHYSFS_mount(folder_name.c_str(), nullptr, 1) == 0)
 	{
-		//LOG("Error adding the path: %s\n", PHYSFS_getLastError());
 		LPSECURITY_ATTRIBUTES attr;
 		attr = NULL;
 
 		CreateDirectory(folder_name.c_str(), attr);
 		PHYSFS_mount(folder_name.c_str(), nullptr, 1);
 	}
-
-	
-
-	//App->imp->ImportAsset(assetFilesVec[i].c_str());
-	//App->imp->ImportAsset("C:\\Users\\xaviercb12\\Documents\\GitHub\\3D - Engine\\OmegaEngine\\Output\\Assets\\Cube.fbx");
 
 
 	return true;
@@ -141,7 +132,6 @@ uint ModuleFileSystem::ImportFileToDir(const char* filePath, const char* newPath
 	uint size = 0;
 
 	std::string assetsDir = newPath;
-	//std::string libDir = "Library/";
 	
 
 	std::FILE* file;
@@ -197,9 +187,57 @@ void ModuleFileSystem::SaveFile(const char* newFilePath, char* buffer, uint size
 		PHYSFS_writeBytes(physfs_lib_file, (const void*)buffer, size);
 		PHYSFS_close(physfs_lib_file);
 
-		
-
 	}
 
 }
 
+bool ModuleFileSystem::CleanUp() {
+
+	std::string folder_name = LIB_MESH_PATH;
+
+	vector<string> chadMeshFilesVec = App->imp->GetFilesInFolder(folder_name);
+
+	for (int i = 0; i < chadMeshFilesVec.size(); i++)
+	{
+		
+		std::string fileName_s = chadMeshFilesVec[i].substr(chadMeshFilesVec[i].find_last_of('\\') + 1);
+
+		folder_name = LIB_MESH_PATH;
+		folder_name += fileName_s;
+
+		if (remove(folder_name.c_str()) == 0)
+		{
+			LOG("Chad file removed");
+		}
+		
+	}
+
+	folder_name = LIB_MATERIAL_PATH;
+
+	vector<string> chadMatFilesVec = App->imp->GetFilesInFolder(folder_name);
+
+	for (int i = 0; i < chadMatFilesVec.size(); i++)
+	{
+
+		std::string fileName_s = chadMatFilesVec[i].substr(chadMatFilesVec[i].find_last_of('\\') + 1);
+
+		folder_name = LIB_MATERIAL_PATH;
+		folder_name += fileName_s;
+
+		if (remove(folder_name.c_str()) == 0)
+		{
+			LOG("Chad file removed");
+		}
+
+	}
+
+	folder_name = LIB_MATERIAL_PATH;
+
+	if (remove(folder_name.c_str()) == 0)
+	{
+		LOG("Library folder removed");
+	}
+	
+
+	return true;
+}

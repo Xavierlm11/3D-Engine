@@ -59,7 +59,6 @@ vector<string> ModuleImport:: GetFilesInFolder(string folder)
 	{
 		do
 		{
-			// read all (real) files in current folder, delete '!' read other 2 default folder . and ..
 			if (!(fd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY))
 			{
 				string temp;
@@ -69,7 +68,7 @@ vector<string> ModuleImport:: GetFilesInFolder(string folder)
 
 				GetFullPathName(filename, MAX_PATH, fullFilename, nullptr);
 				string temp2 = fullFilename;
-				string filepath_s = temp2.substr(0,temp2.find_last_of('\\') + 1) + "Assets\\";// +temp;
+				string filepath_s = temp2.substr(0,temp2.find_last_of('\\') + 1) + "Assets\\";
 				filepath_s += temp;
 				names.push_back(filepath_s);
 			}
@@ -151,30 +150,9 @@ bool ModuleImport::CleanUp()
 }
 
 
-//const aiScene* ModuleImport::LoadFile(const char* file_path) {
-//	const aiScene* scene = aiImportFile(file_path, aiProcessPreset_TargetRealtime_MaxQuality);
-//	
-//	if (scene != nullptr && scene->HasMeshes()==true)
-//	{
-//		// Use scene->mNumMeshes to iterate on scene->mMeshes array
-//		LOG("File with path: %s loaded successfully!", file_path);
-//		return scene;
-//	}
-//	else {
-//		LOG("Error loading scene % s", file_path);
-//		return scene;
-//	}
-//		
-//}
-
 void ModuleImport::ImportModelResources(const aiScene* scene, ModelData* model) {
 
-	//std::vector<MeshData*> meshDatasVec;
-	//std::vector<Uint64> materialsVec;
-
-	//uint size = 0;
-	//char* buffer = nullptr;
-
+	
 	if (scene->HasMeshes())
 	{
 		for (unsigned int i = 0; i < scene->mNumMeshes; i++)
@@ -182,27 +160,10 @@ void ModuleImport::ImportModelResources(const aiScene* scene, ModelData* model) 
 			aiMesh* mesh = new aiMesh();
 			mesh = scene->mMeshes[i];
 			
-			MeshData* meshData = new MeshData(scene->mMeshes[i]->mName.C_Str());//model->assetPath.c_str());
-			
-			//Resource* meshResource = new Resource(model->assetName.c_str(), Resource::Types::MESH);
-			
+			MeshData* meshData = new MeshData(scene->mMeshes[i]->mName.C_Str());
+
 			MeshImporter::Import(mesh, meshData);
 			
-			//buffer = MeshImporter::Save(meshData, size);
-			//////char* fileBuffer = nullptr;
-			//////uint size = 0;
-			//////MeshImporter::Save(meshData, size);// &fileBuffer);
-			//////if (fileBuffer != nullptr) {
-			//////	delete[] fileBuffer;
-			//////	fileBuffer = nullptr;
-			//////}
-			
-			//MeshImporter::Load(fileBuffer, meshData);
-
-			
-
-			//meshDatasVec.push_back(meshData->assetID);
-			//dobj->GOmesh->meshData = GetMeshDataObj(dobj->GOmesh->meshData, scene->mMeshes[i], scene, dobj);
 			model->meshDatas.push_back(meshData);
 		}
 	}
@@ -239,53 +200,9 @@ void ModuleImport::ImportModelResources(const aiScene* scene, ModelData* model) 
 
 	}
 }
-//
-//void ModuleImport::GetMaterialsID(const aiScene* scene, ModelData* model) {
-//
-//	//if (scene->HasMeshes())
-//	//{
-//	//	for (unsigned int j = 0; j < scene->mNumMeshes; j++) {
-//
-//	//		//If the mesh has a material assigned
-//	//		if (scene->mMeshes[j]->mMaterialIndex != -1) {
-//
-//	//			aiMaterial* meshMat = scene->mMaterials[scene->mMeshes[j]->mMaterialIndex];
-//
-//	//			aiString path;
-//	//			meshMat->GetTexture(aiTextureType_DIFFUSE, 0, &path);
-//
-//	//			const char* filePath = path.C_Str();
-//	//			LOG("File path: %s", filePath);
-//
-//	//			std::string assetsPath = ASSETS_PATH;
-//	//			std::string finalPath = assetsPath + filePath;
-//	//			LOG("Assets path: %s", finalPath.c_str());
-//
-//	//			for (unsigned int k = 0; k < model->materialDatas.size(); k++) {
-//
-//	//				//If material of mesh is the same as one of the model materials list
-//	//				if (finalPath == model->materialDatas[k]->assetPath) {
-//
-//	//					for (unsigned int l = 0; l < model->meshDatas.size(); l++) {
-//
-//	//						//Find the mesh in model meshes list
-//	//						if (model->meshDatas[l]->assetName == scene->mMeshes[j]->mName.C_Str())
-//	//						{
-//	//							model->meshDatas[l]->materialAttachedID = model->materialDatas[k]->assetID;
-//	//							//Now we need to find the game object of the mesh data and assign it the texture
-//	//						}
-//
-//	//					}
-//
-//
-//	//				}
-//	//			}
-//	//		}
-//	//	}
-//	//}
-//}
 
 update_status ModuleImport::Update(float dt) {
+
 	if (hasToLoadAssets==false) {
 
 		const char* folder_name = ASSETS_PATH;
@@ -296,7 +213,7 @@ update_status ModuleImport::Update(float dt) {
 		}
 
 		for (int i = 0; i < App->scene->resourceList.size(); i++) {
-			//GetAssetMaterial(App->scene->resourceList[i]);
+
 			if (App->scene->resourceList[i]->resourceType == Resource::Types::MODEL) {
 				GetMaterialsID(assetFilesVec[i].c_str(), (ModelData*)App->scene->resourceList[i]);
 			}
@@ -305,7 +222,7 @@ update_status ModuleImport::Update(float dt) {
 
 		hasToLoadAssets = true;
 
-		//App->scene->LoadSpecific(App->imp->firstID);
+
 	}
 
 	
@@ -313,26 +230,9 @@ update_status ModuleImport::Update(float dt) {
 	return update_status::UPDATE_CONTINUE;
 }
 
-//void ModuleImport::ImportModelResources(const aiScene* scene, ModelData* model) {
-//
-//	ILuint size;
-//	ILubyte* data;
-//
-//	ilSetInteger(IL_DXTC_FORMAT, IL_DXT5); // To pick a specific DXT compression use
-//	size = ilSaveL(IL_DDS, nullptr, 0); // Get the size of the data buffer
-//
-//	if (size > 0) {
-//		data = new ILubyte[size]; // allocate data buffer
-//		if (ilSaveL(IL_DDS, data, size) > 0) // Save to buffer with the ilSaveIL function
-//			*fileBuffer = (char*)data
-//			RELEASE_ARRAY(data);
-//	}
-//		
-//}
-
 void ModuleImport::ImportAsset(const char* filePath) {
-		/////////////[BEFORE]
-					//char* dropped_filedir;
+
+
 	std::string dropped_filedir_s = filePath;
 	std::string fileName_s = dropped_filedir_s.substr(dropped_filedir_s.find_last_of('\\') + 1);
 	std::string extension_s = fileName_s.substr(fileName_s.find_last_of('.') + 1);
@@ -395,27 +295,10 @@ void ModuleImport::ImportAsset(const char* filePath) {
 			buffer = nullptr;
 		}
 
-		//for (int i = 0; i < new_model_data->meshDatas.size(); i++) {
-		//	size = 0;
-		//	
-		//	std::string new_name = new_model_data->meshDatas[i]->assetName;//.substr(0, new_model_data->meshDatas[i]->assetName.find_last_of('.') + 1);
-		//	new_name += ".chad";
-		//	std::string finalLibraryPath = libraryPath_s + new_name;
-		//	App->fileSystem->SaveFile(finalLibraryPath.c_str(), buffer, size);
-		//	if (buffer != nullptr) {
-		//		delete[] buffer;
-		//		buffer = nullptr;
-		//	}
-		//}
-
-
-
 	}
 }
 
 Resource* ModuleImport::LoadFile(const char* file_path, Resource::Types type) {
-
-	//Resource* new_res = new Resource(file_path, type);
 	
 	const aiScene* new_scene = aiImportFile(file_path, aiProcessPreset_TargetRealtime_MaxQuality);
 
@@ -448,48 +331,7 @@ Resource* ModuleImport::LoadFile(const char* file_path, Resource::Types type) {
 			
 	}
 }
-//if (scene->HasMeshes())
-//{
-//	for (unsigned int j = 0; j < scene->mNumMeshes; j++) {
-//
-//		If the mesh has a material assigned
-//		if (scene->mMeshes[j]->mMaterialIndex != -1) {
-//
-//			aiMaterial* meshMat = scene->mMaterials[scene->mMeshes[j]->mMaterialIndex];
-//
-//			aiString path;
-//			meshMat->GetTexture(aiTextureType_DIFFUSE, 0, &path);
-//
-//			const char* filePath = path.C_Str();
-//			LOG("File path: %s", filePath);
-//
-//			std::string assetsPath = ASSETS_PATH;
-//			std::string finalPath = assetsPath + filePath;
-//			LOG("Assets path: %s", finalPath.c_str());
-//
-//			for (unsigned int k = 0; k < model->materialDatas.size(); k++) {
-//
-//				If material of mesh is the same as one of the model materials list
-//				if (finalPath == model->materialDatas[k]->assetPath) {
-//
-//					for (unsigned int l = 0; l < model->meshDatas.size(); l++) {
-//
-//						Find the mesh in model meshes list
-//						if (model->meshDatas[l]->assetName == scene->mMeshes[j]->mName.C_Str())
-//						{
-//							model->meshDatas[l]->materialAttachedID = model->materialDatas[k]->assetID;
-//							Now we need to find the game object of the mesh data and assign it the texture
-//							model->meshDatas[l]
-//						}
-//
-//					}
-//
-//
-//				}
-//			}
-//		}
-//	}
-//}
+
 void ModuleImport::GetMaterialsID(const char* path, ModelData* model) {
 
 	const aiScene* scene = aiImportFile(path, aiProcessPreset_TargetRealtime_MaxQuality);
@@ -530,8 +372,8 @@ void ModuleImport::GetMaterialsID(const char* path, ModelData* model) {
 											//Find the mesh in model meshes list
 											if (model->meshDatas[m]->assetName == scene->mMeshes[j]->mName.C_Str())
 											{
-												model->meshDatas[m]->materialAttachedID = App->scene->resourceList[l]->assetID;
 												//Now we need to find the game object of the mesh data and assign it the texture
+												model->meshDatas[m]->materialAttachedID = App->scene->resourceList[l]->assetID;
 											}
 
 										}
@@ -549,17 +391,6 @@ void ModuleImport::GetMaterialsID(const char* path, ModelData* model) {
 	ReleaseFile(scene);
 
 }
-//
-//void ModuleImport::GetMeshDatas(const aiScene* scene, std::vector<MeshData*>* meshes){
-//
-//	for (int i = 0; i < scene->mNumMeshes; i++) {
-//		MeshData* newMesh = new MeshData();
-//		
-//		//GetMeshData(newMesh, scene->mMeshes[i], scene);
-//		newMesh->LoadBuffers();
-//		meshes->push_back(newMesh);
-//	}
-//}
 
 void ModuleImport::GetObjectResources(const aiScene* scene, const char* name) {
 
@@ -569,70 +400,8 @@ void ModuleImport::GetObjectResources(const aiScene* scene, const char* name) {
 	std::vector<Uint64> meshesVec;
 	std::vector<Uint64> materialsVec;
 
-	//if (scene->HasMeshes())
-	//{
-	//	if (scene->mNumMeshes > 1)
-	//	{
-	//		GameObject* dobj = nullptr;
-	//		dobj = App->scene->CreateGO(name, parent);
-	//		parent = dobj;
-	//	}
-
-	//	for (unsigned int i = 0; i < scene->mNumMeshes; i++)
-	//	{
-	//		GameObject* dobj = nullptr;
-	//		dobj = App->scene->CreateGO(scene->mMeshes[i]->mName.C_Str(), parent);
-
-
-	//		MeshData* newMesh = new MeshData();
-
-	//		dobj->CreateComp(Component::Types::MESH);
-
-	//		dobj->GOmesh->meshData = new MeshData();
-	//		dobj->GOmesh->meshData = GetMeshDataObj(dobj->GOmesh->meshData, scene->mMeshes[i], scene, dobj);
-	//		dobj->GOmesh->meshData->LoadBuffers();
-
-	//	}
-	//}
-
-	if (scene->HasMaterials()) {
-		
-		//for (unsigned int i = 0; i < scene->mNumMaterials; i++)
-		//{
-		//	aiMaterial* material = new aiMaterial();
-		//	material = scene->mMaterials[mesh->mMaterialIndex];
-
-		//}
-
-		//
-
-		//uint numTextures = material->GetTextureCount(aiTextureType_DIFFUSE);
-		//obj->CreateComp(Component::Types::MATERIAL);
-		////obj->GOmat->materialData->texture_id
-
-		//obj->GOmat->materialData = new MaterialData();
-
-		//if (numTextures > 0) {
-
-		//	aiString path;
-		//	material->GetTexture(aiTextureType_DIFFUSE, 0, &path);
-
-		//	LOG("PATH: %s", path.C_Str());
-		//	std::string assetsPath = "Assets/";
-		//	const char* filePath = path.C_Str();
-
-		//	std::string finalPath = assetsPath + filePath;
-		//	LOG("PATH: %s", finalPath.c_str());
-		//	//const char* newPath = "Assets/%s"
-
-		//	obj->GOmat->materialData->texture_id = ImportTexture(finalPath.c_str());
-		//}
-		//
-
-	}
-
 	parent = nullptr;
-	//tgo.clear();
+
 }
 
 void ModuleImport::ReleaseFile(const aiScene* scene) {
@@ -640,122 +409,11 @@ void ModuleImport::ReleaseFile(const aiScene* scene) {
 }
 
 
-//
-//MeshData* ModuleImport::GetMeshData(MeshData * meshData, aiMesh* mesh, const aiScene * scene) {
-//
-//
-//	aiMaterial* material = new aiMaterial();
-//	material = scene->mMaterials[mesh->mMaterialIndex];
-//
-//	if (scene->HasMaterials()) {
-//		uint numTextures = material->GetTextureCount(aiTextureType_DIFFUSE);
-//		
-//
-//		if (numTextures > 0) {
-//
-//			aiString path;
-//			material->GetTexture(aiTextureType_DIFFUSE, 0, &path);
-//
-//			LOG("PATH: %s", path.C_Str());
-//			std::string assetsPath = "Assets/";
-//			const char* filePath = path.C_Str();
-//
-//			std::string finalPath = assetsPath + filePath;
-//			LOG("PATH: %s", finalPath.c_str());
-//			//const char* newPath = "Assets/%s"
-//			meshData->material = new MaterialData();
-//			meshData->material->texture_id = App->imp->ImportTexture(finalPath.c_str());
-//		}
-//	}
-//	
-//	
-//	
-//
-//	
-//	
-//	
-//
-//	//copy vertices
-//	meshData->num_vertices = mesh->mNumVertices;
-//	meshData->vertices = new float[meshData->num_vertices * 3];
-//
-//	memcpy(meshData->vertices, mesh->mVertices, sizeof(float) * meshData->num_vertices * 3);
-//
-//	LOG("New mesh with %d vertices", meshData->num_vertices);
-//
-//	//copy faces
-//	if (mesh->HasFaces())
-//	{
-//		meshData->num_indices = mesh->mNumFaces * 3;
-//		meshData->indices = new uint[meshData->num_indices]; // assume each face is a triangle
-//		for (uint i = 0; i < mesh->mNumFaces; ++i)
-//		{
-//			if (mesh->mFaces[i].mNumIndices != 3) {
-//				LOG("WARNING, geometry face with != 3 indices!");
-//			}
-//			else 
-//			{
-//				memcpy(&meshData->indices[i * 3], mesh->mFaces[i].mIndices, 3 * sizeof(uint));
-//			}
-//		}
-//	}
-//	if (mesh->mNumUVComponents > 0) {
-//		LOG("HAS TEX");
-//	}
-//	else {
-//		LOG("NO TEX");
-//	}
-//	//copy texture coords
-//	if (mesh->HasTextureCoords(0)) {
-//		meshData->num_textureCoords = mesh->mNumVertices;
-//		meshData->textureCoords = new float[mesh->mNumVertices * 2];
-//
-//		for (unsigned int i = 0; i < meshData->num_textureCoords; i++) {
-//			meshData->textureCoords[i * 2] = mesh->mTextureCoords[0][i].x;
-//			meshData->textureCoords[i * 2 + 1] = mesh->mTextureCoords[0][i].y;
-//		}
-//	}
-//	
-//	
-//
-//	return meshData;
-//}
-
 MeshData* ModuleImport::GetMeshDataObj(MeshData* meshData, aiMesh* mesh, const aiScene* scene, GameObject* obj) {
 
 
 	aiMaterial* material = new aiMaterial();
 	material = scene->mMaterials[mesh->mMaterialIndex];
-
-	//if (scene->HasMaterials()) {
-	//	uint numTextures = material->GetTextureCount(aiTextureType_DIFFUSE);
-	//	obj->CreateComp(Component::Types::MATERIAL);
-	//	//obj->GOmat->materialData->texture_id
-	//	
-	//	obj->GOmat->materialData = new MaterialData();
-
-	//	if (numTextures > 0) {
-
-	//		aiString path;
-	//		material->GetTexture(aiTextureType_DIFFUSE, 0, &path);
-
-	//		LOG("PATH: %s", path.C_Str());
-	//		std::string assetsPath = "Assets/";
-	//		const char* filePath = path.C_Str();
-
-	//		std::string finalPath = assetsPath + filePath;
-	//		LOG("PATH: %s", finalPath.c_str());
-	//		//const char* newPath = "Assets/%s"
-
-	//		obj->GOmat->materialData->texture_id = ImportTexture(finalPath.c_str());
-	//	}
-	//}
-
-
-
-
-
-
 
 
 	//copy vertices

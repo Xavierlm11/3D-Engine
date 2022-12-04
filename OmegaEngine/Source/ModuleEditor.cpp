@@ -340,11 +340,9 @@ void ModuleEditor::ShowAssetInfo() {
 	
 		assetSelelected =-1;
 		
-		
 
 		if (remove(textString.c_str())==0) 
 		{
-			//meshesVec->erase(meshesVec->begin()), meshesVec->end();
 			LOG("Asset removed");
 		}
 	}
@@ -361,7 +359,6 @@ bool ModuleEditor::CleanUp()
 	ImGui::DestroyContext();
 
 	login.clear();
-	//logs.clear();
 
 	selectedShape = ModuleScene::Shapes::NONE;
 
@@ -922,14 +919,14 @@ void ModuleEditor::LoadShape(const char* resName) {
 }
 
 void ModuleEditor::BarShapes() {
+
 	if (ImGui::BeginMenu("Shapes"))
 	{
-
 		char* shapes[] = {"Cube" , "Sphere" , "Pyramid", "Cylinder" };
 
 		if (ImGui::MenuItem(shapes[0]))
 		{
-				LoadShape(shapes[0]);
+			LoadShape(shapes[0]);
 		}
 		if (ImGui::MenuItem(shapes[1]))
 		{
@@ -958,23 +955,21 @@ void ModuleEditor::BarShapes() {
 
 void ModuleEditor::BarXXX() {
 	if (ImGui::Begin("Configuration", &show_config_window)) {
+
 		ImGui::Text("Options");
 		
-			ConfigAppXXX();
+		ConfigAppXXX();
 		
-			ConfigWindowXXX();
+		ConfigWindowXXX();
 		
-			ConfigHardwareXXX();
+		ConfigHardwareXXX();
 
-			ConfigInputXXX();
+		ConfigInputXXX();
 
-			ConfigPathXXX();
+		ConfigPathXXX();
 
-			
 	}
 	ImGui::End();
-
-
 
 }
 

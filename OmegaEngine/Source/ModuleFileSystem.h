@@ -14,6 +14,7 @@ public:
 	~ModuleFileSystem();
 	
 	bool Init();
+	bool CleanUp();
 
 	uint FileToBuffer(const char* filePath, char** fileBuffer)const;
 	uint ImportFileToDir(const char* fileName, const char* newPath);

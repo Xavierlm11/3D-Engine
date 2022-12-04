@@ -87,7 +87,6 @@ update_status ModuleCamera3D::Update(float dt)
 			{
 				float3 objectPosF = App->editor->selectedObj->GOtrans->pos;
 				ScnCam->LookAt(App->editor->selectedObj->GOtrans->pos);
-				//ScnCam->cameraFrustum.pos(objectPosF.x, objectPosF.y, objectPosF.z - 10);
 
 			}
 		}
@@ -146,15 +145,10 @@ void ModuleCamera3D::Orbit(float3 target) {
 	ScnCam->cameraFrustum.pos = target + (ScnCam->cameraFrustum.front * -distance);
 	
 }
-//
-
-// -----------------------------------------------------------------
 
 void ModuleCamera3D::Zoom(float _speed) {
 
-	//vec3 frontVec = (cameraFrustum.front.x, cameraFrustum.front.y, cameraFrustum.front.z);
 	ScnCam->cameraFrustum.pos+= ScnCam->cameraFrustum.front * App->input->GetMouseZ() * _speed*1.8;
-	
 
 }
 

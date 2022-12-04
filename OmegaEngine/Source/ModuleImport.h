@@ -35,7 +35,7 @@ public:
 	Resource* LoadFile(const char* path, Resource::Types type);
 	void GetMeshDatas(const aiScene* scene, std::vector<MeshData*>* meshes);
 	void GetObjectResources(const aiScene* scene, const char* name);
-	//MeshData* GetMeshData(MeshData * meshData, aiMesh* mesh, const aiScene * scene);
+
 	MeshData* GetMeshDataObj(MeshData* meshData, aiMesh* mesh, const aiScene* scene, GameObject* obj);
 	void ReleaseFile(const aiScene* scene);
 
@@ -46,15 +46,11 @@ public:
 	void ImportAsset(const char* filePath);
 
 	vector<string> GetFilesInFolder(string folder);
+
 	//Textures
 	void LoadCheckerTexture();
 	
 	GLuint ImportTexture(const char* path);
-
-	//std::vector<GameObject*>tgo;
-
-	
-	//Component::Types type;
 
 	bool hasToLoadAssets = false;
 

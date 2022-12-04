@@ -20,7 +20,6 @@ Uint64 MaterialImporter::Save(char** fileBuffer) {
 
 	ilSetInteger(IL_DXTC_FORMAT, IL_DXT5); // To pick a specific DXT compression use
 	size = ilSaveL(IL_DDS, nullptr, 0); // Get the size of the data buffer
-	//LOG("Error: %s", ilGetError());
 
 	if (size > 0) {
 		data = new ILubyte[size]; // allocate data buffer
@@ -59,37 +58,9 @@ void MaterialImporter::Load(const char* fileBuffer, MaterialData* materialData, 
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glGenerateMipmap(GL_TEXTURE_2D);
 	glBindTexture(GL_TEXTURE_2D, 0);
-	///
-	//GLuint texID;
-	//GLuint texture;
-
-
-	//////////glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-	//////////texID = ilutGLBindTexImage();
-
-	//////////glBindTexture(GL_TEXTURE_2D, texID);
-	//////////glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-	//////////glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
-	//////////glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	//////////glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	////////////glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, CHECKERS_WIDTH, CHECKERS_HEIGHT, 0, GL_RGBA, GL_UNSIGNED_BYTE, texImage);
-	//////////glGenerateMipmap(GL_TEXTURE_2D);
-	//////////glBindTexture(GL_TEXTURE_2D, 0);
-
-	//////////ilDeleteImages(1, &texID);
-
-	//glBindTexture(GL_TEXTURE_2D, 0);
-
-	///
-
-
+	
 	materialData->texture_id = texIDGL;
 
 	ilDeleteImages(1, &texID);
-
-
-
-
-	
 
 }
