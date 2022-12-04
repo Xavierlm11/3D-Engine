@@ -2,7 +2,7 @@
 #include "CMaterial.h"
 #include "CMesh.h"
 #include "CTransform.h"
-
+#include "CCamera.h"
 GameObject::GameObject(const char* name, GameObject* parent):name(name)
 {
 	if(parent!=nullptr )
@@ -43,8 +43,12 @@ GameObject::~GameObject()
 
 	GOtrans = nullptr;
 	delete GOtrans;
+
 	GOmesh = nullptr;
 	delete GOmesh;
+
+	GOcam = nullptr;
+	delete GOcam;
 	//External->CleanVec(childrens);
 }
 
@@ -165,9 +169,11 @@ Component* GameObject::CreateComp(Component::Types type)
 			//GOmesh = (CMeshes*)comp;
 		}
 			break;
-		case Component::Types::LIGHT:
+		case Component::Types::CAMERA:
 		{
-			//no
+			CCamera* ccam = new CCamera(this);
+			GOcam = ccam;
+			comp = ccam;
 		}
 			break;
 	}
@@ -236,11 +242,12 @@ void GameObject::Remove()
 
 		GOtrans = nullptr;
 		delete GOtrans;
+
 		GOmesh = nullptr;
 		delete GOmesh;
 		
-		
-
+		GOcam = nullptr;
+		delete GOcam;
 	}
 
 }

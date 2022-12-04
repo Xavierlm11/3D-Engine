@@ -37,16 +37,16 @@ public:
 	void LookAt(const float3& Spot);
 	void Move(const float3& Movement);
 	//void Zoom();
-	void Orbit(float3 target);
+	//void Orbit(float3 target);
 
 	//float* GetViewMatrix();
 	float* GetViewMatrixOpenGL();
 	float* GetProjectionMatrixOpenGL();
 
 	//void CalculateViewMatrix();
-	void CalculateViewMatrixOpenGL();
+	/*void CalculateViewMatrixOpenGL();
 
-	void CalculateProjectionMatrixOpenGL();
+	void CalculateProjectionMatrixOpenGL();*/
 
 	unsigned int GetCCamBuffer();
 

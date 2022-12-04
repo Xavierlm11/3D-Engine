@@ -92,7 +92,7 @@ update_status ModuleCamera3D::Update(float dt)
 			float3 objectPosF = App->editor->selectedObj->GOtrans->pos;
 			float3 objectPosV(objectPosF.x, objectPosF.y, objectPosF.z);
 			ScnCam->LookAt(objectPosV);
-			//Orbit(objectPosF);
+			Orbit(objectPosF);
 		}
 		else if(App->input->GetMouseButton(SDL_BUTTON_RIGHT) == KEY_REPEAT)
 		{
@@ -208,48 +208,19 @@ void ModuleCamera3D::Rotate() {
 //
 //}
 //
-//void ModuleCamera3D::Orbit(float3 target) {
-//
-//	int dx = -App->input->GetMouseXMotion();
-//	int dy = -App->input->GetMouseYMotion();
-//
-//	float Sensitivity = 0.15f;
-//
-//	float distance = cameraFrustum.pos.Distance(target);
-//
-//	if (dx != 0)
-//	{
-//		float DeltaX = (float)dx * Sensitivity;
-//
-//		X = rotate(X, DeltaX, vec3(0.0f, 1.0f, 0.0f));
-//		Y = rotate(Y, DeltaX, vec3(0.0f, 1.0f, 0.0f));
-//		Z = rotate(Z, DeltaX, vec3(0.0f, 1.0f, 0.0f));
-//	}
-//
-//	if (dy != 0)
-//	{
-//		float DeltaY = (float)dy * Sensitivity;
-//
-//		Y = rotate(Y, DeltaY, -X);
-//		Z = rotate(Z, DeltaY, -X);
-//
-//		if (Y.y < 0.0f)
-//		{
-//			Z = vec3(0.0f, Z.y > 0.0f ? 1.0f : -1.0f, 0.0f);
-//			Y = cross(Z, X);
-//		}
-//	}
-//
-//	//UpdateFrustum();
-//	UpdateFrustum();
-//	
-//	float3 posFloat = target - distance * cameraFrustum.front.Normalized();
-//	posFloat = target - distance * cameraFrustum.front.Normalized();
-//	Position.x = posFloat.x;
-//	Position.y = posFloat.y;
-//	Position.z = posFloat.z;
-//	UpdateFrustum();
-//}
+void ModuleCamera3D::Orbit(float3 target) {
+
+	int dx = -App->input->GetMouseXMotion();
+	int dy = -App->input->GetMouseYMotion();
+
+	float Sensitivity = 0.15f;
+
+	float distance = ScnCam->cameraFrustum.pos.Distance(target);
+
+	Rotate();
+	ScnCam->cameraFrustum.pos = target + (ScnCam->cameraFrustum.front * -distance);
+	
+}
 //
 
 // -----------------------------------------------------------------
@@ -257,22 +228,13 @@ void ModuleCamera3D::Rotate() {
 void ModuleCamera3D::Zoom(float _speed) {
 
 	//vec3 frontVec = (cameraFrustum.front.x, cameraFrustum.front.y, cameraFrustum.front.z);
-	ScnCam->cameraFrustum.pos+= ScnCam->cameraFrustum.front * App->input->GetMouseZ() * _speed*1.5;
-	//Reference += Z * App->input->GetMouseZ() * 1.5f;
-
-	//cameraFrustum.nearPlaneDistance += App->input->GetMouseZ() * 0.8f;
-	//cameraFrustum.nearPlaneDistance += 2;
-
-	//UpdateFrustum();
-	//CalculateViewMatrixOpenGL();
+	ScnCam->cameraFrustum.pos+= ScnCam->cameraFrustum.front * App->input->GetMouseZ() * _speed*1.8;
 	
 
-	/*glMatrixMode(GL_PROJECTION);
-	glLoadMatrixf((GLfloat*)GetProjectionMatrixOpenGL());
-	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();*/
-
 }
+
+
+
 //
 //// -----------------------------------------------------------------
 //void ModuleCamera3D::Look(const vec3 &Position, const vec3 &Reference, bool RotateAroundReference)
