@@ -5,5 +5,5 @@ namespace ModelImporter
 {
 	void Import(const aiMesh* mesh, MeshData* ourMesh);
 	char* Save(const ModelData* ourMesh, uint& size);// char*& fileBuffer);
-	void Load(const char* fileBuffer, MeshData* ourMesh);
+	void Load(char* buffer, ModelData* model);
 };

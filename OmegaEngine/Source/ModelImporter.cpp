@@ -107,43 +107,145 @@ char* ModelImporter::Save(const ModelData* model, uint& size) {//char*& buffer) 
 }
 
 
-void ModelImporter::Load(const char* buffer, MeshData* meshData) {
+void ModelImporter::Load(char* buffer, ModelData* model) {
 
-	const char* cursor = buffer;
+	//////
 
-	// amount of indices / vertices / normals / texture_coords
-	uint ranges[4] = { meshData->num_indices, meshData->num_vertices, meshData->num_normals, meshData->num_textureCoords };
-	uint bytes = sizeof(ranges);
 
-	memcpy(ranges, cursor, bytes);
-	cursor += bytes;
 
-	meshData->num_indices = ranges[0];
-	meshData->num_vertices = ranges[1];
-	meshData->num_normals = ranges[2];
-	meshData->num_textureCoords = ranges[3];
+	/*for (int i = 0; i < model->meshDatas.size(); i++) {
 
-	// Load indices
-	bytes = sizeof(uint) * meshData->num_indices;
-	meshData->indices = new uint[meshData->num_indices];
-	memcpy(meshData->indices, cursor, bytes);
-	cursor += bytes;
+		const char* cursor = buffer;
 
-	// Load vertices
-	bytes = sizeof(float) * meshData->num_vertices;
-	meshData->vertices = new float[meshData->num_vertices];
-	memcpy(meshData->vertices, cursor, bytes);
-	cursor += bytes;
+		uint ranges[4];
+		uint bytes = sizeof(ranges);
+	}*/
 
-	// Load normals
-	bytes = sizeof(float) * meshData->num_normals;
-	meshData->normals = new float[meshData->num_normals];
-	memcpy(meshData->normals, cursor, bytes);
-	cursor += bytes;
+	//char* fileBuffer = new char[size]; // Allocate
+	char* cursor = buffer;
 
-	// Load texture_coords
-	bytes = sizeof(float) * meshData->num_textureCoords;
-	meshData->textureCoords = new float[meshData->num_textureCoords];
-	memcpy(meshData->textureCoords, cursor, bytes);
-	cursor += bytes;
+	for (int i = 0; i < model->meshDatas.size(); i++) {
+
+		MeshData* meshData = model->meshDatas[i];
+
+		uint ranges[4];
+		uint bytes = sizeof(ranges);
+
+		memcpy(ranges, cursor, bytes);
+		cursor += bytes;
+
+
+		meshData->num_indices = ranges[0];
+		meshData->num_vertices = ranges[1];
+		meshData->num_normals = ranges[2];
+		meshData->num_textureCoords = ranges[3];
+
+		// Load indices
+		bytes = sizeof(uint) * meshData->num_indices;
+		meshData->indices = new uint[meshData->num_indices];
+		memcpy(meshData->indices, cursor, bytes);
+		cursor += bytes;
+
+		// Load vertices
+		bytes = sizeof(float) * meshData->num_vertices * 3;
+		meshData->vertices = new float[meshData->num_vertices * 3];
+		memcpy(meshData->vertices, cursor, bytes);
+		cursor += bytes;
+
+		// Load normals
+		bytes = sizeof(float) * meshData->num_normals * 3;
+		meshData->normals = new float[meshData->num_normals * 3];
+		memcpy(meshData->normals, cursor, bytes);
+		cursor += bytes;
+
+		// Load texture_coords
+		bytes = sizeof(float) * meshData->num_textureCoords * 2;
+		meshData->textureCoords = new float[meshData->num_textureCoords * 2];
+		memcpy(meshData->textureCoords, cursor, bytes);
+		cursor += bytes;
+
+
+		///
+
+
+
+		//uint bytes = sizeof(ranges); // First store ranges
+		//memcpy(cursor, ranges, bytes);
+		//cursor += bytes;
+
+		//// Store indices
+		//bytes = sizeof(uint) * mesh->num_indices;
+		//memcpy(cursor, mesh->indices, bytes);
+		//cursor += bytes;
+
+		//// Store vertices
+		//bytes = sizeof(float) * mesh->num_vertices * 3;
+		//memcpy(cursor, mesh->vertices, bytes);
+		//cursor += bytes;
+
+		//// Store normals
+		//bytes = sizeof(float) * mesh->num_normals * 3;
+		//memcpy(cursor, mesh->normals, bytes);
+		//cursor += bytes;
+
+		//// Store texture_coords
+		//bytes = sizeof(float) * mesh->num_textureCoords * 2;
+		//memcpy(cursor, mesh->textureCoords, bytes);
+		//cursor += bytes;
+	}
+
+
+
+
+
+	//////
+
+
+
+
+
+	//const char* cursor = buffer;
+
+	//// amount of indices / vertices / normals / texture_coords
+	//uint ranges[4];
+	//uint bytes = sizeof(ranges);
+
+	//for (int i = 0; i < model->meshDatas.size(); i++) {
+
+	//}
+
+	//memcpy(ranges, cursor, bytes);
+	//cursor += bytes;
+
+	//meshData->num_indices = ranges[0];
+	//meshData->num_vertices = ranges[1];
+	//meshData->num_normals = ranges[2];
+	//meshData->num_textureCoords = ranges[3];
+
+	//// Load indices
+	//bytes = sizeof(uint) * meshData->num_indices;
+	//meshData->indices = new uint[meshData->num_indices];
+	//memcpy(meshData->indices, cursor, bytes);
+	//cursor += bytes;
+
+	//// Load vertices
+	//bytes = sizeof(float) * meshData->num_vertices * 3;
+	//meshData->vertices = new float[meshData->num_vertices * 3];
+	//memcpy(meshData->vertices, cursor, bytes);
+	//cursor += bytes;
+
+	//// Load normals
+	//bytes = sizeof(float) * meshData->num_normals * 3;
+	//meshData->normals = new float[meshData->num_normals * 3];
+	//memcpy(meshData->normals, cursor, bytes);
+	//cursor += bytes;
+
+	//// Load texture_coords
+	//bytes = sizeof(float) * meshData->num_textureCoords * 2;
+	//meshData->textureCoords = new float[meshData->num_textureCoords * 2];
+	//memcpy(meshData->textureCoords, cursor, bytes);
+	//cursor += bytes;
+
 }
+
+
