@@ -115,6 +115,12 @@ update_status ModuleInput::PreUpdate(float dt)
 			case SDL_DROPFILE:
 			{
 				App->imp->ImportAsset(e.drop.file);
+				for (int i = 0; i < App->scene->resourceList.size(); i++)
+				{
+					if (App->scene->resourceList[i]->resourceType == Resource::Types::MODEL) {
+						App->imp->GetMaterialsID(e.drop.file, (ModelData*)App->scene->resourceList[i]);
+					}
+				}
 				break;
 			}
 

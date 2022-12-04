@@ -1483,23 +1483,27 @@ void ModuleEditor::GOList()
 	if (ImGui::Begin("Game Object List"))
 	{
 		
+		if (hasToMoveSelection == true)
+		{
+			showingGOIndex = 0;
+		}
 		
-
-			gameObjectsShowing.clear();
-			for (int i = 0; i < App->scene->ListGO.size(); i++)
-			{
-				if (App->scene->ListGO[i]->showingInHierarchy == true) {
-					gameObjectsShowing.push_back(App->scene->ListGO[i]);
-				}
+		gameObjectsShowing.clear();
+		for (int i = 0; i < App->scene->ListGO.size(); i++)
+		{
+			if (App->scene->ListGO[i]->showingInHierarchy == true) {
+				gameObjectsShowing.push_back(App->scene->ListGO[i]);
 			}
+		}
 
-			static ImGuiTreeNodeFlags base_flags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick | ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_SpanFullWidth;
-			static bool align_label_with_current_x_position = false;
-			static bool test_drag_and_drop = false;
+		static ImGuiTreeNodeFlags base_flags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick | ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_SpanFullWidth;
+		static bool align_label_with_current_x_position = false;
+		static bool test_drag_and_drop = false;
 
-			if (align_label_with_current_x_position)
-				ImGui::Unindent(ImGui::GetTreeNodeToLabelSpacing());
-
+		if (align_label_with_current_x_position) {
+			ImGui::Unindent(ImGui::GetTreeNodeToLabelSpacing());
+		}
+			
 		for (int i = 0; i < gameObjectsShowing.size(); i++)
 		{
 			ImGuiTreeNodeFlags node_flags = base_flags;
@@ -1507,8 +1511,11 @@ void ModuleEditor::GOList()
 			//Root
 			if (gameObjectsShowing[i]->parent == nullptr)
 			{
-				if (i == showingGOIndex) {
-					node_flags |= ImGuiTreeNodeFlags_Selected;
+				if (GOIndex >= 0) {
+					if (gameObjectsShowing[i] == App->scene->ListGO[GOIndex])
+					{
+						node_flags |= ImGuiTreeNodeFlags_Selected;
+					}
 				}
 				node_flags |= ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_NoTreePushOnOpen;
 				ImGui::TreeNodeEx((void*)(intptr_t)i, node_flags, gameObjectsShowing[i]->name.c_str(), i);
@@ -1665,8 +1672,12 @@ void ModuleEditor::GOList()
 						ImGui::Text("This is a drag and drop source");
 						ImGui::EndDragDropSource();
 					}
-					if (i == showingGOIndex) {
-						node_flags = base_flags;
+					//if (i == showingGOIndex) {
+					if (GOIndex >= 0) {
+						if (gameObjectsShowing[i] == App->scene->ListGO[GOIndex])
+						{
+							node_flags = base_flags;
+						}
 					}
 
 			}
@@ -1674,9 +1685,13 @@ void ModuleEditor::GOList()
 				//Parents
 				if (gameObjectsShowing[i]->parent->parent == nullptr && gameObjectsShowing[i]->children.size() > 0)
 				{
-					if (i == showingGOIndex) {
-						node_flags |= ImGuiTreeNodeFlags_Selected;
+					if (GOIndex >= 0) {
+						if (gameObjectsShowing[i] == App->scene->ListGO[GOIndex])
+						{
+							node_flags |= ImGuiTreeNodeFlags_Selected;
+						}
 					}
+					std::string objID = std::to_string(i);
 					bool node_open = ImGui::TreeNodeEx((void*)(intptr_t)i, node_flags, gameObjectsShowing[i]->name.c_str(), i);
 					if (ImGui::IsItemClicked() && !ImGui::IsItemToggledOpen()) {
 						showingGOIndex = i;
@@ -1688,71 +1703,79 @@ void ModuleEditor::GOList()
 						inspectorShowing = InspectorShow::GAMEOBJECT;
 					}
 
-						if (ImGui::BeginDragDropTarget())
+					if (ImGui::BeginDragDropTarget())
+					{
+						if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("LOAD_ASSET_INTO_SCENE"))
 						{
-							if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("LOAD_ASSET_INTO_SCENE"))
+							int resource_ind = *(const int*)payload->Data;
+							Resource* payload_res = App->scene->resourceList[resource_ind];
+							switch (payload_res->resourceType) {
+							case Resource::Types::MODEL:
 							{
-								int resource_ind = *(const int*)payload->Data;
-								Resource* payload_res = App->scene->resourceList[resource_ind];
-								switch (payload_res->resourceType) {
-								case Resource::Types::MODEL:
-								{
-									break;
-								}
-
-								case Resource::Types::MATERIAL:
-
-								{
-
-									gameObjectsShowing[i]->CreateComp(Component::Types::MATERIAL);
-
-									char* fileBuffer = nullptr;
-									std::string libName = std::to_string(payload_res->assetID) + ".chad";
-
-									uint bufferSize = App->fileSystem->FileToBuffer(libName.c_str(), &fileBuffer);
-									MaterialData* new_material_data = new MaterialData(payload_res->assetName.c_str());
-									MaterialImporter::Load(fileBuffer, new_material_data, bufferSize);
-
-									gameObjectsShowing[i]->GOmat->materialData = new_material_data;
-
-									break;
-								}
-								}
-
+								break;
 							}
-							ImGui::EndDragDropTarget();
-						}
 
-						if (test_drag_and_drop && ImGui::BeginDragDropSource())
-						{
-							ImGui::SetDragDropPayload("_TREENODE", NULL, 0);
-							ImGui::Text("This is a drag and drop source");
-							ImGui::EndDragDropSource();
+							case Resource::Types::MATERIAL:
+
+							{
+
+								gameObjectsShowing[i]->CreateComp(Component::Types::MATERIAL);
+
+								char* fileBuffer = nullptr;
+								std::string libName = std::to_string(payload_res->assetID) + ".chad";
+
+								uint bufferSize = App->fileSystem->FileToBuffer(libName.c_str(), &fileBuffer);
+								MaterialData* new_material_data = new MaterialData(payload_res->assetName.c_str());
+								MaterialImporter::Load(fileBuffer, new_material_data, bufferSize);
+
+								gameObjectsShowing[i]->GOmat->materialData = new_material_data;
+
+								break;
+							}
+							}
+
 						}
-						if (i == showingGOIndex) {
+						ImGui::EndDragDropTarget();
+					}
+
+					if (test_drag_and_drop && ImGui::BeginDragDropSource())
+					{
+						ImGui::SetDragDropPayload("_TREENODE", NULL, 0);
+						ImGui::Text("This is a drag and drop source");
+						ImGui::EndDragDropSource();
+					}
+					//if (i == showingGOIndex) {
+					if (GOIndex >= 0) {
+						if (gameObjectsShowing[i] == App->scene->ListGO[GOIndex])
+						{
 							node_flags = base_flags;
 						}
-						//Childs
-						if (node_open)
-						{
-							if (hasToMoveSelection == true) {
-								if (showingGOIndex > i)
-								{
-									showingGOIndex += gameObjectsShowing[i]->children.size();
-								}
-								hasToMoveSelection = false;
+					}
+					//Childs
+					if (node_open)
+					{
+						/*if (hasToMoveSelection == true) {
+							if (showingGOIndex > i)
+							{
+								showingGOIndex += gameObjectsShowing[i]->children.size();
 							}
+							hasToMoveSelection = false;
+						}*/
 
-							for (int j = 0; j < gameObjectsShowing[i]->children.size(); j++) {
-								if (gameObjectsShowing[i]->children[j]->showingInHierarchy == false) {
-									gameObjectsShowing[i]->children[j]->showingInHierarchy = true;
-								}
-								else {
+						for (int j = 0; j < gameObjectsShowing[i]->children.size(); j++) {
+
+							if (gameObjectsShowing[i]->children[j]->showingInHierarchy == false) {
+								gameObjectsShowing[i]->children[j]->showingInHierarchy = true;
+							}
+							else {
 
 								for (int k = 0; k < gameObjectsShowing.size(); k++) {
 									if (gameObjectsShowing[i]->children[j] == gameObjectsShowing[k]) {
-										if (k == showingGOIndex) {
-											node_flags |= ImGuiTreeNodeFlags_Selected;
+										if (GOIndex >= 0) {
+											if (gameObjectsShowing[k] == App->scene->ListGO[GOIndex])
+											{
+												node_flags |= ImGuiTreeNodeFlags_Selected;
+											}
 										}
 										node_flags |= ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_NoTreePushOnOpen;
 										ImGui::TreeNodeEx((void*)(intptr_t)k, node_flags, gameObjectsShowing[k]->name.c_str(), k);
@@ -1766,83 +1789,92 @@ void ModuleEditor::GOList()
 											inspectorShowing = InspectorShow::GAMEOBJECT;
 										}
 
-											if (ImGui::BeginDragDropTarget())
+										if (ImGui::BeginDragDropTarget())
+										{
+											if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("LOAD_ASSET_INTO_SCENE"))
 											{
-												if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("LOAD_ASSET_INTO_SCENE"))
+												int resource_ind = *(const int*)payload->Data;
+												Resource* payload_res = App->scene->resourceList[resource_ind];
+												switch (payload_res->resourceType) {
+												case Resource::Types::MODEL:
 												{
-													int resource_ind = *(const int*)payload->Data;
-													Resource* payload_res = App->scene->resourceList[resource_ind];
-													switch (payload_res->resourceType) {
-													case Resource::Types::MODEL:
-													{
-														break;
-													}
-
-													case Resource::Types::MATERIAL:
-
-													{
-
-														gameObjectsShowing[k]->CreateComp(Component::Types::MATERIAL);
-
-														char* fileBuffer = nullptr;
-														std::string libName = std::to_string(payload_res->assetID) + ".chad";
-
-														uint bufferSize = App->fileSystem->FileToBuffer(libName.c_str(), &fileBuffer);
-														MaterialData* new_material_data = new MaterialData(payload_res->assetName.c_str());
-														MaterialImporter::Load(fileBuffer, new_material_data, bufferSize);
-
-														gameObjectsShowing[k]->GOmat->materialData = new_material_data;
-
-														break;
-													}
-													}
-
+													break;
 												}
-												ImGui::EndDragDropTarget();
-											}
 
-											if (test_drag_and_drop && ImGui::BeginDragDropSource())
-											{
-												ImGui::SetDragDropPayload("_TREENODE", NULL, 0);
-												ImGui::Text("This is a drag and drop source");
-												ImGui::EndDragDropSource();
+												case Resource::Types::MATERIAL:
+
+												{
+
+													gameObjectsShowing[k]->CreateComp(Component::Types::MATERIAL);
+
+													char* fileBuffer = nullptr;
+													std::string libName = std::to_string(payload_res->assetID) + ".chad";
+
+													uint bufferSize = App->fileSystem->FileToBuffer(libName.c_str(), &fileBuffer);
+													MaterialData* new_material_data = new MaterialData(payload_res->assetName.c_str());
+													MaterialImporter::Load(fileBuffer, new_material_data, bufferSize);
+
+													gameObjectsShowing[k]->GOmat->materialData = new_material_data;
+
+													break;
+												}
+												}
+
 											}
-											if (k == showingGOIndex) {
+											ImGui::EndDragDropTarget();
+										}
+
+										if (test_drag_and_drop && ImGui::BeginDragDropSource())
+										{
+											ImGui::SetDragDropPayload("_TREENODE", NULL, 0);
+											ImGui::Text("This is a drag and drop source");
+											ImGui::EndDragDropSource();
+										}
+										//if (k == showingGOIndex) {
+										if (GOIndex >= 0) {
+											if (gameObjectsShowing[k] == App->scene->ListGO[GOIndex])
+											{
 												node_flags = base_flags;
 											}
 										}
+										
 									}
 								}
 							}
-							ImGui::TreePop();
 						}
-						else {
-							if (hasToMoveSelection == false) {
-								if (showingGOIndex > i && showingGOIndex <= i + gameObjectsShowing[i]->children.size()) {
-									showingGOIndex = i;
-									GOIndex = i;
-								}
-								else if (showingGOIndex > i)
-								{
-									showingGOIndex -= gameObjectsShowing[i]->children.size();
-								}
-								hasToMoveSelection = true;
-							}
 
-							for (int j = 0; j < gameObjectsShowing[i]->children.size(); j++) {
-								if (gameObjectsShowing[i]->children[j]->showingInHierarchy == true) {
-									gameObjectsShowing[i]->children[j]->showingInHierarchy = false;
-								}
+						ImGui::TreePop();
+					}
+					else {
+						/*if (hasToMoveSelection == false) {
+							if (showingGOIndex > i && showingGOIndex <= i + gameObjectsShowing[i]->children.size()) {
+								showingGOIndex = i;
+								GOIndex = i;
 							}
-						}
+							else if (showingGOIndex > i)
+							{
+								showingGOIndex -= gameObjectsShowing[i]->children.size();
+							}
+							hasToMoveSelection = true;
+						}*/
+
+					/*	for (int j = 0; j < gameObjectsShowing[i]->children.size(); j++) {
+							if (gameObjectsShowing[i]->children[j]->showingInHierarchy == true) {
+								gameObjectsShowing[i]->children[j]->showingInHierarchy = false;
+							}
+						}*/
+					}
 
 				}
 				//Direct childs
 				else if (gameObjectsShowing[i]->parent->parent == nullptr)
 				{
-					if (i == showingGOIndex) {
+				if (GOIndex >= 0) {
+					if (gameObjectsShowing[i] == App->scene->ListGO[GOIndex])
+					{
 						node_flags |= ImGuiTreeNodeFlags_Selected;
 					}
+				}
 					node_flags |= ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_NoTreePushOnOpen; // ImGuiTreeNodeFlags_Bullet
 					ImGui::TreeNodeEx((void*)(intptr_t)i, node_flags, gameObjectsShowing[i]->name.c_str(), i);
 					if (ImGui::IsItemClicked() && !ImGui::IsItemToggledOpen()) {
@@ -1855,105 +1887,113 @@ void ModuleEditor::GOList()
 						inspectorShowing = InspectorShow::GAMEOBJECT;
 					}
 
-						if (ImGui::BeginDragDropTarget())
+					if (ImGui::BeginDragDropTarget())
+					{
+						if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("LOAD_ASSET_INTO_SCENE"))
 						{
-							if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("LOAD_ASSET_INTO_SCENE"))
+							//	/*IM_ASSERT(payload->DataSize == sizeof(int));
+							//	int payload_n = *(const int*)payload->Data;*/
+							int resource_ind = *(const int*)payload->Data;
+							Resource* payload_res = App->scene->resourceList[resource_ind];
+							switch (payload_res->resourceType) {
+							case Resource::Types::MODEL:
 							{
-								//	/*IM_ASSERT(payload->DataSize == sizeof(int));
-								//	int payload_n = *(const int*)payload->Data;*/
-								int resource_ind = *(const int*)payload->Data;
-								Resource* payload_res = App->scene->resourceList[resource_ind];
-								switch (payload_res->resourceType) {
-								case Resource::Types::MODEL:
-								{
-									break;
-								}
-
-								case Resource::Types::MATERIAL:
-								{
-
-
-									gameObjectsShowing[i]->CreateComp(Component::Types::MATERIAL);
-
-									char* fileBuffer = nullptr;
-									std::string libName = std::to_string(payload_res->assetID) + ".chad";
-
-
-
-									uint bufferSize = App->fileSystem->FileToBuffer(libName.c_str(), &fileBuffer);
-									MaterialData* new_material_data = new MaterialData(payload_res->assetName.c_str());
-									MaterialImporter::Load(fileBuffer, new_material_data, bufferSize);
-
-									gameObjectsShowing[i]->GOmat->materialData = new_material_data;
-
-
-
-									//std::string assetsPath = ASSETS_PATH;
-									//const char* fileName = payload_res->fileName.c_str();
-
-									//std::string finalPath = assetsPath + fileName;
-									//		//App->scene->ListGO[App->editor->GOIndex]->GOmat->materialData->texture_id = App->imp->ImportTexture(finalPath.c_str());
-									//gameObjectsShowing[i]->GOmat->materialData->texture_id = App->imp->ImportTexture(finalPath.c_str());
-
-
-
-									break;
-								}
-								}
-
-								//for (int ind = 0; ind < App->scene->ListGO.size(); ind++) {
-								//	if (App->scene->ListGO[ind] == gameObjectsShowing[k]) {
-								//		GOIndex = ind;
-								//	}
-								//}
-
-
+								break;
 							}
-							ImGui::EndDragDropTarget();
-						}
 
-						if (test_drag_and_drop && ImGui::BeginDragDropSource())
-						{
-							ImGui::SetDragDropPayload("_TREENODE", NULL, 0);
-							ImGui::Text("This is a drag and drop source");
-							ImGui::EndDragDropSource();
+							case Resource::Types::MATERIAL:
+							{
+
+
+								gameObjectsShowing[i]->CreateComp(Component::Types::MATERIAL);
+
+								char* fileBuffer = nullptr;
+								std::string libName = std::to_string(payload_res->assetID) + ".chad";
+
+
+
+								uint bufferSize = App->fileSystem->FileToBuffer(libName.c_str(), &fileBuffer);
+								MaterialData* new_material_data = new MaterialData(payload_res->assetName.c_str());
+								MaterialImporter::Load(fileBuffer, new_material_data, bufferSize);
+
+								gameObjectsShowing[i]->GOmat->materialData = new_material_data;
+
+
+
+								//std::string assetsPath = ASSETS_PATH;
+								//const char* fileName = payload_res->fileName.c_str();
+
+								//std::string finalPath = assetsPath + fileName;
+								//		//App->scene->ListGO[App->editor->GOIndex]->GOmat->materialData->texture_id = App->imp->ImportTexture(finalPath.c_str());
+								//gameObjectsShowing[i]->GOmat->materialData->texture_id = App->imp->ImportTexture(finalPath.c_str());
+
+
+
+								break;
+							}
+							}
+
+							//for (int ind = 0; ind < App->scene->ListGO.size(); ind++) {
+							//	if (App->scene->ListGO[ind] == gameObjectsShowing[k]) {
+							//		GOIndex = ind;
+							//	}
+							//}
+
+
 						}
-						if (i == showingGOIndex) {
+						ImGui::EndDragDropTarget();
+					}
+
+					if (test_drag_and_drop && ImGui::BeginDragDropSource())
+					{
+						ImGui::SetDragDropPayload("_TREENODE", NULL, 0);
+						ImGui::Text("This is a drag and drop source");
+						ImGui::EndDragDropSource();
+					}
+
+					if (GOIndex >= 0) {
+						if (gameObjectsShowing[i] == App->scene->ListGO[GOIndex])
+						{
 							node_flags = base_flags;
 						}
 					}
-
-
 				}
-				if (align_label_with_current_x_position) {
 
-					ImGui::Indent(ImGui::GetTreeNodeToLabelSpacing());
-				}
+
 			}
-			if (GOIndex == 0) {
-				GOIndex = -1;
+			if (align_label_with_current_x_position) {
+
+				ImGui::Indent(ImGui::GetTreeNodeToLabelSpacing());
 			}
-			/*if (showingGOIndex == 0) {
-				showingGOIndex = -1;
-			}*/
-			//LOG("GOIndex: %i", GOIndex);
-			//LOG("ShowingGOIndex: %i", showingGOIndex);
-
-
-
-
 		}
-		if (ImGui::BeginDragDropTarget())
+		if (GOIndex == 0) {
+			GOIndex = -1;
+		}
+		/*if (showingGOIndex == 0) {
+			showingGOIndex = -1;
+		}*/
+		LOG("GOIndex: %i", GOIndex);
+		LOG("ShowingGOIndex: %i", showingGOIndex);
+
+		if (hasToMoveSelection == true)
 		{
-			if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("LOAD_ASSET_INTO_SCENE"))
-			{
-				/*IM_ASSERT(payload->DataSize == sizeof(int));
-				int payload_n = *(const int*)payload->Data;*/
-				//LOG("DROPPED");
-
-			}
-			ImGui::EndDragDropTarget();
+			showingGOIndex = 0;
+			hasToMoveSelection = false;
 		}
+
+
+	}
+	if (ImGui::BeginDragDropTarget())
+	{
+		if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("LOAD_ASSET_INTO_SCENE"))
+		{
+			/*IM_ASSERT(payload->DataSize == sizeof(int));
+			int payload_n = *(const int*)payload->Data;*/
+			//LOG("DROPPED");
+
+		}
+		ImGui::EndDragDropTarget();
+	}
 	
 	ImGui::End();
 
