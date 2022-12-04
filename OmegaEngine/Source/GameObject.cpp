@@ -2,7 +2,7 @@
 #include "CMaterial.h"
 #include "CMesh.h"
 #include "CTransform.h"
-#include "CCamera.h"
+
 GameObject::GameObject(const char* name, GameObject* parent):name(name)
 {
 	if(parent!=nullptr )
@@ -165,11 +165,9 @@ Component* GameObject::CreateComp(Component::Types type)
 			//GOmesh = (CMeshes*)comp;
 		}
 			break;
-		case Component::Types::CAMERA:
+		case Component::Types::LIGHT:
 		{
-			CCamera* ccam = new CCamera(this);
-			GOcam = ccam;
-			comp = ccam;
+			//no
 		}
 			break;
 	}

@@ -16,8 +16,6 @@ class CMaterial;
 
 class CTransform;
 
-class CCamera;
-
 class GameObject
 {
 public:
@@ -63,7 +61,6 @@ public:
 	CMesh* GOmesh=nullptr;
 	CMaterial* GOmat = nullptr;
 	CTransform* GOtrans = nullptr;
-	CCamera* GOcam = nullptr;
 	uint uid=0;
 
 public:

@@ -44,9 +44,9 @@ public:
 	float* GetProjectionMatrixOpenGL();
 
 	//void CalculateViewMatrix();
-	//void CalculateViewMatrixOpenGL();
+	void CalculateViewMatrixOpenGL();
 
-	//void CalculateProjectionMatrixOpenGL();
+	void CalculateProjectionMatrixOpenGL();
 
 	unsigned int GetCCamBuffer();
 
@@ -69,8 +69,8 @@ public:
 	Frustum cameraFrustum;
 private:
 	mat4x4 ViewMatrix, ViewMatrixInverse;
-	float4x4 ViewMatrixOpenGL;
-	float4x4 ProjectionMatrixOpenGL;
+	float4x4* ViewMatrixOpenGL;
+	float4x4* ProjectionMatrixOpenGL;
 
 	float nextRot = 0;
 
