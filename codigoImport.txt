@@ -1,7 +1,0 @@
-aiVector3D translation, scaling;
-			aiQuaternion rotation;
-			//rotation.GetEuler().
-			scene->mRootNode->mTransformation.Decompose(scaling, rotation, translation);
-			dobj->GOtrans->SetPos({ translation.x, translation.y, translation.z });
-			dobj->GOtrans->SetRot({ rotation.GetEuler().x, rotation.GetEuler().y, rotation.GetEuler().z });
-			dobj->GOtrans->SetScale({ scaling.x, scaling.y, scaling.z });

@@ -231,8 +231,7 @@ update_status ModuleEditor::Update(float dt)
 	//selectedObj = nullptr;
 	if(ImGui::Begin("inspector"))
 	{
-		for (uint i = 0; i< App->scene->ListGO.size(); ++i)
-		{
+		
 			
 			switch(inspectorShowing)
 			{
@@ -244,10 +243,38 @@ update_status ModuleEditor::Update(float dt)
 
 				case InspectorShow::GAMEOBJECT:
 				{
-					if (GOIndex == i && GOIndex != 0 && i != 0)
+					for (uint i = 0; i < App->scene->ListGO.size(); ++i)
 					{
-						App->scene->ListGO[i]->Editor();
+						if (GOIndex == i && GOIndex != 0 && i != 0)
+						{
+							App->scene->ListGO[i]->Editor();
+							//if (assetSelelected <= -1) {
+							//	return;
+							//}
+
+							//GameObject* go = App->scene->ListGO[i];
+
+							//ImGui::Text(" ");
+
+							//if (ImGui::Button("Delete GameObject", ImVec2(120, 60))) {
+							//	//go. = ASSETS_PATH;
+							//	textString += res->fileName;
+							//	App->scene->resourceList.erase(App->scene->resourceList.begin() + assetSelelected);
+
+							//	assetSelelected = -1;
+
+
+
+							//	if (remove(textString.c_str()) == 0)
+							//	{
+							//		//meshesVec->erase(meshesVec->begin()), meshesVec->end();
+							//		LOG("Asset removed");
+							//	}
+							//}
+						}
+						
 					}
+
 					break;
 				}
 
@@ -262,7 +289,7 @@ update_status ModuleEditor::Update(float dt)
 			//LOG("PARENT: %s ",App->scene->ListGO[i]->GetParent()->name.c_str() );
 			
 			
-		}
+		
 		//ImGui::Text("aaaaaaaaaa");
 	}
 	ImGui::End();
@@ -287,8 +314,6 @@ void ModuleEditor::ShowAssetInfo() {
 	}
 
 	Resource* res = App->scene->resourceList[assetSelelected];
-		
-	res->fileName;
 
 
 	ImGui::Text("");
@@ -1462,6 +1487,7 @@ void ModuleEditor::GOList()
 							GOIndex = ind;
 						}
 					}
+					inspectorShowing = InspectorShow::GAMEOBJECT;
 				}
 
 					if (ImGui::BeginDragDropTarget())
@@ -1588,6 +1614,7 @@ void ModuleEditor::GOList()
 								GOIndex = ind;
 							}
 						}
+						inspectorShowing = InspectorShow::GAMEOBJECT;
 					}
 
 						if (ImGui::BeginDragDropTarget())
@@ -1665,6 +1692,7 @@ void ModuleEditor::GOList()
 													GOIndex = ind;
 												}
 											}
+											inspectorShowing = InspectorShow::GAMEOBJECT;
 										}
 
 											if (ImGui::BeginDragDropTarget())
@@ -1753,6 +1781,7 @@ void ModuleEditor::GOList()
 								GOIndex = ind;
 							}
 						}
+						inspectorShowing = InspectorShow::GAMEOBJECT;
 					}
 
 						if (ImGui::BeginDragDropTarget())
