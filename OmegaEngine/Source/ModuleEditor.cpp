@@ -41,6 +41,8 @@ ModuleEditor::ModuleEditor(Application* app, bool start_enabled) : Module(app, s
 	gl_lineSmoothEnabled = false;
 	gl_fogEnabled = false;
 
+	playPressed = false;
+
 	fog_density = 0;
 	fog_start = 0;
 	fog_end = 0;
@@ -372,6 +374,8 @@ bool ModuleEditor::DrawMenuBar()
 		BarFile();
 		BarWindows();
 		BarShapes();
+		BarPlay();
+		BarPause();
 		
 
 		ImGui::EndMainMenuBar();
@@ -971,6 +975,56 @@ void ModuleEditor::BarShapes() {
 		}
 
 		ImGui::EndMenu();
+	}
+
+}
+
+void ModuleEditor::BarPlay() {
+
+	bool color = false;
+
+	if (playPressed == true) {
+		ImGui::PushStyleColor(ImGuiCol_Button, (ImVec4)ImColor::HSV(2 / 7.0f, 0.6f, 0.6f));
+		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, (ImVec4)ImColor::HSV(2 / 7.0f, 0.7f, 0.7f));
+		ImGui::PushStyleColor(ImGuiCol_ButtonActive, (ImVec4)ImColor::HSV(2 / 7.0f, 0.8f, 0.8f));
+		color = true;
+	}
+
+	if (ImGui::Button("Play"))
+	{
+		if (playPressed == true) {
+			playPressed = false;
+
+			std::string folder_name = "Settings/scene_at_play.json";
+
+			if (remove(folder_name.c_str()) == 0)
+			{
+				LOG("Save At Play file removed");
+			}
+
+			
+		}
+		else {
+			playPressed = true;
+			App->scene->SaveSceneAtPlay();
+		}
+	}
+
+	if (color == true) {
+		ImGui::PopStyleColor(3);
+	}
+
+	
+}
+
+void ModuleEditor::BarPause() {
+
+	if (ImGui::Button("Pause"))
+	{
+
+
+
+		
 	}
 
 }

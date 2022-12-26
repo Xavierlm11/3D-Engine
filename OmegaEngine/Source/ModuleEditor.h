@@ -95,6 +95,9 @@ private:
 	void LoadShape(const char* resName);
 	void BarShapes();
 
+	void BarPlay();
+	void BarPause();
+
 	void ConfigAppXXX();
 
 
@@ -160,6 +163,8 @@ public:
 	float fog_coord;
 
 	GameObject* selectedObj = nullptr;
+
+	bool playPressed;
 
 private:
 
