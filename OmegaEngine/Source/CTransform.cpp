@@ -1,8 +1,9 @@
 #include "CTransform.h"
 #include "Globals.h"
+#include "Component.h"
 CTransform::CTransform(GameObject* obj):Component( obj, Types::TRANSFORM )
 {
-	this->GO = obj;
+	//this->GO = obj;
 }
 
 CTransform::~CTransform()
@@ -12,7 +13,7 @@ CTransform::~CTransform()
 
 void CTransform::Update()
 {
-
+	
 	
 }
 
@@ -146,3 +147,13 @@ void CTransform::OnInspector()
 }
 
 
+float4x4 CTransform::GetGlobal()
+{
+
+	if (GO->GetParent() == nullptr)
+	{
+		return GetMatrix();
+	}
+	return GO->GetParent()->GOtrans->GetGlobal() * matrix1;
+
+}

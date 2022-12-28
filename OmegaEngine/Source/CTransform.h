@@ -4,7 +4,9 @@
 #include "ImGui/imgui.h"
 #include <MathGeoLib/include/Math/float3.h>
 #include "External/MathGeoLib/include/Math/float4x4.h"
+#include "GameObject.h"
 
+class Component;
 
 class CTransform : public Component
 {
@@ -29,6 +31,7 @@ public:
 
 	void OnInspector() override;
 
+
 	float3 GetPos() { return pos; }
 	float3 GetRot() { return rot; }
 	float3 GetScale() { return scl; }
@@ -41,8 +44,9 @@ public:
 	void SetPos1(float3 _pos) { pos = _pos; TransformMatrix1(pos, rot, scl); }
 	void SetRot1(float3 _rot) { rot = _rot; TransformMatrix1(pos, rot, scl); }
 	void SetScale1(float3 _scl) { scl = _scl; TransformMatrix1(pos, rot, scl); }
-	//float4x4 GetMatrix() { return matrix; }
+	float4x4 GetMatrix() { return matrix1; }
 
+	float4x4 GetGlobal();
 	/*float4x4 GetGlobal()
 	{
 		if (GO->GetParent() == nullptr)
