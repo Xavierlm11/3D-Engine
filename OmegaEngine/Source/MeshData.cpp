@@ -167,3 +167,45 @@ void MeshData::DrawMesh(GLuint textureID, mat4x4 mat) {
 	}
 }
 
+void MeshData::DrawMesh1(GLuint textureID, float4x4 mat) {
+	if (hasLoadedBuffers == true) {
+
+		
+		glBindTexture(GL_TEXTURE_2D, textureID);
+		
+		glEnableClientState(GL_VERTEX_ARRAY);
+		glBindBuffer(GL_ARRAY_BUFFER, id_vertices);
+		glVertexPointer(3, GL_FLOAT, 0, NULL);
+
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, id_indices);
+
+
+		glEnableClientState(GL_NORMAL_ARRAY);
+		glBindBuffer(GL_ARRAY_BUFFER, id_normals);
+		glNormalPointer(GL_FLOAT, 0, NULL);
+
+		
+		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+		glBindBuffer(GL_ARRAY_BUFFER, id_textureCoords);
+		glTexCoordPointer(2, GL_FLOAT, 0, NULL);
+
+		
+		glPushMatrix();
+		glMultMatrixf(mat.ptr());
+
+		glDrawElements(GL_TRIANGLES, num_indices, GL_UNSIGNED_INT, NULL);
+		
+
+		glPopMatrix();
+		glBindTexture(GL_TEXTURE_2D, 0);
+		
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
+		glDisableClientState(GL_VERTEX_ARRAY);
+
+		
+		glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+		
+
+	}
+}

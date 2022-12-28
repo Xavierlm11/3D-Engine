@@ -3,7 +3,7 @@
 #include "glmath.h"
 #include "ImGui/imgui.h"
 #include <MathGeoLib/include/Math/float3.h>
-
+#include "External/MathGeoLib/include/Math/float4x4.h"
 
 
 class CTransform : public Component
@@ -25,6 +25,8 @@ public:
 
 	void TransformMatrix(float3 _pos, float3 _rot, float3 _scl);
 
+	void TransformMatrix1(float3 _pos, float3 _rot, float3 _scl);
+
 	void OnInspector() override;
 
 	float3 GetPos() { return pos; }
@@ -35,6 +37,10 @@ public:
 	void SetRot(float3 _rot) { rot = _rot; TransformMatrix(pos, rot, scl);}
 	void SetScale(float3 _scl) { scl = _scl; TransformMatrix(pos, rot, scl); }
 
+
+	void SetPos1(float3 _pos) { pos = _pos; TransformMatrix1(pos, rot, scl); }
+	void SetRot1(float3 _rot) { rot = _rot; TransformMatrix1(pos, rot, scl); }
+	void SetScale1(float3 _scl) { scl = _scl; TransformMatrix1(pos, rot, scl); }
 	//float4x4 GetMatrix() { return matrix; }
 
 	/*float4x4 GetGlobal()
@@ -53,6 +59,7 @@ public:
 	float3 scl = { 1,1,1 };
 	
 	mat4x4 matrix;
+	float4x4 matrix1;
 	
 };
 
