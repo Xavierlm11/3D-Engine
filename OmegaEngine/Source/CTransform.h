@@ -4,6 +4,8 @@
 #include "ImGui/imgui.h"
 #include <MathGeoLib/include/Math/float3.h>
 
+#include "GameObject.h"
+
 
 
 class CTransform : public Component
