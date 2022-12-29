@@ -33,7 +33,7 @@ public:
 	uint num_textureCoords = 0;
 	float* textureCoords = nullptr;
 
-	
+	uint indexInModel = 0;
 
 	bool hasLoadedBuffers;
 

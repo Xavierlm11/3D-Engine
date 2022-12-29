@@ -27,6 +27,7 @@ public:
 	bool SaveScene();
 	bool SaveSceneAtPlay();
 	bool LoadScene();
+	bool LoadSceneAtPlay();
 
 	void LoadSpecific(uint id);
 

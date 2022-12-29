@@ -356,6 +356,23 @@ bool ModuleEditor::CleanUp()
 {
 	LOG("Quitting ImGui Module");
 	// Cleanup
+
+	if (playPressed == true) {
+		playPressed = false;
+
+		DeleteGo();
+		App->scene->LoadSceneAtPlay();
+
+		std::string folder_name = "Settings/scene_at_play.json";
+
+		if (remove(folder_name.c_str()) == 0)
+		{
+			LOG("Save At Play file removed");
+		}
+
+
+	}
+
 	ImGui_ImplOpenGL3_Shutdown();
 	ImGui_ImplSDL2_Shutdown();
 	ImGui::DestroyContext();
@@ -705,6 +722,7 @@ void ModuleEditor::DrawSceneViewport()
 							std::string libName = std::to_string(payload_res->assetID) + ".chad";
 							uint bufferSize = App->fileSystem->FileToBuffer(libName.c_str(), &fileBuffer);
 							MeshData* new_mesh_data = new MeshData(payload_res->assetName.c_str());
+							new_mesh_data->assetID = payload_res->assetID;
 							MeshImporter::Load(fileBuffer, new_mesh_data);
 
 							go->GOmesh->meshData = new_mesh_data;
@@ -721,6 +739,7 @@ void ModuleEditor::DrawSceneViewport()
 								MaterialImporter::Load(fileBuffer, new_material_data, bufferSize);
 
 								go->GOmat->materialData = new_material_data;
+								go->GOmat->materialData->assetID = payload_model->meshDatas[0]->materialAttachedID;
 							}
 
 
@@ -744,11 +763,13 @@ void ModuleEditor::DrawSceneViewport()
 								goChild->CreateComp(Component::Types::MESH);
 								goChild->GOmesh->meshData = payload_model->meshDatas[ind];
 								goChild->GOmesh->meshData->LoadBuffers();
+								goChild->GOmesh->meshData->assetID = payload_res->assetID;
+								goChild->GOmesh->meshData->indexInModel = ind;
 
 								goChild->CreateComp(Component::Types::MATERIAL);
 
 								if (goChild->GOmesh->meshData->materialAttachedID != 0) {
-
+									
 									char* fileBufferMat = nullptr;
 									std::string libNameMat = std::to_string(goChild->GOmesh->meshData->materialAttachedID) + ".chad";
 
@@ -757,6 +778,8 @@ void ModuleEditor::DrawSceneViewport()
 									MaterialImporter::Load(fileBufferMat, new_material_data, bufferSizeMat);
 
 									goChild->GOmat->materialData = new_material_data;
+									goChild->GOmat->materialData->assetID = goChild->GOmesh->meshData->materialAttachedID;
+
 								}
 							}
 						}
@@ -886,6 +909,7 @@ void ModuleEditor::LoadShape(const char* resName) {
 			std::string libName = std::to_string(res->assetID) + ".chad";
 			uint bufferSize = App->fileSystem->FileToBuffer(libName.c_str(), &fileBuffer);
 			MeshData* new_mesh_data = new MeshData(res->assetName.c_str());
+			new_mesh_data->assetID = res->assetID;
 			MeshImporter::Load(fileBuffer, new_mesh_data);
 
 			go->GOmesh->meshData = new_mesh_data;
@@ -902,6 +926,7 @@ void ModuleEditor::LoadShape(const char* resName) {
 				MaterialImporter::Load(fileBuffer, new_material_data, bufferSize);
 
 				go->GOmat->materialData = new_material_data;
+				go->GOmat->materialData->assetID = res->meshDatas[0]->materialAttachedID;
 			}
 
 
@@ -925,6 +950,8 @@ void ModuleEditor::LoadShape(const char* resName) {
 				goChild->CreateComp(Component::Types::MESH);
 				goChild->GOmesh->meshData = res->meshDatas[ind];
 				goChild->GOmesh->meshData->LoadBuffers();
+				goChild->GOmesh->meshData->assetID = res->assetID;
+				goChild->GOmesh->meshData->indexInModel = ind;
 
 				goChild->CreateComp(Component::Types::MATERIAL);
 
@@ -938,6 +965,8 @@ void ModuleEditor::LoadShape(const char* resName) {
 					MaterialImporter::Load(fileBufferMat, new_material_data, bufferSizeMat);
 
 					goChild->GOmat->materialData = new_material_data;
+					goChild->GOmat->materialData->assetID = goChild->GOmesh->meshData->materialAttachedID;
+
 				}
 			}
 		}
@@ -994,6 +1023,9 @@ void ModuleEditor::BarPlay() {
 	{
 		if (playPressed == true) {
 			playPressed = false;
+
+			DeleteGo();
+			App->scene->LoadSceneAtPlay();
 
 			std::string folder_name = "Settings/scene_at_play.json";
 
@@ -1321,6 +1353,7 @@ void ModuleEditor::GOList()
 									std::string libName = std::to_string(payload_res->assetID) + ".chad";
 									uint bufferSize = App->fileSystem->FileToBuffer(libName.c_str(), &fileBuffer);
 									MeshData* new_mesh_data = new MeshData(payload_res->assetName.c_str());
+									new_mesh_data->assetID = payload_res->assetID;
 									MeshImporter::Load(fileBuffer, new_mesh_data);
 
 									go->GOmesh->meshData = new_mesh_data;
@@ -1337,6 +1370,7 @@ void ModuleEditor::GOList()
 										MaterialImporter::Load(fileBuffer, new_material_data, bufferSize);
 
 										go->GOmat->materialData = new_material_data;
+										go->GOmat->materialData->assetID = payload_model->meshDatas[0]->materialAttachedID;
 									}
 
 
@@ -1360,6 +1394,8 @@ void ModuleEditor::GOList()
 										goChild->CreateComp(Component::Types::MESH);
 										goChild->GOmesh->meshData = payload_model->meshDatas[ind];
 										goChild->GOmesh->meshData->LoadBuffers();
+										goChild->GOmesh->meshData->assetID = payload_res->assetID;
+										goChild->GOmesh->meshData->indexInModel = ind;
 
 										goChild->CreateComp(Component::Types::MATERIAL);
 
@@ -1373,6 +1409,8 @@ void ModuleEditor::GOList()
 											MaterialImporter::Load(fileBufferMat, new_material_data, bufferSizeMat);
 
 											goChild->GOmat->materialData = new_material_data;
+											goChild->GOmat->materialData->assetID = goChild->GOmesh->meshData->materialAttachedID;
+
 										}
 									}
 								}
@@ -1454,6 +1492,7 @@ void ModuleEditor::GOList()
 										std::string libName = std::to_string(payload_res->assetID) + ".chad";
 										uint bufferSize = App->fileSystem->FileToBuffer(libName.c_str(), &fileBuffer);
 										MeshData* new_mesh_data = new MeshData(payload_res->assetName.c_str());
+										new_mesh_data->assetID = payload_res->assetID;
 										MeshImporter::Load(fileBuffer, new_mesh_data);
 
 										go->GOmesh->meshData = new_mesh_data;
@@ -1470,6 +1509,7 @@ void ModuleEditor::GOList()
 											MaterialImporter::Load(fileBuffer, new_material_data, bufferSize);
 
 											go->GOmat->materialData = new_material_data;
+											go->GOmat->materialData->assetID = payload_model->meshDatas[0]->materialAttachedID;
 										}
 
 
@@ -1493,6 +1533,8 @@ void ModuleEditor::GOList()
 											goChild->CreateComp(Component::Types::MESH);
 											goChild->GOmesh->meshData = payload_model->meshDatas[ind];
 											goChild->GOmesh->meshData->LoadBuffers();
+											goChild->GOmesh->meshData->assetID = payload_res->assetID;
+											goChild->GOmesh->meshData->indexInModel = ind;
 
 											goChild->CreateComp(Component::Types::MATERIAL);
 
@@ -1506,6 +1548,8 @@ void ModuleEditor::GOList()
 												MaterialImporter::Load(fileBufferMat, new_material_data, bufferSizeMat);
 
 												goChild->GOmat->materialData = new_material_data;
+												goChild->GOmat->materialData->assetID = goChild->GOmesh->meshData->materialAttachedID;
+
 											}
 										}
 									}
@@ -1526,6 +1570,8 @@ void ModuleEditor::GOList()
 								MaterialImporter::Load(fileBuffer, new_material_data, bufferSize);
 
 								gameObjectsShowing[i]->GOmat->materialData = new_material_data;
+								gameObjectsShowing[i]->GOmat->materialData->assetID = payload_res->assetID;
+
 
 								break;
 							}
@@ -1602,6 +1648,7 @@ void ModuleEditor::GOList()
 															std::string libName = std::to_string(payload_res->assetID) + ".chad";
 															uint bufferSize = App->fileSystem->FileToBuffer(libName.c_str(), &fileBuffer);
 															MeshData* new_mesh_data = new MeshData(payload_res->assetName.c_str());
+															new_mesh_data->assetID = payload_res->assetID;
 															MeshImporter::Load(fileBuffer, new_mesh_data);
 
 															go->GOmesh->meshData = new_mesh_data;
@@ -1618,6 +1665,7 @@ void ModuleEditor::GOList()
 																MaterialImporter::Load(fileBuffer, new_material_data, bufferSize);
 
 																go->GOmat->materialData = new_material_data;
+																go->GOmat->materialData->assetID = payload_model->meshDatas[0]->materialAttachedID;
 															}
 
 
@@ -1641,6 +1689,8 @@ void ModuleEditor::GOList()
 																goChild->CreateComp(Component::Types::MESH);
 																goChild->GOmesh->meshData = payload_model->meshDatas[ind];
 																goChild->GOmesh->meshData->LoadBuffers();
+																goChild->GOmesh->meshData->assetID = payload_res->assetID;
+																goChild->GOmesh->meshData->indexInModel = ind;
 
 																goChild->CreateComp(Component::Types::MATERIAL);
 
@@ -1654,6 +1704,8 @@ void ModuleEditor::GOList()
 																	MaterialImporter::Load(fileBufferMat, new_material_data, bufferSizeMat);
 
 																	goChild->GOmat->materialData = new_material_data;
+																	goChild->GOmat->materialData->assetID = goChild->GOmesh->meshData->materialAttachedID;
+
 																}
 															}
 														}
@@ -1675,6 +1727,8 @@ void ModuleEditor::GOList()
 													MaterialImporter::Load(fileBuffer, new_material_data, bufferSize);
 
 													gameObjectsShowing[k]->GOmat->materialData = new_material_data;
+													gameObjectsShowing[k]->GOmat->materialData->assetID = payload_res->assetID;
+
 
 													break;
 												}
@@ -1756,6 +1810,7 @@ void ModuleEditor::GOList()
 										std::string libName = std::to_string(payload_res->assetID) + ".chad";
 										uint bufferSize = App->fileSystem->FileToBuffer(libName.c_str(), &fileBuffer);
 										MeshData* new_mesh_data = new MeshData(payload_res->assetName.c_str());
+										new_mesh_data->assetID = payload_res->assetID;
 										MeshImporter::Load(fileBuffer, new_mesh_data);
 
 										go->GOmesh->meshData = new_mesh_data;
@@ -1772,6 +1827,8 @@ void ModuleEditor::GOList()
 											MaterialImporter::Load(fileBuffer, new_material_data, bufferSize);
 
 											go->GOmat->materialData = new_material_data;
+											go->GOmat->materialData->assetID = payload_model->meshDatas[0]->materialAttachedID;
+
 										}
 
 
@@ -1795,6 +1852,8 @@ void ModuleEditor::GOList()
 											goChild->CreateComp(Component::Types::MESH);
 											goChild->GOmesh->meshData = payload_model->meshDatas[ind];
 											goChild->GOmesh->meshData->LoadBuffers();
+											goChild->GOmesh->meshData->assetID = payload_res->assetID;
+											goChild->GOmesh->meshData->indexInModel = ind;
 
 											goChild->CreateComp(Component::Types::MATERIAL);
 
@@ -1808,6 +1867,8 @@ void ModuleEditor::GOList()
 												MaterialImporter::Load(fileBufferMat, new_material_data, bufferSizeMat);
 
 												goChild->GOmat->materialData = new_material_data;
+												goChild->GOmat->materialData->assetID = goChild->GOmesh->meshData->materialAttachedID;
+
 											}
 										}
 									}
@@ -1831,6 +1892,8 @@ void ModuleEditor::GOList()
 								MaterialImporter::Load(fileBuffer, new_material_data, bufferSize);
 
 								gameObjectsShowing[i]->GOmat->materialData = new_material_data;
+								gameObjectsShowing[i]->GOmat->materialData->assetID = payload_res->assetID;
+
 
 								break;
 							}
@@ -1883,17 +1946,22 @@ void ModuleEditor::GOList()
 
 void ModuleEditor::DeleteGo()
 {
-	for (uint i = 1; i < App->scene->ListGO.size(); ++i) {
+	for (uint i = 2; i < App->scene->ListGO.size(); i++) {
 			
-			if(App->scene->ListGO[i]->GOcam!=nullptr)
-			{
-				App->scene->ListGO.at(i)->Remove();
-				App->scene->ListGO.erase(App->scene->ListGO.begin() + 1, App->scene->ListGO.end());
-			}
+			//if(App->scene->ListGO[i]->GOcam==nullptr)
+			//{
+				App->scene->ListGO[i]->Remove();
+				
+			//}
 				//App->scene->ListGO.at(i) = nullptr;
 				//delete App->scene->ListGO.at(i);
 				
-		}
+	}
+
+	App->scene->ListGO.erase(App->scene->ListGO.begin() + 2, App->scene->ListGO.end());
+	App->editor->selectedObj = nullptr;
+	App->editor->GOIndex = 0;
+	//App->editor->sele
 		/*for (uint i = 1; i < App->scene->ListGO.size(); ++i) {
 			App->scene->ListGO[i] = nullptr;
 			delete App->scene->ListGO[i];

@@ -7,7 +7,7 @@ GameObject::GameObject(const char* name, GameObject* parent):name(name)
 {
 	if(parent!=nullptr )
 	{ 
-		while(uid!=0)uid = External->rand.Int();
+		while(uid==0)uid = External->rand.Int();
 		//parent->childrens.push_back(this);
 	}
 	SetParent(parent);
