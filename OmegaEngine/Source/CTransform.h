@@ -29,6 +29,8 @@ public:
 
 	void OnInspector() override;
 
+	mat4x4 GlobalMatrix();
+
 	float3 GetPos() { return pos; }
 	float3 GetRot() { return rot; }
 	float3 GetScale() { return scl; }
@@ -55,6 +57,9 @@ public:
 	float3 scl = { 1,1,1 };
 	
 	mat4x4 matrix;
-	
+private:
+	float3 npos = { 0,0,0 };
+	float3 nrot = { 0,0,0 };
+	float3 nscl = { 1,1,1 };
 };
 

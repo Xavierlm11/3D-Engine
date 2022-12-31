@@ -269,8 +269,10 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 	if (MainCam != nullptr)
 	{
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+		//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		//glLoadIdentity();
 		BindCamBuffer(MainCam);
-		GoRender();
+		GoRenderGame();
 	}
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
@@ -281,6 +283,64 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 }
 
 void ModuleRenderer3D::GoRender()
+{
+	PrimPlane p(0, 0, 0, 0);
+	p.axis = true;
+	p.Render();
+	switch (mode)
+	{
+	case RenderMode::NONE:
+
+		break;
+	case RenderMode::NORMAL:
+		
+		
+		for (int i = 0; i <meshlist.size(); i++)
+		{
+			if (meshlist[i] != nullptr)
+			{
+
+				meshlist[i]->MeshRenderer();
+
+			}
+		}
+		meshlist.clear();
+		//DrawCube();
+		break;
+	case RenderMode::CHECKERS:
+	
+		for (int i = 0; i < meshlist.size(); i++)
+		{
+			if (meshlist[i] != nullptr)
+			{
+
+				meshlist[i]->MeshRenderer();
+
+			}
+		}
+		meshlist.clear();
+		//DrawCube();
+		break;
+	case RenderMode::WIREFRAME:
+		
+		for (int i = 0; i < meshlist.size(); i++)
+		{
+			glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+			if (meshlist[i] != nullptr)
+			{
+
+				meshlist[i]->MeshRenderer();
+
+			}
+			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+		}
+		meshlist.clear();
+		//Draw();
+		break;
+	}
+}
+
+void ModuleRenderer3D::GoRenderGame()
 {
 	PrimPlane p(0, 0, 0, 0);
 	p.axis = true;
@@ -366,13 +426,15 @@ GLuint ModuleRenderer3D::GetBuffCam()
 
 void ModuleRenderer3D::BindCamBuffer(CCamera* _CCam)
 {
+	
 	glMatrixMode(GL_PROJECTION);
 	glLoadMatrixf(_CCam->GetProjectionMatrixOpenGL());
 	
 	glMatrixMode(GL_MODELVIEW);
 	glLoadMatrixf(_CCam->GetViewMatrixOpenGL());
 
-	glBindFramebuffer(GL_FRAMEBUFFER, _CCam->GetFrameBuffer());
+	//glBindFramebuffer(GL_FRAMEBUFFER, _CCam->GetFrameBuffer());
+	glBindFramebuffer(GL_FRAMEBUFFER, _CCam->NewFrameBuffer);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	Color c ;
 	glClearColor(c.r, c.g, c.b, c.a);

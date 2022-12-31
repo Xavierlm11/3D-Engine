@@ -44,6 +44,7 @@ public:
 	void DrawMesh(MeshData* mesh);
 	update_status PostUpdate(float dt);
 	void GoRender();
+	void GoRenderGame();
 	bool CleanUp();
 
 	void OnResize(int x, int y, int width, int height);
