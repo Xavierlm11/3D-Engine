@@ -3,6 +3,7 @@
 #include "Globals.h"
 #include "GameObject.h"
 #include "Component.h"
+#include "PhysBody3D.h"
 
 class ModuleScene : public Module
 {
@@ -36,6 +37,8 @@ public:
 	GameObject* CreateGO( const char* name, GameObject* parent);
 	void CreateGORoot(GameObject* obj, const char* name, GameObject* parent);
 	void AddGOList(GameObject* obj);
+
+	void OnCollision(PhysBody3D* body1, PhysBody3D* body2);
 
 	bool house_loaded = false;
 	bool cube_loaded = false;

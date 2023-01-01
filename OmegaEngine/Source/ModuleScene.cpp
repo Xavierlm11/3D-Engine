@@ -81,6 +81,11 @@ void ModuleScene::AddGOList(GameObject* objlist)
     ListGO.push_back(objlist);
 }
 
+void ModuleScene::OnCollision(PhysBody3D* body1, PhysBody3D* body2)
+{
+
+}
+
 
 void ModuleScene::LoadSpecific(uint uid)
 {

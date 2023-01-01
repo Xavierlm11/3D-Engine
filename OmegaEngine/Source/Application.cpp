@@ -16,6 +16,7 @@ Application::Application()
 	editor = new ModuleEditor(this);
 	fileSystem = new ModuleFileSystem(this);
 	resources = new ModuleResources(this);
+	physics = new ModulePhysics3D(this);
 
 	// The order of calls is very important!
 	// Modules will Init() Start() and Update in this order
@@ -31,7 +32,7 @@ Application::Application()
 	
 
 	AddModule(input);
-	
+	AddModule(physics);
 	
 
 	// Scenes
@@ -160,7 +161,6 @@ bool Application::CleanUp()
 	for (int i = 0; i < list_modules.size() && ret == true; i--)
 	{
 		ret = list_modules[i]->CleanUp();
-
 	}
 	External = nullptr;
 	return ret;

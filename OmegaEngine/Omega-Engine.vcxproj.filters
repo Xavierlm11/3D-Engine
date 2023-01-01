@@ -251,9 +251,18 @@
     </ClCompile>
     <ClCompile Include="Source\ModuleResources.cpp">
       <Filter>Files\Modules</Filter>
-      </ClCompile>
+    </ClCompile>
     <ClCompile Include="Source\CCamera.cpp">
       <Filter>Files\GameObjects\Propierties</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\ModulePhysics.cpp">
+      <Filter>Files\Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\PhysBody3D.cpp">
+      <Filter>Files\Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\PhysVehicle3D.cpp">
+      <Filter>Files\Tools</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -553,9 +562,18 @@
     </ClInclude>
     <ClInclude Include="Source\ModuleResources.h">
       <Filter>Files\Modules</Filter>
-      </ClInclude>
+    </ClInclude>
     <ClInclude Include="Source\CCamera.h">
       <Filter>Files\GameObjects\Propierties</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ModulePhysics.h">
+      <Filter>Files\Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\PhysBody3D.h">
+      <Filter>Files\Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\PhysVehicle3D.h">
+      <Filter>Files\Tools</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

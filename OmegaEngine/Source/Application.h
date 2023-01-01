@@ -18,6 +18,7 @@
 #include "ModuleScene.h"
 #include "ModuleFileSystem.h"
 #include "ModuleResources.h"
+#include "ModulePhysics.h"
 
 
 class Application
@@ -33,6 +34,7 @@ public:
 	ModuleScene* scene;
 	ModuleFileSystem* fileSystem;
 	ModuleResources* resources;
+	ModulePhysics3D* physics;
 
 private:
 
