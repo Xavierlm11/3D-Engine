@@ -261,6 +261,7 @@ void ModuleRenderer3D::DrawMesh(MeshData* mesh) {
 update_status ModuleRenderer3D::PostUpdate(float dt)
 {
 	
+
 	GoRender();
 
 	
@@ -304,7 +305,7 @@ void ModuleRenderer3D::GoRender()
 
 			}
 		}
-		meshlist.clear();
+	//	meshlist.clear();
 		//DrawCube();
 		break;
 	case RenderMode::CHECKERS:
@@ -318,7 +319,7 @@ void ModuleRenderer3D::GoRender()
 
 			}
 		}
-		meshlist.clear();
+		//meshlist.clear();
 		//DrawCube();
 		break;
 	case RenderMode::WIREFRAME:
@@ -334,7 +335,7 @@ void ModuleRenderer3D::GoRender()
 			}
 			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 		}
-		meshlist.clear();
+	//	meshlist.clear();
 		//Draw();
 		break;
 	}

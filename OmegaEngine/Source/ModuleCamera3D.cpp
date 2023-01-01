@@ -20,6 +20,7 @@ bool ModuleCamera3D::Start()
 	//ScnCam = new CCamera(App->scene->RootParent);
 	ScnCam = new CCamera(NULL);
 	ScnCam->cameraFrustum.pos = float3(0,4, -10);
+	//ScnCam = App->renderer3D->GameCam->GOcam;
 	return ret;
 }
 
