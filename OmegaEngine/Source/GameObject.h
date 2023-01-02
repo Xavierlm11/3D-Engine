@@ -18,6 +18,8 @@ class CTransform;
 
 class CCamera;
 
+class CPhysics;
+
 class GameObject
 {
 public:
@@ -64,6 +66,7 @@ public:
 	CMaterial* GOmat = nullptr;
 	CTransform* GOtrans = nullptr;
 	CCamera* GOcam = nullptr;
+	CPhysics* GOphys = nullptr;
 	uint uid=0;
 
 public:

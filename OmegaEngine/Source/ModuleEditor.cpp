@@ -28,6 +28,7 @@
 #include "MaterialImporter.h"
 #include "CCamera.h"
 #include "ModelImporter.h"
+#include "CPhysics.h"
 
 
 ModuleEditor::ModuleEditor(Application* app, bool start_enabled) : Module(app, start_enabled)
@@ -192,9 +193,115 @@ update_status ModuleEditor::Update(float dt)
 						{
 							App->scene->ListGO[i]->Editor();
 
+							bool hasMesh = false;
+							bool hasMat = false;
+							bool hasCam = false;
+							bool hasPhys = false;
+
+							for each (Component *comp in App->scene->ListGO[i]->components)
+							{
+								switch (comp->type)
+								{
+								case Component::Types::MESH:
+									hasMesh = true;
+									break;
+								case Component::Types::MATERIAL:
+									hasMat = true;
+									break;
+								case Component::Types::CAMERA:
+									hasCam = true;
+									break;
+								case Component::Types::PHYSICS:
+									hasPhys = true;
+									break;
+								}
+								
+							}
+							
+							vector<const char*> components;
+
+							//string components_s = "";
+							if (hasMesh == false) {
+								components.push_back("Mesh");
+							}
+							if (hasMat == false) {
+								components.push_back("Material");
+							}
+							if (hasCam == false) {
+								components.push_back("Camera");
+							}
+							if (hasPhys == false) {
+								components.push_back("Physics");
+							}
+
+							if (components.empty() == false) {
+
+								ImGui::Text(" ");
+
+								if (ImGui::Button("Add Component", ImVec2(140, 40)))
+								{
+									ImGui::OpenPopup("Components");
+								}
+
+								if (ImGui::BeginPopup("Components"))
+								{
+									for (int j = 0; j < components.size(); j++) {
+										if (ImGui::Selectable(components[j])) {
+
+											int a = -1;
+											if (components[j] == "Mesh") {
+												a = 0;
+											}
+											else if (components[j] == "Material")
+											{
+												a = 1;
+											}
+											else if (components[j] == "Camera")
+											{
+												a = 2;
+											}
+											else if (components[j] == "Physics")
+											{
+												a = 3;
+											}
+
+
+											switch (a) {
+											case 0:
+											{
+												App->scene->ListGO[i]->CreateComp(Component::Types::MESH);
+											}
+											break;
+											case 1:
+											{
+												App->scene->ListGO[i]->CreateComp(Component::Types::MATERIAL);
+											}
+											break;
+											case 2:
+											{
+												App->scene->ListGO[i]->CreateComp(Component::Types::CAMERA);
+											}
+											break;
+											case 3:
+											{
+												App->scene->ListGO[i]->CreateComp(Component::Types::PHYSICS);
+												App->scene->ListGO[i]->GOphys->phys = App->physics;
+											}
+											break;
+											}
+										}
+									}
+
+									ImGui::EndPopup();
+								}
+							}
+
+							
+							
+
 							ImGui::Text(" ");
 
-							if (ImGui::Button("Delete GameObject", ImVec2(140, 60))) {
+							if (ImGui::Button("Delete GameObject", ImVec2(140, 40))) {
 								selectedObj = nullptr;
 								GameObject* goPtr = App->scene->ListGO[GOIndex];
 								
@@ -217,7 +324,6 @@ update_status ModuleEditor::Update(float dt)
 											goToDelete.push_back(k);
 
 										}
-										
 									}
 								}
 
@@ -238,10 +344,8 @@ update_status ModuleEditor::Update(float dt)
 											if (App->renderer3D->meshlist[k] == goToDel->components[l])
 											{
 												meshesToDelete.push_back(k);
-
 											}
 										}
-
 									}
 
 									sort(meshesToDelete.begin(), meshesToDelete.end(), greater<int>());
@@ -256,13 +360,8 @@ update_status ModuleEditor::Update(float dt)
 									GOIndex = -1;
 									showingGOIndex = -1;
 								}
-
-
-								
-
 							}
 						}
-						
 					}
 
 					break;
@@ -1267,10 +1366,6 @@ void ModuleEditor::CloseEngine()
 
 	}
 	ImGui::End();
-}
-
-void ModuleEditor::CheckShapes() {
-
 }
 	
 

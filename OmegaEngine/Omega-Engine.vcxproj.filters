@@ -264,6 +264,9 @@
     <ClCompile Include="Source\PhysVehicle3D.cpp">
       <Filter>Files\Tools</Filter>
     </ClCompile>
+    <ClCompile Include="Source\CPhysics.cpp">
+      <Filter>Files\GameObjects\Propierties</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Application.h">
@@ -573,6 +576,12 @@
       <Filter>Files\Tools</Filter>
     </ClInclude>
     <ClInclude Include="Source\PhysVehicle3D.h">
+      <Filter>Files\Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\CPhysics.h">
+      <Filter>Files\GameObjects\Propierties</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Collider.h">
       <Filter>Files\Tools</Filter>
     </ClInclude>
   </ItemGroup>

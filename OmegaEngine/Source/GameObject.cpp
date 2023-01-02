@@ -3,6 +3,8 @@
 #include "CMesh.h"
 #include "CTransform.h"
 #include "CCamera.h"
+#include "CPhysics.h"
+
 GameObject::GameObject(const char* name, GameObject* parent):name(name)
 {
 	if(parent!=nullptr )
@@ -176,6 +178,14 @@ Component* GameObject::CreateComp(Component::Types type)
 			comp = ccam;
 		}
 			break;
+
+		case Component::Types::PHYSICS:
+		{
+			CPhysics* cphys = new CPhysics(this);
+			GOphys = cphys;
+			comp = cphys;
+		}
+		break;
 	}
 	if (comp != nullptr) components.push_back(comp);
 	
@@ -206,7 +216,7 @@ void GameObject::Editor()
 		{
 
 			components[i]->OnInspector();
-
+			
 		}
 
 	}

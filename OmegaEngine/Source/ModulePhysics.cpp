@@ -333,9 +333,44 @@ PhysVehicle3D* ModulePhysics3D::AddVehicle(const VehicleInfo& info)
 	PhysVehicle3D* pvehicle = new PhysVehicle3D(body, vehicle, info);
 	world->addVehicle(vehicle);
 	vehicles.push_back(pvehicle);
-
 	return pvehicle;
 }
+
+void ModulePhysics3D::RemoveBody(PhysBody3D* body) {
+	
+	world->removeRigidBody(body->body);
+
+	//// Remove from the world all collision bodies
+	//for (int i = world->getNumCollisionObjects() - 1; i >= 0; i--)
+	//{
+
+	//	btCollisionObject* obj = world->getCollisionObjectArray()[i];
+	//	world->removeCollisionObject(obj);
+	//}
+
+	//for each (btTypedConstraint * item in constraints)
+	//{
+	//	world->removeConstraint(item);
+	//	delete item;
+	//}
+
+
+	//for each (btDefaultMotionState * item in motions)
+	//{
+	//	delete item;
+	//}
+
+	//for each (btCollisionShape * item in shapes)
+	//{
+	//	delete item;
+	//}
+
+	//for each (PhysBody3D * item in bodies)
+	//{
+	//	delete item;
+	//}
+}
+
 
 // ---------------------------------------------------------
 void ModulePhysics3D::AddConstraintP2P(PhysBody3D& bodyA, PhysBody3D& bodyB, const vec3& anchorA, const vec3& anchorB)

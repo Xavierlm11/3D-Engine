@@ -12,7 +12,8 @@ public:
 		MESH,
 		MATERIAL,
 		CAMERA,
-		LIGHT
+		LIGHT,
+		PHYSICS
 	};
 	Component(GameObject* obj, Types type);
 	virtual ~Component();

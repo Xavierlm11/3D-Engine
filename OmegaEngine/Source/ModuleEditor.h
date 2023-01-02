@@ -112,8 +112,7 @@ private:
 
 	void CloseEngine();
 
-	void CheckGLCapabilities();
-	void CheckShapes();
+	void CheckGLCapabilities();;
 
 	void ShowAssetInfo();
 

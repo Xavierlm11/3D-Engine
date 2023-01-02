@@ -17,6 +17,7 @@
     <ClCompile Include="Source\CMesh.cpp" />
     <ClCompile Include="Source\Color.cpp" />
     <ClCompile Include="Source\Component.cpp" />
+    <ClCompile Include="Source\CPhysics.cpp" />
     <ClCompile Include="Source\CTransform.cpp" />
     <ClCompile Include="Source\External\ImGui\imgui.cpp" />
     <ClCompile Include="Source\External\ImGui\imgui_demo.cpp" />
@@ -89,8 +90,10 @@
     <ClInclude Include="Source\CCamera.h" />
     <ClInclude Include="Source\CMaterial.h" />
     <ClInclude Include="Source\CMesh.h" />
+    <ClInclude Include="Source\Collider.h" />
     <ClInclude Include="Source\Color.h" />
     <ClInclude Include="Source\Component.h" />
+    <ClInclude Include="Source\CPhysics.h" />
     <ClInclude Include="Source\CTransform.h" />
     <ClInclude Include="Source\External\ImGui\imconfig.h" />
     <ClInclude Include="Source\External\ImGui\imgui.h" />
