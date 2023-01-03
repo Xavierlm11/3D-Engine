@@ -6,6 +6,8 @@
 
 #include "GameObject.h"
 
+#include "MathGeoLib/include/Math/float4x4.h"
+
 
 
 class CTransform : public Component
@@ -25,19 +27,23 @@ public:
 
 	void Update() override;
 
-	void TransformMatrix(float3 _pos, float3 _rot, float3 _scl);
+	void TransformMatrix();
 
 	void OnInspector() override;
 
 	mat4x4 GlobalMatrix();
 
+	void SetPos(float3 _pos);
+
+	void SetRot(float3 _rot);
+
+	void SetScale(float3 _scl);
+
 	float3 GetPos() { return pos; }
 	float3 GetRot() { return rot; }
 	float3 GetScale() { return scl; }
 
-	void SetPos(float3 _pos) { pos = _pos; TransformMatrix(pos, rot,scl); }
-	void SetRot(float3 _rot) { rot = _rot; TransformMatrix(pos, rot, scl);}
-	void SetScale(float3 _scl) { scl = _scl; TransformMatrix(pos, rot, scl); }
+	
 
 	//float4x4 GetMatrix() { return matrix; }
 
