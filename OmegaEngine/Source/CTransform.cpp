@@ -4,6 +4,22 @@
 CTransform::CTransform(GameObject* obj):Component( obj, Types::TRANSFORM )
 {
 	this->GO = obj;
+	if (GO->parent != nullptr)
+	{
+		/*
+			gpos = ppos + pos;
+			grot = prot + rot;
+			gscl.x = pscl.x * scl.x;
+			gscl.y = pscl.y * scl.y;
+			gscl.z = pscl.z * scl.z;
+			TransformMatrix(gpos, grot, gscl);*/
+
+		
+			ppos = GO->parent->GOtrans->GetPos();
+			ppos = GO->parent->GOtrans->GetRot();
+			ppos = GO->parent->GOtrans->GetScale();
+			
+	}
 }
 
 CTransform::~CTransform()
@@ -17,15 +33,15 @@ void CTransform::Update()
 	
 }
 
-void CTransform::TransformMatrix()
+void CTransform::TransformMatrix(float3 _pos, float3 _rot, float3 _scl)
 {
 	//pos = _pos;
 	//rot = _rot;
 	//scl = _scl;
 
-	float x = rot.x * DEGTORAD;
-	float y = rot.y * DEGTORAD;
-	float z = rot.z * DEGTORAD;
+	float x = _rot.x * DEGTORAD;
+	float y = _rot.y * DEGTORAD;
+	float z = _rot.z * DEGTORAD;
 
 	/*Quat _rot = Quat::FromEulerXYZ(x, y, z);
 	mat4x4::
@@ -34,35 +50,53 @@ void CTransform::TransformMatrix()
 	matrix[0] = cos(y) * cos(z);
 	matrix[1] = -cos(x) * sin(z) + sin(y) * cos(z) * sin(x);
 	matrix[2] = sin(x) * sin(z) + sin(y) * cos(z) * cos(x);
-	matrix[3] = pos.x;
+	matrix[3] = _pos.x;
 
 	matrix[4] = cos(y) * sin(z);
 	matrix[5] = cos(x) * cos(z) + sin(y) * sin(z) * sin(z);
 	matrix[6] = -sin(x) * cos(z) + sin(y) * sin(z) * cos(x);
-	matrix[7] = pos.y;
+	matrix[7] = _pos.y;
 
 	matrix[8] = -sin(y);
 	matrix[9] = cos(y) * sin(x);
 	matrix[10] = cos(x) * cos(y);
-	matrix[11] = pos.z;
+	matrix[11] = _pos.z;
 
 	matrix[12] = 0;
 	matrix[13] = 0;
 	matrix[14] = 0;
 	matrix[15] = 1;
 
-	matrix[0] *= scl.x;
-	matrix[5] *= scl.y;
-	matrix[10] *= scl.z;
+	matrix[0] *= _scl.x;
+	matrix[5] *= _scl.y;
+	matrix[10] *= _scl.z;
 
 	matrix = transpose(matrix);
 
 	
-
-
 	
-
 }
+
+void CTransform::SetGlobalTrans()
+{
+	if (GO->parent == nullptr)
+	{
+
+		TransformMatrix(pos,rot,scl);
+	}
+	else
+	{
+		gpos = ppos + pos;
+		grot = prot + rot;
+		gscl.x = pscl.x * scl.x;
+		gscl.y = pscl.y * scl.y;
+		gscl.z = pscl.z * scl.z;
+		TransformMatrix(gpos, grot, gscl );
+
+	}
+}
+
+
 
 void CTransform::OnInspector()
 {
@@ -77,67 +111,28 @@ void CTransform::OnInspector()
 		ImGui::Text("Y	");
 		ImGui::SameLine();
 		ImGui::Text("Z	");
-		if(ImGui::DragFloat3("Pos.", newPos.ptr(), 0.1))SetPos(newPos);
+		if(ImGui::DragFloat3("Pos.", newPos.ptr(), 0.1))
+			SetPos(newPos);
 		
 		ImGui::Text("X	");
 		ImGui::SameLine();
 		ImGui::Text("Y	");
 		ImGui::SameLine();
 		ImGui::Text("Z	");
-		if(ImGui::DragFloat3("Rotation.", newrot.ptr(),0.1)) SetRot(newrot);
+		if(ImGui::DragFloat3("Rotation.", newrot.ptr(),0.1)) 
+			SetRot(newrot);
 		
 		ImGui::Text("X	");
 		ImGui::SameLine();
 		ImGui::Text("Y	");
 		ImGui::SameLine();
 		ImGui::Text("Z	");
-		if (ImGui::DragFloat3("Scale.", newScl.ptr(), 0.1)) SetScale(newScl);
+		if (ImGui::DragFloat3("Scale.", newScl.ptr(), 0.1)) 
+			SetScale(newScl);
 
 
 
 	}
-
-	//TransformMatrix(pos, rot, scl);
-
-	//if (GO->children.size() != 0)
-	//{
-	//	for (uint i = 0; i < GO->children.size(); ++i)
-	//	{
-	//		//GO->children[i]->GOtrans->TransformMatrix(GO->children[i]->GOtrans->GetPos() + pos, GO->children[i]->GOtrans->GetRot() + rot, GO->children[i]->GOtrans->GetScale() + scl);
-	//		/*GO->children[i]->GOtrans->SetPos(GO->children[i]->GOtrans->GetPos() + newPos);
-	//		GO->children[i]->GOtrans->SetRot(GO->children[i]->GOtrans->GetRot() + newPos);
-	//		GO->children[i]->GOtrans->SetScale({ GO->children[i]->GOtrans->GetScale().x * newScl.x,
-	//			GO->children[i]->GOtrans->GetScale().y * newScl.y,
-	//			GO->children[i]->GOtrans->GetScale().z * newScl.z });*/
-	//		//GO->children[i]->GOtrans->SetRot(GO->children[i]->GOtrans->GetRot() + rot), nrot = rot;
-	//		/*if (pos.x != GO->children[i]->GOtrans->npos.x || pos.y != GO->children[i]->GOtrans->npos.y || pos.z != GO->children[i]->GOtrans->npos.z)
-	//		{
-	//			if ((pos.x < GO->children[i]->GOtrans->npos.x || pos.y < GO->children[i]->GOtrans->npos.y || pos.z < GO->children[i]->GOtrans->npos.z)&&(pos.x >= 0 || pos.y >=0|| pos.z >=0))
-	//				GO->children[i]->GOtrans->SetPos(GO->children[i]->GOtrans->GetPos() + pos), GO->children[i]->GOtrans->npos=pos;
-
-	//			else if ((pos.x < GO->children[i]->GOtrans->npos.x || pos.y < GO->children[i]->GOtrans->npos.y || pos.z < GO->children[i]->GOtrans->npos.z) && (pos.x <= 0 || pos.y <= 0 || pos.z <= 0))
-	//				GO->children[i]->GOtrans->SetPos(GO->children[i]->GOtrans->GetPos() - pos), GO->children[i]->GOtrans->npos = pos;
-
-	//			else if ((pos.x > GO->children[i]->GOtrans->npos.x || pos.y > GO->children[i]->GOtrans->npos.y || pos.z > GO->children[i]->GOtrans->npos.z) && (pos.x <= 0 || pos.y <= 0 || pos.z <= 0))
-	//				GO->children[i]->GOtrans->SetPos(GO->children[i]->GOtrans->GetPos() + pos), GO->children[i]->GOtrans->npos = pos;
-
-	//			else if ((pos.x > GO->children[i]->GOtrans->npos.x || pos.y > GO->children[i]->GOtrans->npos.y || pos.z > GO->children[i]->GOtrans->npos.z) && (pos.x >= 0 || pos.y >= 0 || pos.z >= 0))
-	//				GO->children[i]->GOtrans->SetPos(GO->children[i]->GOtrans->GetPos() - pos), GO->children[i]->GOtrans->npos = pos;
-
-	//		}*/
-
-	//		if (rot.x != GO->children[i]->GOtrans->nrot.x || rot.y != GO->children[i]->GOtrans->nrot.y || rot.z != GO->children[i]->GOtrans->nrot.z)
-	//			GO->children[i]->GOtrans->SetRot(GO->children[i]->GOtrans->GetRot() + rot), GO->children[i]->GOtrans->nrot=rot;
-
-	//		if (scl.x != GO->children[i]->GOtrans->nscl.x || scl.y != GO->children[i]->GOtrans->nscl.y || scl.z != GO->children[i]->GOtrans->nscl.z)
-	//			GO->children[i]->GOtrans->SetScale({ 
-	//			GO->children[i]->GOtrans->GetScale().x * scl.x,
-	//			GO->children[i]->GOtrans->GetScale().y * scl.y,
-	//			GO->children[i]->GOtrans->GetScale().z * scl.z }), GO->children[i]->GOtrans->nscl=scl;
-	//	}
-	//}
-
-
 	
 }
 
@@ -149,8 +144,13 @@ mat4x4 CTransform::GlobalMatrix()
 		return matrix;
 	}
 
+
+
+
 	return matrix * GO->parent->GOtrans->GlobalMatrix();
 }
+
+
 
 void CTransform::SetPos(float3 _pos)
 {
@@ -158,44 +158,122 @@ void CTransform::SetPos(float3 _pos)
 	pos = _pos;
 
 	//if(GO->parent->GOtrans!=nullptr)
-		float3 cpos = GO->GetParent()->GOtrans->GetPos() + pos;
 		//float3 cpos = GO->Get + pos;
 
+	UpdatePos();
+}
+
+void CTransform::UpdatePos()
+{
+
+	float3 cpos = ppos + pos;
 	if (GO->children.size() != 0)
 	{
+
 		for (uint i = 0; i < GO->children.size(); ++i)
 		{
-			GO->children[i]->GOtrans->SetPos(cpos);
+			GO->children[i]->GOtrans->SetGPos(cpos);
 			//GO->children[i]->GOtrans->SetPos(cpos);
 		}
 	}
 
 	if (GO->GOcam != nullptr)
 	{
-		GO->GOcam->cameraFrustum.pos = pos;
-		GO->GOcam->Reference = pos;
+		GO->GOcam->cameraFrustum.pos = cpos;
+		GO->GOcam->Reference = cpos;
 	}
 
-	TransformMatrix();
+	SetGlobalTrans();
+	//TransformMatrix();
 }
+
+void CTransform::SetGPos(float3 _pos)
+{
+
+	ppos = _pos;
+
+	UpdatePos();
+}
+
+
+
 void CTransform::SetRot(float3 _rot) {
 	rot = _rot;
 
-	float3 crot = GO->GetParent()->GOtrans->GetRot() + rot;
+	
+	UpdateRot();
+	
+	//TransformMatrix();
+}
 
+void CTransform::UpdateRot()
+{
+
+	float3 crot = prot + rot;
 	if (GO->children.size() != 0)
 	{
+
 		for (uint i = 0; i < GO->children.size(); ++i)
 		{
-			GO->children[i]->GOtrans->SetRot(crot);
+			GO->children[i]->GOtrans->SetGRot(crot);
+			//GO->children[i]->GOtrans->SetPos(cpos);
 		}
 	}
 
-	TransformMatrix();
+	if (GO->GOcam != nullptr)
+	{
+		
+		Quat dir;
+		GO->GOcam->cameraFrustum.WorldMatrix().Decompose(float3(), dir, float3());
+
+		Quat Z = { 0, 0, 0, 1 };
+		Z.SetFromAxisAngle(float3(0.0f, 0.0f, 1.0f), crot.z * DEGTORAD);
+
+		dir = Z * dir;
+
+		//float AngleY = (float)dy * Sensitivity;
+
+		Quat Y = { 0, 0, 0, 1 };
+		Y.SetFromAxisAngle(float3(0.0f, 1.0f, 0.0f), crot.y * DEGTORAD);
+
+		dir = dir * Y;
+
+		//float AngleX = (float)dx * Sensitivity;
+
+		Quat X = { 0, 0, 0, 1 };
+		X.SetFromAxisAngle(float3(1.0f, 0.0f, 0.0f), crot.x * DEGTORAD);
+
+		dir = X * dir;
+
+		float4x4 matrix = GO->GOcam->cameraFrustum.WorldMatrix();
+		matrix.SetRotatePart(dir.Normalized());
+		GO->GOcam->cameraFrustum.SetWorldMatrix(matrix.Float3x4Part());
+		
+	}
+
+	SetGlobalTrans();
+	//TransformMatrix();
 }
+
+void CTransform::SetGRot(float3 _rot)
+{
+
+	prot = _rot;
+
+	UpdateRot();
+}
+
+
 
 void CTransform::SetScale(float3 _scl) {
 	scl = _scl;
+
+	UpdateScl();
+	//TransformMatrix();
+}
+
+void CTransform::UpdateScl()
+{
 
 	float3 cscl ;
 
@@ -207,8 +285,19 @@ void CTransform::SetScale(float3 _scl) {
 	{
 		for (uint i = 0; i < GO->children.size(); ++i)
 		{
-			GO->children[i]->GOtrans->SetPos(cscl);
+			GO->children[i]->GOtrans->SetGScl(cscl);
 		}
 	}
-	TransformMatrix();
+
+	SetGlobalTrans();
 }
+
+void CTransform::SetGScl(float3 _scl)
+{
+
+	pscl = _scl;
+
+	UpdateScl();
+}
+	
+
