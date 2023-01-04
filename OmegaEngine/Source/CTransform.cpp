@@ -200,7 +200,32 @@ void CTransform::SetGPos(float3 _pos)
 void CTransform::SetRot(float3 _rot) {
 	rot = _rot;
 
-	
+	if (rot.x >= 361)
+	{
+		rot.x = 0;
+	}
+	if (rot.y >= 361)
+	{
+		rot.y = 0;
+	}
+	if (rot.z >= 361)
+	{
+		rot.z = 0;
+	}
+
+	if (rot.x < 0)
+	{
+		rot.x = 360;
+	}
+	if (rot.y < 0)
+	{
+		rot.y = 360;
+	}
+	if (rot.z < 0)
+	{
+		rot.z = 360;
+	}
+
 	UpdateRot();
 	
 	//TransformMatrix();
@@ -225,25 +250,22 @@ void CTransform::UpdateRot()
 		
 		Quat dir;
 		GO->GOcam->cameraFrustum.WorldMatrix().Decompose(float3(), dir, float3());
-
-		Quat Z = { 0, 0, 0, 1 };
-		Z.SetFromAxisAngle(float3(0.0f, 0.0f, 1.0f), crot.z * DEGTORAD);
-
-		dir = Z * dir;
-
+		
+		Quat X = { 0, 0, 0, 1 };
+		X.SetFromAxisAngle(float3(1.0f, 0.0f, 0.0f), crot.x * DEGTORAD);
+		dir = X * dir;
 		//float AngleY = (float)dy * Sensitivity;
 
 		Quat Y = { 0, 0, 0, 1 };
 		Y.SetFromAxisAngle(float3(0.0f, 1.0f, 0.0f), crot.y * DEGTORAD);
-
 		dir = dir * Y;
+		
+		Quat Z = { 0, 0, 0, 1 };
+		Z.SetFromAxisAngle(float3(0.0f, 0.0f, 1.0f), crot.z * DEGTORAD);
+		dir = Z * dir;
+
 
 		//float AngleX = (float)dx * Sensitivity;
-
-		Quat X = { 0, 0, 0, 1 };
-		X.SetFromAxisAngle(float3(1.0f, 0.0f, 0.0f), crot.x * DEGTORAD);
-
-		dir = X * dir;
 
 		float4x4 matrix = GO->GOcam->cameraFrustum.WorldMatrix();
 		matrix.SetRotatePart(dir.Normalized());
