@@ -79,7 +79,7 @@ void CTransform::TransformMatrix(float3 _pos, float3 _rot, float3 _scl)
 
 void CTransform::SetGlobalTrans()
 {
-	if (GO->parent == nullptr)
+	if (GO->parent->parent == nullptr)
 	{
 
 		TransformMatrix(pos,rot,scl);
