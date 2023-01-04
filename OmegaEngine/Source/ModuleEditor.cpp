@@ -786,9 +786,9 @@ void ModuleEditor::DrawSceneViewport()
 {
 	if (ImGui::Begin("Scene"))
 	{
-		if (ImGui::IsWindowHovered())App->camera->IsWindow = true;
+		if (ImGui::IsWindowFocused())App->camera->IsWindow = true;
 		else App->camera->IsWindow = false;
-
+		//ImGui::iswindow
 		ImVec2 ViewSize = ImGui::GetContentRegionAvail();
 			AspRatioScene = (float)(ViewSize.x / ViewSize.y);
 			App->camera->ScnCam->SetRatio(AspRatioScene) ;
@@ -908,9 +908,10 @@ void ModuleEditor::DrawGameViewport()
 {
 	if (ImGui::Begin("Game"))
 	{
-		if (ImGui::IsWindowHovered())App->camera->IsWindow = true;
-		else App->camera->IsWindow = false;
+		//if (ImGui::IsWindowHovered())App->camera->IsWindow = true;
+		//else App->camera->IsWindow = false;
 
+		
 		ImVec2 ViewSize = ImGui::GetContentRegionAvail();
 		AspRatioGame = (float)(ViewSize.x / ViewSize.y);
 		App->renderer3D->MainCam->SetRatio(AspRatioGame);
