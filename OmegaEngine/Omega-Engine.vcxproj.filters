@@ -581,9 +581,6 @@
     <ClInclude Include="Source\CPhysics.h">
       <Filter>Files\GameObjects\Propierties</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Collider.h">
-      <Filter>Files\Tools</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Source\External\MathGeoLib\include\Math\Matrix.inl">

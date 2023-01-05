@@ -37,6 +37,12 @@ public:
 
 	void RemoveBody(PhysBody3D* body);
 
+	void UpdateAABBs();
+
+	//PhysBody3D* UpdateBoxColliderSize(PhysBody3D* collider, CPhysics::ColliderShape shape, mat4x4 transform, float mass = 1.0f);
+	//PhysBody3D* UpdateSphereColliderSize(PhysBody3D* collider, float mass = 1.0f);
+	//PhysBody3D* UpdateCylinderColliderSize(PhysBody3D* collider, float mass = 1.0f);
+
 private:
 
 	bool debug;

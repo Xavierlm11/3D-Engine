@@ -26,6 +26,7 @@ CPhysics::CPhysics(GameObject* obj) :Component(obj, Types::PHYSICS)
 
 	isStatic = false;
 	collider = nullptr;
+	hasInit = false;
 }
 
 CPhysics::~CPhysics()
@@ -146,24 +147,41 @@ void CPhysics::OnInspector()
 						case CPhysics::ColliderShape::BOX: 
 							{
 								PrimCube cube;
+								cube.size.x = GO->GOtrans->GetScale().x;
+								cube.size.y = GO->GOtrans->GetScale().y;
+								cube.size.z = GO->GOtrans->GetScale().z;
+								float3 pos = GO->GOtrans->GetPos();
+								//cube.transform = GO->GOtrans->matrix;
+								cube.SetPos(pos.x, pos.y, pos.z);
+								//cube.SetRotation();
+								
 								collider = phys->AddBody(cube,3.f);
+								
 							}
 							break;
 						case CPhysics::ColliderShape::SPHERE:
 							{
 								PrimSphere sphere;
+								sphere.radius = 1.0f;
+								sphere.transform = GO->GOtrans->matrix;
 								collider = phys->AddBody(sphere, 3.f);
 							}
 							break;
 						case CPhysics::ColliderShape::CYLINDER:
 							{
 								PrimCylinder cylinder;
+								cylinder.radius = 1.0f;
+								cylinder.height = 1.0f;
+								cylinder.transform = GO->GOtrans->matrix;
 								collider = phys->AddBody(cylinder, 3.f);
+								//collider->SetTransform(&GO->GOtrans->matrix);
+								
 							}
 							break;
 						default:
 							break;
 						}
+
 					}
 				}
 				
@@ -193,7 +211,90 @@ void CPhysics::OnInspector()
 				std::string colName = "Collider Attached: ";
 				colName  += colliderType;
 				ImGui::Text(colName.c_str());
-				
+
+				float3 boxScale;
+				float sphereRadius;
+				float2 cyliRadiusHeight;
+
+				switch (shapeSelected)
+				{
+				case CPhysics::ColliderShape::BOX:
+				{
+					
+					ImGui::Text("X	");
+					ImGui::SameLine();
+					ImGui::Text("Y	");
+					ImGui::SameLine();
+					ImGui::Text("Z	");
+					if (ImGui::DragFloat3("Scale: ", boxScale.ptr(), 0.1)) {
+						
+					}
+				}
+				break;
+				case CPhysics::ColliderShape::SPHERE:
+				{
+					if (ImGui::DragFloat("Radius: ", &sphereRadius, 0.1)) {
+
+					}
+				}
+				break;
+				case CPhysics::ColliderShape::CYLINDER:
+				{
+					if (ImGui::DragFloat2("Radius & Height: ", cyliRadiusHeight.ptr(), 0.1)) {
+
+					}
+				}
+				break;
+				default:
+					break;
+				}
+
+				if (ImGui::Button("Update Collider Size"))
+				{
+					phys->RemoveBody(collider);
+					collider->~PhysBody3D();
+					collider = nullptr;
+
+					switch (shapeSelected)
+					{
+					case CPhysics::ColliderShape::BOX:
+					{
+						PrimCube cube;
+						cube.size.x = boxScale.x;
+						cube.size.y = boxScale.y;
+						cube.size.z = boxScale.z;
+						//float3 pos = GO->GOtrans->GetPos();
+						cube.transform = GO->GOtrans->matrix;
+						//cube.SetPos(pos.x, pos.y, pos.z);
+
+						collider = phys->AddBody(cube, 3.f);
+
+					}
+					break;
+					case CPhysics::ColliderShape::SPHERE:
+					{
+						PrimSphere sphere;
+						sphere.radius = sphereRadius;
+						sphere.transform = GO->GOtrans->matrix;
+						collider = phys->AddBody(sphere, 3.f);
+					}
+					break;
+					case CPhysics::ColliderShape::CYLINDER:
+					{
+						PrimCylinder cylinder;
+						cylinder.radius = cyliRadiusHeight.x;
+						cylinder.height = cyliRadiusHeight.y;
+						cylinder.transform = GO->GOtrans->matrix;
+						collider = phys->AddBody(cylinder, 3.f);
+						//collider->SetTransform(&GO->GOtrans->matrix);
+
+					}
+					break;
+					default:
+						break;
+					}
+				}
+
 				if (ImGui::Button("Remove Collider"))
 				{
 					phys->RemoveBody(collider);

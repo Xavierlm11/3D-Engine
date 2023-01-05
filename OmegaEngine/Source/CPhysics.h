@@ -46,6 +46,7 @@ public:
 	bool isShapeCreated[3];
 	bool isStatic;
 	PhysBody3D* collider;
+	bool hasInit;
 
 };
 

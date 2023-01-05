@@ -90,7 +90,6 @@
     <ClInclude Include="Source\CCamera.h" />
     <ClInclude Include="Source\CMaterial.h" />
     <ClInclude Include="Source\CMesh.h" />
-    <ClInclude Include="Source\Collider.h" />
     <ClInclude Include="Source\Color.h" />
     <ClInclude Include="Source\Component.h" />
     <ClInclude Include="Source\CPhysics.h" />

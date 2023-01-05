@@ -5,6 +5,7 @@
 #include "PhysVehicle3D.h"
 #include "Primitive.h"
 #include "ModuleScene.h"
+#include "CPhysics.h"
 
 #ifdef _DEBUG
 #pragma comment (lib, "Bullet/libx86/BulletDynamics_debug.lib")
@@ -59,7 +60,7 @@ bool ModulePhysics3D::Start()
 	vehicle_raycaster = new btDefaultVehicleRaycaster(world);
 
 	// Big plane as ground
-	{
+	/*{
 		btCollisionShape* colShape = new btStaticPlaneShape(btVector3(0, 1, 0), 0);
 
 		btDefaultMotionState* myMotionState = new btDefaultMotionState();
@@ -67,7 +68,7 @@ bool ModulePhysics3D::Start()
 
 		btRigidBody* body = new btRigidBody(rbInfo);
 		world->addRigidBody(body);
-	}
+	}*/
 
 	return true;
 }
@@ -75,7 +76,29 @@ bool ModulePhysics3D::Start()
 // ---------------------------------------------------------
 update_status ModulePhysics3D::PreUpdate(float dt)
 {
-	world->stepSimulation(dt, 15);
+	//world->stepSimulation(dt, 15);
+
+	if (App->editor->playPressed == false) {
+		world->stepSimulation(0);
+	}
+	else {
+		world->stepSimulation(dt, 15);
+		//for (int i = 0; i < App->scene->ListGO.size();i++) 
+		//{
+		//	if (App->scene->ListGO[i]->GOphys != nullptr) {
+		//		if (App->scene->ListGO[i]->GOphys->hasInit == false) {
+		//			if (App->scene->ListGO[i]->GOphys->collider != nullptr) {
+
+		//				//App->scene->ListGO[i]->GOphys->collider->SetTransform(&App->scene->ListGO[i]->GOtrans->matrix);
+		//				//App->scene->ListGO[i]->GOphys->hasInit = true;
+		//			}
+		//		}
+		//		
+		//	}
+		//}
+		//App->scene->ListGO;
+	}
+	
 
 	int numManifolds = world->getDispatcher()->getNumManifolds();
 	for (int i = 0; i < numManifolds; i++)
@@ -119,6 +142,8 @@ update_status ModulePhysics3D::Update(float dt)
 {
 	if (App->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN)
 		debug = !debug;
+
+	
 
 	if (debug == true)
 	{
@@ -229,7 +254,7 @@ PhysBody3D* ModulePhysics3D::AddBody(const PrimCube& cube, float mass)
 {
 	btCollisionShape* colShape = new btBoxShape(btVector3(cube.size.x * 0.5f, cube.size.y * 0.5f, cube.size.z * 0.5f));
 	shapes.push_back(colShape);
-
+	
 	btTransform startTransform;
 	startTransform.setFromOpenGLMatrix(&cube.transform);
 
@@ -246,6 +271,7 @@ PhysBody3D* ModulePhysics3D::AddBody(const PrimCube& cube, float mass)
 
 	body->setUserPointer(pbody);
 	world->addRigidBody(body);
+	
 	bodies.push_back(pbody);
 
 	return pbody;
@@ -340,36 +366,40 @@ void ModulePhysics3D::RemoveBody(PhysBody3D* body) {
 	
 	world->removeRigidBody(body->body);
 
-	//// Remove from the world all collision bodies
-	//for (int i = world->getNumCollisionObjects() - 1; i >= 0; i--)
-	//{
-
-	//	btCollisionObject* obj = world->getCollisionObjectArray()[i];
-	//	world->removeCollisionObject(obj);
-	//}
-
-	//for each (btTypedConstraint * item in constraints)
-	//{
-	//	world->removeConstraint(item);
-	//	delete item;
-	//}
-
-
-	//for each (btDefaultMotionState * item in motions)
-	//{
-	//	delete item;
-	//}
-
-	//for each (btCollisionShape * item in shapes)
-	//{
-	//	delete item;
-	//}
-
-	//for each (PhysBody3D * item in bodies)
-	//{
-	//	delete item;
-	//}
 }
+
+void ModulePhysics3D::UpdateAABBs()
+{
+	world->updateAabbs();
+}
+
+//PhysBody3D* ModulePhysics3D::UpdateBoxColliderSize(PhysBody3D* collider, CPhysics::ColliderShape shape, mat4x4 transform, float mass)
+//{
+//	RemoveBody(collider);
+//	collider->~PhysBody3D();
+//	collider = nullptr;
+//
+//	switch (shape)
+//	{
+//	case CPhysics::ColliderShape::BOX:
+//	{
+//		PrimCube cube;
+//		//cube.size.x = transform[0];
+//		//cube.size.y = transform.y;
+//		//cube.size.z = transform.z;
+//		//collider = phys->AddBody(box, 3.f);
+//	}
+//		break;
+//	case CPhysics::ColliderShape::SPHERE:
+//		break;
+//	case CPhysics::ColliderShape::CYLINDER:
+//		break;
+//	default:
+//		break;
+//	}
+//
+//	return nullptr;
+//}
 
 
 // ---------------------------------------------------------
