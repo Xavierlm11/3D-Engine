@@ -1,6 +1,7 @@
 #pragma once
 #include "Globals.h"
 #include "External/MathGeoLib/include/Math/float3.h"
+#include "MathGeoLib/include/Math/float4x4.h"
 #include "Glew/include/glew.h"
 #include "Assimp/include/scene.h"
 #include "MaterialData.h"
@@ -14,7 +15,8 @@ public:
 	~MeshData();
 
 	void LoadBuffers();
-	void DrawMesh(GLuint textureID, mat4x4 mat);
+	void DrawMesh(GLuint textureID, float4x4 mat);
+	void DrawMesh1(GLuint textureID, mat4x4 mat);
 	void UnloadMesh();
 
 	uint id_indices = 0; // index in VRAM

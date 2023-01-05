@@ -1,6 +1,6 @@
 #include "CTransform.h"
 #include "Globals.h"
-
+#include "MathGeoLib/include/Math/float4x4.h"
 CTransform::CTransform(GameObject* obj):Component( obj, Types::TRANSFORM )
 {
 	this->GO = obj;
@@ -19,7 +19,10 @@ CTransform::CTransform(GameObject* obj):Component( obj, Types::TRANSFORM )
 			ppos = GO->parent->GOtrans->GetRot();
 			ppos = GO->parent->GOtrans->GetScale();
 			
+
 	}
+
+	matrix =  float4x4::identity;
 }
 
 CTransform::~CTransform()
@@ -43,11 +46,28 @@ void CTransform::TransformMatrix(float3 _pos, float3 _rot, float3 _scl)
 	float y = _rot.y * DEGTORAD;
 	float z = _rot.z * DEGTORAD;
 
-	/*Quat _rot = Quat::FromEulerXYZ(x, y, z);
-	mat4x4::
-	matrix = float4x4::FromTRS(pos, _rot, scl).Transposed();
-	*/
-	matrix[0] = cos(y) * cos(z);
+	//Quat Qrot = Quat::FromEulerXYZ(x, y, z);
+	
+	//matrix = float4x4::FromTRS(_pos, Qrot, _scl).Transposed();
+
+	matrix[0][0] = cos(z) * cos(y) * _scl.x;
+	matrix[1][0] = -sin(z) * cos(x) + cos(z) * sin(y) * sin(x);
+	matrix[2][0] = sin(z) * sin(x) + cos(z) * sin(y) * cos(x);
+	matrix[0][1] = sin(z) * cos(y);
+	matrix[1][1] = (cos(z) * cos(x) + sin(z) * sin(y) * sin(x)) * _scl.y;
+	matrix[2][1] = -cos(z) * sin(x) + sin(z) * sin(y) * cos(x);
+	matrix[0][2] = -sin(y);
+	matrix[1][2] = cos(y) * sin(x);
+	matrix[2][2] = cos(y) * cos(x) * _scl.z;
+	matrix[3][0] = _pos.x;
+	matrix[3][1] = _pos.y;
+	matrix[3][2] = _pos.z;
+	matrix[0][3] = 0;
+	matrix[1][3] = 0;
+	matrix[2][3] = 0;
+	matrix[3][3] = 1;
+	
+	/*matrix[0] = cos(y) * cos(z);
 	matrix[1] = -cos(x) * sin(z) + sin(y) * cos(z) * sin(x);
 	matrix[2] = sin(x) * sin(z) + sin(y) * cos(z) * cos(x);
 	matrix[3] = _pos.x;
@@ -71,7 +91,7 @@ void CTransform::TransformMatrix(float3 _pos, float3 _rot, float3 _scl)
 	matrix[5] *= _scl.y;
 	matrix[10] *= _scl.z;
 
-	matrix = transpose(matrix);
+	matrix = transpose(matrix);*/
 
 	
 	
@@ -112,7 +132,7 @@ void CTransform::OnInspector()
 		ImGui::SameLine();
 		ImGui::Text("Z	");
 		if(ImGui::DragFloat3("Pos.", newPos.ptr(), 0.1))
-			SetPos(newPos);
+		//	SetPos(newPos);
 		
 		ImGui::Text("X	");
 		ImGui::SameLine();
@@ -120,32 +140,30 @@ void CTransform::OnInspector()
 		ImGui::SameLine();
 		ImGui::Text("Z	");
 		if(ImGui::DragFloat3("Rotation.", newrot.ptr(),0.1)) 
-			SetRot(newrot);
+		//	SetRot(newrot);
 		
 		ImGui::Text("X	");
 		ImGui::SameLine();
 		ImGui::Text("Y	");
 		ImGui::SameLine();
 		ImGui::Text("Z	");
-		if (ImGui::DragFloat3("Scale.", newScl.ptr(), 0.1)) 
-			SetScale(newScl);
+		//if (ImGui::DragFloat3("Scale.", newScl.ptr(), 0.1)) 
+		//SetScale(newScl);
+		ImGui::DragFloat3("Scale.", newScl.ptr(), 0.1);
+		//SetScale(newScl);
 
 
-
+		TransformMatrix(newPos, newrot, newScl);
 	}
 	
 }
 
-
-mat4x4 CTransform::GlobalMatrix()
+float4x4 CTransform::GlobalMatrix()
 {
-	if (GO->parent != nullptr)
+	if (GO->parent->parent == nullptr)
 	{
 		return matrix;
 	}
-
-
-
 
 	return matrix * GO->parent->GOtrans->GlobalMatrix();
 }
