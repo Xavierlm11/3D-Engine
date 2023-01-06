@@ -36,6 +36,8 @@ public:
 
 	bool active = true;
 
+	void CallUpdateShape();
+
 public:
 
 	ModulePhysics3D* phys;
@@ -47,6 +49,13 @@ public:
 	bool isStatic;
 	PhysBody3D* collider;
 	bool hasInit;
+
+	float3 colPos = { 0,0,0 };
+	float3 colRot = { 0,0,0 };
+	float3 colScl = { 1,1,1 };
+
+	float sphereRadius;
+	float2 cylRadiusHeight;
 
 };
 

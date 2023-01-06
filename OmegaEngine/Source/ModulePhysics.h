@@ -4,6 +4,7 @@
 #include "Primitive.h"
 
 #include "Bullet/include/btBulletDynamicsCommon.h"
+#include "CPhysics.h"
 
 // Recommended scale is 1.0f == 1 meter, no less than 0.2 objects
 #define GRAVITY btVector3(0.0f, -10.0f, 0.0f) 
@@ -39,7 +40,12 @@ public:
 
 	void UpdateAABBs();
 
-	//PhysBody3D* UpdateBoxColliderSize(PhysBody3D* collider, CPhysics::ColliderShape shape, mat4x4 transform, float mass = 1.0f);
+	PhysBody3D* UpdateBoxColliderSize(PhysBody3D* collider, float3 colPos, float3 colRot, float3 colScl, float mass = 1.0f);
+	PhysBody3D* UpdateSphereColliderSize(PhysBody3D* collider, float3 colPos, float3 colRot, float radius, float mass = 1.0f);
+	PhysBody3D* UpdateCylinderColliderSize(PhysBody3D* collider,  float3 colPos, float3 colRot, float2 radiusHeight, float mass = 1.0f);
+
+	
+	
 	//PhysBody3D* UpdateSphereColliderSize(PhysBody3D* collider, float mass = 1.0f);
 	//PhysBody3D* UpdateCylinderColliderSize(PhysBody3D* collider, float mass = 1.0f);
 

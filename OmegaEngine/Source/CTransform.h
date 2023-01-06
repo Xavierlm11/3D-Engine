@@ -74,7 +74,7 @@ public:
 
 public:
 
-	float3 pos={0,0,0};
+	float3 pos= {0,0,0};
 	float3 rot = { 0,0,0 };
 	float3 scl = { 1,1,1 };
 	

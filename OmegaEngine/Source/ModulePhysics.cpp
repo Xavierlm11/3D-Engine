@@ -5,7 +5,6 @@
 #include "PhysVehicle3D.h"
 #include "Primitive.h"
 #include "ModuleScene.h"
-#include "CPhysics.h"
 
 #ifdef _DEBUG
 #pragma comment (lib, "Bullet/libx86/BulletDynamics_debug.lib")
@@ -373,33 +372,59 @@ void ModulePhysics3D::UpdateAABBs()
 	world->updateAabbs();
 }
 
-//PhysBody3D* ModulePhysics3D::UpdateBoxColliderSize(PhysBody3D* collider, CPhysics::ColliderShape shape, mat4x4 transform, float mass)
-//{
-//	RemoveBody(collider);
-//	collider->~PhysBody3D();
-//	collider = nullptr;
-//
-//	switch (shape)
-//	{
-//	case CPhysics::ColliderShape::BOX:
-//	{
-//		PrimCube cube;
-//		//cube.size.x = transform[0];
-//		//cube.size.y = transform.y;
-//		//cube.size.z = transform.z;
-//		//collider = phys->AddBody(box, 3.f);
-//	}
-//		break;
-//	case CPhysics::ColliderShape::SPHERE:
-//		break;
-//	case CPhysics::ColliderShape::CYLINDER:
-//		break;
-//	default:
-//		break;
-//	}
-//
-//	return nullptr;
-//}
+PhysBody3D* ModulePhysics3D::UpdateBoxColliderSize(PhysBody3D* collider, float3 colPos, float3 colRot, float3 colScl, float mass)
+{
+	RemoveBody(collider);
+	collider->~PhysBody3D();
+	collider = nullptr;
+	
+	PrimCube cube;
+	cube.SetPos(colPos.x, colPos.y, colPos.z);
+	//cube.SetRotation();
+	cube.size.x = colScl.x;
+	cube.size.y = colScl.y;
+	cube.size.z = colScl.z;
+	cube.color = Green;
+
+	collider = AddBody(cube, mass);
+
+	return nullptr;
+}
+
+PhysBody3D* ModulePhysics3D::UpdateSphereColliderSize(PhysBody3D* collider, float3 colPos, float3 colRot, float radius, float mass)
+{
+	RemoveBody(collider);
+	collider->~PhysBody3D();
+	collider = nullptr;
+
+	PrimSphere sphere;
+	sphere.SetPos(colPos.x, colPos.y, colPos.z);
+	//sphere.SetRotation();
+	sphere.radius = radius;
+	sphere.color = Green;
+
+	collider = AddBody(sphere, mass);
+
+	return nullptr;
+}
+
+PhysBody3D* ModulePhysics3D::UpdateCylinderColliderSize(PhysBody3D* collider, float3 colPos, float3 colRot, float2 radiusHeight, float mass)
+{
+	RemoveBody(collider);
+	collider->~PhysBody3D();
+	collider = nullptr;
+
+	PrimCylinder cylinder;
+	cylinder.SetPos(colPos.x, colPos.y, colPos.z);
+	//cylinder.SetRotation();
+	cylinder.radius = radiusHeight.x;
+	cylinder.height = radiusHeight.y;
+	cylinder.color = Green;
+
+	collider = AddBody(cylinder, mass);
+
+	return nullptr;
+}
 
 
 // ---------------------------------------------------------
