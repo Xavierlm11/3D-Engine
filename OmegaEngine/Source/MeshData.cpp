@@ -2,7 +2,7 @@
 #include "glmath.h"
 #include "External/MathGeoLib/include/Math/float3.h"
 #include "Glew/include/glew.h"
-#include "MathGeoLib/include/Math/float4x4.h"
+
 MeshData::MeshData(const char* name) : Resource(Resource::Types::MESH)
 {
 	id_indices = 0; // index in VRAM
@@ -117,107 +117,7 @@ void MeshData::UnloadMesh() {
 
 }
 
-void MeshData::DrawMesh(GLuint textureID, float4x4 mat) {
-	if (hasLoadedBuffers == true) {
-
-
-
-
-		//glEnable(GL_TEXTURE_COORD_ARRAY);
-		//glEnable(GL_TEXTURE_2D);
-		//glEnableClientState(GL_VERTEX_ARRAY);
-
-		//glBindTexture(GL_TEXTURE_2D, textureID);
-
-
-		//glBindBuffer(GL_ARRAY_BUFFER, id_vertices);
-
-
-		//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, id_indices);
-
-
-		////glVertexPointer(3, GL_FLOAT, sizeof(float) * 5, NULL);
-		//glVertexPointer(3, GL_FLOAT, 0, NULL);
-		////glTexCoordPointer(2, GL_FLOAT, sizeof(float) * 5, (void*)(3 * sizeof(float)));
-		//glTexCoordPointer(2, GL_FLOAT, 0, NULL);
-
-		//glEnableClientState(GL_NORMAL_ARRAY);
-		//glBindBuffer(GL_ARRAY_BUFFER, id_normals);
-		//glNormalPointer(GL_FLOAT, 0, NULL);
-
-		//glPushMatrix();
-		//glMultMatrixf(mat.ptr());
-
-		//glDrawElements(GL_TRIANGLES, num_indices, GL_UNSIGNED_INT, NULL);
-
-
-		//glPopMatrix(); // Unbind transform matrix
-
-
-		///*glEnableClientState(GL_VERTEX_ARRAY);
-		//glVertexPointer(3, GL_FLOAT, 0, NULL);*/
-
-
-
-		//glActiveTexture(GL_TEXTURE0);
-		//glBindTexture(GL_TEXTURE_2D, 0);
-
-		//// Unbind buffers
-		//glDisableClientState(GL_VERTEX_ARRAY);
-		//glDisable(GL_TEXTURE_2D);
-		//glDisable(GL_TEXTURE_COORD_ARRAY);
-
-		
-		//if (textureID != NULL) {
-			glBindTexture(GL_TEXTURE_2D, textureID);
-		//}
-		//draw vertex
-		glEnableClientState(GL_VERTEX_ARRAY);
-		glBindBuffer(GL_ARRAY_BUFFER, id_vertices);
-		glVertexPointer(3, GL_FLOAT, 0, NULL);
-
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, id_indices);
-
-
-		glEnableClientState(GL_NORMAL_ARRAY);
-		glBindBuffer(GL_ARRAY_BUFFER, id_normals);
-		glNormalPointer(GL_FLOAT, 0, NULL);
-
-		//draw textutes
-		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-		glBindBuffer(GL_ARRAY_BUFFER, id_textureCoords);
-		glTexCoordPointer(2, GL_FLOAT, 0, NULL);
-
-		//estas 2 funciones hacen el trnasform
-		//glMatrixMode(GL_MODELVIEW);
-		glPushMatrix();
-		glMultMatrixf(mat.ptr());
-
-		glDrawElements(GL_TRIANGLES, num_indices, GL_UNSIGNED_INT, NULL);
-		//if (textureID != NULL) {
-
-		glPopMatrix();
-			glBindTexture(GL_TEXTURE_2D, 0);
-		//}
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-		glBindBuffer(GL_ARRAY_BUFFER, 0);
-		glDisableClientState(GL_VERTEX_ARRAY);
-
-		//if (num_textures != 0) {
-			glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-
-			
-		//}
-		//LOG("Mesh Loaded! Num indices: %i. Num vertices: %i. ID Indices: %i. ID Vertices: %i.", num_indices, num_vertices, id_indices, id_vertices);
-
-
-		//LOG("Mesh Loaded! Num indices: %i. Num vertices: %i. ID Indices: %i. ID Vertices: %i.", num_indices, num_vertices, id_indices, id_vertices);
-
-
-	}
-}
-
-void MeshData::DrawMesh1(GLuint textureID, mat4x4 mat) {
+void MeshData::DrawMesh(GLuint textureID, mat4x4 mat) {
 	if (hasLoadedBuffers == true) {
 
 		//if (textureID != NULL) {
