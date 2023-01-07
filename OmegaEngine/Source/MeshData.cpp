@@ -117,11 +117,183 @@ void MeshData::UnloadMesh() {
 
 }
 
-void MeshData::DrawMesh(GLuint textureID, mat4x4 mat) {
+void MeshData::DrawMesh(GLuint textureID, const float* mat) {
 	if (hasLoadedBuffers == true) {
 
 		//if (textureID != NULL) {
+		/////////////////////
 			glBindTexture(GL_TEXTURE_2D, textureID);
+		//}
+		//draw vertex
+		glEnableClientState(GL_VERTEX_ARRAY);
+		glBindBuffer(GL_ARRAY_BUFFER, id_vertices);
+		glVertexPointer(3, GL_FLOAT, 0, NULL);
+		//glVertexPointer(3, GL_FLOAT, sizeof(float) * 5, NULL);
+
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, id_indices);
+
+
+		glEnableClientState(GL_NORMAL_ARRAY);
+		glBindBuffer(GL_ARRAY_BUFFER, id_normals);
+		glNormalPointer(GL_FLOAT, 0, NULL);
+		//glNormalPointer(GL_FLOAT, sizeof(float) * 5, NULL);
+
+		//draw textutes
+		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+		glBindBuffer(GL_ARRAY_BUFFER, id_textureCoords);
+		glTexCoordPointer(2, GL_FLOAT, 0, NULL);
+		//glTexCoordPointer(2, GL_FLOAT, sizeof(float) * 5, (void*)(sizeof(float) * 3));
+		//estas 2 funciones hacen el trnasform
+		//glMatrixMode(GL_MODELVIEW);
+		glPushMatrix();
+		//glMultMatrixf(mat.ptr);
+		glMultMatrixf(mat);
+
+		glDrawElements(GL_TRIANGLES, num_indices, GL_UNSIGNED_INT, NULL);
+		//if (textureID != NULL) {
+
+		glPopMatrix();
+			glBindTexture(GL_TEXTURE_2D, 0);
+		//}
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
+		glDisableClientState(GL_VERTEX_ARRAY);
+		/////////////////////
+		////if (num_textures != 0) {
+		//	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+
+		// Bind Buffers
+		//glEnable(GL_TEXTURE_COORD_ARRAY);
+		//glEnable(GL_TEXTURE_2D);
+		//glEnableClientState(GL_VERTEX_ARRAY);
+
+		//glBindTexture(GL_TEXTURE_2D, textureID);
+
+
+		//glBindBuffer(GL_ARRAY_BUFFER, id_vertices);
+
+
+		//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, id_indices);
+
+
+		////glVertexPointer(3, GL_FLOAT, sizeof(float) * 5, NULL);
+		//glVertexPointer(3, GL_FLOAT, 0, NULL);
+		////glTexCoordPointer(2, GL_FLOAT, sizeof(float) * 5, (void*)(3 * sizeof(float)));
+		//glTexCoordPointer(2, GL_FLOAT, 0,NULL);
+
+
+		//glPushMatrix();
+		//glMultMatrixf(mat);
+
+		//glDrawElements(GL_TRIANGLES, num_indices, GL_UNSIGNED_INT, NULL);
+
+
+		//glPopMatrix(); // Unbind transform matrix
+
+
+		///*glEnableClientState(GL_VERTEX_ARRAY);
+		//glVertexPointer(3, GL_FLOAT, 0, NULL);*/
+
+
+
+		//glActiveTexture(GL_TEXTURE0);
+		//glBindTexture(GL_TEXTURE_2D, 0);
+
+		//// Unbind buffers
+		//glDisableClientState(GL_VERTEX_ARRAY);
+		//glDisable(GL_TEXTURE_2D);
+
+		}
+		//LOG("Mesh Loaded! Num indices: %i. Num vertices: %i. ID Indices: %i. ID Vertices: %i.", num_indices, num_vertices, id_indices, id_vertices);
+
+
+		//LOG("Mesh Loaded! Num indices: %i. Num vertices: %i. ID Indices: %i. ID Vertices: %i.", num_indices, num_vertices, id_indices, id_vertices);
+
+			///////////////////////////////////////
+
+			// Bind Buffers
+			//glBindBuffer(GL_ARRAY_BUFFER, id_vertices);
+			//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, id_indices);
+
+			//glBindTexture(GL_TEXTURE_2D, textureID);
+
+
+			//glEnableClientState(GL_VERTEX_ARRAY);
+			//glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+			////glEnableClientState(GL_NORMAL_ARRAY);
+
+			//// Vertex Array [ x, y, z, u, v ]
+			//glVertexPointer(3, GL_FLOAT, sizeof(float) * 5, NULL);
+			//glTexCoordPointer(2, GL_FLOAT, sizeof(float) * 5, (void*)(3 * sizeof(float)));
+			//glNormalPointer(GL_FLOAT, sizeof(float) * 5, NULL);
+
+
+			//glPushMatrix();
+			//glMultMatrixf(mat);
+
+			//// Draw
+			//glDrawElements(GL_TRIANGLES, num_indices, GL_UNSIGNED_INT, NULL);
+
+			//glPopMatrix();
+
+			//glClientActiveTexture(GL_TEXTURE0);
+
+			//// Unbind buffers
+			//glBindTexture(GL_TEXTURE_2D, 0);
+			//glDisableClientState(GL_VERTEX_ARRAY);
+			//glDisable(GL_TEXTURE_COORD_ARRAY);
+	//}
+}
+
+void MeshData::DrawMesh1(GLuint textureID, mat4x4 mat) {
+	if (hasLoadedBuffers == true) {
+
+		glBindTexture(GL_TEXTURE_2D, textureID);
+		
+		//draw vertex
+		glEnableClientState(GL_VERTEX_ARRAY);
+		glBindBuffer(GL_ARRAY_BUFFER, id_vertices);
+		glVertexPointer(3, GL_FLOAT, 0, NULL);
+
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, id_indices);
+
+
+		glEnableClientState(GL_NORMAL_ARRAY);
+		glBindBuffer(GL_ARRAY_BUFFER, id_normals);
+		glNormalPointer(GL_FLOAT, 0, NULL);
+
+		//draw textures
+		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+		glBindBuffer(GL_ARRAY_BUFFER, id_textureCoords);
+		glTexCoordPointer(2, GL_FLOAT, 0, NULL);
+
+		// trnasform
+		glPushMatrix();
+		glMultMatrixf(&mat);
+
+		glDrawElements(GL_TRIANGLES, num_indices, GL_UNSIGNED_INT, NULL);
+	
+		//unbind
+		glPopMatrix();
+		glBindTexture(GL_TEXTURE_2D, 0);
+		
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
+		glDisableClientState(GL_VERTEX_ARRAY);
+
+		
+		glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+		
+		
+
+	}
+}
+
+void MeshData::DrawMesh2(GLuint textureID, mat4x4 mat) {
+	if (hasLoadedBuffers == true) {
+
+		//if (textureID != NULL) {
+		glBindTexture(GL_TEXTURE_2D, textureID);
 		//}
 		//draw vertex
 		glEnableClientState(GL_VERTEX_ARRAY);
@@ -149,14 +321,14 @@ void MeshData::DrawMesh(GLuint textureID, mat4x4 mat) {
 		//if (textureID != NULL) {
 
 		glPopMatrix();
-			glBindTexture(GL_TEXTURE_2D, 0);
+		glBindTexture(GL_TEXTURE_2D, 0);
 		//}
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 		glDisableClientState(GL_VERTEX_ARRAY);
 
 		//if (num_textures != 0) {
-			glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+		glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 		//}
 		//LOG("Mesh Loaded! Num indices: %i. Num vertices: %i. ID Indices: %i. ID Vertices: %i.", num_indices, num_vertices, id_indices, id_vertices);
 
@@ -166,4 +338,3 @@ void MeshData::DrawMesh(GLuint textureID, mat4x4 mat) {
 
 	}
 }
-

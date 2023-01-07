@@ -6,7 +6,7 @@
 
 #include "GameObject.h"
 
-#include "MathGeoLib/include/Math/float4x4.h"
+#include "External/MathGeoLib/include/Math/float4x4.h"
 
 
 
@@ -31,11 +31,9 @@ public:
 
 	void SetGlobalTrans();
 
-	
-
 	void OnInspector() override;
 
-	mat4x4 GlobalMatrix();
+	//mat4x4 GlobalMatrix();
 
 	void SetPos(float3 _pos);
 
@@ -79,6 +77,7 @@ public:
 	float3 scl = { 1,1,1 };
 	
 	mat4x4 matrix;
+	//float4x4 matrix;
 private:
 	float3 ppos = { 0,0,0 };
 	float3 prot = { 0,0,0 };

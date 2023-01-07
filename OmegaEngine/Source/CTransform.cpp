@@ -43,23 +43,46 @@ void CTransform::TransformMatrix(float3 _pos, float3 _rot, float3 _scl)
 	float y = _rot.y * DEGTORAD;
 	float z = _rot.z * DEGTORAD;
 
-	/*Quat _rot = Quat::FromEulerXYZ(x, y, z);
-	mat4x4::
-	matrix = float4x4::FromTRS(pos, _rot, scl).Transposed();
-	*/
-	matrix[0] = cos(y) * cos(z);
+	//Quat qrot = Quat::FromEulerXYZ(x, y, z); 
+	//matrix = float4x4::FromTRS(_pos, qrot, _scl).Transposed();
+
+	////matrix[0][0] = cos(z) * cos(y) * _scl.x;
+	//matrix[0][0] = cos(z) * cos(y) ;
+	//matrix[1][0] = -sin(z) * cos(x) + cos(z) * sin(y) * sin(x);
+	//matrix[2][0] = sin(z) * sin(x) + cos(z) * sin(y) * cos(x);
+	//matrix[0][1] = sin(z) * cos(y);
+	////matrix[1][1] = (cos(z) * cos(x) + sin(z) * sin(y) * sin(x)) * _scl.y;
+	//matrix[1][1] = (cos(z) * cos(x) + sin(z) * sin(y) * sin(x)) ;
+	//matrix[2][1] = -cos(z) * sin(x) + sin(z) * sin(y) * cos(x);
+	//matrix[0][2] = -sin(y);
+	//matrix[1][2] = cos(y) * sin(x);
+	////matrix[2][2] = cos(y) * cos(x) * _scl.z;
+	//matrix[2][2] = cos(y) * cos(x) ;
+	//matrix[3][0] = _pos.x;
+	//matrix[3][1] = _pos.y;
+	//matrix[3][2] = _pos.z;
+	//matrix[0][3] = 0;
+	//matrix[1][3] = 0;
+	//matrix[2][3] = 0;
+	//matrix[3][3] = 1;
+
+	//matrix[0][0] *= _scl.x;
+	//matrix[1][1] *= _scl.y;
+	//matrix[2][2] *= _scl.z;
+	
+	matrix[0] = cos(y) * cos(z)* _scl.x;
 	matrix[1] = -cos(x) * sin(z) + sin(y) * cos(z) * sin(x);
 	matrix[2] = sin(x) * sin(z) + sin(y) * cos(z) * cos(x);
 	matrix[3] = _pos.x;
 
 	matrix[4] = cos(y) * sin(z);
-	matrix[5] = cos(x) * cos(z) + sin(y) * sin(z) * sin(z);
+	matrix[5] = (cos(x) * cos(z) + sin(y) * sin(z) * sin(z)) * _scl.y;
 	matrix[6] = -sin(x) * cos(z) + sin(y) * sin(z) * cos(x);
 	matrix[7] = _pos.y;
 
 	matrix[8] = -sin(y);
 	matrix[9] = cos(y) * sin(x);
-	matrix[10] = cos(x) * cos(y);
+	matrix[10] = cos(x) * cos(y) * _scl.z;
 	matrix[11] = _pos.z;
 
 	matrix[12] = 0;
@@ -67,9 +90,9 @@ void CTransform::TransformMatrix(float3 _pos, float3 _rot, float3 _scl)
 	matrix[14] = 0;
 	matrix[15] = 1;
 
-	matrix[0] *= _scl.x;
+	/*matrix[0] *= _scl.x;
 	matrix[5] *= _scl.y;
-	matrix[10] *= _scl.z;
+	matrix[10] *= _scl.z;*/
 
 	matrix = transpose(matrix);
 
@@ -136,20 +159,20 @@ void CTransform::OnInspector()
 	
 }
 
-
-mat4x4 CTransform::GlobalMatrix()
-{
-	if (GO->parent != nullptr)
-	{
-		return matrix;
-	}
-
-
-
-
-	return matrix * GO->parent->GOtrans->GlobalMatrix();
-}
-
+//
+//mat4x4 CTransform::GlobalMatrix()
+//{
+//	if (GO->parent != nullptr)
+//	{
+//		return matrix;
+//	}
+//
+//
+//
+//
+//	return matrix * GO->parent->GOtrans->GlobalMatrix();
+//}
+//
 
 
 void CTransform::SetPos(float3 _pos)
