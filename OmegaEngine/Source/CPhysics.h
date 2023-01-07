@@ -38,12 +38,13 @@ public:
 
 	void CallUpdateShape();
 
+	void CreateCollider();
+
 public:
 
 	ModulePhysics3D* phys;
 
 	ColliderShape shapeSelected;
-	bool isShapeSelectedTrigger[3];
 	bool isShapeSelected[3];
 	bool isShapeCreated[3];
 	bool isStatic;

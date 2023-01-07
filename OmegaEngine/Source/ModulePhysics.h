@@ -40,9 +40,9 @@ public:
 
 	void UpdateAABBs();
 
-	PhysBody3D* UpdateBoxColliderSize(PhysBody3D* collider, float3 colPos, float3 colRot, float3 colScl, float mass = 1.0f);
-	PhysBody3D* UpdateSphereColliderSize(PhysBody3D* collider, float3 colPos, float3 colRot, float radius, float mass = 1.0f);
-	PhysBody3D* UpdateCylinderColliderSize(PhysBody3D* collider,  float3 colPos, float3 colRot, float2 radiusHeight, float mass = 1.0f);
+	PhysBody3D* UpdateBoxColliderSize(PhysBody3D*& collider, float3 colPos, float3 colRot, float3 colScl, float mass = 1.0f);
+	PhysBody3D* UpdateSphereColliderSize(PhysBody3D*& collider, float3 colPos, float3 colRot, float radius, float mass = 1.0f);
+	PhysBody3D* UpdateCylinderColliderSize(PhysBody3D*& collider,  float3 colPos, float3 colRot, float2 radiusHeight, float mass = 1.0f);
 
 	
 	

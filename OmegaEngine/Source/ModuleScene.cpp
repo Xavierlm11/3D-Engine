@@ -392,6 +392,48 @@ bool ModuleScene::SaveSceneAtPlay() {
                                 json_object_set_boolean(json_object(scene_settings), goComp.c_str(), true);
                             }
                         break;
+                        case Component::Types::PHYSICS:
+                            {
+                                goComp = "Gameobject [" + std::to_string(i) + "] Physics";
+                                json_object_set_boolean(json_object(scene_settings), goComp.c_str(), true);
+
+                                goComp = "Gameobject [" + std::to_string(i) + "] Physics Shape Selected";
+                                json_object_set_number(json_object(scene_settings), goComp.c_str(), (int)saveGoList[i]->GOphys->shapeSelected);
+
+                                goComp = "Gameobject [" + std::to_string(i) + "] Physics Is Static";
+                                json_object_set_boolean(json_object(scene_settings), goComp.c_str(), saveGoList[i]->GOphys->isStatic);
+
+                                goComp = "Gameobject [" + std::to_string(i) + "] Physics Col Pos X";
+                                json_object_set_number(json_object(scene_settings), goComp.c_str(), saveGoList[i]->GOphys->colPos.x);
+                                goComp = "Gameobject [" + std::to_string(i) + "] Physics Col Pos Y";
+                                json_object_set_number(json_object(scene_settings), goComp.c_str(), saveGoList[i]->GOphys->colPos.y);
+                                goComp = "Gameobject [" + std::to_string(i) + "] Physics Col Pos Z";
+                                json_object_set_number(json_object(scene_settings), goComp.c_str(), saveGoList[i]->GOphys->colPos.z);
+
+                                goComp = "Gameobject [" + std::to_string(i) + "] Physics Col Rot X";
+                                json_object_set_number(json_object(scene_settings), goComp.c_str(), saveGoList[i]->GOphys->colRot.x);
+                                goComp = "Gameobject [" + std::to_string(i) + "] Physics Col Rot Y";
+                                json_object_set_number(json_object(scene_settings), goComp.c_str(), saveGoList[i]->GOphys->colRot.y);
+                                goComp = "Gameobject [" + std::to_string(i) + "] Physics Col Rot Z";
+                                json_object_set_number(json_object(scene_settings), goComp.c_str(), saveGoList[i]->GOphys->colRot.z);
+
+                                goComp = "Gameobject [" + std::to_string(i) + "] Physics Col Scl X";
+                                json_object_set_number(json_object(scene_settings), goComp.c_str(), saveGoList[i]->GOphys->colScl.x);
+                                goComp = "Gameobject [" + std::to_string(i) + "] Physics Col Scl Y";
+                                json_object_set_number(json_object(scene_settings), goComp.c_str(), saveGoList[i]->GOphys->colScl.y);
+                                goComp = "Gameobject [" + std::to_string(i) + "] Physics Col Scl Z";
+                                json_object_set_number(json_object(scene_settings), goComp.c_str(), saveGoList[i]->GOphys->colScl.z);
+
+                                goComp = "Gameobject [" + std::to_string(i) + "] Physics Sphere Radius";
+                                json_object_set_number(json_object(scene_settings), goComp.c_str(), saveGoList[i]->GOphys->sphereRadius);
+
+                                goComp = "Gameobject [" + std::to_string(i) + "] Physics Cyl Radius";
+                                json_object_set_number(json_object(scene_settings), goComp.c_str(), saveGoList[i]->GOphys->cylRadiusHeight.x);
+                                goComp = "Gameobject [" + std::to_string(i) + "] Physics Cyl Height";
+                                json_object_set_number(json_object(scene_settings), goComp.c_str(), saveGoList[i]->GOphys->cylRadiusHeight.y);
+
+                            }
+                        break;
                    
                     };
                     
@@ -638,6 +680,60 @@ bool ModuleScene::LoadSceneAtPlay() {
                 hasComp = false;
             }
 
+            goComp = "Gameobject [" + std::to_string(i) + "] Physics";
+            hasComp = json_object_get_boolean(json_object(scene_settings), goComp.c_str());
+            if (hasComp == true) {
+
+                go->CreateComp(Component::Types::PHYSICS);
+                go->GOphys->phys = App->physics;
+
+                goComp = "Gameobject [" + std::to_string(i) + "] Physics Shape Selected";
+                go->GOphys->shapeSelected = (CPhysics::ColliderShape)json_object_get_number(json_object(scene_settings), goComp.c_str());
+
+                goComp = "Gameobject [" + std::to_string(i) + "] Physics Is Static";
+                go->GOphys->isStatic = json_object_get_boolean(json_object(scene_settings), goComp.c_str());
+
+                float3 newColPos;
+                float3 newColRot;
+                float3 newColScl;
+
+                goComp = "Gameobject [" + std::to_string(i) + "] Physics Col Pos X";
+                newColPos.x = json_object_get_number(json_object(scene_settings), goComp.c_str());
+                goComp = "Gameobject [" + std::to_string(i) + "] Physics Col Pos Y";
+                newColPos.y = json_object_get_number(json_object(scene_settings), goComp.c_str());
+                goComp = "Gameobject [" + std::to_string(i) + "] Physics Col Pos Z";
+                newColPos.z = json_object_get_number(json_object(scene_settings), goComp.c_str());
+
+                goComp = "Gameobject [" + std::to_string(i) + "] Physics Col Rot X";
+                newColRot.x = json_object_get_number(json_object(scene_settings), goComp.c_str());
+                goComp = "Gameobject [" + std::to_string(i) + "] Physics Col Rot Y";
+                newColRot.y = json_object_get_number(json_object(scene_settings), goComp.c_str());
+                goComp = "Gameobject [" + std::to_string(i) + "] Physics Col Rot Z";
+                newColRot.z = json_object_get_number(json_object(scene_settings), goComp.c_str());
+
+                goComp = "Gameobject [" + std::to_string(i) + "] Physics Col Scl X";
+                newColScl.x = json_object_get_number(json_object(scene_settings), goComp.c_str());
+                goComp = "Gameobject [" + std::to_string(i) + "] Physics Col Scl Y";
+                newColScl.y = json_object_get_number(json_object(scene_settings), goComp.c_str());
+                goComp = "Gameobject [" + std::to_string(i) + "] Physics Col Scl Z";
+                newColScl.z = json_object_get_number(json_object(scene_settings), goComp.c_str());
+
+                go->GOphys->colPos = {newColPos.x, newColPos.y, newColPos.z};
+                go->GOphys->colRot = {newColRot.x, newColRot.y, newColRot.z};
+                go->GOphys->colScl = {newColScl.x, newColScl.y, newColScl.z};
+
+                goComp = "Gameobject [" + std::to_string(i) + "] Physics Sphere Radius";
+                go->GOphys->sphereRadius = json_object_get_number(json_object(scene_settings), goComp.c_str());
+
+                goComp = "Gameobject [" + std::to_string(i) + "] Physics Cyl Radius";
+                go->GOphys->cylRadiusHeight.x = json_object_get_number(json_object(scene_settings), goComp.c_str());
+                goComp = "Gameobject [" + std::to_string(i) + "] Physics Cyl Height";
+                go->GOphys->cylRadiusHeight.y = json_object_get_number(json_object(scene_settings), goComp.c_str());
+
+                go->GOphys->CreateCollider();
+
+                hasComp = false;
+            }
 
             saveGoList.push_back(go);
     

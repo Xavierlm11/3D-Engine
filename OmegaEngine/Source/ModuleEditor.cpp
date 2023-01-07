@@ -888,17 +888,8 @@ void ModuleEditor::DrawSceneViewport()
 				}
 
 				}
-
-
-
-
-
-
-
-
 			}
 			ImGui::EndDragDropTarget();
-			
 		}
 	}
 	ImGui::End();

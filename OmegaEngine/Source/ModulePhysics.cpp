@@ -372,7 +372,7 @@ void ModulePhysics3D::UpdateAABBs()
 	world->updateAabbs();
 }
 
-PhysBody3D* ModulePhysics3D::UpdateBoxColliderSize(PhysBody3D* collider, float3 colPos, float3 colRot, float3 colScl, float mass)
+PhysBody3D* ModulePhysics3D::UpdateBoxColliderSize(PhysBody3D*& collider, float3 colPos, float3 colRot, float3 colScl, float mass)
 {
 	RemoveBody(collider);
 	collider->~PhysBody3D();
@@ -391,7 +391,7 @@ PhysBody3D* ModulePhysics3D::UpdateBoxColliderSize(PhysBody3D* collider, float3 
 	return nullptr;
 }
 
-PhysBody3D* ModulePhysics3D::UpdateSphereColliderSize(PhysBody3D* collider, float3 colPos, float3 colRot, float radius, float mass)
+PhysBody3D* ModulePhysics3D::UpdateSphereColliderSize(PhysBody3D*& collider, float3 colPos, float3 colRot, float radius, float mass)
 {
 	RemoveBody(collider);
 	collider->~PhysBody3D();
@@ -408,7 +408,7 @@ PhysBody3D* ModulePhysics3D::UpdateSphereColliderSize(PhysBody3D* collider, floa
 	return nullptr;
 }
 
-PhysBody3D* ModulePhysics3D::UpdateCylinderColliderSize(PhysBody3D* collider, float3 colPos, float3 colRot, float2 radiusHeight, float mass)
+PhysBody3D* ModulePhysics3D::UpdateCylinderColliderSize(PhysBody3D*& collider, float3 colPos, float3 colRot, float2 radiusHeight, float mass)
 {
 	RemoveBody(collider);
 	collider->~PhysBody3D();

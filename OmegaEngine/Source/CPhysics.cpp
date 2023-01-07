@@ -12,10 +12,6 @@ CPhysics::CPhysics(GameObject* obj) :Component(obj, Types::PHYSICS)
 
 	shapeSelected = ColliderShape::NONE;
 
-	isShapeSelectedTrigger[0] = false;
-	isShapeSelectedTrigger[1] = false;
-	isShapeSelectedTrigger[2] = false;
-
 	isShapeSelected[0] = false;
 	isShapeSelected[1] = false;
 	isShapeSelected[2] = false;
@@ -34,7 +30,16 @@ CPhysics::CPhysics(GameObject* obj) :Component(obj, Types::PHYSICS)
 
 CPhysics::~CPhysics()
 {
-	
+
+	if (collider!=nullptr) {
+		phys->RemoveBody(collider);
+		collider->~PhysBody3D();
+		collider = nullptr;
+	}
+
+	phys = nullptr;
+	delete phys;
+
 }
 
 void CPhysics::Update()
@@ -120,7 +125,7 @@ void CPhysics::CheckShapes() {
 
 void CPhysics::CallUpdateShape()
 {
-	/*switch (shapeSelected)
+	switch (shapeSelected)
 	{
 	case CPhysics::ColliderShape::BOX:
 		phys->UpdateBoxColliderSize(collider, colPos, colRot, colScl, 1.0f);
@@ -133,8 +138,64 @@ void CPhysics::CallUpdateShape()
 		break;
 	default:
 		break;
-	}*/
+	}
 	
+}
+
+void CPhysics::CreateCollider()
+{
+	switch (shapeSelected)
+	{
+	case CPhysics::ColliderShape::BOX:
+	{
+		PrimCube cube;
+		
+		cube.SetPos(colPos.x, colPos.y, colPos.z);
+		//cube.SetRotation();
+		cube.size.x = GO->GOtrans->GetScale().x;
+		cube.size.y = GO->GOtrans->GetScale().y;
+		cube.size.z = GO->GOtrans->GetScale().z;
+
+		//cube.transform = GO->GOtrans->matrix;
+
+		cube.color = Green;
+
+
+		collider = phys->AddBody(cube, 1.f);
+
+	}
+	break;
+	case CPhysics::ColliderShape::SPHERE:
+	{
+		PrimSphere sphere;
+	
+		sphere.SetPos(colPos.x, colPos.y, colPos.z);
+		//sphere.SetRotation();
+		sphere.radius = 1.0f;
+
+		sphere.color = Green;
+
+		collider = phys->AddBody(sphere, 1.f);
+	}
+	break;
+	case CPhysics::ColliderShape::CYLINDER:
+	{
+		PrimCylinder cylinder;
+		
+		cylinder.SetPos(colPos.x, colPos.y, colPos.z);
+		//cylinder.SetRotation();
+		cylinder.radius = 1.0f;
+		cylinder.height = 1.0f;
+		cylinder.color = Green;
+
+		collider = phys->AddBody(cylinder, 1.f);
+		//collider->SetTransform(&GO->GOtrans->matrix);
+
+	}
+	break;
+	default:
+		break;
+	}
 }
 
 void CPhysics::OnInspector()
@@ -164,59 +225,8 @@ void CPhysics::OnInspector()
 				if (shapeSelected != ColliderShape::NONE) {
 					if (ImGui::Button("Create Collider"))
 					{
-						switch (shapeSelected)
-						{
-						case CPhysics::ColliderShape::BOX: 
-							{
-								PrimCube cube;
-								float3 pos = GO->GOtrans->GetPos();
-								cube.SetPos(pos.x, pos.y, pos.z);
-								//cube.SetRotation();
-								cube.size.x = GO->GOtrans->GetScale().x;
-								cube.size.y = GO->GOtrans->GetScale().y;
-								cube.size.z = GO->GOtrans->GetScale().z;
-								
-								//cube.transform = GO->GOtrans->matrix;
-								
-								cube.color = Green;
-								
-								
-								collider = phys->AddBody(cube,1.f);
-								
-							}
-							break;
-						case CPhysics::ColliderShape::SPHERE:
-							{
-								PrimSphere sphere;
-								float3 pos = GO->GOtrans->GetPos();
-								sphere.SetPos(pos.x, pos.y, pos.z);
-								//sphere.SetRotation();
-								sphere.radius = 1.0f;
-
-								sphere.color = Green;
-								
-								collider = phys->AddBody(sphere, 1.f);
-							}
-							break;
-						case CPhysics::ColliderShape::CYLINDER:
-							{
-								PrimCylinder cylinder;
-								float3 pos = GO->GOtrans->GetPos();
-								cylinder.SetPos(pos.x, pos.y, pos.z);
-								//cylinder.SetRotation();
-								cylinder.radius = 1.0f;
-								cylinder.height = 1.0f;
-								cylinder.color = Green;
-								
-								collider = phys->AddBody(cylinder, 1.f);
-								//collider->SetTransform(&GO->GOtrans->matrix);
-								
-							}
-							break;
-						default:
-							break;
-						}
-
+						colPos = GO->GOtrans->GetPos();
+						CreateCollider();
 					}
 				}
 				
@@ -327,31 +337,37 @@ void CPhysics::OnInspector()
 					break;
 				}
 
-				if (ImGui::Button("Update Collider Size"))
-				{
-					switch (shapeSelected)
+				
+					/*if (ImGui::Button("Update Collider Size"))
 					{
-					case CPhysics::ColliderShape::BOX:
-						phys->UpdateBoxColliderSize(collider, colPos, colRot, colScl, 1.0f);
-						break;
-					case CPhysics::ColliderShape::SPHERE:
-						phys->UpdateSphereColliderSize(collider, colPos, colRot, sphereRadius, 1.0f);
-						break;
-					case CPhysics::ColliderShape::CYLINDER:
-						phys->UpdateCylinderColliderSize(collider, colPos, colRot, cylRadiusHeight, 1.0f);
-						break;
-					default:
-						break;
-					}
-	
-				}
+						switch (shapeSelected)
+						{
+						case CPhysics::ColliderShape::BOX:
+							phys->UpdateBoxColliderSize(collider, colPos, colRot, colScl, 1.0f);
+							break;
+						case CPhysics::ColliderShape::SPHERE:
+							phys->UpdateSphereColliderSize(collider, colPos, colRot, sphereRadius, 1.0f);
+							break;
+						case CPhysics::ColliderShape::CYLINDER:
+							phys->UpdateCylinderColliderSize(collider, colPos, colRot, cylRadiusHeight, 1.0f);
+							break;
+						default:
+							break;
+						}
 
-				if (ImGui::Button("Remove Collider"))
-				{
-					phys->RemoveBody(collider);
-					collider->~PhysBody3D();
-					collider = nullptr;
-				}
+					}*/
+
+					if (ImGui::Button("Remove Collider"))
+					{
+						
+							phys->RemoveBody(collider);
+							collider->~PhysBody3D();
+							collider = nullptr;
+						
+
+
+					}
+				
 			}
 			
 		}

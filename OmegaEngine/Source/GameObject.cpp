@@ -235,6 +235,7 @@ void GameObject::Remove()
 				delete components[i];
 			}
 			components.clear();
+
 		}
 		//External->CleanVec(components);
 		if (!children.empty()) {
@@ -250,17 +251,35 @@ void GameObject::Remove()
 		parent = nullptr;
 		delete parent;
 
-		GOmat = nullptr;
+		if (GOmat != nullptr) {
+			GOmat->~CMaterial();
+			GOmat = nullptr;
+		}
 		delete GOmat;
 
-		GOtrans = nullptr;
+		if (GOtrans != nullptr) {
+			GOtrans->~CTransform();
+			GOtrans = nullptr;
+		}
 		delete GOtrans;
 
-		GOmesh = nullptr;
+		if (GOmesh != nullptr) {
+			GOmesh->~CMesh();
+			GOmesh = nullptr;
+		}
 		delete GOmesh;
 		
-		GOcam = nullptr;
+		if (GOcam != nullptr) {
+			GOcam->~CCamera();
+			GOcam = nullptr;
+		}
 		delete GOcam;
+
+		if (GOphys != nullptr) {
+			GOphys->~CPhysics();
+			GOphys = nullptr;
+		}
+		delete GOphys;
 	}
 
 }
