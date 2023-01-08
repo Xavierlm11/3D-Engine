@@ -16,8 +16,8 @@ CTransform::CTransform(GameObject* obj):Component( obj, Types::TRANSFORM )
 
 		
 			ppos = GO->parent->GOtrans->GetPos();
-			ppos = GO->parent->GOtrans->GetRot();
-			ppos = GO->parent->GOtrans->GetScale();
+			prot = GO->parent->GOtrans->GetRot();
+			pscl = GO->parent->GOtrans->GetScale();
 			
 	}
 }
@@ -43,10 +43,11 @@ void CTransform::TransformMatrix(float3 _pos, float3 _rot, float3 _scl)
 	float y = _rot.y * DEGTORAD;
 	float z = _rot.z * DEGTORAD;
 
-	/*Quat _rot = Quat::FromEulerXYZ(x, y, z);
-	mat4x4::
-	matrix = float4x4::FromTRS(pos, _rot, scl).Transposed();
-	*/
+	//Quat qrot = Quat::FromEulerXYZ(x, y, z);
+	
+	
+	//matrix = float4x4::FromTRS(pos, _rot, scl).Transposed();
+	
 	matrix[0] = cos(y) * cos(z);
 	matrix[1] = -cos(x) * sin(z) + sin(y) * cos(z) * sin(x);
 	matrix[2] = sin(x) * sin(z) + sin(y) * cos(z) * cos(x);
