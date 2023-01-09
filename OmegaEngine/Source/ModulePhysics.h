@@ -49,6 +49,8 @@ public:
 	//PhysBody3D* UpdateSphereColliderSize(PhysBody3D* collider, float mass = 1.0f);
 	//PhysBody3D* UpdateCylinderColliderSize(PhysBody3D* collider, float mass = 1.0f);
 
+	bool isWorldOn;
+
 private:
 
 	bool debug;

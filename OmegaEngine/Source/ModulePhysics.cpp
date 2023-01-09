@@ -25,6 +25,12 @@ ModulePhysics3D::ModulePhysics3D(Application* app, bool start_enabled) : Module(
 	broad_phase = new btDbvtBroadphase();
 	solver = new btSequentialImpulseConstraintSolver();
 	debug_draw = new DebugDrawer();
+
+	vehicle_raycaster = nullptr;
+	world = nullptr;
+
+	isWorldOn = false;
+
 }
 
 // Destructor
@@ -423,7 +429,7 @@ PhysBody3D* ModulePhysics3D::UpdateBoxColliderSize(PhysBody3D*& collider, float3
 	cube.size.z = colScl.z;
 
 	
-	cube.transform = transpose(cube.transform);
+	//cube.transform = transpose(cube.transform);
 	
 
 	cube.color = Green;

@@ -44,7 +44,13 @@ CPhysics::~CPhysics()
 
 void CPhysics::Update()
 {
-	
+	if (phys->isWorldOn == true) {
+		if (collider != nullptr) {
+			//float3 newPos = {collider->body->getWorldTransform()0],0.f,0.f};
+			//GO->GOtrans->SetPos(newPos);
+		}
+		
+	}
 }
 
 void CPhysics::CheckShapes() {
@@ -125,16 +131,25 @@ void CPhysics::CheckShapes() {
 
 void CPhysics::CallUpdateShape()
 {
+	float mass;
+
+	if (isStatic == true) {
+		mass = 0.f;
+	}
+	else {
+		mass = 1.f;
+	}
+
 	switch (shapeSelected)
 	{
 	case CPhysics::ColliderShape::BOX:
-		phys->UpdateBoxColliderSize(collider, colPos, colRot, colScl, 1.0f);
+		phys->UpdateBoxColliderSize(collider, colPos, colRot, colScl, mass);
 		break;
 	case CPhysics::ColliderShape::SPHERE:
-		phys->UpdateSphereColliderSize(collider, colPos, colRot, sphereRadius, 1.0f);
+		phys->UpdateSphereColliderSize(collider, colPos, colRot, sphereRadius, mass);
 		break;
 	case CPhysics::ColliderShape::CYLINDER:
-		phys->UpdateCylinderColliderSize(collider, colPos, colRot, cylRadiusHeight, 1.0f);
+		phys->UpdateCylinderColliderSize(collider, colPos, colRot, cylRadiusHeight, mass);
 		break;
 	default:
 		break;
@@ -181,26 +196,35 @@ void CPhysics::CreateCollider()
 	//rotation angle
 	float ra = qrot.Angle(); 
 
+	float mass;
+	if (isStatic == true) {
+		mass = 0.f;
+	}
+	else {
+		mass = 1.f;
+	}
+
 	switch (shapeSelected)
 	{
 	case CPhysics::ColliderShape::BOX:
 	{
 		PrimCube cube;
 		GO->GOtrans->setIdentity(cube.transform);
-		//cube.SetPos(colPos.x, colPos.y, colPos.z);
+		
+		cube.SetPos(colPos.x, colPos.y, colPos.z);
 		//cube.SetRotation();
-		//cube.size.x = GO->GOtrans->GetScale().x;
-		//cube.size.y = GO->GOtrans->GetScale().y;
-		//cube.size.z = GO->GOtrans->GetScale().z;
+		cube.size.x = GO->GOtrans->GetScale().x;
+		cube.size.y = GO->GOtrans->GetScale().y;
+		cube.size.z = GO->GOtrans->GetScale().z;
 		
 		//cube.SetRotation(ra,rvec);
 		//cube.SetRotation(ra, (rx, ry, rz));
-		cube.transform = GO->GOtrans->matrix;
+		//cube.transform = GO->GOtrans->matrix;
 		//cube.transform
 		cube.color = Green;
 
 
-		collider = phys->AddBody(cube, 1.f);
+		collider = phys->AddBody(cube, mass);
 
 	}
 	break;
@@ -214,7 +238,7 @@ void CPhysics::CreateCollider()
 
 		sphere.color = Green;
 
-		collider = phys->AddBody(sphere, 1.f);
+		collider = phys->AddBody(sphere, mass);
 	}
 	break;
 	case CPhysics::ColliderShape::CYLINDER:
@@ -227,7 +251,7 @@ void CPhysics::CreateCollider()
 		cylinder.height = 1.0f;
 		cylinder.color = Green;
 
-		collider = phys->AddBody(cylinder, 1.f);
+		collider = phys->AddBody(cylinder, mass);
 		//collider->SetTransform(&GO->GOtrans->matrix);
 
 	}
@@ -243,7 +267,12 @@ void CPhysics::OnInspector()
 	{
 		//if (ImGui::CollapsingHeader("Physic Body"))
 		{
-			ImGui::Checkbox("Static", &isStatic);
+			if (ImGui::Checkbox("Static", &isStatic)) {
+				if (collider != nullptr) {
+					CallUpdateShape();
+				}
+				
+			}
 		}
 
 		//if (ImGui::CollapsingHeader("Collider"))

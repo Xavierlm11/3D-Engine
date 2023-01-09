@@ -60,10 +60,10 @@ void CTransform::TransformMatrix(float3 _pos, float3 _rot, float3 _scl)
 	float y = _rot.y ;
 	float z = _rot.z ;*/
 
-	Quat qrot = Quat::FromEulerXYZ(x, y, z);
+	//Quat qrot = Quat::FromEulerXYZ(x, y, z);
 	
 	
-	rmatrix = float4x4::FromTRS(_pos, qrot, _scl).Transposed();
+	//rmatrix = float4x4::FromTRS(_pos, qrot, _scl).Transposed();
 	
 	matrix[0] = (cos(y) * cos(z))  *_scl.x;
 	matrix[1] = -cos(x) * sin(z) + sin(y) * cos(z) * sin(x);
@@ -91,11 +91,11 @@ void CTransform::TransformMatrix(float3 _pos, float3 _rot, float3 _scl)
 
 	if (GO->GOcam != nullptr)
 	{
-		GO->GOcam->cameraFrustum.pos = _pos;
+		/*GO->GOcam->cameraFrustum.pos = _pos;
 		GO->GOcam->Reference = _pos;
 
 		GO->GOcam->cameraFrustum.up = rmatrix.RotatePart().Col(1).Normalized();
-		GO->GOcam->cameraFrustum.front = rmatrix.RotatePart().Col(2).Normalized();
+		GO->GOcam->cameraFrustum.front = rmatrix.RotatePart().Col(2).Normalized();*/
 
 		/*Quat dir;
 		GO->GOcam->cameraFrustum.WorldMatrix().Decompose(float3(), dir, float3());

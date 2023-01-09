@@ -1116,6 +1116,7 @@ void ModuleEditor::BarPlay() {
 			playPressed = false;
 
 			DeleteGo();
+			App->physics->isWorldOn = true;
 			App->scene->LoadSceneAtPlay();
 
 			std::string folder_name = "Settings/scene_at_play.json";
@@ -1129,6 +1130,7 @@ void ModuleEditor::BarPlay() {
 		}
 		else {
 			playPressed = true;
+			App->physics->isWorldOn = false;
 			App->scene->SaveSceneAtPlay();
 		}
 	}
