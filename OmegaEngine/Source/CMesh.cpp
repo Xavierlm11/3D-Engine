@@ -42,8 +42,11 @@ void CMesh::Update()
 void CMesh::MeshRenderer()
 {
 	//External->rendere
-	if (GO->GOmat->GetMaterial() != nullptr && External->renderer3D->mode == ModuleRenderer3D::RenderMode::NORMAL) {
-		meshData->DrawMesh(GO->GOmat->GetMaterial()->texture_id, GO->GOtrans->matrix);
+	if (GO->GOmat!=nullptr && GO->GOmat->GetMaterial() != nullptr && External->renderer3D->mode == ModuleRenderer3D::RenderMode::NORMAL) {
+
+		
+			meshData->DrawMesh(GO->GOmat->GetMaterial()->texture_id, GO->GOtrans->matrix);
+		
 		
 	}
 	else if (External->renderer3D->mode== ModuleRenderer3D::RenderMode::CHECKERS)
