@@ -1,9 +1,13 @@
 #include "CTransform.h"
 #include "Globals.h"
+//#include "External/MathGeoLib/include/Math/float4x4.h"
 
 CTransform::CTransform(GameObject* obj):Component( obj, Types::TRANSFORM )
 {
 	this->GO = obj;
+	setIdentity(matrix);
+	//rmatrix = float4x4::identity;
+	//rmatrix[0][0] = 1;
 	if (GO->parent != nullptr)
 	{
 		/*
@@ -22,6 +26,7 @@ CTransform::CTransform(GameObject* obj):Component( obj, Types::TRANSFORM )
 	}
 }
 
+
 CTransform::~CTransform()
 {
 
@@ -33,6 +38,14 @@ void CTransform::Update()
 	
 }
 
+void CTransform::setIdentity(mat4x4 mat)
+{
+	for (int i = 0; i<15; ++i)
+	{
+		if (i == 0 || i == 5 || i == 10 || i == 15) mat[i] = 1;
+		else mat[i] = 0;
+	}
+}
 void CTransform::TransformMatrix(float3 _pos, float3 _rot, float3 _scl)
 {
 	//pos = _pos;
@@ -43,24 +56,28 @@ void CTransform::TransformMatrix(float3 _pos, float3 _rot, float3 _scl)
 	float y = _rot.y * DEGTORAD;
 	float z = _rot.z * DEGTORAD;
 
-	//Quat qrot = Quat::FromEulerXYZ(x, y, z);
+	/*float x = _rot.x ;
+	float y = _rot.y ;
+	float z = _rot.z ;*/
+
+	Quat qrot = Quat::FromEulerXYZ(x, y, z);
 	
 	
-	//matrix = float4x4::FromTRS(pos, _rot, scl).Transposed();
+	rmatrix = float4x4::FromTRS(_pos, qrot, _scl).Transposed();
 	
-	matrix[0] = cos(y) * cos(z);
+	matrix[0] = (cos(y) * cos(z))  *_scl.x;
 	matrix[1] = -cos(x) * sin(z) + sin(y) * cos(z) * sin(x);
 	matrix[2] = sin(x) * sin(z) + sin(y) * cos(z) * cos(x);
 	matrix[3] = _pos.x;
 
 	matrix[4] = cos(y) * sin(z);
-	matrix[5] = cos(x) * cos(z) + sin(y) * sin(z) * sin(z);
+	matrix[5] = (cos(x) * cos(z) + sin(y) * sin(z) * sin(z)) * _scl.y;
 	matrix[6] = -sin(x) * cos(z) + sin(y) * sin(z) * cos(x);
 	matrix[7] = _pos.y;
 
 	matrix[8] = -sin(y);
 	matrix[9] = cos(y) * sin(x);
-	matrix[10] = cos(x) * cos(y);
+	matrix[10] = (cos(x) * cos(y)) * _scl.z;
 	matrix[11] = _pos.z;
 
 	matrix[12] = 0;
@@ -68,9 +85,42 @@ void CTransform::TransformMatrix(float3 _pos, float3 _rot, float3 _scl)
 	matrix[14] = 0;
 	matrix[15] = 1;
 
-	matrix[0] *= _scl.x;
-	matrix[5] *= _scl.y;
-	matrix[10] *= _scl.z;
+	//matrix[0] *= _scl.x;
+	//matrix[5] *= _scl.y;
+	//matrix[10] *= _scl.z;
+
+	if (GO->GOcam != nullptr)
+	{
+		GO->GOcam->cameraFrustum.pos = _pos;
+		GO->GOcam->Reference = _pos;
+
+		GO->GOcam->cameraFrustum.up = rmatrix.RotatePart().Col(1).Normalized();
+		GO->GOcam->cameraFrustum.front = rmatrix.RotatePart().Col(2).Normalized();
+
+		/*Quat dir;
+		GO->GOcam->cameraFrustum.WorldMatrix().Decompose(float3(), dir, float3());
+
+		Quat X = { 0, 0, 0, 1 };
+		X.SetFromAxisAngle(float3(1.0f, 0.0f, 0.0f), _rot.x * DEGTORAD);
+		dir = X * dir;
+		float AngleY = (float)dy * Sensitivity;
+
+		Quat Y = { 0, 0, 0, 1 };
+		Y.SetFromAxisAngle(float3(0.0f, 1.0f, 0.0f), _rot.y * DEGTORAD);
+		dir = dir * Y;
+
+		Quat Z = { 0, 0, 0, 1 };
+		Z.SetFromAxisAngle(float3(0.0f, 0.0f, 1.0f), _rot.z * DEGTORAD);
+		dir = Z * dir;
+
+
+		float AngleX = (float)dx * Sensitivity;
+
+		float4x4 matrix = GO->GOcam->cameraFrustum.WorldMatrix();
+		matrix.SetRotatePart(dir.Normalized());
+		GO->GOcam->cameraFrustum.SetWorldMatrix(matrix.Float3x4Part());*/
+
+	}
 
 	matrix = transpose(matrix);
 
@@ -178,11 +228,7 @@ void CTransform::UpdatePos()
 		}
 	}
 
-	if (GO->GOcam != nullptr)
-	{
-		GO->GOcam->cameraFrustum.pos = cpos;
-		GO->GOcam->Reference = cpos;
-	}
+	
 
 	SetGlobalTrans();
 	//TransformMatrix();
@@ -246,33 +292,7 @@ void CTransform::UpdateRot()
 		}
 	}
 
-	if (GO->GOcam != nullptr)
-	{
-		
-		Quat dir;
-		GO->GOcam->cameraFrustum.WorldMatrix().Decompose(float3(), dir, float3());
-		
-		Quat X = { 0, 0, 0, 1 };
-		X.SetFromAxisAngle(float3(1.0f, 0.0f, 0.0f), crot.x * DEGTORAD);
-		dir = X * dir;
-		//float AngleY = (float)dy * Sensitivity;
-
-		Quat Y = { 0, 0, 0, 1 };
-		Y.SetFromAxisAngle(float3(0.0f, 1.0f, 0.0f), crot.y * DEGTORAD);
-		dir = dir * Y;
-		
-		Quat Z = { 0, 0, 0, 1 };
-		Z.SetFromAxisAngle(float3(0.0f, 0.0f, 1.0f), crot.z * DEGTORAD);
-		dir = Z * dir;
-
-
-		//float AngleX = (float)dx * Sensitivity;
-
-		float4x4 matrix = GO->GOcam->cameraFrustum.WorldMatrix();
-		matrix.SetRotatePart(dir.Normalized());
-		GO->GOcam->cameraFrustum.SetWorldMatrix(matrix.Float3x4Part());
-		
-	}
+	
 
 	SetGlobalTrans();
 	//TransformMatrix();

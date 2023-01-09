@@ -144,20 +144,59 @@ void CPhysics::CallUpdateShape()
 
 void CPhysics::CreateCollider()
 {
+
+	float rx ;
+	float ry ;
+	float rz ;
+
+	float3 _rot = GO->GOtrans->GetRot();
+	float3 _grot = GO->GOtrans->GetGRot();
+
+	if (GO->parent->parent == nullptr)
+	{
+		
+		//TransformMatrix(pos, rot, scl);
+		 rx = _rot.x * DEGTORAD;
+		 ry = _rot.y * DEGTORAD;
+		 rz = _rot.z * DEGTORAD;
+	}
+	else
+	{
+		rx = _grot.x * DEGTORAD;
+		ry = _grot.y * DEGTORAD;
+		rz = _grot.z * DEGTORAD;
+		//gpos = ppos + pos;
+		//grot = prot + rot;
+		//gscl.x = pscl.x * scl.x;
+		//gscl.y = pscl.y * scl.y;
+		//gscl.z = pscl.z * scl.z;
+		//TransformMatrix(gpos, grot, gscl);
+
+	}
+	Quat qrot = Quat::FromEulerXYZ(rx, ry, rz);
+
+	//rotation vector
+	vec3 rvec(qrot.Axis().x, qrot.Axis().y, qrot.Axis().z);
+
+	//rotation angle
+	float ra = qrot.Angle(); 
+
 	switch (shapeSelected)
 	{
 	case CPhysics::ColliderShape::BOX:
 	{
 		PrimCube cube;
-		
-		cube.SetPos(colPos.x, colPos.y, colPos.z);
+		GO->GOtrans->setIdentity(cube.transform);
+		//cube.SetPos(colPos.x, colPos.y, colPos.z);
 		//cube.SetRotation();
-		cube.size.x = GO->GOtrans->GetScale().x;
-		cube.size.y = GO->GOtrans->GetScale().y;
-		cube.size.z = GO->GOtrans->GetScale().z;
-
-		//cube.transform = GO->GOtrans->matrix;
-
+		//cube.size.x = GO->GOtrans->GetScale().x;
+		//cube.size.y = GO->GOtrans->GetScale().y;
+		//cube.size.z = GO->GOtrans->GetScale().z;
+		
+		//cube.SetRotation(ra,rvec);
+		//cube.SetRotation(ra, (rx, ry, rz));
+		cube.transform = GO->GOtrans->matrix;
+		//cube.transform
 		cube.color = Green;
 
 
@@ -170,7 +209,7 @@ void CPhysics::CreateCollider()
 		PrimSphere sphere;
 	
 		sphere.SetPos(colPos.x, colPos.y, colPos.z);
-		//sphere.SetRotation();
+		sphere.SetRotation(ra, rvec);
 		sphere.radius = 1.0f;
 
 		sphere.color = Green;
@@ -183,7 +222,7 @@ void CPhysics::CreateCollider()
 		PrimCylinder cylinder;
 		
 		cylinder.SetPos(colPos.x, colPos.y, colPos.z);
-		//cylinder.SetRotation();
+		cylinder.SetRotation(ra, rvec);
 		cylinder.radius = 1.0f;
 		cylinder.height = 1.0f;
 		cylinder.color = Green;

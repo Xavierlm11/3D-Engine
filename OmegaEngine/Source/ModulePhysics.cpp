@@ -377,15 +377,57 @@ PhysBody3D* ModulePhysics3D::UpdateBoxColliderSize(PhysBody3D*& collider, float3
 	RemoveBody(collider);
 	collider->~PhysBody3D();
 	collider = nullptr;
-	
+
 	PrimCube cube;
+
+	float rx;
+	float ry;
+	float rz;
+
+	float3 _rot = colRot;
+	
+//	//TransformMatrix(pos, rot, scl);
+	rx = _rot.x * DEGTORAD;
+	ry = _rot.y * DEGTORAD;
+	rz = _rot.z * DEGTORAD;
+	
+	//Quat qrot = Quat::FromEulerXYZ(rx, ry, rz);
+	//qrot.Normalize();
+//float e=	qrot.;
+	//rotation vector
+	//vec3 rvec(qrot.Axis().x, qrot.Axis().y, qrot.Axis().z);
+
+	//rotation angle
+	//float ra = qrot.Angle();
+
+
+	cube.transform[0] = cos(ry) * cos(rz);
+	cube.transform[1] = sin(ry) * sin(rx) * cos(rz) - (cos(rx) * sin(rz)) ;
+	cube.transform[2] = sin(rx) * sin(rz) + sin(ry) * cos(rz) * cos(rx);
+	
+	 
+	cube.transform[4] = cos(ry) * sin(rz);
+	cube.transform[5] = cos(rx) * cos(rz) + sin(ry) * sin(rz) * sin(rz);
+	cube.transform[6] = sin(ry) * sin(rz) * cos(rx) - sin(rx) * cos(rz);
+	
+
+	cube.transform[8] = -sin(ry);
+	cube.transform[9] = cos(ry) * sin(rx);
+	cube.transform[10] = cos(rx) * cos(ry);
+	
 	cube.SetPos(colPos.x, colPos.y, colPos.z);
-	//cube.SetRotation();
+	//cube.SetRotation(ra,rvec);
+	//cube.SetRotation(ra, (rx, ry, rz));
 	cube.size.x = colScl.x;
 	cube.size.y = colScl.y;
 	cube.size.z = colScl.z;
-	cube.color = Green;
 
+	
+	cube.transform = transpose(cube.transform);
+	
+
+	cube.color = Green;
+	
 	collider = AddBody(cube, mass);
 
 	return nullptr;
@@ -397,7 +439,46 @@ PhysBody3D* ModulePhysics3D::UpdateSphereColliderSize(PhysBody3D*& collider, flo
 	collider->~PhysBody3D();
 	collider = nullptr;
 
+
+
 	PrimSphere sphere;
+
+
+	float rx;
+	float ry;
+	float rz;
+
+	float3 _rot = colRot;
+
+	//	//TransformMatrix(pos, rot, scl);
+	rx = _rot.x * DEGTORAD;
+	ry = _rot.y * DEGTORAD;
+	rz = _rot.z * DEGTORAD;
+
+	//Quat qrot = Quat::FromEulerXYZ(rx, ry, rz);
+	//qrot.Normalize();
+//float e=	qrot.;
+	//rotation vector
+	//vec3 rvec(qrot.Axis().x, qrot.Axis().y, qrot.Axis().z);
+
+	//rotation angle
+	//float ra = qrot.Angle();
+
+
+	sphere.transform[0] = cos(ry) * cos(rz);
+	sphere.transform[1] = sin(ry) * sin(rx) * cos(rz) - (cos(rx) * sin(rz));
+	sphere.transform[2] = sin(rx) * sin(rz) + sin(ry) * cos(rz) * cos(rx);
+
+
+	sphere.transform[4] = cos(ry) * sin(rz);
+	sphere.transform[5] = cos(rx) * cos(rz) + sin(ry) * sin(rz) * sin(rz);
+	sphere.transform[6] = sin(ry) * sin(rz) * cos(rx) - sin(rx) * cos(rz);
+
+
+	sphere.transform[8] = -sin(ry);
+	sphere.transform[9] = cos(ry) * sin(rx);
+	sphere.transform[10] = cos(rx) * cos(ry);
+
 	sphere.SetPos(colPos.x, colPos.y, colPos.z);
 	//sphere.SetRotation();
 	sphere.radius = radius;
@@ -415,6 +496,42 @@ PhysBody3D* ModulePhysics3D::UpdateCylinderColliderSize(PhysBody3D*& collider, f
 	collider = nullptr;
 
 	PrimCylinder cylinder;
+
+	float rx;
+	float ry;
+	float rz;
+
+	float3 _rot = colRot;
+
+	//	//TransformMatrix(pos, rot, scl);
+	rx = _rot.x * DEGTORAD;
+	ry = _rot.y * DEGTORAD;
+	rz = _rot.z * DEGTORAD;
+
+	//Quat qrot = Quat::FromEulerXYZ(rx, ry, rz);
+	//qrot.Normalize();
+//float e=	qrot.;
+	//rotation vector
+	//vec3 rvec(qrot.Axis().x, qrot.Axis().y, qrot.Axis().z);
+
+	//rotation angle
+	//float ra = qrot.Angle();
+
+
+	cylinder.transform[0] = cos(ry) * cos(rz);
+	cylinder.transform[1] = sin(ry) * sin(rx) * cos(rz) - (cos(rx) * sin(rz));
+	cylinder.transform[2] = sin(rx) * sin(rz) + sin(ry) * cos(rz) * cos(rx);
+
+
+	cylinder.transform[4] = cos(ry) * sin(rz);
+	cylinder.transform[5] = cos(rx) * cos(rz) + sin(ry) * sin(rz) * sin(rz);
+	cylinder.transform[6] = sin(ry) * sin(rz) * cos(rx) - sin(rx) * cos(rz);
+
+
+	cylinder.transform[8] = -sin(ry);
+	cylinder.transform[9] = cos(ry) * sin(rx);
+	cylinder.transform[10] = cos(rx) * cos(ry);
+
 	cylinder.SetPos(colPos.x, colPos.y, colPos.z);
 	//cylinder.SetRotation();
 	cylinder.radius = radiusHeight.x;

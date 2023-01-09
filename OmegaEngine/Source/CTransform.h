@@ -6,15 +6,16 @@
 
 #include "GameObject.h"
 
-#include "MathGeoLib/include/Math/float4x4.h"
+//#include "MathGeoLib/include/Math/float4x4.h"
 
-
+#include "MathGeoLib/include/MathGeoLib.h"
 
 class CTransform : public Component
 {
 public:
 
 	CTransform(GameObject* obj);
+	void setIdentity(mat4x4 mat);
 	virtual ~CTransform();
 
 	void Enable() override { active = true; }
@@ -59,7 +60,9 @@ public:
 	float3 GetRot() { return rot; }
 	float3 GetScale() { return scl; }
 
-	
+	float3 GetGPos() { return gpos; }
+	float3 GetGRot() { return grot; }
+	float3 GetGScale() { return gscl; }
 
 	//float4x4 GetMatrix() { return matrix; }
 
@@ -79,6 +82,7 @@ public:
 	float3 scl = { 1,1,1 };
 	
 	mat4x4 matrix;
+	float4x4 rmatrix;
 private:
 	float3 ppos = { 0,0,0 };
 	float3 prot = { 0,0,0 };
