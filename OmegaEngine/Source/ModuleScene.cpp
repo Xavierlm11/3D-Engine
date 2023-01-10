@@ -300,6 +300,8 @@ bool ModuleScene::SaveSceneAtPlay() {
                 json_object_set_boolean(json_object(scene_settings), goComp.c_str(), false);
                 goComp = "Gameobject [" + std::to_string(i) + "] Light";
                 json_object_set_boolean(json_object(scene_settings), goComp.c_str(), false);
+                goComp = "Gameobject [" + std::to_string(i) + "] Physics";
+                json_object_set_boolean(json_object(scene_settings), goComp.c_str(), false);
 
                 for (int j = 0; j < saveGoList[i]->components.size(); j++) {
                    
@@ -486,6 +488,8 @@ bool ModuleScene::LoadSceneAtPlay() {
     int gameObjects_num = 0;
     std::vector <GameObject*> saveGoList;
 
+    float3 parentPos;
+
     if (scene_settings == NULL || json_validate(schema, scene_settings) != JSONSuccess) 
     {
         //scene_settings = json_value_init_object();
@@ -523,6 +527,8 @@ bool ModuleScene::LoadSceneAtPlay() {
         fog_color[3] = json_object_get_number(json_object(scene_settings), "fog_color_3");
 
         gameObjects_num = json_object_get_number(json_object(scene_settings), "gameObjects_num");
+
+        
         //LOG("W::::::::::%i", new_winWidth);
 
 
@@ -536,6 +542,25 @@ bool ModuleScene::LoadSceneAtPlay() {
             
             std::string uidField = "Gameobject [" + std::to_string(i) + "] UID";
             int goUid = json_object_get_number(json_object(scene_settings), uidField.c_str());
+
+            //Set parents
+            for (int i = 0; i < saveGoList.size(); i++)
+            {
+                std::string parentField = "Gameobject [" + std::to_string(i) + "] Parent";
+                int goParent = json_object_get_number(json_object(scene_settings), parentField.c_str());
+
+                if (goParent != 0) {
+
+                    for (int j = 0; j < saveGoList.size(); j++)
+                    {
+                        if (saveGoList[j]->uid == goParent)
+                        {
+                            saveGoList[j]->children.push_back(saveGoList[i]);
+                            saveGoList[i]->parent = saveGoList[j];
+                        }
+                    }
+                }
+            }
 
             go->uid = goUid;
 
@@ -572,9 +597,18 @@ bool ModuleScene::LoadSceneAtPlay() {
                 goComp = "Gameobject [" + std::to_string(i) + "] Transform Scl Z";
                 goScl[2] = json_object_get_number(json_object(scene_settings), goComp.c_str());
 
-                go->GOtrans->SetPos(goPos);
-                go->GOtrans->SetRot(goRot);
-                go->GOtrans->SetScale(goScl);
+                //goComp = "Gameobject [" + std::to_string(i) + "] Parent";
+                //uint parentID = json_object_get_number(json_object(scene_settings), goComp.c_str());
+
+
+                //if (parentID == 0) {
+                    go->GOtrans->SetPos(goPos);
+                    //parentPos = goPos;
+                    go->GOtrans->SetRot(goRot);
+                    go->GOtrans->SetScale(goScl);
+               // }
+
+              
                 
 
                 hasComp = false;
@@ -739,24 +773,7 @@ bool ModuleScene::LoadSceneAtPlay() {
     
         }
 
-        //Set parents
-        for (int i = 0; i < saveGoList.size(); i++)
-        {
-            std::string parentField = "Gameobject [" + std::to_string(i) + "] Parent";
-            int goParent = json_object_get_number(json_object(scene_settings), parentField.c_str());
-
-            if (goParent != 0) {
-               
-                for (int j = 0; j < saveGoList.size(); j++)
-                {
-                    if (saveGoList[j]->uid == goParent)
-                    {
-                        saveGoList[j]->children.push_back(saveGoList[i]);
-                        saveGoList[i]->parent = saveGoList[j];
-                    }
-                }
-            }
-        }
+        
 
         //Add them to GameObjects List
         //for (int i = 0; i < saveGoList.size(); i++) {
@@ -808,6 +825,9 @@ bool ModuleScene::LoadSceneAtPlay() {
     App->editor->fog_color[2] = fog_color[2];
     App->editor->fog_color[3] = fog_color[3];
 
+    //App->scene->ListGO[2]->GOtrans->SetPos(parentPos);
+    //App->scene->ListGO[2]->GOtrans->SetRot(goRot);
+    //App->scene->ListGO[2]->GOtrans->SetScale(goScl);
 
     json_serialize_to_file_pretty(scene_settings, "Settings/scene_at_play.json");
 

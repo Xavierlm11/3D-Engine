@@ -46,8 +46,33 @@ void CPhysics::Update()
 {
 	if (phys->isWorldOn == true) {
 		if (collider != nullptr) {
-			//float3 newPos = {collider->body->getWorldTransform()0],0.f,0.f};
-			//GO->GOtrans->SetPos(newPos);
+			float glMat[16];
+			mat4x4 glMat4x4;
+			//collider->body->getpos
+			collider->body->getWorldTransform().getOpenGLMatrix(glMat);
+			//float3 newPos = {,0.f,0.f};
+			glMat4x4[0] = glMat[0];
+			glMat4x4[1] = glMat[1];
+			glMat4x4[2] = glMat[2];
+			glMat4x4[3] = glMat[3];
+
+			glMat4x4[4] = glMat[4];
+			glMat4x4[5] = glMat[5];
+			glMat4x4[6] = glMat[6];
+			glMat4x4[7] = glMat[7];
+
+			glMat4x4[8] = glMat[8];
+			glMat4x4[9] = glMat[9];
+			glMat4x4[10] = glMat[10];
+			glMat4x4[11] = glMat[11];
+
+			glMat4x4[12] = glMat[12];
+			glMat4x4[13] = glMat[13];
+			glMat4x4[14] = glMat[14];
+			glMat4x4[15] = glMat[15];
+
+			GO->GOtrans->matrix = glMat4x4;
+			
 		}
 		
 	}

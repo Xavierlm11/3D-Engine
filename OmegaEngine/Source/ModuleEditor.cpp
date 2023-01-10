@@ -1116,7 +1116,7 @@ void ModuleEditor::BarPlay() {
 			playPressed = false;
 
 			DeleteGo();
-			App->physics->isWorldOn = true;
+			App->physics->isWorldOn = false;
 			App->scene->LoadSceneAtPlay();
 
 			std::string folder_name = "Settings/scene_at_play.json";
@@ -1130,7 +1130,7 @@ void ModuleEditor::BarPlay() {
 		}
 		else {
 			playPressed = true;
-			App->physics->isWorldOn = false;
+			App->physics->isWorldOn = true;
 			App->scene->SaveSceneAtPlay();
 		}
 	}
@@ -1318,7 +1318,6 @@ void ModuleEditor::ConfigInputXXX()
 		ImGui::Text("Wheel Motion:");
 		ImGui::SameLine();
 		ImGui::TextColored({ 255,0,0,1 }, "%i", App->input->GetMouseZ());
-
 	}
 }
 
