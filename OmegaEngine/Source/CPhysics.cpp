@@ -47,7 +47,8 @@ void CPhysics::Update()
 	if (phys->isWorldOn == true) {
 		if (collider != nullptr) {
 			float glMat[16];
-			mat4x4 glMat4x4;
+			
+			
 			//collider->body->getpos
 			collider->body->getWorldTransform().getOpenGLMatrix(glMat);
 			//float3 newPos = {,0.f,0.f};
@@ -72,6 +73,18 @@ void CPhysics::Update()
 			glMat4x4[15] = glMat[15];
 
 			GO->GOtrans->matrix = glMat4x4;
+			
+			
+			//GO->GOtrans->SetPos(GO->GOtrans->GetPos());
+			//GO->GOtrans->UpdatePos();
+			
+
+			for each (GameObject* child in GO->children)
+			{
+				
+				//child->GOtrans->matrix = child->GOtrans->matrix * glMat4x4;
+				//child->GOtrans->UpdatePos();
+			}
 			
 		}
 		

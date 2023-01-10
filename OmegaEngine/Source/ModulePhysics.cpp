@@ -87,7 +87,12 @@ update_status ModulePhysics3D::PreUpdate(float dt)
 		world->stepSimulation(0);
 	}
 	else {
-		world->stepSimulation(dt, 15);
+		if (App->editor->pausePressed == true) {
+			world->stepSimulation(0);
+		}
+		else {
+			world->stepSimulation(dt, 15);
+		}
 		//for (int i = 0; i < App->scene->ListGO.size();i++) 
 		//{
 		//	if (App->scene->ListGO[i]->GOphys != nullptr) {

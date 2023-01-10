@@ -164,6 +164,7 @@ public:
 	GameObject* selectedObj = nullptr;
 
 	bool playPressed;
+	bool pausePressed;
 
 private:
 

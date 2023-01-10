@@ -539,31 +539,39 @@ bool ModuleScene::LoadSceneAtPlay() {
             const char* goName = json_object_get_string(json_object(scene_settings), nameField.c_str());
 
             GameObject* go = App->scene->CreateGO(goName, App->scene->ListGO[0]);
-            
+
             std::string uidField = "Gameobject [" + std::to_string(i) + "] UID";
             int goUid = json_object_get_number(json_object(scene_settings), uidField.c_str());
 
-            //Set parents
-            for (int i = 0; i < saveGoList.size(); i++)
-            {
-                std::string parentField = "Gameobject [" + std::to_string(i) + "] Parent";
-                int goParent = json_object_get_number(json_object(scene_settings), parentField.c_str());
+            go->uid = goUid;
 
-                if (goParent != 0) {
+            saveGoList.push_back(go);
 
-                    for (int j = 0; j < saveGoList.size(); j++)
+        }
+
+        //Set parents
+        for (int i = 0; i < saveGoList.size(); i++)
+        {
+            std::string parentField = "Gameobject [" + std::to_string(i) + "] Parent";
+            int goParent = json_object_get_number(json_object(scene_settings), parentField.c_str());
+
+            if (goParent != 0) {
+
+                for (int j = 0; j < saveGoList.size(); j++)
+                {
+                    if (saveGoList[j]->uid == goParent)
                     {
-                        if (saveGoList[j]->uid == goParent)
-                        {
-                            saveGoList[j]->children.push_back(saveGoList[i]);
-                            saveGoList[i]->parent = saveGoList[j];
-                        }
+                        saveGoList[j]->children.push_back(saveGoList[i]);
+                        saveGoList[i]->parent = saveGoList[j];
                     }
                 }
             }
+        }
 
-            go->uid = goUid;
+        for (int i = 0; i < saveGoList.size(); i++)
+        {
 
+            GameObject* go = saveGoList[i];
 
             std::string goComp;
             bool hasComp = false;
@@ -768,9 +776,6 @@ bool ModuleScene::LoadSceneAtPlay() {
 
                 hasComp = false;
             }
-
-            saveGoList.push_back(go);
-    
         }
 
         
@@ -780,6 +785,8 @@ bool ModuleScene::LoadSceneAtPlay() {
            
            // App->scene->AddGOList(saveGoList[i]);
        // }
+
+         
     }
 
    
@@ -869,7 +876,7 @@ bool ModuleScene::SaveScene() {
     JSON_Value* schema = json_parse_string("{\"name\":\"\"}");
     JSON_Value* scene_settings = json_parse_file("scene_settings.json");
 
-    if (scene_settings == NULL || json_validate(schema, scene_settings) != JSONSuccess) {
+   if (scene_settings == NULL || json_validate(schema, scene_settings) != JSONSuccess) {
         scene_settings = json_value_init_object();
         //json_object_set_number(json_object(scene_settings), "R", backgroundColor.x);
         //json_object_set_number(json_object(scene_settings), "G", backgroundColor.y);

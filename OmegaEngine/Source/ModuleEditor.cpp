@@ -43,6 +43,7 @@ ModuleEditor::ModuleEditor(Application* app, bool start_enabled) : Module(app, s
 	gl_fogEnabled = false;
 
 	playPressed = false;
+	pausePressed = false;
 
 	fog_density = 0;
 	fog_start = 0;
@@ -1113,6 +1114,7 @@ void ModuleEditor::BarPlay() {
 	if (ImGui::Button("Play"))
 	{
 		if (playPressed == true) {
+			pausePressed = false;
 			playPressed = false;
 
 			DeleteGo();
@@ -1144,12 +1146,36 @@ void ModuleEditor::BarPlay() {
 
 void ModuleEditor::BarPause() {
 
+	bool color = false;
+
+	if (playPressed == true) {
+		if (pausePressed == true) {
+
+			ImGui::PushStyleColor(ImGuiCol_Button, (ImVec4)ImColor::HSV(2 / 7.0f, 0.6f, 0.6f));
+			ImGui::PushStyleColor(ImGuiCol_ButtonHovered, (ImVec4)ImColor::HSV(2 / 7.0f, 0.7f, 0.7f));
+			ImGui::PushStyleColor(ImGuiCol_ButtonActive, (ImVec4)ImColor::HSV(2 / 7.0f, 0.8f, 0.8f));
+			color = true;
+		}
+	}
+
 	if (ImGui::Button("Pause"))
 	{
+		if (pausePressed == true) {
 
+			pausePressed = false;
+			App->physics->isWorldOn = false;
 
+		}
+		else {
 
-		
+			pausePressed = true;
+			App->physics->isWorldOn = true;
+
+		}
+	}
+
+	if (color == true) {
+		ImGui::PopStyleColor(3);
 	}
 
 }

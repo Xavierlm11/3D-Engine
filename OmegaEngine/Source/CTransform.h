@@ -83,6 +83,9 @@ public:
 	
 	mat4x4 matrix;
 	float4x4 rmatrix;
+
+	mat4x4 glMatParent;
+
 private:
 	float3 ppos = { 0,0,0 };
 	float3 prot = { 0,0,0 };
