@@ -192,6 +192,12 @@ Component* GameObject::CreateComp(Component::Types type)
 	return comp;
 }
 
+void GameObject::DeleteComponent()
+{
+
+
+}
+
 void GameObject::Update(float dt)
 {
 

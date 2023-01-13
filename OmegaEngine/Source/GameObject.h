@@ -45,6 +45,7 @@ public:
 	std::vector<GameObject*> GetChildrens();
 
 	Component* CreateComp(Component::Types type);
+	void DeleteComponent();
 	void Update(float dt);
 
 	void Editor();
