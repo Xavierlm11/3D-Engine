@@ -1133,6 +1133,7 @@ void ModuleEditor::BarPlay() {
 		else {
 			playPressed = true;
 			App->physics->isWorldOn = true;
+			App->physics->SaveWorldTransforms();
 			App->scene->SaveSceneAtPlay();
 		}
 	}

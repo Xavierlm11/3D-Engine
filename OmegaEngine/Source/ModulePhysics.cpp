@@ -554,6 +554,19 @@ PhysBody3D* ModulePhysics3D::UpdateCylinderColliderSize(PhysBody3D*& collider, f
 	return nullptr;
 }
 
+void ModulePhysics3D::SaveWorldTransforms() 
+{
+	for (int i = 0; i < App->scene->ListGO.size(); i++) {
+		if (App->scene->ListGO[i]->GOphys != nullptr && App->scene->ListGO[i]->GOtrans != nullptr) {
+			float glMat[16];
+			App->scene->ListGO[i]->GOphys->collider->body->getWorldTransform().getOpenGLMatrix(glMat);
+			for (int j = 0; j < 16; j++) {
+				App->scene->ListGO[i]->GOphys->matrixBeforePhys[j] = App->scene->ListGO[i]->GOtrans->matrix[j] - glMat[j];
+
+			}
+		}
+	}
+}
 
 // ---------------------------------------------------------
 void ModulePhysics3D::AddConstraintP2P(PhysBody3D& bodyA, PhysBody3D& bodyB, const vec3& anchorA, const vec3& anchorB)
