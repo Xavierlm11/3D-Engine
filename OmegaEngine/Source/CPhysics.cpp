@@ -73,9 +73,16 @@ void CPhysics::Update()
 			glMat4x4[15] = glMat[15];
 
 			GO->GOtrans->matrix = glMat4x4;
-			GO->GOtrans->matrix[12] += matrixBeforePhys[12];
-			GO->GOtrans->matrix[13] += matrixBeforePhys[13];
-			GO->GOtrans->matrix[14] += matrixBeforePhys[14];
+			
+			GO->GOtrans->UpdateRot();
+			//GO->GOtrans->UpdateScl();
+			GO->GOtrans->matrix[12] = glMat4x4[12];
+			GO->GOtrans->matrix[13] = glMat4x4[13];
+			GO->GOtrans->matrix[14] = glMat4x4[14];
+			
+			//GO->GOtrans->matrix[12] += matrixBeforePhys[12];
+			//GO->GOtrans->matrix[13] += matrixBeforePhys[13];
+			//GO->GOtrans->matrix[14] += matrixBeforePhys[14];
 			
 			//GO->GOtrans->SetPos(GO->GOtrans->GetPos());
 			//GO->GOtrans->UpdatePos();
