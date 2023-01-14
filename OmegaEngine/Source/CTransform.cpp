@@ -155,6 +155,17 @@ void CTransform::SetGlobalTrans()
 		TransformMatrix(gpos, grot, gscl );
 
 	}
+
+	if (GO->GOphys != nullptr) {
+		if (GO->GOphys->collider != nullptr) {
+			//GO->GOphys->SaveOffsetMatrix();
+			GO->GOphys->colPos.x = matrix[12] + GO->GOphys->offsetMatrix[12];
+			GO->GOphys->colPos.y = matrix[13] + GO->GOphys->offsetMatrix[13];
+			GO->GOphys->colPos.z = matrix[14] + GO->GOphys->offsetMatrix[14];
+			GO->GOphys->CallUpdateShape();
+
+		}
+	}
 }
 
 
@@ -172,24 +183,50 @@ void CTransform::OnInspector()
 		ImGui::Text("Y	");
 		ImGui::SameLine();
 		ImGui::Text("Z	");
-		if(ImGui::DragFloat3("Pos.", newPos.ptr(), 0.1))
+		if (ImGui::DragFloat3("Pos.", newPos.ptr(), 0.1))
+		{
+			if (GO->GOphys != nullptr) {
+
+				if (GO->GOphys->collider != nullptr) {
+					GO->GOphys ->SaveOffsetMatrix();
+				}
+			}
+				
 			SetPos(newPos);
+		}
+			
 		
 		ImGui::Text("X	");
 		ImGui::SameLine();
 		ImGui::Text("Y	");
 		ImGui::SameLine();
 		ImGui::Text("Z	");
-		if(ImGui::DragFloat3("Rotation.", newrot.ptr(),0.1)) 
+		if (ImGui::DragFloat3("Rotation.", newrot.ptr(), 0.1)) {
+			if (GO->GOphys != nullptr) {
+
+				if (GO->GOphys->collider != nullptr) {
+					GO->GOphys->SaveOffsetMatrix();
+				}
+			}
 			SetRot(newrot);
+		}
+			
 		
 		ImGui::Text("X	");
 		ImGui::SameLine();
 		ImGui::Text("Y	");
 		ImGui::SameLine();
 		ImGui::Text("Z	");
-		if (ImGui::DragFloat3("Scale.", newScl.ptr(), 0.1)) 
+		if (ImGui::DragFloat3("Scale.", newScl.ptr(), 0.1))
+		{
+			if (GO->GOphys != nullptr) {
+
+				if (GO->GOphys->collider != nullptr) {
+					GO->GOphys->SaveOffsetMatrix();
+				}
+			}
 			SetScale(newScl);
+		}
 
 
 

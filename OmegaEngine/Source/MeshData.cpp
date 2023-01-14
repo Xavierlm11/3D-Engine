@@ -3,7 +3,7 @@
 #include "External/MathGeoLib/include/Math/float3.h"
 #include "Glew/include/glew.h"
 
-MeshData::MeshData(const char* name) : Resource(Resource::Types::MESH)
+MeshData::MeshData(const char* path) : Resource(path, Resource::Types::MESH)
 {
 	id_indices = 0; // index in VRAM
 	num_indices = 0;
@@ -25,7 +25,7 @@ MeshData::MeshData(const char* name) : Resource(Resource::Types::MESH)
 
 	hasLoadedBuffers = false;
 
-	assetName = name;
+	//assetName = path;
 }
 
 MeshData::~MeshData()

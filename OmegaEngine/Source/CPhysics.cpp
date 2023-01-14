@@ -151,6 +151,25 @@ void CPhysics::Update()
 	}
 }
 
+void CPhysics::SaveMatrixBeforePhys() {
+
+	for (int j = 0; j < 16; j++) {
+		matrixBeforePhys[j] = GO->GOtrans->matrix[j];
+	}
+
+}
+
+void CPhysics::SaveOffsetMatrix() {
+
+	float glMat[16];
+	collider->body->getWorldTransform().getOpenGLMatrix(glMat);
+
+	for (int j = 0; j < 16; j++) {
+		offsetMatrix[j] = abs(GO->GOtrans->matrix[j] - glMat[j]);
+	}
+
+}
+
 void CPhysics::CheckShapes() {
 
 	for (int h = 0; h < static_cast<int>(ColliderShape::Count); h++) {
@@ -252,6 +271,8 @@ void CPhysics::CallUpdateShape()
 	default:
 		break;
 	}
+
+	SaveOffsetMatrix();
 	
 }
 

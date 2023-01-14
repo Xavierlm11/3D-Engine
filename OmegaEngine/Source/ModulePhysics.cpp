@@ -558,12 +558,8 @@ void ModulePhysics3D::SaveWorldTransforms()
 {
 	for (int i = 0; i < App->scene->ListGO.size(); i++) {
 		if (App->scene->ListGO[i]->GOphys != nullptr && App->scene->ListGO[i]->GOtrans != nullptr) {
-			float glMat[16];
-			App->scene->ListGO[i]->GOphys->collider->body->getWorldTransform().getOpenGLMatrix(glMat);
-			for (int j = 0; j < 16; j++) {
-				App->scene->ListGO[i]->GOphys->matrixBeforePhys[j] = App->scene->ListGO[i]->GOtrans->matrix[j];
-				App->scene->ListGO[i]->GOphys->offsetMatrix[j] = App->scene->ListGO[i]->GOtrans->matrix[j] - glMat[j];
-			}
+			App->scene->ListGO[i]->GOphys->SaveMatrixBeforePhys();
+			App->scene->ListGO[i]->GOphys->SaveOffsetMatrix();
 		}
 	}
 }

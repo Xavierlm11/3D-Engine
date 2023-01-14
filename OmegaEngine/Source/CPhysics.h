@@ -40,6 +40,9 @@ public:
 
 	void CreateCollider();
 
+	void SaveMatrixBeforePhys();
+	void SaveOffsetMatrix();
+
 public:
 
 	ModulePhysics3D* phys;

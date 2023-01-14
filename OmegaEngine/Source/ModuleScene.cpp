@@ -12,6 +12,7 @@
 #include "MaterialImporter.h"
 #include "Component.h"
 #include "ModelImporter.h"
+#include "ModelData.h"
 
 ModuleScene::ModuleScene(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
@@ -104,7 +105,7 @@ void ModuleScene::LoadSpecific(uint uid)
                 char* fileBuffer = nullptr;
                 std::string libName = std::to_string(payload_res->assetID) + ".chad";
                 uint bufferSize = App->fileSystem->FileToBuffer(libName.c_str(), &fileBuffer);
-                MeshData* new_mesh_data = new MeshData(payload_res->assetName.c_str());
+                MeshData* new_mesh_data = new MeshData(payload_res->assetPath.c_str());
                 MeshImporter::Load(fileBuffer, new_mesh_data);
 
                 go->GOmesh->meshData = new_mesh_data;
@@ -118,11 +119,16 @@ void ModuleScene::LoadSpecific(uint uid)
                     std::string libName = std::to_string(payload_model->meshDatas[0]->materialAttachedID) + ".chad";
 
                     uint bufferSize = App->fileSystem->FileToBuffer(libName.c_str(), &fileBuffer);
-                    MaterialData* new_material_data = new MaterialData(payload_res->assetName.c_str());
-                    MaterialImporter::Load(fileBuffer, new_material_data, bufferSize);
+                    for (int rInd = 0; rInd < App->scene->resourceList.size(); rInd++) {
+                        if (App->scene->resourceList[rInd]->assetID == payload_model->meshDatas[0]->materialAttachedID) {
 
-                    go->GOmat->materialData = new_material_data;
-                    go->GOmat->materialData->assetID = payload_model->meshDatas[0]->materialAttachedID;
+                            MaterialData* new_material_data = new MaterialData(App->scene->resourceList[rInd]->assetPath.c_str());
+                            MaterialImporter::Load(fileBuffer, new_material_data, bufferSize);
+
+                            go->GOmat->materialData = new_material_data;
+                            go->GOmat->materialData->assetID = payload_model->meshDatas[0]->materialAttachedID;
+                        }
+                    }
 
                 }
 
@@ -149,11 +155,16 @@ void ModuleScene::LoadSpecific(uint uid)
                         std::string libName = std::to_string(goChild->GOmesh->meshData->materialAttachedID) + ".chad";
 
                         uint bufferSize = App->fileSystem->FileToBuffer(libName.c_str(), &fileBuffer);
-                        MaterialData* new_material_data = new MaterialData(payload_res->assetName.c_str());
-                        MaterialImporter::Load(fileBuffer, new_material_data, bufferSize);
+                        for (int rInd = 0; rInd < App->scene->resourceList.size(); rInd++) {
+                            if (App->scene->resourceList[rInd]->assetID == goChild->GOmesh->meshData->materialAttachedID) {
 
-                        goChild->GOmat->materialData = new_material_data;
-                        goChild->GOmat->materialData->assetID = goChild->GOmesh->meshData->materialAttachedID;
+                                MaterialData* new_material_data = new MaterialData(App->scene->resourceList[rInd]->assetPath.c_str());
+                                MaterialImporter::Load(fileBuffer, new_material_data, bufferSize);
+
+                                goChild->GOmat->materialData = new_material_data;
+                                goChild->GOmat->materialData->assetID = goChild->GOmesh->meshData->materialAttachedID;
+                            }
+                        }
 
                     }
 
@@ -528,9 +539,6 @@ bool ModuleScene::LoadSceneAtPlay() {
 
         gameObjects_num = json_object_get_number(json_object(scene_settings), "gameObjects_num");
 
-        
-        //LOG("W::::::::::%i", new_winWidth);
-
 
         //Restore GameObjects
         for (int i = 0; i < gameObjects_num; i++)
@@ -644,7 +652,7 @@ bool ModuleScene::LoadSceneAtPlay() {
                             char* fileBuffer = nullptr;
                             std::string libName = std::to_string(payload_res->assetID) + ".chad";
                             uint bufferSize = App->fileSystem->FileToBuffer(libName.c_str(), &fileBuffer);
-                            MeshData* new_mesh_data = new MeshData(payload_res->assetName.c_str());
+                            MeshData* new_mesh_data = new MeshData(payload_res->assetPath.c_str());
                             new_mesh_data->assetID = payload_res->assetID;
                             MeshImporter::Load(fileBuffer, new_mesh_data);
 
@@ -699,7 +707,7 @@ bool ModuleScene::LoadSceneAtPlay() {
                         std::string libName = std::to_string(payload_res->assetID) + ".chad";
 
                         uint bufferSize = App->fileSystem->FileToBuffer(libName.c_str(), &fileBuffer);
-                        MaterialData* new_material_data = new MaterialData(payload_res->assetName.c_str());
+                        MaterialData* new_material_data = new MaterialData(payload_res->assetPath.c_str());
                         MaterialImporter::Load(fileBuffer, new_material_data, bufferSize);
 
                         go->GOmat->materialData = new_material_data;
@@ -773,6 +781,7 @@ bool ModuleScene::LoadSceneAtPlay() {
                 go->GOphys->cylRadiusHeight.y = json_object_get_number(json_object(scene_settings), goComp.c_str());
 
                 go->GOphys->CreateCollider();
+                go->GOphys->CallUpdateShape();
 
                 hasComp = false;
             }
@@ -873,6 +882,16 @@ bool ModuleScene::SaveScene() {
     float fog_end = App->editor->fog_end;
     float fog_color[] = { App->editor->fog_color[0], App->editor->fog_color[1], App->editor->fog_color[2], App->editor->fog_color[3] };
 
+    std::vector <GameObject*> saveGoList;
+
+    for (int i = 0; i < App->scene->ListGO.size(); i++) {
+        if (i > 1) {
+            saveGoList.push_back(App->scene->ListGO[i]);
+        }
+    }
+
+    int gameObjects_num = saveGoList.size();
+
     JSON_Value* schema = json_parse_string("{\"name\":\"\"}");
     JSON_Value* scene_settings = json_parse_file("scene_settings.json");
 
@@ -910,6 +929,185 @@ bool ModuleScene::SaveScene() {
         json_object_set_number(json_object(scene_settings), "fog_color_2", fog_color[2]);
         json_object_set_number(json_object(scene_settings), "fog_color_3", fog_color[3]);
 
+        json_object_set_number(json_object(scene_settings), "gameObjects_num", gameObjects_num);
+
+        for (int i = 0; i < saveGoList.size(); i++) {
+
+            std::string goName = "Gameobject [" + std::to_string(i) + "] Name";
+            json_object_set_string(json_object(scene_settings), goName.c_str(), saveGoList[i]->name.c_str());
+            std::string goUid = "Gameobject [" + std::to_string(i) + "] UID";
+            json_object_set_number(json_object(scene_settings), goUid.c_str(), saveGoList[i]->uid);
+            std::string goParent = "Gameobject [" + std::to_string(i) + "] Parent";
+            json_object_set_number(json_object(scene_settings), goParent.c_str(), saveGoList[i]->parent->uid);
+
+            std::string goComp;
+            goComp = "Gameobject [" + std::to_string(i) + "] Transform";
+            json_object_set_boolean(json_object(scene_settings), goComp.c_str(), false);
+            goComp = "Gameobject [" + std::to_string(i) + "] Mesh";
+            json_object_set_boolean(json_object(scene_settings), goComp.c_str(), false);
+            goComp = "Gameobject [" + std::to_string(i) + "] Material";
+            json_object_set_boolean(json_object(scene_settings), goComp.c_str(), false);
+            goComp = "Gameobject [" + std::to_string(i) + "] Camera";
+            json_object_set_boolean(json_object(scene_settings), goComp.c_str(), false);
+            goComp = "Gameobject [" + std::to_string(i) + "] Light";
+            json_object_set_boolean(json_object(scene_settings), goComp.c_str(), false);
+            goComp = "Gameobject [" + std::to_string(i) + "] Physics";
+            json_object_set_boolean(json_object(scene_settings), goComp.c_str(), false);
+
+            for (int j = 0; j < saveGoList[i]->components.size(); j++) {
+
+                switch (saveGoList[i]->components[j]->type) {
+                case Component::Types::TRANSFORM:
+                {
+
+                    goComp = "Gameobject [" + std::to_string(i) + "] Transform";
+                    json_object_set_boolean(json_object(scene_settings), goComp.c_str(), true);
+
+                    goComp = "Gameobject [" + std::to_string(i) + "] Transform Pos X";
+                    json_object_set_number(json_object(scene_settings), goComp.c_str(), saveGoList[i]->GOtrans->pos.x);
+                    goComp = "Gameobject [" + std::to_string(i) + "] Transform Pos Y";
+                    json_object_set_number(json_object(scene_settings), goComp.c_str(), saveGoList[i]->GOtrans->pos.y);
+                    goComp = "Gameobject [" + std::to_string(i) + "] Transform Pos Z";
+                    json_object_set_number(json_object(scene_settings), goComp.c_str(), saveGoList[i]->GOtrans->pos.z);
+
+                    goComp = "Gameobject [" + std::to_string(i) + "] Transform Rot X";
+                    json_object_set_number(json_object(scene_settings), goComp.c_str(), saveGoList[i]->GOtrans->rot.x);
+                    goComp = "Gameobject [" + std::to_string(i) + "] Transform Rot Y";
+                    json_object_set_number(json_object(scene_settings), goComp.c_str(), saveGoList[i]->GOtrans->rot.y);
+                    goComp = "Gameobject [" + std::to_string(i) + "] Transform Rot Z";
+                    json_object_set_number(json_object(scene_settings), goComp.c_str(), saveGoList[i]->GOtrans->rot.z);
+
+                    goComp = "Gameobject [" + std::to_string(i) + "] Transform Scl X";
+                    json_object_set_number(json_object(scene_settings), goComp.c_str(), saveGoList[i]->GOtrans->scl.x);
+                    goComp = "Gameobject [" + std::to_string(i) + "] Transform Scl Y";
+                    json_object_set_number(json_object(scene_settings), goComp.c_str(), saveGoList[i]->GOtrans->scl.y);
+                    goComp = "Gameobject [" + std::to_string(i) + "] Transform Scl Z";
+                    json_object_set_number(json_object(scene_settings), goComp.c_str(), saveGoList[i]->GOtrans->scl.z);
+
+                }
+                break;
+                case Component::Types::MESH:
+                {
+
+                    goComp = "Gameobject [" + std::to_string(i) + "] Mesh";
+                    json_object_set_boolean(json_object(scene_settings), goComp.c_str(), true);
+
+                    int modelCount = 0;
+                    goComp = "Gameobject [" + std::to_string(i) + "] Mesh Asset File Name";
+                    for (int k = 0; k < App->scene->resourceList.size(); k++) {
+                        if (App->scene->resourceList[k]->resourceType == Resource::Types::MODEL) {
+                            for (int l = 0; l < ((ModelData*)App->scene->resourceList[k])->meshDatas.size(); l++) {
+                                if (((ModelData*)App->scene->resourceList[k])->meshDatas[l] == saveGoList[i]->GOmesh->meshData) {
+
+                                    json_object_set_string(json_object(scene_settings), goComp.c_str(), App->scene->resourceList[k]->fileName.c_str());
+                                    modelCount++;
+
+                                }
+                            }
+                        }
+                    }
+
+                    if (modelCount == 0) {
+                        json_object_set_string(json_object(scene_settings), goComp.c_str(), saveGoList[i]->GOmesh->meshData->fileName.c_str());
+                    }
+                   
+
+                    goComp = "Gameobject [" + std::to_string(i) + "] Mesh Index In Model";
+                    json_object_set_number(json_object(scene_settings), goComp.c_str(), saveGoList[i]->GOmesh->meshData->indexInModel);
+
+
+                    /*for (int n = 0; n < App->scene->resourceList.size(); n++)
+                    {
+                        if (App->scene->resourceList[n]->assetID == saveGoList[i]->GOmesh->meshData->assetID) {
+
+                        }
+                    }*/
+                    // goComp = "Gameobject [" + std::to_string(i) + "] Mesh UID";
+                     /*for (int k = 0; k < App->scene->resourceList.size(); k++) {
+                         if (App->scene->resourceList[k]->assetID == saveGoList[i]->GOmesh->meshData->assetID) {
+                             App->scene->LoadSpecific(App->scene->resourceList[k]->assetID);
+                         }
+
+                     }*/
+                     // json_object_set_number(json_object(scene_settings), goComp.c_str(), saveGoList[i]->GOmesh->meshData->assetID);
+
+                     // goComp = "Gameobject [" + std::to_string(i) + "] Mesh Asset Name";
+                     // json_object_set_string(json_object(scene_settings), goComp.c_str(), saveGoList[i]->GOmesh->meshData->assetName.c_str());
+
+                }
+                break;
+                case Component::Types::MATERIAL:
+                {
+                    if (saveGoList[i]->GOmat->materialData != nullptr) {
+                        goComp = "Gameobject [" + std::to_string(i) + "] Material";
+                        json_object_set_boolean(json_object(scene_settings), goComp.c_str(), true);
+
+                        goComp = "Gameobject [" + std::to_string(i) + "] Material Asset File Name";
+                        json_object_set_string(json_object(scene_settings), goComp.c_str(), saveGoList[i]->GOmat->materialData->fileName.c_str());
+
+                    }
+                }
+                break;
+                case Component::Types::CAMERA:
+                {
+                    goComp = "Gameobject [" + std::to_string(i) + "] Camera";
+                    json_object_set_boolean(json_object(scene_settings), goComp.c_str(), true);
+                }
+                break;
+                case Component::Types::LIGHT:
+                {
+                    goComp = "Gameobject [" + std::to_string(i) + "] Light";
+                    json_object_set_boolean(json_object(scene_settings), goComp.c_str(), true);
+                }
+                break;
+                case Component::Types::PHYSICS:
+                {
+                    goComp = "Gameobject [" + std::to_string(i) + "] Physics";
+                    json_object_set_boolean(json_object(scene_settings), goComp.c_str(), true);
+
+                    goComp = "Gameobject [" + std::to_string(i) + "] Physics Shape Selected";
+                    json_object_set_number(json_object(scene_settings), goComp.c_str(), (int)saveGoList[i]->GOphys->shapeSelected);
+
+                    goComp = "Gameobject [" + std::to_string(i) + "] Physics Is Static";
+                    json_object_set_boolean(json_object(scene_settings), goComp.c_str(), saveGoList[i]->GOphys->isStatic);
+
+                    goComp = "Gameobject [" + std::to_string(i) + "] Physics Col Pos X";
+                    json_object_set_number(json_object(scene_settings), goComp.c_str(), saveGoList[i]->GOphys->colPos.x);
+                    goComp = "Gameobject [" + std::to_string(i) + "] Physics Col Pos Y";
+                    json_object_set_number(json_object(scene_settings), goComp.c_str(), saveGoList[i]->GOphys->colPos.y);
+                    goComp = "Gameobject [" + std::to_string(i) + "] Physics Col Pos Z";
+                    json_object_set_number(json_object(scene_settings), goComp.c_str(), saveGoList[i]->GOphys->colPos.z);
+
+                    goComp = "Gameobject [" + std::to_string(i) + "] Physics Col Rot X";
+                    json_object_set_number(json_object(scene_settings), goComp.c_str(), saveGoList[i]->GOphys->colRot.x);
+                    goComp = "Gameobject [" + std::to_string(i) + "] Physics Col Rot Y";
+                    json_object_set_number(json_object(scene_settings), goComp.c_str(), saveGoList[i]->GOphys->colRot.y);
+                    goComp = "Gameobject [" + std::to_string(i) + "] Physics Col Rot Z";
+                    json_object_set_number(json_object(scene_settings), goComp.c_str(), saveGoList[i]->GOphys->colRot.z);
+
+                    goComp = "Gameobject [" + std::to_string(i) + "] Physics Col Scl X";
+                    json_object_set_number(json_object(scene_settings), goComp.c_str(), saveGoList[i]->GOphys->colScl.x);
+                    goComp = "Gameobject [" + std::to_string(i) + "] Physics Col Scl Y";
+                    json_object_set_number(json_object(scene_settings), goComp.c_str(), saveGoList[i]->GOphys->colScl.y);
+                    goComp = "Gameobject [" + std::to_string(i) + "] Physics Col Scl Z";
+                    json_object_set_number(json_object(scene_settings), goComp.c_str(), saveGoList[i]->GOphys->colScl.z);
+
+                    goComp = "Gameobject [" + std::to_string(i) + "] Physics Sphere Radius";
+                    json_object_set_number(json_object(scene_settings), goComp.c_str(), saveGoList[i]->GOphys->sphereRadius);
+
+                    goComp = "Gameobject [" + std::to_string(i) + "] Physics Cyl Radius";
+                    json_object_set_number(json_object(scene_settings), goComp.c_str(), saveGoList[i]->GOphys->cylRadiusHeight.x);
+                    goComp = "Gameobject [" + std::to_string(i) + "] Physics Cyl Height";
+                    json_object_set_number(json_object(scene_settings), goComp.c_str(), saveGoList[i]->GOphys->cylRadiusHeight.y);
+
+                }
+                break;
+
+                };
+
+            }
+
+        }
 
         json_serialize_to_file(scene_settings, "Settings/scene_settings.json");
     }
@@ -954,6 +1152,10 @@ bool ModuleScene::LoadScene() {
     float fog_end = false;
     float fog_color[] = { 0,0,0,0 };
 
+    int gameObjects_num = 0;
+    std::vector <GameObject*> saveGoList;
+
+    float3 parentPos;
 
     if (scene_settings == NULL || json_validate(schema, scene_settings) != JSONSuccess) {
         //scene_settings = json_value_init_object();
@@ -989,7 +1191,257 @@ bool ModuleScene::LoadScene() {
         fog_color[1] = json_object_get_number(json_object(scene_settings), "fog_color_1");
         fog_color[2] = json_object_get_number(json_object(scene_settings), "fog_color_2");
         fog_color[3] = json_object_get_number(json_object(scene_settings), "fog_color_3");
-        //LOG("W::::::::::%i", new_winWidth);
+        
+        gameObjects_num = json_object_get_number(json_object(scene_settings), "gameObjects_num");
+
+
+        //Restore GameObjects
+        for (int i = 0; i < gameObjects_num; i++)
+        {
+            std::string nameField = "Gameobject [" + std::to_string(i) + "] Name";
+            const char* goName = json_object_get_string(json_object(scene_settings), nameField.c_str());
+
+            GameObject* go = App->scene->CreateGO(goName, App->scene->ListGO[0]);
+
+            std::string uidField = "Gameobject [" + std::to_string(i) + "] UID";
+            int goUid = json_object_get_number(json_object(scene_settings), uidField.c_str());
+
+            go->uid = goUid;
+
+            saveGoList.push_back(go);
+
+        }
+
+        //Set parents
+        for (int i = 0; i < saveGoList.size(); i++)
+        {
+            std::string parentField = "Gameobject [" + std::to_string(i) + "] Parent";
+            int goParent = json_object_get_number(json_object(scene_settings), parentField.c_str());
+
+            if (goParent != 0) {
+
+                for (int j = 0; j < saveGoList.size(); j++)
+                {
+                    if (saveGoList[j]->uid == goParent)
+                    {
+                        saveGoList[j]->children.push_back(saveGoList[i]);
+                        saveGoList[i]->parent = saveGoList[j];
+                    }
+                }
+            }
+        }
+
+        for (int i = 0; i < saveGoList.size(); i++)
+        {
+
+            GameObject* go = saveGoList[i];
+
+            std::string goComp;
+            bool hasComp = false;
+
+            goComp = "Gameobject [" + std::to_string(i) + "] Transform";
+            hasComp = json_object_get_boolean(json_object(scene_settings), goComp.c_str());
+            if (hasComp == true) {
+
+                float3 goPos;
+                float3 goRot;
+                float3 goScl;
+
+                goComp = "Gameobject [" + std::to_string(i) + "] Transform Pos X";
+                goPos[0] = json_object_get_number(json_object(scene_settings), goComp.c_str());
+                goComp = "Gameobject [" + std::to_string(i) + "] Transform Pos Y";
+                goPos[1] = json_object_get_number(json_object(scene_settings), goComp.c_str());
+                goComp = "Gameobject [" + std::to_string(i) + "] Transform Pos Z";
+                goPos[2] = json_object_get_number(json_object(scene_settings), goComp.c_str());
+
+                goComp = "Gameobject [" + std::to_string(i) + "] Transform Rot X";
+                goRot[0] = json_object_get_number(json_object(scene_settings), goComp.c_str());
+                goComp = "Gameobject [" + std::to_string(i) + "] Transform Rot Y";
+                goRot[1] = json_object_get_number(json_object(scene_settings), goComp.c_str());
+                goComp = "Gameobject [" + std::to_string(i) + "] Transform Rot Z";
+                goRot[2] = json_object_get_number(json_object(scene_settings), goComp.c_str());
+
+                goComp = "Gameobject [" + std::to_string(i) + "] Transform Scl X";
+                goScl[0] = json_object_get_number(json_object(scene_settings), goComp.c_str());
+                goComp = "Gameobject [" + std::to_string(i) + "] Transform Scl Y";
+                goScl[1] = json_object_get_number(json_object(scene_settings), goComp.c_str());
+                goComp = "Gameobject [" + std::to_string(i) + "] Transform Scl Z";
+                goScl[2] = json_object_get_number(json_object(scene_settings), goComp.c_str());
+
+                //goComp = "Gameobject [" + std::to_string(i) + "] Parent";
+                //uint parentID = json_object_get_number(json_object(scene_settings), goComp.c_str());
+
+
+                //if (parentID == 0) {
+                go->GOtrans->SetPos(goPos);
+                //parentPos = goPos;
+                go->GOtrans->SetRot(goRot);
+                go->GOtrans->SetScale(goScl);
+                // }
+
+
+
+
+                hasComp = false;
+            }
+
+            goComp = "Gameobject [" + std::to_string(i) + "] Mesh";
+            hasComp = json_object_get_boolean(json_object(scene_settings), goComp.c_str());
+            if (hasComp == true) {
+
+                goComp = "Gameobject [" + std::to_string(i) + "] Mesh Asset File Name";
+                std::string assetFileName = json_object_get_string(json_object(scene_settings), goComp.c_str());
+
+
+                for (int j = 0; j < App->scene->resourceList.size(); j++)
+                {
+                    if (App->scene->resourceList[j]->fileName == assetFileName) {
+                        Resource* payload_res = App->scene->resourceList[j];
+
+                        ModelData* payload_model = (ModelData*)payload_res;
+
+                        if (payload_model->meshDatas.size() == 1) {
+
+                            go->CreateComp(Component::Types::MESH);
+
+                            char* fileBuffer = nullptr;
+                            std::string libName = std::to_string(payload_res->assetID) + ".chad";
+                            uint bufferSize = App->fileSystem->FileToBuffer(libName.c_str(), &fileBuffer);
+                            MeshData* new_mesh_data = new MeshData(payload_res->assetPath.c_str());
+                            new_mesh_data->assetID = payload_res->assetID;
+                            MeshImporter::Load(fileBuffer, new_mesh_data);
+
+                            go->GOmesh->meshData = new_mesh_data;
+                            go->GOmesh->meshData->LoadBuffers();
+
+                            go->CreateComp(Component::Types::MATERIAL);
+                        }
+                        else {
+
+                            goComp = "Gameobject [" + std::to_string(i) + "] Mesh Index In Model";
+                            int indexInModel = json_object_get_number(json_object(scene_settings), goComp.c_str());
+
+
+                            char* fileBufferMesh = nullptr;
+                            std::string libName = std::to_string(payload_res->assetID) + ".chad";
+                            uint bufferSize = App->fileSystem->FileToBuffer(libName.c_str(), &fileBufferMesh);
+
+                            ModelImporter::Load(fileBufferMesh, payload_model);
+
+                            go->CreateComp(Component::Types::MESH);
+                            go->GOmesh->meshData = payload_model->meshDatas[indexInModel];
+                            go->GOmesh->meshData->LoadBuffers();
+                            go->GOmesh->meshData->assetID = payload_res->assetID;
+                            go->GOmesh->meshData->indexInModel = indexInModel;
+
+                            go->CreateComp(Component::Types::MATERIAL);
+
+                        }
+                    }
+                }
+                // goComp = "Gameobject [" + std::to_string(i) + "] Mesh UID";
+                // int assetID = json_object_get_number(json_object(scene_settings), goComp.c_str());
+
+            }
+
+            goComp = "Gameobject [" + std::to_string(i) + "] Material";
+            hasComp = json_object_get_boolean(json_object(scene_settings), goComp.c_str());
+            if (hasComp == true) {
+
+                goComp = "Gameobject [" + std::to_string(i) + "] Material Asset File Name";
+                std::string assetFileName = json_object_get_string(json_object(scene_settings), goComp.c_str());
+
+                for (int j = 0; j < App->scene->resourceList.size(); j++)
+                {
+                    if (App->scene->resourceList[j]->fileName == assetFileName) {
+                        Resource* payload_res = App->scene->resourceList[j];
+
+                        go->CreateComp(Component::Types::MATERIAL);
+
+                        char* fileBuffer = nullptr;
+                        std::string libName = std::to_string(payload_res->assetID) + ".chad";
+
+                        uint bufferSize = App->fileSystem->FileToBuffer(libName.c_str(), &fileBuffer);
+                        MaterialData* new_material_data = new MaterialData(payload_res->assetPath.c_str());
+                        MaterialImporter::Load(fileBuffer, new_material_data, bufferSize);
+
+                        go->GOmat->materialData = new_material_data;
+                        go->GOmat->materialData->assetID = App->scene->resourceList[j]->assetID;
+                    }
+                }
+
+                hasComp = false;
+            }
+
+            goComp = "Gameobject [" + std::to_string(i) + "] Camera";
+            hasComp = json_object_get_boolean(json_object(scene_settings), goComp.c_str());
+            if (hasComp == true) {
+                hasComp = false;
+            }
+
+            goComp = "Gameobject [" + std::to_string(i) + "] Light";
+            hasComp = json_object_get_boolean(json_object(scene_settings), goComp.c_str());
+            if (hasComp == true) {
+                hasComp = false;
+            }
+
+            goComp = "Gameobject [" + std::to_string(i) + "] Physics";
+            hasComp = json_object_get_boolean(json_object(scene_settings), goComp.c_str());
+            if (hasComp == true) {
+
+                go->CreateComp(Component::Types::PHYSICS);
+                go->GOphys->phys = App->physics;
+
+                goComp = "Gameobject [" + std::to_string(i) + "] Physics Shape Selected";
+                go->GOphys->shapeSelected = (CPhysics::ColliderShape)json_object_get_number(json_object(scene_settings), goComp.c_str());
+
+                goComp = "Gameobject [" + std::to_string(i) + "] Physics Is Static";
+                go->GOphys->isStatic = json_object_get_boolean(json_object(scene_settings), goComp.c_str());
+
+                float3 newColPos;
+                float3 newColRot;
+                float3 newColScl;
+
+                goComp = "Gameobject [" + std::to_string(i) + "] Physics Col Pos X";
+                newColPos.x = json_object_get_number(json_object(scene_settings), goComp.c_str());
+                goComp = "Gameobject [" + std::to_string(i) + "] Physics Col Pos Y";
+                newColPos.y = json_object_get_number(json_object(scene_settings), goComp.c_str());
+                goComp = "Gameobject [" + std::to_string(i) + "] Physics Col Pos Z";
+                newColPos.z = json_object_get_number(json_object(scene_settings), goComp.c_str());
+
+                goComp = "Gameobject [" + std::to_string(i) + "] Physics Col Rot X";
+                newColRot.x = json_object_get_number(json_object(scene_settings), goComp.c_str());
+                goComp = "Gameobject [" + std::to_string(i) + "] Physics Col Rot Y";
+                newColRot.y = json_object_get_number(json_object(scene_settings), goComp.c_str());
+                goComp = "Gameobject [" + std::to_string(i) + "] Physics Col Rot Z";
+                newColRot.z = json_object_get_number(json_object(scene_settings), goComp.c_str());
+
+                goComp = "Gameobject [" + std::to_string(i) + "] Physics Col Scl X";
+                newColScl.x = json_object_get_number(json_object(scene_settings), goComp.c_str());
+                goComp = "Gameobject [" + std::to_string(i) + "] Physics Col Scl Y";
+                newColScl.y = json_object_get_number(json_object(scene_settings), goComp.c_str());
+                goComp = "Gameobject [" + std::to_string(i) + "] Physics Col Scl Z";
+                newColScl.z = json_object_get_number(json_object(scene_settings), goComp.c_str());
+
+                go->GOphys->colPos = { newColPos.x, newColPos.y, newColPos.z };
+                go->GOphys->colRot = { newColRot.x, newColRot.y, newColRot.z };
+                go->GOphys->colScl = { newColScl.x, newColScl.y, newColScl.z };
+
+                goComp = "Gameobject [" + std::to_string(i) + "] Physics Sphere Radius";
+                go->GOphys->sphereRadius = json_object_get_number(json_object(scene_settings), goComp.c_str());
+
+                goComp = "Gameobject [" + std::to_string(i) + "] Physics Cyl Radius";
+                go->GOphys->cylRadiusHeight.x = json_object_get_number(json_object(scene_settings), goComp.c_str());
+                goComp = "Gameobject [" + std::to_string(i) + "] Physics Cyl Height";
+                go->GOphys->cylRadiusHeight.y = json_object_get_number(json_object(scene_settings), goComp.c_str());
+
+                go->GOphys->CreateCollider();
+                go->GOphys->CallUpdateShape();
+
+                hasComp = false;
+            }
+        }
+
     }
     
     //App->editor->clear_color = new_backgroundColor;

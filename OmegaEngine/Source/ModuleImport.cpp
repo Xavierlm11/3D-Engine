@@ -223,13 +223,16 @@ update_status ModuleImport::Update(float dt) {
 
 
 		for (int i = 0; i < App->scene->resourceList.size(); i++) {
-			if (App->scene->resourceList[i]->assetName == "street2") {
-				App->scene->LoadSpecific(App->scene->resourceList[i]->assetID);
-			}
+			//if (App->scene->resourceList[i]->assetName == "street2") {
+				//App->scene->LoadSpecific(App->scene->resourceList[i]->assetID);
+			//}
 			
 		}
+
+		App->scene->LoadScene();
 	}
 
+	
 	
 
 	return update_status::UPDATE_CONTINUE;
@@ -249,7 +252,7 @@ void ModuleImport::ImportAsset(const char* filePath) {
 
 	LOG("PATH: %s", finalAssetPath.c_str());
 
-	if (extension_s == "png" || extension_s == "PNG" || extension_s == "JPG" || extension_s == "png"|| extension_s == "DDS"|| extension_s == "dds")
+	if (extension_s == "png" || extension_s == "PNG" || extension_s == "JPG" || extension_s == "png")
 	{
 		MaterialData* new_material_data = (MaterialData*)App->imp->LoadFile(filePath, Resource::Types::MATERIAL);
 		App->fileSystem->ImportFileToDir(dropped_filedir_s.c_str(), assetsPath_s.c_str());
@@ -375,7 +378,7 @@ void ModuleImport::GetMaterialsID(const char* path, ModelData* model) {
 										for (unsigned int m = 0; m < model->meshDatas.size(); m++) {
 
 											//Find the mesh in model meshes list
-											if (model->meshDatas[m]->assetName == scene->mMeshes[j]->mName.C_Str())
+											if (model->meshDatas[m]->fileName == scene->mMeshes[j]->mName.C_Str())
 											{
 												//Now we need to find the game object of the mesh data and assign it the texture
 												model->meshDatas[m]->materialAttachedID = App->scene->resourceList[l]->assetID;

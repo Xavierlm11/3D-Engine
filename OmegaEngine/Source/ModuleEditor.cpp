@@ -821,7 +821,7 @@ void ModuleEditor::DrawSceneViewport()
 							char* fileBuffer = nullptr;
 							std::string libName = std::to_string(payload_res->assetID) + ".chad";
 							uint bufferSize = App->fileSystem->FileToBuffer(libName.c_str(), &fileBuffer);
-							MeshData* new_mesh_data = new MeshData(payload_res->assetName.c_str());
+							MeshData* new_mesh_data = new MeshData(payload_res->assetPath.c_str());
 							new_mesh_data->assetID = payload_res->assetID;
 							MeshImporter::Load(fileBuffer, new_mesh_data);
 
@@ -835,11 +835,21 @@ void ModuleEditor::DrawSceneViewport()
 								std::string libName = std::to_string(payload_model->meshDatas[0]->materialAttachedID) + ".chad";
 
 								uint bufferSize = App->fileSystem->FileToBuffer(libName.c_str(), &fileBuffer);
-								MaterialData* new_material_data = new MaterialData(payload_res->assetName.c_str());
-								MaterialImporter::Load(fileBuffer, new_material_data, bufferSize);
 
-								go->GOmat->materialData = new_material_data;
-								go->GOmat->materialData->assetID = payload_model->meshDatas[0]->materialAttachedID;
+
+							
+								for (int rInd = 0; rInd < App->scene->resourceList.size(); rInd++) {
+									if (App->scene->resourceList[rInd]->assetID == payload_model->meshDatas[0]->materialAttachedID) {
+
+										MaterialData* new_material_data = new MaterialData(App->scene->resourceList[rInd]->assetPath.c_str());
+										MaterialImporter::Load(fileBuffer, new_material_data, bufferSize);
+
+										go->GOmat->materialData = new_material_data;
+										go->GOmat->materialData->assetID = payload_model->meshDatas[0]->materialAttachedID;
+									}
+								}
+
+								
 							}
 
 
@@ -874,11 +884,21 @@ void ModuleEditor::DrawSceneViewport()
 									std::string libNameMat = std::to_string(goChild->GOmesh->meshData->materialAttachedID) + ".chad";
 
 									uint bufferSizeMat = App->fileSystem->FileToBuffer(libNameMat.c_str(), &fileBufferMat);
-									MaterialData* new_material_data = new MaterialData(payload_res->assetName.c_str());
-									MaterialImporter::Load(fileBufferMat, new_material_data, bufferSizeMat);
+									for (int rInd = 0; rInd < App->scene->resourceList.size(); rInd++) {
+										if (App->scene->resourceList[rInd]->assetID == goChild->GOmesh->meshData->materialAttachedID) {
 
-									goChild->GOmat->materialData = new_material_data;
-									goChild->GOmat->materialData->assetID = goChild->GOmesh->meshData->materialAttachedID;
+											MaterialData* new_material_data = new MaterialData(App->scene->resourceList[rInd]->assetPath.c_str());
+											MaterialImporter::Load(fileBufferMat, new_material_data, bufferSizeMat);
+
+											goChild->GOmat->materialData = new_material_data;
+											goChild->GOmat->materialData->assetID = goChild->GOmesh->meshData->materialAttachedID;
+										}
+									}
+									//MaterialData* new_material_data = new MaterialData(payload_res->assetPath.c_str());
+									//MaterialImporter::Load(fileBufferMat, new_material_data, bufferSizeMat);
+
+									//goChild->GOmat->materialData = new_material_data;
+									//goChild->GOmat->materialData->assetID = goChild->GOmesh->meshData->materialAttachedID;
 
 								}
 							}
@@ -931,7 +951,8 @@ void ModuleEditor::BarFile() {
 		}
 		if (ImGui::MenuItem("Load"))
 		{
-
+			DeleteGo();
+			
 			App->scene->LoadScene();
 		}
 		if (ImGui::MenuItem("Close"))
@@ -991,7 +1012,7 @@ void ModuleEditor::LoadShape(const char* resName) {
 
 
 		if (res->meshDatas.size() == 1) {
-			LOG("Dropped %s in scene", res->assetName.c_str());
+			
 			GameObject* go = App->scene->CreateGO(res->assetName.c_str(), gameObjectsShowing[0]);
 
 
@@ -1000,7 +1021,7 @@ void ModuleEditor::LoadShape(const char* resName) {
 			char* fileBuffer = nullptr;
 			std::string libName = std::to_string(res->assetID) + ".chad";
 			uint bufferSize = App->fileSystem->FileToBuffer(libName.c_str(), &fileBuffer);
-			MeshData* new_mesh_data = new MeshData(res->assetName.c_str());
+			MeshData* new_mesh_data = new MeshData(res->assetPath.c_str());
 			new_mesh_data->assetID = res->assetID;
 			MeshImporter::Load(fileBuffer, new_mesh_data);
 
@@ -1014,11 +1035,16 @@ void ModuleEditor::LoadShape(const char* resName) {
 				std::string libName = std::to_string(res->meshDatas[0]->materialAttachedID) + ".chad";
 
 				uint bufferSize = App->fileSystem->FileToBuffer(libName.c_str(), &fileBuffer);
-				MaterialData* new_material_data = new MaterialData(res->assetName.c_str());
-				MaterialImporter::Load(fileBuffer, new_material_data, bufferSize);
+				for (int rInd = 0; rInd < App->scene->resourceList.size(); rInd++) {
+					if (App->scene->resourceList[rInd]->assetID == res->meshDatas[0]->materialAttachedID) {
 
-				go->GOmat->materialData = new_material_data;
-				go->GOmat->materialData->assetID = res->meshDatas[0]->materialAttachedID;
+						MaterialData* new_material_data = new MaterialData(App->scene->resourceList[rInd]->assetPath.c_str());
+						MaterialImporter::Load(fileBuffer, new_material_data, bufferSize);
+
+						go->GOmat->materialData = new_material_data;
+						go->GOmat->materialData->assetID = res->meshDatas[0]->materialAttachedID;
+					}
+				}
 			}
 
 
@@ -1053,11 +1079,16 @@ void ModuleEditor::LoadShape(const char* resName) {
 					std::string libNameMat = std::to_string(goChild->GOmesh->meshData->materialAttachedID) + ".chad";
 
 					uint bufferSizeMat = App->fileSystem->FileToBuffer(libNameMat.c_str(), &fileBufferMat);
-					MaterialData* new_material_data = new MaterialData(res->assetName.c_str());
-					MaterialImporter::Load(fileBufferMat, new_material_data, bufferSizeMat);
+					for (int rInd = 0; rInd < App->scene->resourceList.size(); rInd++) {
+						if (App->scene->resourceList[rInd]->assetID == goChild->GOmesh->meshData->materialAttachedID) {
 
-					goChild->GOmat->materialData = new_material_data;
-					goChild->GOmat->materialData->assetID = goChild->GOmesh->meshData->materialAttachedID;
+							MaterialData* new_material_data = new MaterialData(App->scene->resourceList[rInd]->assetPath.c_str());
+							MaterialImporter::Load(fileBufferMat, new_material_data, bufferSizeMat);
+
+							goChild->GOmat->materialData = new_material_data;
+							goChild->GOmat->materialData->assetID = goChild->GOmesh->meshData->materialAttachedID;
+						}
+					}
 
 				}
 			}
@@ -1467,7 +1498,7 @@ void ModuleEditor::GOList()
 									char* fileBuffer = nullptr;
 									std::string libName = std::to_string(payload_res->assetID) + ".chad";
 									uint bufferSize = App->fileSystem->FileToBuffer(libName.c_str(), &fileBuffer);
-									MeshData* new_mesh_data = new MeshData(payload_res->assetName.c_str());
+									MeshData* new_mesh_data = new MeshData(payload_res->assetPath.c_str());
 									new_mesh_data->assetID = payload_res->assetID;
 									MeshImporter::Load(fileBuffer, new_mesh_data);
 
@@ -1481,11 +1512,21 @@ void ModuleEditor::GOList()
 										std::string libName = std::to_string(payload_model->meshDatas[0]->materialAttachedID) + ".chad";
 
 										uint bufferSize = App->fileSystem->FileToBuffer(libName.c_str(), &fileBuffer);
-										MaterialData* new_material_data = new MaterialData(payload_res->assetName.c_str());
-										MaterialImporter::Load(fileBuffer, new_material_data, bufferSize);
+										for (int rInd = 0; rInd < App->scene->resourceList.size(); rInd++) {
+											if (App->scene->resourceList[rInd]->assetID == payload_model->meshDatas[0]->materialAttachedID) {
 
-										go->GOmat->materialData = new_material_data;
-										go->GOmat->materialData->assetID = payload_model->meshDatas[0]->materialAttachedID;
+												MaterialData* new_material_data = new MaterialData(App->scene->resourceList[rInd]->assetPath.c_str());
+												MaterialImporter::Load(fileBuffer, new_material_data, bufferSize);
+
+												go->GOmat->materialData = new_material_data;
+												go->GOmat->materialData->assetID = payload_model->meshDatas[0]->materialAttachedID;
+											}
+										}
+										//MaterialData* new_material_data = new MaterialData(payload_res->assetPath.c_str());
+										//MaterialImporter::Load(fileBuffer, new_material_data, bufferSize);
+
+										//go->GOmat->materialData = new_material_data;
+										//go->GOmat->materialData->assetID = payload_model->meshDatas[0]->materialAttachedID;
 									}
 
 
@@ -1520,11 +1561,21 @@ void ModuleEditor::GOList()
 											std::string libNameMat = std::to_string(goChild->GOmesh->meshData->materialAttachedID) + ".chad";
 
 											uint bufferSizeMat = App->fileSystem->FileToBuffer(libNameMat.c_str(), &fileBufferMat);
-											MaterialData* new_material_data = new MaterialData(payload_res->assetName.c_str());
-											MaterialImporter::Load(fileBufferMat, new_material_data, bufferSizeMat);
+											for (int rInd = 0; rInd < App->scene->resourceList.size(); rInd++) {
+												if (App->scene->resourceList[rInd]->assetID == goChild->GOmesh->meshData->materialAttachedID) {
 
-											goChild->GOmat->materialData = new_material_data;
-											goChild->GOmat->materialData->assetID = goChild->GOmesh->meshData->materialAttachedID;
+													MaterialData* new_material_data = new MaterialData(App->scene->resourceList[rInd]->assetPath.c_str());
+													MaterialImporter::Load(fileBufferMat, new_material_data, bufferSizeMat);
+
+													goChild->GOmat->materialData = new_material_data;
+													goChild->GOmat->materialData->assetID = goChild->GOmesh->meshData->materialAttachedID;
+												}
+											}
+											//MaterialData* new_material_data = new MaterialData(payload_res->assetPath.c_str());
+											//MaterialImporter::Load(fileBufferMat, new_material_data, bufferSizeMat);
+
+											//goChild->GOmat->materialData = new_material_data;
+											//goChild->GOmat->materialData->assetID = goChild->GOmesh->meshData->materialAttachedID;
 
 										}
 									}
@@ -1606,7 +1657,7 @@ void ModuleEditor::GOList()
 										char* fileBuffer = nullptr;
 										std::string libName = std::to_string(payload_res->assetID) + ".chad";
 										uint bufferSize = App->fileSystem->FileToBuffer(libName.c_str(), &fileBuffer);
-										MeshData* new_mesh_data = new MeshData(payload_res->assetName.c_str());
+										MeshData* new_mesh_data = new MeshData(payload_res->assetPath.c_str());
 										new_mesh_data->assetID = payload_res->assetID;
 										MeshImporter::Load(fileBuffer, new_mesh_data);
 
@@ -1620,11 +1671,16 @@ void ModuleEditor::GOList()
 											std::string libName = std::to_string(payload_model->meshDatas[0]->materialAttachedID) + ".chad";
 
 											uint bufferSize = App->fileSystem->FileToBuffer(libName.c_str(), &fileBuffer);
-											MaterialData* new_material_data = new MaterialData(payload_res->assetName.c_str());
-											MaterialImporter::Load(fileBuffer, new_material_data, bufferSize);
+											for (int rInd = 0; rInd < App->scene->resourceList.size(); rInd++) {
+												if (App->scene->resourceList[rInd]->assetID == payload_model->meshDatas[0]->materialAttachedID) {
 
-											go->GOmat->materialData = new_material_data;
-											go->GOmat->materialData->assetID = payload_model->meshDatas[0]->materialAttachedID;
+													MaterialData* new_material_data = new MaterialData(App->scene->resourceList[rInd]->assetPath.c_str());
+													MaterialImporter::Load(fileBuffer, new_material_data, bufferSize);
+
+													go->GOmat->materialData = new_material_data;
+													go->GOmat->materialData->assetID = payload_model->meshDatas[0]->materialAttachedID;
+												}
+											}
 										}
 
 
@@ -1659,11 +1715,16 @@ void ModuleEditor::GOList()
 												std::string libNameMat = std::to_string(goChild->GOmesh->meshData->materialAttachedID) + ".chad";
 
 												uint bufferSizeMat = App->fileSystem->FileToBuffer(libNameMat.c_str(), &fileBufferMat);
-												MaterialData* new_material_data = new MaterialData(payload_res->assetName.c_str());
-												MaterialImporter::Load(fileBufferMat, new_material_data, bufferSizeMat);
+												for (int rInd = 0; rInd < App->scene->resourceList.size(); rInd++) {
+													if (App->scene->resourceList[rInd]->assetID == goChild->GOmesh->meshData->materialAttachedID) {
 
-												goChild->GOmat->materialData = new_material_data;
-												goChild->GOmat->materialData->assetID = goChild->GOmesh->meshData->materialAttachedID;
+														MaterialData* new_material_data = new MaterialData(App->scene->resourceList[rInd]->assetPath.c_str());
+														MaterialImporter::Load(fileBufferMat, new_material_data, bufferSizeMat);
+
+														goChild->GOmat->materialData = new_material_data;
+														goChild->GOmat->materialData->assetID = goChild->GOmesh->meshData->materialAttachedID;
+													}
+												}
 
 											}
 										}
@@ -1681,7 +1742,7 @@ void ModuleEditor::GOList()
 								std::string libName = std::to_string(payload_res->assetID) + ".chad";
 
 								uint bufferSize = App->fileSystem->FileToBuffer(libName.c_str(), &fileBuffer);
-								MaterialData* new_material_data = new MaterialData(payload_res->assetName.c_str());
+								MaterialData* new_material_data = new MaterialData(payload_res->assetPath.c_str());
 								MaterialImporter::Load(fileBuffer, new_material_data, bufferSize);
 
 								gameObjectsShowing[i]->GOmat->materialData = new_material_data;
@@ -1762,7 +1823,7 @@ void ModuleEditor::GOList()
 															char* fileBuffer = nullptr;
 															std::string libName = std::to_string(payload_res->assetID) + ".chad";
 															uint bufferSize = App->fileSystem->FileToBuffer(libName.c_str(), &fileBuffer);
-															MeshData* new_mesh_data = new MeshData(payload_res->assetName.c_str());
+															MeshData* new_mesh_data = new MeshData(payload_res->assetPath.c_str());
 															new_mesh_data->assetID = payload_res->assetID;
 															MeshImporter::Load(fileBuffer, new_mesh_data);
 
@@ -1776,11 +1837,16 @@ void ModuleEditor::GOList()
 																std::string libName = std::to_string(payload_model->meshDatas[0]->materialAttachedID) + ".chad";
 
 																uint bufferSize = App->fileSystem->FileToBuffer(libName.c_str(), &fileBuffer);
-																MaterialData* new_material_data = new MaterialData(payload_res->assetName.c_str());
-																MaterialImporter::Load(fileBuffer, new_material_data, bufferSize);
+																for (int rInd = 0; rInd < App->scene->resourceList.size(); rInd++) {
+																	if (App->scene->resourceList[rInd]->assetID == payload_model->meshDatas[0]->materialAttachedID) {
 
-																go->GOmat->materialData = new_material_data;
-																go->GOmat->materialData->assetID = payload_model->meshDatas[0]->materialAttachedID;
+																		MaterialData* new_material_data = new MaterialData(App->scene->resourceList[rInd]->assetPath.c_str());
+																		MaterialImporter::Load(fileBuffer, new_material_data, bufferSize);
+
+																		go->GOmat->materialData = new_material_data;
+																		go->GOmat->materialData->assetID = payload_model->meshDatas[0]->materialAttachedID;
+																	}
+																}
 															}
 
 
@@ -1815,11 +1881,16 @@ void ModuleEditor::GOList()
 																	std::string libNameMat = std::to_string(goChild->GOmesh->meshData->materialAttachedID) + ".chad";
 
 																	uint bufferSizeMat = App->fileSystem->FileToBuffer(libNameMat.c_str(), &fileBufferMat);
-																	MaterialData* new_material_data = new MaterialData(payload_res->assetName.c_str());
-																	MaterialImporter::Load(fileBufferMat, new_material_data, bufferSizeMat);
+																	for (int rInd = 0; rInd < App->scene->resourceList.size(); rInd++) {
+																		if (App->scene->resourceList[rInd]->assetID == goChild->GOmesh->meshData->materialAttachedID) {
 
-																	goChild->GOmat->materialData = new_material_data;
-																	goChild->GOmat->materialData->assetID = goChild->GOmesh->meshData->materialAttachedID;
+																			MaterialData* new_material_data = new MaterialData(App->scene->resourceList[rInd]->assetPath.c_str());
+																			MaterialImporter::Load(fileBufferMat, new_material_data, bufferSizeMat);
+
+																			goChild->GOmat->materialData = new_material_data;
+																			goChild->GOmat->materialData->assetID = goChild->GOmesh->meshData->materialAttachedID;
+																		}
+																	}
 
 																}
 															}
@@ -1838,7 +1909,7 @@ void ModuleEditor::GOList()
 													std::string libName = std::to_string(payload_res->assetID) + ".chad";
 
 													uint bufferSize = App->fileSystem->FileToBuffer(libName.c_str(), &fileBuffer);
-													MaterialData* new_material_data = new MaterialData(payload_res->assetName.c_str());
+													MaterialData* new_material_data = new MaterialData(payload_res->assetPath.c_str());
 													MaterialImporter::Load(fileBuffer, new_material_data, bufferSize);
 
 													gameObjectsShowing[k]->GOmat->materialData = new_material_data;
@@ -1924,7 +1995,7 @@ void ModuleEditor::GOList()
 										char* fileBuffer = nullptr;
 										std::string libName = std::to_string(payload_res->assetID) + ".chad";
 										uint bufferSize = App->fileSystem->FileToBuffer(libName.c_str(), &fileBuffer);
-										MeshData* new_mesh_data = new MeshData(payload_res->assetName.c_str());
+										MeshData* new_mesh_data = new MeshData(payload_res->assetPath.c_str());
 										new_mesh_data->assetID = payload_res->assetID;
 										MeshImporter::Load(fileBuffer, new_mesh_data);
 
@@ -1938,12 +2009,16 @@ void ModuleEditor::GOList()
 											std::string libName = std::to_string(payload_model->meshDatas[0]->materialAttachedID) + ".chad";
 
 											uint bufferSize = App->fileSystem->FileToBuffer(libName.c_str(), &fileBuffer);
-											MaterialData* new_material_data = new MaterialData(payload_res->assetName.c_str());
-											MaterialImporter::Load(fileBuffer, new_material_data, bufferSize);
+											for (int rInd = 0; rInd < App->scene->resourceList.size(); rInd++) {
+												if (App->scene->resourceList[rInd]->assetID == payload_model->meshDatas[0]->materialAttachedID) {
 
-											go->GOmat->materialData = new_material_data;
-											go->GOmat->materialData->assetID = payload_model->meshDatas[0]->materialAttachedID;
+													MaterialData* new_material_data = new MaterialData(App->scene->resourceList[rInd]->assetPath.c_str());
+													MaterialImporter::Load(fileBuffer, new_material_data, bufferSize);
 
+													go->GOmat->materialData = new_material_data;
+													go->GOmat->materialData->assetID = payload_model->meshDatas[0]->materialAttachedID;
+												}
+											}
 										}
 
 
@@ -1978,11 +2053,16 @@ void ModuleEditor::GOList()
 												std::string libNameMat = std::to_string(goChild->GOmesh->meshData->materialAttachedID) + ".chad";
 
 												uint bufferSizeMat = App->fileSystem->FileToBuffer(libNameMat.c_str(), &fileBufferMat);
-												MaterialData* new_material_data = new MaterialData(payload_res->assetName.c_str());
-												MaterialImporter::Load(fileBufferMat, new_material_data, bufferSizeMat);
+												for (int rInd = 0; rInd < App->scene->resourceList.size(); rInd++) {
+													if (App->scene->resourceList[rInd]->assetID == goChild->GOmesh->meshData->materialAttachedID) {
 
-												goChild->GOmat->materialData = new_material_data;
-												goChild->GOmat->materialData->assetID = goChild->GOmesh->meshData->materialAttachedID;
+														MaterialData* new_material_data = new MaterialData(App->scene->resourceList[rInd]->assetPath.c_str());
+														MaterialImporter::Load(fileBufferMat, new_material_data, bufferSizeMat);
+
+														goChild->GOmat->materialData = new_material_data;
+														goChild->GOmat->materialData->assetID = goChild->GOmesh->meshData->materialAttachedID;
+													}
+												}
 
 											}
 										}
@@ -2003,7 +2083,7 @@ void ModuleEditor::GOList()
 
 
 								uint bufferSize = App->fileSystem->FileToBuffer(libName.c_str(), &fileBuffer);
-								MaterialData* new_material_data = new MaterialData(payload_res->assetName.c_str());
+								MaterialData* new_material_data = new MaterialData(payload_res->assetPath.c_str());
 								MaterialImporter::Load(fileBuffer, new_material_data, bufferSize);
 
 								gameObjectsShowing[i]->GOmat->materialData = new_material_data;
