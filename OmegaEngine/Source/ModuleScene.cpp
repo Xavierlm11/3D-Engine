@@ -37,7 +37,7 @@ bool ModuleScene::Start()
     //RootParent->showingInHierarchy = false;
     AddGOList(RootParent);
 
-    App->renderer3D->GameCam = App->scene->CreateGO("Cam", App->scene->RootParent);
+    App->renderer3D->GameCam = App->scene->CreateGO("GameCam", App->scene->RootParent);
     App->renderer3D->GameCam->CreateComp(Component::Types::CAMERA);
     App->renderer3D->MainCam = App->renderer3D->GameCam->GOcam;
    // App->renderer3D->MainCam = App->camera->ScnCam;

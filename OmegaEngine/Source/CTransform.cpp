@@ -24,6 +24,12 @@ CTransform::CTransform(GameObject* obj):Component( obj, Types::TRANSFORM )
 			pscl = GO->parent->GOtrans->GetScale();
 			
 	}
+
+	//if (GO->GOcam != nullptr)
+	//{
+	//	pos = GO->GOcam->cameraFrustum.pos ;
+	//	//GO->GOcam->Reference  ;
+	//}
 }
 
 

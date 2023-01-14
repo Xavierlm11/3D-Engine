@@ -18,7 +18,8 @@ CCamera::CCamera(GameObject* obj) :Component(obj, Types::CAMERA)
 	cameraFrustum.front = float3(Z.x, Z.y, Z.z);
 	cameraFrustum.up = float3(Y.x, Y.y, Y.z);
 
-
+	if (GO!=nullptr && GO->GOtrans != nullptr)
+		GO->GOtrans->pos = cameraFrustum.pos;
 	
 
 	NewFrBuffer();
