@@ -2,6 +2,7 @@
 #include "ImGui/imgui.h"
 #include "Primitive.h"
 #include "ModulePhysics.h"
+#include "MathGeoLib/include/Math/MathFunc.h"
 
 #include "Module.h"
 
@@ -49,7 +50,7 @@ void CPhysics::Update()
 			float glMat[16];
 			
 			
-			//collider->body->getpos
+
 			collider->body->getWorldTransform().getOpenGLMatrix(glMat);
 			//float3 newPos = {,0.f,0.f};
 			glMat4x4[0] = glMat[0];
@@ -72,17 +73,62 @@ void CPhysics::Update()
 			glMat4x4[14] = glMat[14];
 			glMat4x4[15] = glMat[15];
 
-			GO->GOtrans->matrix = glMat4x4;
+			//GO->GOtrans->matrix = glMat4x4;
+
 			
-			GO->GOtrans->UpdateRot();
-			//GO->GOtrans->UpdateScl();
+			//Pos
 			GO->GOtrans->matrix[12] = glMat4x4[12];
 			GO->GOtrans->matrix[13] = glMat4x4[13];
 			GO->GOtrans->matrix[14] = glMat4x4[14];
+
+			btQuaternion colbtQuatRot = collider->body->getWorldTransform().getRotation();
+			Quat colQuatRot = (Quat)colbtQuatRot;
+
+			//Rot
+			float colRotAngle = RadToDeg(colQuatRot.Angle());
+			vec3 colRotAxis;
+			colRotAxis.x = colQuatRot.Axis().x;
+			colRotAxis.y = colQuatRot.Axis().y;
+			colRotAxis.z = colQuatRot.Axis().z;
+
+			GO->GOtrans->matrix.rotate(colRotAngle, colRotAxis);
 			
-			//GO->GOtrans->matrix[12] += matrixBeforePhys[12];
-			//GO->GOtrans->matrix[13] += matrixBeforePhys[13];
-			//GO->GOtrans->matrix[14] += matrixBeforePhys[14];
+			//Scl
+			btQuaternion SCLrot = collider->body->getWorldTransform().getRotation();
+			btCollisionShape* SCLshape = collider->body->getCollisionShape();
+			btVector3 SCLscale = SCLshape->getLocalScaling();
+
+			Quat SCLquatRot = (Quat)SCLrot;
+			btScalar SCLrotAngle = RadToDeg(SCLquatRot.Angle());
+			btVector3 SCLrotAxis;
+			SCLrotAxis[0] = SCLquatRot.Axis().x;
+			SCLrotAxis[1] = SCLquatRot.Axis().y;
+			SCLrotAxis[2] = SCLquatRot.Axis().z;
+
+
+			btVector3 rotated_scale = SCLscale.rotate(SCLrotAxis, SCLrotAngle);
+			GO->GOtrans->matrix.scale(rotated_scale[0], rotated_scale[1], rotated_scale[2]);
+
+
+
+
+			//GO->GOtrans->matrix.scale();
+			//GO->GOtrans->matrix[0] = GO->GOtrans->matrix[0] * rotated_scale[0];
+			//GO->GOtrans->matrix[5] = GO->GOtrans->matrix[5] * rotated_scale[1];
+			//GO->GOtrans->matrix[10] = GO->GOtrans->matrix[10] * rotated_scale[2];
+			//GO->GOtrans->matrix[0] = GO->GOtrans->matrix[0] * matrixBeforePhys[0];
+			//GO->GOtrans->matrix[5] = GO->GOtrans->matrix[5] * matrixBeforePhys[5];
+			//GO->GOtrans->matrix[10] = GO->GOtrans->matrix[10] * matrixBeforePhys[10];
+			//GO->GOtrans->matrix.scale(matrixBeforePhys[0], matrixBeforePhys[5], matrixBeforePhys[10]);
+			//GO->GOtrans->UpdateRot();
+			//GO->GOtrans->UpdateScl();
+
+			
+			
+			
+			//GO->GOtrans->matrix[12] += offsetMatrix[12];
+			//GO->GOtrans->matrix[13] += offsetMatrix[13];
+			//GO->GOtrans->matrix[14] += offsetMatrix[14];
 			
 			//GO->GOtrans->SetPos(GO->GOtrans->GetPos());
 			//GO->GOtrans->UpdatePos();
@@ -90,11 +136,11 @@ void CPhysics::Update()
 
 			for each (GameObject* child in GO->children)
 			{
-				
+					
 					child->GOtrans->matrix = glMat4x4;
-					child->GOtrans->matrix[12] = matrixBeforePhys[12];
-					child->GOtrans->matrix[13] = matrixBeforePhys[13];
-					child->GOtrans->matrix[14] = matrixBeforePhys[14];
+					child->GOtrans->matrix[12] += offsetMatrix[12];
+					child->GOtrans->matrix[13] += offsetMatrix[13];
+					child->GOtrans->matrix[14] += offsetMatrix[14];
 			
 				
 				//child->GOtrans->UpdatePos();
