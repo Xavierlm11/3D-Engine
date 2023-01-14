@@ -81,6 +81,11 @@ void CPhysics::Update()
 			GO->GOtrans->matrix[13] = glMat4x4[13];
 			GO->GOtrans->matrix[14] = glMat4x4[14];
 
+			GO->GOtrans->matrix[12] -= offsetMatrix[12];
+			GO->GOtrans->matrix[13] -= offsetMatrix[13];
+			GO->GOtrans->matrix[14] -= offsetMatrix[14];
+
+
 			btQuaternion colbtQuatRot = collider->body->getWorldTransform().getRotation();
 			Quat colQuatRot = (Quat)colbtQuatRot;
 
@@ -126,9 +131,6 @@ void CPhysics::Update()
 			
 			
 			
-			//GO->GOtrans->matrix[12] += offsetMatrix[12];
-			//GO->GOtrans->matrix[13] += offsetMatrix[13];
-			//GO->GOtrans->matrix[14] += offsetMatrix[14];
 			
 			//GO->GOtrans->SetPos(GO->GOtrans->GetPos());
 			//GO->GOtrans->UpdatePos();
@@ -165,7 +167,7 @@ void CPhysics::SaveOffsetMatrix() {
 	collider->body->getWorldTransform().getOpenGLMatrix(glMat);
 
 	for (int j = 0; j < 16; j++) {
-		offsetMatrix[j] = abs(GO->GOtrans->matrix[j] - glMat[j]);
+		offsetMatrix[j] = glMat[j] - GO->GOtrans->matrix[j];
 	}
 
 }
