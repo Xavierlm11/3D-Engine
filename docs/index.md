@@ -1,15 +1,10 @@
 # 3D-Engine
 
-https://github.com/Xavierlm11/Omega-Engine
 
-The goal of this project is to make a game engine for learning popuses
-We hope you like it! :)
+## About Omega Engine
+Omega Engine is a class project where the main goal was to create a game engine for learning pruposes, maybe has some bugs or not has the best optimization is a honest work
 
-We are:
-Xavier Casadó - https://github.com/Akage369
-Xavier López - https://github.com/Xavierlm11
-
-Website: https://xavierlm11.github.io/Omega-Engine/
+Repository ----->>[Omega Engine](https://github.com/Xavierlm11/Omega-Engine)
 
 ## Description
 There are 3 modes of rendering: Normal, with checkers view and Wireframe.
