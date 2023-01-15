@@ -252,7 +252,7 @@ void ModuleImport::ImportAsset(const char* filePath) {
 
 	LOG("PATH: %s", finalAssetPath.c_str());
 
-	if (extension_s == "png" || extension_s == "PNG" || extension_s == "JPG" || extension_s == "png")
+	if (extension_s == "png" || extension_s == "PNG" || extension_s == "JPG" || extension_s == "png" || extension_s == "dds" || extension_s == "DDS")
 	{
 		MaterialData* new_material_data = (MaterialData*)App->imp->LoadFile(filePath, Resource::Types::MATERIAL);
 		App->fileSystem->ImportFileToDir(dropped_filedir_s.c_str(), assetsPath_s.c_str());
