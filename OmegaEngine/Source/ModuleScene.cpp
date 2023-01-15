@@ -40,7 +40,21 @@ bool ModuleScene::Start()
 
     App->renderer3D->GameCam = App->scene->CreateGO("GameCam", App->scene->RootParent);
     App->renderer3D->GameCam->CreateComp(Component::Types::CAMERA);
+    App->renderer3D->GameCam->CreateComp(Component::Types::PHYSICS);
+    App->renderer3D->GameCam->GOphys->phys = App->physics;
+    App->renderer3D->GameCam->GOphys->shapeSelected = CPhysics::ColliderShape::SPHERE;
+    App->renderer3D->GameCam->GOphys->isStatic = true;
+    App->renderer3D->GameCam->GOphys->isShapeSelected[1] = true;
+   // App->renderer3D->GameCam->GOphys->CheckShapes();
+    if (App->renderer3D->GameCam->GOphys->shapeSelected != CPhysics::ColliderShape::NONE) {
+        
+            //App->renderer3D->GameCam->GOphys->colPos = App->renderer3D->GameCam->GOcam->cameraFrustum.pos;
+            App->renderer3D->GameCam->GOphys->colPos = App->renderer3D->GameCam->GOtrans->GetPos();
+            App->renderer3D->GameCam->GOphys->CreateCollider();
+            App->renderer3D->GameCam->GOphys->CallUpdateShape();
+    }
     App->renderer3D->MainCam = App->renderer3D->GameCam->GOcam;
+
    // App->renderer3D->MainCam = App->camera->ScnCam;
    /* App->renderer3D->MainCam->cameraFrustum.pos =float3(0,5,-200);
     App->renderer3D->GameCam->GOtrans->SetPos({ 0,5,-20 });

@@ -167,7 +167,12 @@ update_status ModulePhysics3D::Update(float dt)
 		
 	}
 
-	return UPDATE_CONTINUE;
+	if (App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)
+	{
+		
+	}
+
+		return UPDATE_CONTINUE;
 }
 
 // ---------------------------------------------------------

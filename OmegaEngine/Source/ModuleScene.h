@@ -4,7 +4,7 @@
 #include "GameObject.h"
 #include "Component.h"
 #include "PhysBody3D.h"
-
+#include "CPhysics.h"
 class ModuleScene : public Module
 {
 public:
