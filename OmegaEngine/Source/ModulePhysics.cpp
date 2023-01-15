@@ -5,6 +5,7 @@
 #include "PhysVehicle3D.h"
 #include "Primitive.h"
 #include "ModuleScene.h"
+#include <vector>
 
 #ifdef _DEBUG
 #pragma comment (lib, "Bullet/libx86/BulletDynamics_debug.lib")
@@ -373,6 +374,7 @@ PhysVehicle3D* ModulePhysics3D::AddVehicle(const VehicleInfo& info)
 
 	PhysVehicle3D* pvehicle = new PhysVehicle3D(body, vehicle, info);
 	world->addVehicle(vehicle);
+
 	vehicles.push_back(pvehicle);
 	return pvehicle;
 }
@@ -602,6 +604,31 @@ void ModulePhysics3D::AddConstraintHinge(PhysBody3D& bodyA, PhysBody3D& bodyB, c
 	world->addConstraint(hinge, disable_collision);
 	constraints.push_back(hinge);
 	hinge->setDbgDrawSize(2.0f);
+}
+
+void ModulePhysics3D::DeleteVehicle()
+{
+	std::vector<PhysVehicle3D*> newList;
+	//int vSize = vehicles.size();
+	
+	
+
+	
+
+	world->removeRigidBody(App->scene->vehicle->body);
+
+	world->removeAction(App->scene->vehicle->vehicle);
+
+	for (int i = 0; i < vehicles.size(); i++) {
+		//newList.push_back(vehicles.at(i));
+		delete vehicles[i];
+	}
+	for (int i = 0; i < newList.size(); i++) {
+		//delete newList.at(i);
+	}
+
+	vehicles.clear();
+	
 }
 
 // =============================================

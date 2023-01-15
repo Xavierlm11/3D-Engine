@@ -1145,6 +1145,9 @@ void ModuleEditor::BarPlay() {
 	if (ImGui::Button("Play"))
 	{
 		if (playPressed == true) {
+			//App->scene->vehicle->~PhysVehicle3D();
+			App->physics->DeleteVehicle();
+			App->scene->vehicle = nullptr;
 			pausePressed = false;
 			playPressed = false;
 
@@ -1162,6 +1165,7 @@ void ModuleEditor::BarPlay() {
 			
 		}
 		else {
+			App->scene->CreateVehicle();
 			playPressed = true;
 			App->physics->isWorldOn = true;
 			App->physics->SaveWorldTransforms();
