@@ -8,12 +8,7 @@ Component::~Component()
 {
 
 }
-/*
-void Component::()
-{
 
-}
-*/
 
 void Component::Enable()
 {
@@ -51,7 +46,3 @@ GameObject* Component::GetGO()
 	return GO;
 }
 
-//Types Component::()
-//{
-//
-//}

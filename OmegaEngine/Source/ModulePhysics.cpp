@@ -66,15 +66,7 @@ bool ModulePhysics3D::Start()
 	vehicle_raycaster = new btDefaultVehicleRaycaster(world);
 
 	// Big plane as ground
-	/*{
-		btCollisionShape* colShape = new btStaticPlaneShape(btVector3(0, 1, 0), 0);
-
-		btDefaultMotionState* myMotionState = new btDefaultMotionState();
-		btRigidBody::btRigidBodyConstructionInfo rbInfo(0.0f, myMotionState, colShape);
-
-		btRigidBody* body = new btRigidBody(rbInfo);
-		world->addRigidBody(body);
-	}*/
+	
 	debugGame = true;
 
 	return true;
@@ -95,20 +87,7 @@ update_status ModulePhysics3D::PreUpdate(float dt)
 		else {
 			world->stepSimulation(dt, 15);
 		}
-		//for (int i = 0; i < App->scene->ListGO.size();i++) 
-		//{
-		//	if (App->scene->ListGO[i]->GOphys != nullptr) {
-		//		if (App->scene->ListGO[i]->GOphys->hasInit == false) {
-		//			if (App->scene->ListGO[i]->GOphys->collider != nullptr) {
-
-		//				//App->scene->ListGO[i]->GOphys->collider->SetTransform(&App->scene->ListGO[i]->GOtrans->matrix);
-		//				//App->scene->ListGO[i]->GOphys->hasInit = true;
-		//			}
-		//		}
-		//		
-		//	}
-		//}
-		//App->scene->ListGO;
+		
 	}
 	
 
@@ -127,22 +106,7 @@ update_status ModulePhysics3D::PreUpdate(float dt)
 
 			App->scene->OnCollision(pbodyA, pbodyB);
 
-			/*if (pbodyA && pbodyB)
-			{
-				vector<Module*>* item = pbodyA->collision_listeners[0];
-				while (item)
-				{
-					item->data->OnCollision(pbodyA, pbodyB);
-					item = item.;
-				}
-
-				item = pbodyB->collision_listeners.getFirst();
-				while (item)
-				{
-					item->data->OnCollision(pbodyB, pbodyA);
-					item = item->next;
-				}
-			}*/
+			
 		}
 	}
 
@@ -434,14 +398,7 @@ PhysBody3D* ModulePhysics3D::UpdateBoxColliderSize(PhysBody3D*& collider, float3
 	ry = _rot.y * DEGTORAD;
 	rz = _rot.z * DEGTORAD;
 	
-	//Quat qrot = Quat::FromEulerXYZ(rx, ry, rz);
-	//qrot.Normalize();
-//float e=	qrot.;
-	//rotation vector
-	//vec3 rvec(qrot.Axis().x, qrot.Axis().y, qrot.Axis().z);
-
-	//rotation angle
-	//float ra = qrot.Angle();
+	
 
 
 	cube.transform[0] = cos(ry) * cos(rz);
@@ -499,14 +456,7 @@ PhysBody3D* ModulePhysics3D::UpdateSphereColliderSize(PhysBody3D*& collider, flo
 	ry = _rot.y * DEGTORAD;
 	rz = _rot.z * DEGTORAD;
 
-	//Quat qrot = Quat::FromEulerXYZ(rx, ry, rz);
-	//qrot.Normalize();
-//float e=	qrot.;
-	//rotation vector
-	//vec3 rvec(qrot.Axis().x, qrot.Axis().y, qrot.Axis().z);
-
-	//rotation angle
-	//float ra = qrot.Angle();
+	
 
 
 	sphere.transform[0] = cos(ry) * cos(rz);
@@ -552,14 +502,7 @@ PhysBody3D* ModulePhysics3D::UpdateCylinderColliderSize(PhysBody3D*& collider, f
 	ry = _rot.y * DEGTORAD;
 	rz = _rot.z * DEGTORAD;
 
-	//Quat qrot = Quat::FromEulerXYZ(rx, ry, rz);
-	//qrot.Normalize();
-//float e=	qrot.;
-	//rotation vector
-	//vec3 rvec(qrot.Axis().x, qrot.Axis().y, qrot.Axis().z);
-
-	//rotation angle
-	//float ra = qrot.Angle();
+	
 
 
 	cylinder.transform[0] = cos(ry) * cos(rz);
@@ -590,10 +533,7 @@ PhysBody3D* ModulePhysics3D::UpdateCylinderColliderSize(PhysBody3D*& collider, f
 void ModulePhysics3D::SaveWorldTransforms() 
 {
 	for (int i = 0; i < App->scene->ListGO.size(); i++) {
-		/*if (App->scene->ListGO[i]->GOphys != nullptr && App->scene->ListGO[i]->GOtrans != nullptr) {
-			App->scene->ListGO[i]->GOphys->SaveMatrixBeforePhys();
-			App->scene->ListGO[i]->GOphys->SaveOffsetMatrix();
-		}*/
+		
 		if (App->scene->ListGO[i]->GOtrans != nullptr) {
 			App->scene->ListGO[i]->GOtrans->SaveMatrixBeforePhys();
 			App->scene->ListGO[i]->GOtrans->SaveOffsetMatrix();

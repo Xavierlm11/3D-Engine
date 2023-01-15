@@ -202,12 +202,7 @@ void ModuleCamera3D::Rotate(CCamera* cam) {
 
 	if (App->physics->isWorldOn)
 	{
-		/*float3 _rot;
-		float a;
-		dir.Normalized();
-		dir.ToAxisAngle(_rot, a);
-		App->renderer3D->GameCam->GOtrans->GiveRot(App->renderer3D->GameCam->GOtrans->GetRot()+ _rot*a);
-		*/
+		
 		float4x4 matrix = cam->cameraFrustum.WorldMatrix();
 		matrix.SetRotatePart(dir.Normalized());
 		cam->cameraFrustum.SetWorldMatrix(matrix.Float3x4Part());

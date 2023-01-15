@@ -58,10 +58,7 @@ bool ModuleScene::Start()
     App->renderer3D->MainCam = App->renderer3D->GameCam->GOcam;
     App->renderer3D->GameCam->GOcam->ismain = true;
 
-   // App->renderer3D->MainCam = App->camera->ScnCam;
-   /* App->renderer3D->MainCam->cameraFrustum.pos =float3(0,5,-200);
-    App->renderer3D->GameCam->GOtrans->SetPos({ 0,5,-20 });
-    App->renderer3D->GameCam->GOtrans->SetRot({180,0,180});*/
+  
 
     //CreateVehicle();
 

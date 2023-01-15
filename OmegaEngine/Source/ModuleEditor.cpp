@@ -1345,8 +1345,7 @@ void ModuleEditor::ConfigHardwareXXX()
 		ImGui::SameLine();
 		//ImGui::PushStyleColor(ImGuiCol_Text, { 255,0,0,1 });
 		ImGui::TextWrapped(/*{ 255,0,0,1 },*/ "%s%s%s%s%s%s%s%s%s%s%s", tdnow, altvec, AVX, AVX2, MMX, RDTSC, SSE, SSE2, SSE3, SSE41, SSE42);
-		/*ImGui::SameLine();
-		ImGui::Text("%s%s%s%s%s%s",  RDTSC, SSE, SSE2, SSE3,SSE41, SSE42);*/
+		
 		ImGui::Separator();//--------------
 		ImGui::Text("GPU:");
 		ImGui::SameLine();
@@ -1354,18 +1353,7 @@ void ModuleEditor::ConfigHardwareXXX()
 		ImGui::Text("Brand:");
 		ImGui::SameLine();
 		ImGui::TextColored({ 255,0,0,1 }, "%s", renderer);
-		/*ImGui::Text("VRAM Budget:");
-		ImGui::SameLine();
-		ImGui::TextColored({ 255,0,0,1 }, "%i", 1);
-		ImGui::Text("VRAM Usage:");
-		ImGui::SameLine();
-		ImGui::TextColored({ 255,0,0,1 }, "%s", ORGANIZATION);
-		ImGui::Text("VRAM Avaliable:");
-		ImGui::SameLine();
-		ImGui::TextColored({ 255,0,0,1 }, "%s", ORGANIZATION);
-		ImGui::Text("VRAM Reserved:");
-		ImGui::SameLine();
-		ImGui::TextColored({ 255,0,0,1 }, "%s", ORGANIZATION);*/
+		
 	}
 }
 
@@ -1526,11 +1514,7 @@ void ModuleEditor::GOList()
 												go->GOmat->materialData->assetID = payload_model->meshDatas[0]->materialAttachedID;
 											}
 										}
-										//MaterialData* new_material_data = new MaterialData(payload_res->assetPath.c_str());
-										//MaterialImporter::Load(fileBuffer, new_material_data, bufferSize);
-
-										//go->GOmat->materialData = new_material_data;
-										//go->GOmat->materialData->assetID = payload_model->meshDatas[0]->materialAttachedID;
+									
 									}
 
 
@@ -1575,11 +1559,7 @@ void ModuleEditor::GOList()
 													goChild->GOmat->materialData->assetID = goChild->GOmesh->meshData->materialAttachedID;
 												}
 											}
-											//MaterialData* new_material_data = new MaterialData(payload_res->assetPath.c_str());
-											//MaterialImporter::Load(fileBufferMat, new_material_data, bufferSizeMat);
-
-											//goChild->GOmat->materialData = new_material_data;
-											//goChild->GOmat->materialData->assetID = goChild->GOmesh->meshData->materialAttachedID;
+											
 
 										}
 									}

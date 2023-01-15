@@ -110,11 +110,7 @@ void CCamera::OnInspector()
 		{
 			cameraFrustum.nearPlaneDistance = 0.01f;
 		}
-		/*ImGui::SliderFloat("Far Distance", &cameraFrustum.farPlaneDistance, 0.1f, cameraFrustum.nearPlaneDistance);
-		if (ImGui::Button("reset "))
-		{
-			cameraFrustum.farPlaneDistance = 1000.0f;
-		}*/
+		
 
 		if (ImGui::SliderFloat("FOV", &camFOV, 10, 200))
 		{

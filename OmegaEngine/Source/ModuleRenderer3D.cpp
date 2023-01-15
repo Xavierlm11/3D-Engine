@@ -226,17 +226,7 @@ update_status ModuleRenderer3D::PreUpdate(float dt)
 
 update_status ModuleRenderer3D::Update(float dt)
 {
-	//DrawDirectCube();
-	//DrawArrayCube();
-	//DrawArrayIndexCube();
 	
-	/*glLineWidth(2.0f);
-	glBegin(GL_TRIANGLES);
-	glVertex3f(0.f, 0.f, 0.f);
-	glVertex3f(5.f, 0.f, 0.f);
-	glVertex3f(0.f, 5.f, 0.f);
-	glEnd();
-	glLineWidth(1.0f);*/
 
 	
 
@@ -245,16 +235,7 @@ update_status ModuleRenderer3D::Update(float dt)
 
 void ModuleRenderer3D::DrawMesh(MeshData* mesh) {
 
-	/*glEnableClientState(GL_VERTEX_ARRAY);
-	glBindBuffer(GL_ARRAY_BUFFER, mesh->id_vertices);
-	glVertexPointer(3, GL_FLOAT, 0, NULL);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->id_indices);
-
-	glDrawElements(GL_TRIANGLES, mesh->num_indices, GL_UNSIGNED_INT, NULL);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-	glDisableClientState(GL_VERTEX_ARRAY);
-	LOG("Mesh Loaded! Num indices: %i. Num vertices: %i. ID Indices: %i. ID Vertices: %i.", mesh->num_indices, mesh->num_vertices, mesh->id_indices, mesh->id_vertices);*/
+	
 }
 
 // PostUpdate present buffer to screen
@@ -559,26 +540,7 @@ void ModuleRenderer3D::DrawArrayIndexCube()
 
 	// deactivate vertex arrays after drawing
 	glDisableClientState(GL_VERTEX_ARRAY);
-	//// activate and specify pointer to vertex array
-	//glEnableClientState(GL_VERTEX_ARRAY);
-	//glVertexPointer(3, GL_FLOAT, 0, vertices);
-
-	//// draw first half, range is 6 - 0 + 1 = 7 vertices used
-	//glDrawRangeElements(GL_TRIANGLES, 0, 6, 18, GL_UNSIGNED_BYTE, indices);
-
-	//// draw second half, range is 7 - 1 + 1 = 7 vertices used
-	//glDrawRangeElements(GL_TRIANGLES, 1, 7, 18, GL_UNSIGNED_BYTE, indices + 18);
-
-	//// deactivate vertex arrays after drawing
-	//glDisableClientState(GL_VERTEX_ARRAY);
-
-
-	//glEnableClientState(GL_VERTEX_ARRAY);
-	//glBindBuffer(GL_ARRAY_BUFFER, my_id);
-	//glVertexPointer(3, GL_FLOAT, 0, NULL);
-	//// … bind and use other buffers
-	//glDrawArrays(GL_TRIANGLES, 0, 36);
-	//glDisableClientState(GL_VERTEX_ARRAY);
+	
 }
 void ModuleRenderer3D::DrawDirectCube()
 {

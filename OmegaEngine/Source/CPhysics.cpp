@@ -68,63 +68,10 @@ void CPhysics::Update()
 			//
 			//
 
-			//////float3 pos;
-			//////Quat rot;
-			//////float3 scl;
-			//////
-			//////float glMat[16];
-			//////collider->body->getWorldTransform().getOpenGLMatrix(glMat);
-
-			//////float4x4 newFloat;
-			//////for (int i = 0; i < 4; i++) {
-			//////	for (int j = 0; j < 4; j++) {
-			//////		newFloat[i][j] = glMat[i * 4 + j];
-			//////	}
-			//////}
-			//////newFloat.Decompose(pos, rot, scl);
-
-			//////float4x4 transform = float4x4::FromTRS(pos, rot, scl);
-			////////float4x4 inversedtransform = newFloat;
-			////////float4x4 localTrans = transform.Inverted() * inversedtransform;
-			//////collider->globalTrans = transform;
-
-			////////comp_transform->global_transform.Decompose(pos, rot, scl);
-
-			//////float xRot = colRot.x * DEGTORAD;
-			//////float yRot = colRot.y * DEGTORAD;
-			//////float zRot = colRot.z * DEGTORAD;
-
-
-			//////Quat qrot = Quat::FromEulerXYZ(xRot, yRot, zRot);
-			//////collider->transformMat = float4x4::FromTRS(colPos, qrot, colScl).Transposed();
-
-
-			//////float4x4 colTrans;
-			//////collider->GetTransform(colTrans.ptr());
-			//////colTrans.Transpose();
-			//////colTrans = collider->GetColTransform(colTrans, GO);
-
-
-			//////float4x4 newFloatMat;
-			//////for (int i = 0; i < 4; i++) {
-			//////	for (int j = 0; j < 4; j++) {
-			//////		newFloatMat[i][j] = GO->GOtrans->matrix[i * 4 + j];
-			//////	}
-			//////}
-			//////colTrans = colTrans * newFloatMat.Inverted();
-			//////float3 globscale, globscale2, globcolpos;
-			//////Quat globcolrot;
-			//////newFloatMat.Decompose(globcolpos, globcolrot, globscale);
-			//////newFloatMat = colTrans * newFloatMat;
-			//////newFloatMat.Decompose(globcolpos, globcolrot, globscale2);
-
-			//global_transform = float4x4::FromTRS(globcolpos, globcolrot, globscale2);
-
-			//newFloatMat = worldtolocal * global_transform;
-			//newFloatMat.Decompose(pos, rot, scale);
+			
 
 			collider->body->getWorldTransform().getOpenGLMatrix(glMat);
-			//float3 newPos = {,0.f,0.f};
+			
 			glMat4x4[0] = glMat[0];
 			glMat4x4[1] = glMat[1];
 			glMat4x4[2] = glMat[2];
@@ -145,70 +92,27 @@ void CPhysics::Update()
 			glMat4x4[14] = glMat[14];
 			glMat4x4[15] = glMat[15];
 
-			//GO->GOtrans->matrix = glMat4x4;
-
-			//
-			////Pos
-
-
-
-
-
-			//btQuaternion colbtQuatRot = collider->body->getWorldTransform().getRotation();
-			//Quat colQuatRot = (Quat)colbtQuatRot;
-
-			////Rot
-			//float colRotAngle = RadToDeg(colQuatRot.Angle());
-			//vec3 colRotAxis;
-			//colRotAxis.x = colQuatRot.Axis().x;
-			//colRotAxis.y = colQuatRot.Axis().y;
-			//colRotAxis.z = colQuatRot.Axis().z;
-
-			//GO->GOtrans->matrix.rotate(colRotAngle, colRotAxis);
-			//
-			////Scl
 			btQuaternion SCLrot = collider->body->getWorldTransform().getRotation();
-			//btCollisionShape* SCLshape = collider->body->getCollisionShape();
-			//btVector3 SCLscale = SCLshape->getLocalScaling();
+			
 
 			Quat SCLquatRot = (Quat)SCLrot;
 			float rad = SCLquatRot.Angle();
 
 			btScalar SCLrotAngle = RadToDeg(SCLquatRot.Angle());
-			//btScalar SCLrotAngle = RadToDeg(2.24781919);
+			
 
 			float3 SCLrotAxis;
 
 			SCLrotAxis.x = SCLquatRot.Axis().x;
 			SCLrotAxis.y = SCLquatRot.Axis().y;
 			SCLrotAxis.z = SCLquatRot.Axis().z;
-			//SCLrotAxis.x = 0.541857183;
-			//SCLrotAxis.y = 0.281540126;
-			//SCLrotAxis.z = 0.791912913;
+			
 			SCLrotAxis.Normalized();
 			float a = pow(SCLrotAxis.x, 2) + pow(SCLrotAxis.y, 2) + pow(SCLrotAxis.z, 2);
 			Quat quat(SCLquatRot);
 
 			mat4x4 rotMatrix;
-			/*rotMatrix[0] = cos(SCLrotAngle) + pow(SCLrotAxis.x, 2) * (1 - cos(SCLrotAngle));
-			rotMatrix[1] = SCLrotAxis.x * SCLrotAxis.y * (1 - cos(SCLrotAngle)) - SCLrotAxis.z * sin(SCLrotAngle);
-			rotMatrix[2] = SCLrotAxis.x * SCLrotAxis.z * (1 - cos(SCLrotAngle)) + SCLrotAxis.y * sin(SCLrotAngle);
-			rotMatrix[3] = 0;
-
-			rotMatrix[4] = SCLrotAxis.y * SCLrotAxis.x * (1 - cos(SCLrotAngle)) + SCLrotAxis.z * sin(SCLrotAngle);
-			rotMatrix[5] = cos(SCLrotAngle) + pow(SCLrotAxis.y, 2) * (1 - cos(SCLrotAngle));
-			rotMatrix[6] = SCLrotAxis.y * SCLrotAxis.z * (1 - cos(SCLrotAngle)) - SCLrotAxis.x * sin(SCLrotAngle);
-			rotMatrix[7] = 0;
-
-			rotMatrix[8] = SCLrotAxis.z * SCLrotAxis.x * (1 - cos(SCLrotAngle)) - SCLrotAxis.y * sin(SCLrotAngle);
-			rotMatrix[9] = SCLrotAxis.z * SCLrotAxis.y * (1 - cos(SCLrotAngle)) + SCLrotAxis.x * sin(SCLrotAngle);
-			rotMatrix[10] = cos(SCLrotAngle) + pow(SCLrotAxis.z, 2) * (1 - cos(SCLrotAngle));
-			rotMatrix[11] = 0;
-
-			rotMatrix[12] = 0;
-			rotMatrix[13] = 0;
-			rotMatrix[14] = 0;
-			rotMatrix[15] = 1;*/
+			
 			rotMatrix[0] = cos(SCLrotAngle) + pow(SCLrotAxis.x, 2) * (1 - cos(SCLrotAngle));
 			rotMatrix[4] = SCLrotAxis.x * SCLrotAxis.y * (1 - cos(SCLrotAngle)) - SCLrotAxis.z * sin(SCLrotAngle);
 			rotMatrix[8] = SCLrotAxis.x * SCLrotAxis.z * (1 - cos(SCLrotAngle)) + SCLrotAxis.y * sin(SCLrotAngle);
@@ -229,9 +133,6 @@ void CPhysics::Update()
 			rotMatrix[11] = 0;
 			rotMatrix[15] = 1;
 
-			//Quat::QuatToMatrix(SCLrotAxis, RadToDeg(SCLquatRot.Angle()));
-			//quat = Quat::SetFromAxisAngle()
-			//mat4x4 inv = rotMatrix.inverse();
 			mat4x4 beforePhysWithPos = GO->GOtrans->matrixBeforePhys;
 			for (int i = 0; i < GO->GOtrans->collidersAffecting.size(); i++) {
 				if (GO->GOtrans->collidersAffecting[i]->colliderAffected == collider) {
@@ -271,55 +172,20 @@ void CPhysics::Update()
 							GO->children[i]->GOtrans->matrix[13] -= GO->children[i]->GOtrans->collidersAffecting[j]->offsetMatrix[13];
 							GO->children[i]->GOtrans->matrix[14] -= GO->children[i]->GOtrans->collidersAffecting[j]->offsetMatrix[14];
 
-							/*child->GOtrans->matrix = glMat4x4;
-							child->GOtrans->matrix[12] += offsetMatrix[12];
-							child->GOtrans->matrix[13] += offsetMatrix[13];
-							child->GOtrans->matrix[14] += offsetMatrix[14];*/
+							
 						}
 
 
 
 					}
-					//child->GOtrans->UpdatePos();
+					
 				}
 
-				//GO->GOtrans->matrix = GO->GOtrans->matrix *
-				//btVector3 rotated_scale = SCLscale.rotate(SCLrotAxis, SCLrotAngle);
-				//GO->GOtrans->matrix.scale(colScl.x* rotated_scale[0], colScl.y* rotated_scale[1], colScl.z* rotated_scale[2]);
-
-				//_________________
-
-
-				//GO->GOtrans->matrix.scale();
-				//GO->GOtrans->matrix[0] = GO->GOtrans->matrix[0] * rotated_scale[0];
-				//GO->GOtrans->matrix[5] = GO->GOtrans->matrix[5] * rotated_scale[1];
-				//GO->GOtrans->matrix[10] = GO->GOtrans->matrix[10] * rotated_scale[2];
-				//GO->GOtrans->matrix[0] = GO->GOtrans->matrix[0] * matrixBeforePhys[0];
-				//GO->GOtrans->matrix[5] = GO->GOtrans->matrix[5] * matrixBeforePhys[5];
-				//GO->GOtrans->matrix[10] = GO->GOtrans->matrix[10] * matrixBeforePhys[10];
-				//GO->GOtrans->matrix.scale(matrixBeforePhys[0], matrixBeforePhys[5], matrixBeforePhys[10]);
-				//GO->GOtrans->UpdateRot();
-				//GO->GOtrans->UpdateScl();
+				
 
 
 
 
-
-				//GO->GOtrans->SetPos(GO->GOtrans->GetPos());
-				//GO->GOtrans->UpdatePos();
-
-
-				//for each (GameObject* child in GO->children)
-				//{
-				//		
-				//		child->GOtrans->matrix = glMat4x4;
-				//		child->GOtrans->matrix[12] += offsetMatrix[12];
-				//		child->GOtrans->matrix[13] += offsetMatrix[13];
-				//		child->GOtrans->matrix[14] += offsetMatrix[14];
-				//
-				//	
-				//	//child->GOtrans->UpdatePos();
-				//}
 
 			}
 		}
@@ -332,9 +198,7 @@ void CPhysics::CheckShapes() {
 
 	for (int h = 0; h < static_cast<int>(ColliderShape::Count); h++) {
 
-		//if (isShapeSelectedTrigger[h] == true) {
-			///isShapeSelected[h] = true;
-			///isShapeSelectedTrigger[h] = false;
+		
 		if (isShapeSelected[h] == true) {
 			if (isShapeCreated[h] == false)
 			{
@@ -347,12 +211,7 @@ void CPhysics::CheckShapes() {
 		}
 		else {
 			if (isShapeCreated[h] == true) {
-				//isShapeCreated[h] = false;
-				/*for (int i = 0; i < static_cast<int>(ColliderShape::Count); i++) {
-					if (i != h) {
-						isShapeCreated[i] = false;
-					}
-				}*/
+				
 			}
 		}
 
@@ -554,12 +413,7 @@ void CPhysics::CreateCollider()
 		rx = _grot.x * DEGTORAD;
 		ry = _grot.y * DEGTORAD;
 		rz = _grot.z * DEGTORAD;
-		//gpos = ppos + pos;
-		//grot = prot + rot;
-		//gscl.x = pscl.x * scl.x;
-		//gscl.y = pscl.y * scl.y;
-		//gscl.z = pscl.z * scl.z;
-		//TransformMatrix(gpos, grot, gscl);
+	
 
 	}
 	Quat qrot = Quat::FromEulerXYZ(rx, ry, rz);
@@ -591,10 +445,7 @@ void CPhysics::CreateCollider()
 		cube.size.y = GO->GOtrans->GetScale().y;
 		cube.size.z = GO->GOtrans->GetScale().z;
 		
-		//cube.SetRotation(ra,rvec);
-		//cube.SetRotation(ra, (rx, ry, rz));
-		//cube.transform = GO->GOtrans->matrix;
-		//cube.transform
+		
 		cube.color = Green;
 
 
@@ -882,24 +733,7 @@ void CPhysics::OnInspector()
 				}
 
 				
-					/*if (ImGui::Button("Update Collider Size"))
-					{
-						switch (shapeSelected)
-						{
-						case CPhysics::ColliderShape::BOX:
-							phys->UpdateBoxColliderSize(collider, colPos, colRot, colScl, 1.0f);
-							break;
-						case CPhysics::ColliderShape::SPHERE:
-							phys->UpdateSphereColliderSize(collider, colPos, colRot, sphereRadius, 1.0f);
-							break;
-						case CPhysics::ColliderShape::CYLINDER:
-							phys->UpdateCylinderColliderSize(collider, colPos, colRot, cylRadiusHeight, 1.0f);
-							break;
-						default:
-							break;
-						}
-
-					}*/
+					
 
 					if (ImGui::Button("Remove Collider"))
 					{
@@ -999,10 +833,7 @@ void CPhysics::OnInspector()
 
 											vec3 anchor1 = (colPos.x, colPos.y, colPos.z);
 											vec3 anchor2 = (constraintGO->GOphys->colPos.x, constraintGO->GOphys->colPos.y, constraintGO->GOphys->colPos.z);
-											//vec3 axis1 = (0, 1, 0);
-											//vec3 axis2 = (0, 1, 0);
 											
-											//hingeConstraint = phys->AddConstraintHinge(*collider, *constraintGO->GOphys->collider, anchor1, anchor2, axis1, axis2);
 											p2pConstraint = phys->AddConstraintP2P(*collider, *constraintGO->GOphys->collider, anchor1, anchor2);
 
 											constraintGO->GOphys->hingeConstraint = hingeConstraint;
