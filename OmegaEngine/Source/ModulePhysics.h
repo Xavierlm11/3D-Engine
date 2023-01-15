@@ -5,6 +5,7 @@
 
 #include "Bullet/include/btBulletDynamicsCommon.h"
 #include "CPhysics.h"
+#include "ModuleEditor.h"
 
 // Recommended scale is 1.0f == 1 meter, no less than 0.2 objects
 #define GRAVITY btVector3(0.0f, -10.0f, 0.0f) 

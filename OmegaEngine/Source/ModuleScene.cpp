@@ -44,7 +44,7 @@ bool ModuleScene::Start()
     App->renderer3D->GameCam->CreateComp(Component::Types::PHYSICS);
     App->renderer3D->GameCam->GOphys->phys = App->physics;
     App->renderer3D->GameCam->GOphys->shapeSelected = CPhysics::ColliderShape::SPHERE;
-    App->renderer3D->GameCam->GOphys->isStatic = true;
+    App->renderer3D->GameCam->GOphys->isStatic = false;
     App->renderer3D->GameCam->GOphys->isShapeSelected[1] = true;
     // App->renderer3D->GameCam->GOphys->CheckShapes();
     if (App->renderer3D->GameCam->GOphys->shapeSelected != CPhysics::ColliderShape::NONE) {

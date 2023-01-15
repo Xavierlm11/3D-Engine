@@ -78,6 +78,7 @@ public:
 	void SetOrgName(const char* OrgName);
 
 	void SetAppName(const char*  AppName);
+	void CreateSphere(const char* resName, float force);
 private:
 
 	//Windows
@@ -112,7 +113,8 @@ private:
 
 	void CloseEngine();
 
-	void CheckGLCapabilities();;
+	void CheckGLCapabilities();
+	;
 
 	void ShowAssetInfo();
 
@@ -121,7 +123,7 @@ private:
 	
 	int selection_mask;
 
-	void SelectChilds();
+	//void SelectChilds();
 	void DeleteGo();
 
 	

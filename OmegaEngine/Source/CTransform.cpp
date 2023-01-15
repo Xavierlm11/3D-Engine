@@ -111,9 +111,11 @@ void CTransform::TransformMatrix(float3 _pos, float3 _rot, float3 _scl)
 				GO->GOphys->CallUpdateShape();
 			}
 		}
-		GO->GOcam->cameraFrustum.up = rmatrix.RotatePart().Col(1).Normalized();
-		GO->GOcam->cameraFrustum.front = rmatrix.RotatePart().Col(2).Normalized();
-
+		if (!External->physics->isWorldOn)
+		{
+			GO->GOcam->cameraFrustum.up = rmatrix.RotatePart().Col(1).Normalized();
+			GO->GOcam->cameraFrustum.front = rmatrix.RotatePart().Col(2).Normalized();
+		}
 		/*Quat dir;
 		GO->GOcam->cameraFrustum.WorldMatrix().Decompose(float3(), dir, float3());
 

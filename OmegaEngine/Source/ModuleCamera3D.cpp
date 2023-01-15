@@ -43,14 +43,17 @@ update_status ModuleCamera3D::Update(float dt)
 		{
 			float3 newPos(0, 0, 0);
 			float speed = 3.0f * dt;
+			float3 ups = App->renderer3D->GameCam->GOtrans->GetPos();
 			if (App->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT)
 				speed = 8.0f * dt;
 
-			/*if (App->input->GetKey(SDL_SCANCODE_E) == KEY_REPEAT)
-				App->renderer3D->GameCam->GOcam->cameraFrustum.pos.y += speed;
+			if (App->input->GetKey(SDL_SCANCODE_E) == KEY_REPEAT)
+				App->renderer3D->GameCam->GOtrans->GivePos({ ups.x,ups.y + speed,ups.z });
+				//App->renderer3D->GameCam->GOcam->cameraFrustum.pos.y += speed;
 
 			if (App->input->GetKey(SDL_SCANCODE_C) == KEY_REPEAT)
-				App->renderer3D->GameCam->GOcam->cameraFrustum.pos.y -= speed;*/
+				App->renderer3D->GameCam->GOtrans->GivePos({ ups.x,ups.y - speed,ups.z });
+				//App->renderer3D->GameCam->GOcam->cameraFrustum.pos.y -= speed;
 
 			if (App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT)
 				newPos += App->renderer3D->GameCam->GOcam->cameraFrustum.front * speed;
@@ -199,10 +202,17 @@ void ModuleCamera3D::Rotate(CCamera* cam) {
 
 	if (App->physics->isWorldOn)
 	{
-		float3 _rot;
+		/*float3 _rot;
 		float a;
+		dir.Normalized();
 		dir.ToAxisAngle(_rot, a);
-		App->renderer3D->GameCam->GOtrans->GiveRot(App->renderer3D->GameCam->GOtrans->GetGRot() + _rot);
+		App->renderer3D->GameCam->GOtrans->GiveRot(App->renderer3D->GameCam->GOtrans->GetRot()+ _rot*a);
+		*/
+		float4x4 matrix = cam->cameraFrustum.WorldMatrix();
+		matrix.SetRotatePart(dir.Normalized());
+		cam->cameraFrustum.SetWorldMatrix(matrix.Float3x4Part());
+	
+	
 	}
 	else {
 

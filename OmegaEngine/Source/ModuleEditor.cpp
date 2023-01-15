@@ -2249,3 +2249,75 @@ void ModuleEditor::CheckGLCapabilities() {
 		}
 	}
 }
+
+
+void ModuleEditor::CreateSphere(const char* resName,float force ) {
+
+	ModelData* res = nullptr;
+	for (int i = 0; i < App->scene->resourceList.size(); i++) {
+		if (App->scene->resourceList[i]->assetName == resName) {
+			res = (ModelData*)App->scene->resourceList[i];
+		}
+	}
+
+
+	if (res != nullptr) {
+
+
+		if (res->meshDatas.size() == 1) {
+
+			GameObject* go = App->scene->CreateGO(res->assetName.c_str(), gameObjectsShowing[0]);
+
+
+			go->CreateComp(Component::Types::MESH);
+
+			char* fileBuffer = nullptr;
+			std::string libName = std::to_string(res->assetID) + ".chad";
+			uint bufferSize = App->fileSystem->FileToBuffer(libName.c_str(), &fileBuffer);
+			MeshData* new_mesh_data = new MeshData(res->assetPath.c_str());
+			new_mesh_data->assetID = res->assetID;
+			MeshImporter::Load(fileBuffer, new_mesh_data);
+
+			go->GOmesh->meshData = new_mesh_data;
+			go->GOmesh->meshData->LoadBuffers();
+
+			go->CreateComp(Component::Types::MATERIAL);
+			if (res->meshDatas[0]->materialAttachedID != 0) {
+
+				char* fileBuffer = nullptr;
+				std::string libName = std::to_string(res->meshDatas[0]->materialAttachedID) + ".chad";
+
+				uint bufferSize = App->fileSystem->FileToBuffer(libName.c_str(), &fileBuffer);
+				for (int rInd = 0; rInd < App->scene->resourceList.size(); rInd++) {
+					if (App->scene->resourceList[rInd]->assetID == res->meshDatas[0]->materialAttachedID) {
+
+						MaterialData* new_material_data = new MaterialData(App->scene->resourceList[rInd]->assetPath.c_str());
+						MaterialImporter::Load(fileBuffer, new_material_data, bufferSize);
+
+						go->GOmat->materialData = new_material_data;
+						go->GOmat->materialData->assetID = res->meshDatas[0]->materialAttachedID;
+					}
+				}
+			}
+			go->GOtrans->SetPos(App->renderer3D->GameCam->GOtrans->GetPos());
+			go->CreateComp(Component::Types::PHYSICS);
+			go->GOphys->phys = App->physics;
+			go->GOphys->shapeSelected = CPhysics::ColliderShape::SPHERE;
+			go->GOphys->isStatic = false;
+			go->GOphys->isShapeSelected[1] = true;
+			// App->renderer3D->GameCam->GOphys->CheckShapes();
+			if (go->GOphys->shapeSelected != CPhysics::ColliderShape::NONE) {
+				CCamera* Cam = App->renderer3D->GameCam->GOcam;
+				//App->renderer3D->GameCam->GOphys->colPos = App->renderer3D->GameCam->GOcam->cameraFrustum.pos;
+				go->GOphys->colPos = App->renderer3D->GameCam->GOtrans->GetPos();
+				go->GOphys->sphereRadius = 0.6f;
+				go->GOphys->CreateCollider();
+				go->GOphys->CallUpdateShape();
+				go->GOphys->collider->Push(-(Cam->Z.x * force), -(Cam->Z.y * force), -(Cam->Z.z * force));
+			}
+			go->name = "TemporalObject";
+
+		}
+		
+	}
+}
