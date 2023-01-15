@@ -159,9 +159,9 @@ update_status ModulePhysics3D::Update(float dt)
 
 	DrawWorld();
 
-	if (App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)
+	if ((App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN) && App->physics->isWorldOn)
 	{
-		
+		App->editor->CreateSphere("Sphere", 20);
 	}
 
 		return UPDATE_CONTINUE;
