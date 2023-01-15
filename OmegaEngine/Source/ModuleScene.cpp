@@ -46,15 +46,17 @@ bool ModuleScene::Start()
     App->renderer3D->GameCam->GOphys->shapeSelected = CPhysics::ColliderShape::SPHERE;
     App->renderer3D->GameCam->GOphys->isStatic = true;
     App->renderer3D->GameCam->GOphys->isShapeSelected[1] = true;
-   // App->renderer3D->GameCam->GOphys->CheckShapes();
+    // App->renderer3D->GameCam->GOphys->CheckShapes();
     if (App->renderer3D->GameCam->GOphys->shapeSelected != CPhysics::ColliderShape::NONE) {
-        
-            //App->renderer3D->GameCam->GOphys->colPos = App->renderer3D->GameCam->GOcam->cameraFrustum.pos;
-            App->renderer3D->GameCam->GOphys->colPos = App->renderer3D->GameCam->GOtrans->GetPos();
-            App->renderer3D->GameCam->GOphys->CreateCollider();
-            App->renderer3D->GameCam->GOphys->CallUpdateShape();
+
+        //App->renderer3D->GameCam->GOphys->colPos = App->renderer3D->GameCam->GOcam->cameraFrustum.pos;
+        App->renderer3D->GameCam->GOphys->colPos = App->renderer3D->GameCam->GOtrans->GetPos();
+        App->renderer3D->GameCam->GOphys->sphereRadius = 0.6f;
+        App->renderer3D->GameCam->GOphys->CreateCollider();
+        App->renderer3D->GameCam->GOphys->CallUpdateShape();
     }
     App->renderer3D->MainCam = App->renderer3D->GameCam->GOcam;
+    App->renderer3D->GameCam->GOcam->ismain = true;
 
    // App->renderer3D->MainCam = App->camera->ScnCam;
    /* App->renderer3D->MainCam->cameraFrustum.pos =float3(0,5,-200);

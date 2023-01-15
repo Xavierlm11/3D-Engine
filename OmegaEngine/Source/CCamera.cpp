@@ -24,6 +24,7 @@ CCamera::CCamera(GameObject* obj) :Component(obj, Types::CAMERA)
 
 	NewFrBuffer();
 
+	ismain = false;
 }
 
 CCamera::~CCamera()

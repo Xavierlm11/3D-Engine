@@ -24,6 +24,8 @@ public:
 	bool Start();
 	update_status PreUpdate(float dt);
 	update_status Update(float dt);
+	void DrawWorld();
+	void DrawWorldGame();
 	update_status PostUpdate(float dt);
 	bool CleanUp();
 
@@ -53,6 +55,7 @@ public:
 	bool isWorldOn;
 
 private:
+	bool debugGame;
 
 	bool debug;
 

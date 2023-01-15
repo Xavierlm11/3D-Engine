@@ -7,7 +7,7 @@
 #include"MathGeoLib/include/Math/float4x4.h"
 #include "MathGeoLib/include/Geometry/Frustum.h"
 
-//#include "CCamera.h"
+#include "CCamera.h"
 
 class CCamera;
 
@@ -23,12 +23,12 @@ public:
 
 	//void UpdateFrustum();
 	//GLfloat* GetGlLoadMat();
-	void Rotate();
+	void Rotate(CCamera* cam);
 	//void Look(const vec3 &Position, const vec3 &Reference, bool RotateAroundReference = false);
 	//void LookAt(const vec3 &Spot);
 	//void Move(const vec3 &Movement);
-	void Zoom(float _speed);
-	void Orbit(float3 target);
+	void Zoom(CCamera* cam ,float _speed);
+	void Orbit(CCamera* cam,float3 target);
 
 	//float* GetViewMatrix();
 	//float4x4 *GetViewMatrixOpenGL();
@@ -49,7 +49,7 @@ public:
 	CCamera* ScnCam=nullptr ;
 
 	bool IsWindow = false;
-	
+	bool IsGame = false;
 
 
 private:

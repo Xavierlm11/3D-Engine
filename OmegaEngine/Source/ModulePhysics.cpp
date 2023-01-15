@@ -75,6 +75,7 @@ bool ModulePhysics3D::Start()
 		btRigidBody* body = new btRigidBody(rbInfo);
 		world->addRigidBody(body);
 	}*/
+	debugGame = true;
 
 	return true;
 }
@@ -156,17 +157,7 @@ update_status ModulePhysics3D::Update(float dt)
 
 	
 
-	if (debug == true)
-	{
-		world->debugDrawWorld();
-
-		// Render vehicles
-		for each (PhysVehicle3D* item in vehicles)
-		{
-			item->Render();
-		}
-		
-	}
+	DrawWorld();
 
 	if (App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)
 	{
@@ -174,6 +165,40 @@ update_status ModulePhysics3D::Update(float dt)
 	}
 
 		return UPDATE_CONTINUE;
+}
+
+void ModulePhysics3D::DrawWorld()
+{
+	if (debug == true)
+	{
+		world->debugDrawWorld();
+
+		// Render vehicles
+		for each (PhysVehicle3D * item in vehicles)
+		{
+			item->Render();
+		}
+
+	}
+}
+void ModulePhysics3D::DrawWorldGame()
+{
+	if (debug == true)
+	{
+		if (App->input->GetKey(SDL_SCANCODE_F2) == KEY_DOWN) {
+			debugGame ? debugGame = false : debugGame = true;
+		}
+		
+		if(debugGame)
+			world->debugDrawWorld();
+
+		// Render vehicles
+		for each (PhysVehicle3D * item in vehicles)
+		{
+			item->Render();
+		}
+
+	}
 }
 
 // ---------------------------------------------------------

@@ -44,6 +44,10 @@ public:
 
 	
 
+	void GivePos(float3 newPos);
+
+	void GiveRot(float3 newrot);
+
 	void OnInspector() override;
 
 	mat4x4 GlobalMatrix();

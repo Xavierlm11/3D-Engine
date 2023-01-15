@@ -274,6 +274,9 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 		//glLoadIdentity();
 		BindCamBuffer(MainCam);
 		GoRenderGame();
+
+		App->physics->DrawWorldGame();
+
 	}
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 

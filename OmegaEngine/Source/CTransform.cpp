@@ -103,7 +103,14 @@ void CTransform::TransformMatrix(float3 _pos, float3 _rot, float3 _scl)
 	{
 		GO->GOcam->cameraFrustum.pos = _pos;
 		GO->GOcam->Reference = _pos;
-
+		if (GO->GOphys != nullptr)
+		{
+			if (GO->GOphys->collider != nullptr)
+			{
+				GO->GOphys->colPos = _pos;
+				GO->GOphys->CallUpdateShape();
+			}
+		}
 		GO->GOcam->cameraFrustum.up = rmatrix.RotatePart().Col(1).Normalized();
 		GO->GOcam->cameraFrustum.front = rmatrix.RotatePart().Col(2).Normalized();
 
@@ -169,6 +176,29 @@ void CTransform::SetGlobalTrans()
 
 
 
+void CTransform::GivePos(float3 newPos)
+{
+	if (GO->GOphys != nullptr) {
+
+		if (GO->GOphys->collider != nullptr) {
+			SaveOffsetMatrix();
+		}
+	}
+
+	SetPos(newPos);
+}
+
+void CTransform::GiveRot(float3 newrot)
+{
+	if (GO->GOphys != nullptr) {
+
+		if (GO->GOphys->collider != nullptr) {
+			SaveOffsetMatrix();
+		}
+	}
+	SetRot(newrot);
+}
+
 void CTransform::OnInspector()
 {
 		float3 newPos = pos;
@@ -184,14 +214,7 @@ void CTransform::OnInspector()
 		ImGui::Text("Z	");
 		if (ImGui::DragFloat3("Pos.", newPos.ptr(), 0.1))
 		{
-			if (GO->GOphys != nullptr) {
-
-				if (GO->GOphys->collider != nullptr) {
-					SaveOffsetMatrix();
-				}
-			}
-				
-			SetPos(newPos);
+			GivePos(newPos);
 		}
 			
 		
@@ -201,13 +224,7 @@ void CTransform::OnInspector()
 		ImGui::SameLine();
 		ImGui::Text("Z	");
 		if (ImGui::DragFloat3("Rotation.", newrot.ptr(), 0.1)) {
-			if (GO->GOphys != nullptr) {
-
-				if (GO->GOphys->collider != nullptr) {
-					SaveOffsetMatrix();
-				}
-			}
-			SetRot(newrot);
+			GiveRot(newrot);
 		}
 			
 		

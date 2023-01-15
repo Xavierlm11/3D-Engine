@@ -65,6 +65,8 @@ public:
 	unsigned int NewFrameBuffer, CCBuffer, ObjRenderBuffer;
 
 	Frustum cameraFrustum;
+
+	bool ismain;
 private:
 	mat4x4 ViewMatrix, ViewMatrixInverse;
 	float4x4* ViewMatrixOpenGL;
