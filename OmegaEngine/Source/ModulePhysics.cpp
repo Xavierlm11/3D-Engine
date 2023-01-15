@@ -451,6 +451,7 @@ PhysBody3D* ModulePhysics3D::UpdateBoxColliderSize(PhysBody3D*& collider, float3
 
 PhysBody3D* ModulePhysics3D::UpdateSphereColliderSize(PhysBody3D*& collider, float3 colPos, float3 colRot, float radius, float mass)
 {
+
 	RemoveBody(collider);
 	collider->~PhysBody3D();
 	collider = nullptr;
@@ -562,10 +563,16 @@ PhysBody3D* ModulePhysics3D::UpdateCylinderColliderSize(PhysBody3D*& collider, f
 void ModulePhysics3D::SaveWorldTransforms() 
 {
 	for (int i = 0; i < App->scene->ListGO.size(); i++) {
-		if (App->scene->ListGO[i]->GOphys != nullptr && App->scene->ListGO[i]->GOtrans != nullptr) {
+		/*if (App->scene->ListGO[i]->GOphys != nullptr && App->scene->ListGO[i]->GOtrans != nullptr) {
 			App->scene->ListGO[i]->GOphys->SaveMatrixBeforePhys();
 			App->scene->ListGO[i]->GOphys->SaveOffsetMatrix();
+		}*/
+		if (App->scene->ListGO[i]->GOtrans != nullptr) {
+			App->scene->ListGO[i]->GOtrans->SaveMatrixBeforePhys();
+			App->scene->ListGO[i]->GOtrans->SaveOffsetMatrix();
 		}
+		
+
 	}
 }
 

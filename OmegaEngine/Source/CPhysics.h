@@ -41,8 +41,7 @@ public:
 
 	void CreateCollider();
 
-	void SaveMatrixBeforePhys();
-	void SaveOffsetMatrix();
+	void AddColliderRelations();
 
 public:
 
@@ -61,9 +60,6 @@ public:
 
 	float sphereRadius;
 	float2 cylRadiusHeight;
-
-	mat4x4 offsetMatrix;
-	mat4x4 matrixBeforePhys;
 
 	mat4x4 glMat4x4;
 

@@ -6,6 +6,8 @@
 #include "PhysBody3D.h"
 #include "Module.h"
 #include "MathGeoLib/include/Math/Quat.h"
+#include "glmath.h"
+#include "CTransform.h"
 
 CPhysics::CPhysics(GameObject* obj) :Component(obj, Types::PHYSICS)
 {
@@ -133,13 +135,9 @@ void CPhysics::Update()
 
 			//
 			////Pos
-			GO->GOtrans->matrix[12] = glMat4x4[12];
-			GO->GOtrans->matrix[13] = glMat4x4[13];
-			GO->GOtrans->matrix[14] = glMat4x4[14];
 
-			GO->GOtrans->matrix[12] -= offsetMatrix[12];
-			GO->GOtrans->matrix[13] -= offsetMatrix[13];
-			GO->GOtrans->matrix[14] -= offsetMatrix[14];
+
+
 
 
 			//btQuaternion colbtQuatRot = collider->body->getWorldTransform().getRotation();
@@ -161,12 +159,12 @@ void CPhysics::Update()
 
 			Quat SCLquatRot = (Quat)SCLrot;
 			float rad = SCLquatRot.Angle();
-			
+
 			btScalar SCLrotAngle = RadToDeg(SCLquatRot.Angle());
 			//btScalar SCLrotAngle = RadToDeg(2.24781919);
-			
+
 			float3 SCLrotAxis;
-			
+
 			SCLrotAxis.x = SCLquatRot.Axis().x;
 			SCLrotAxis.y = SCLquatRot.Axis().y;
 			SCLrotAxis.z = SCLquatRot.Axis().z;
@@ -176,7 +174,7 @@ void CPhysics::Update()
 			SCLrotAxis.Normalized();
 			float a = pow(SCLrotAxis.x, 2) + pow(SCLrotAxis.y, 2) + pow(SCLrotAxis.z, 2);
 			Quat quat(SCLquatRot);
-			
+
 			mat4x4 rotMatrix;
 			/*rotMatrix[0] = cos(SCLrotAngle) + pow(SCLrotAxis.x, 2) * (1 - cos(SCLrotAngle));
 			rotMatrix[1] = SCLrotAxis.x * SCLrotAxis.y * (1 - cos(SCLrotAngle)) - SCLrotAxis.z * sin(SCLrotAngle);
@@ -219,76 +217,102 @@ void CPhysics::Update()
 
 			//Quat::QuatToMatrix(SCLrotAxis, RadToDeg(SCLquatRot.Angle()));
 			//quat = Quat::SetFromAxisAngle()
-			mat4x4 inv = rotMatrix.inverse();
-			GO->GOtrans->matrix = rotMatrix * GO->GOtrans->matrix;
-			GO->GOtrans->matrix[12] = glMat4x4[12];
-			GO->GOtrans->matrix[13] = glMat4x4[13];
-			GO->GOtrans->matrix[14] = glMat4x4[14];
+			//mat4x4 inv = rotMatrix.inverse();
+			mat4x4 beforePhysWithPos = GO->GOtrans->matrixBeforePhys;
+			for (int i = 0; i < GO->GOtrans->collidersAffecting.size(); i++) {
+				if (GO->GOtrans->collidersAffecting[i]->colliderAffected == collider) {
+					beforePhysWithPos[12] = glMat4x4[12];
+					beforePhysWithPos[13] = glMat4x4[13];
+					beforePhysWithPos[14] = glMat4x4[14];
+					beforePhysWithPos[12] -= GO->GOtrans->collidersAffecting[i]->offsetMatrix[12];
+					beforePhysWithPos[13] -= GO->GOtrans->collidersAffecting[i]->offsetMatrix[13];
+					beforePhysWithPos[14] -= GO->GOtrans->collidersAffecting[i]->offsetMatrix[14];
+				}
+			}
+			GO->GOtrans->matrix = rotMatrix * beforePhysWithPos;
 
-			GO->GOtrans->matrix[12] -= offsetMatrix[12];
-			GO->GOtrans->matrix[13] -= offsetMatrix[13];
-			GO->GOtrans->matrix[14] -= offsetMatrix[14];
-			//GO->GOtrans->matrix = GO->GOtrans->matrix *
-			//btVector3 rotated_scale = SCLscale.rotate(SCLrotAxis, SCLrotAngle);
-			//GO->GOtrans->matrix.scale(colScl.x* rotated_scale[0], colScl.y* rotated_scale[1], colScl.z* rotated_scale[2]);
+			for (int i = 0; i < GO->GOtrans->collidersAffecting.size(); i++) {
+				if (GO->GOtrans->collidersAffecting[i]->colliderAffected == collider) {
+					GO->GOtrans->matrix[12] = glMat4x4[12];
+					GO->GOtrans->matrix[13] = glMat4x4[13];
+					GO->GOtrans->matrix[14] = glMat4x4[14];
 
-			//_________________
+					GO->GOtrans->matrix[12] -= GO->GOtrans->collidersAffecting[i]->offsetMatrix[12];
+					GO->GOtrans->matrix[13] -= GO->GOtrans->collidersAffecting[i]->offsetMatrix[13];
+					GO->GOtrans->matrix[14] -= GO->GOtrans->collidersAffecting[i]->offsetMatrix[14];
+				}
+			}
+
+			for (int i = 0; i < GO->children.size(); i++) {
+				{
+					for (int j = 0; j < GO->children[i]->GOtrans->collidersAffecting.size(); j++) {
+
+						if (GO->children[i]->GOtrans->collidersAffecting[j]->colliderAffected == collider) {
+
+							GO->children[i]->GOtrans->matrix[12] = glMat4x4[12];
+							GO->children[i]->GOtrans->matrix[13] = glMat4x4[13];
+							GO->children[i]->GOtrans->matrix[14] = glMat4x4[14];
+
+							GO->children[i]->GOtrans->matrix[12] -= GO->children[i]->GOtrans->collidersAffecting[j]->offsetMatrix[12];
+							GO->children[i]->GOtrans->matrix[13] -= GO->children[i]->GOtrans->collidersAffecting[j]->offsetMatrix[13];
+							GO->children[i]->GOtrans->matrix[14] -= GO->children[i]->GOtrans->collidersAffecting[j]->offsetMatrix[14];
+
+							/*child->GOtrans->matrix = glMat4x4;
+							child->GOtrans->matrix[12] += offsetMatrix[12];
+							child->GOtrans->matrix[13] += offsetMatrix[13];
+							child->GOtrans->matrix[14] += offsetMatrix[14];*/
+						}
 
 
-			//GO->GOtrans->matrix.scale();
-			//GO->GOtrans->matrix[0] = GO->GOtrans->matrix[0] * rotated_scale[0];
-			//GO->GOtrans->matrix[5] = GO->GOtrans->matrix[5] * rotated_scale[1];
-			//GO->GOtrans->matrix[10] = GO->GOtrans->matrix[10] * rotated_scale[2];
-			//GO->GOtrans->matrix[0] = GO->GOtrans->matrix[0] * matrixBeforePhys[0];
-			//GO->GOtrans->matrix[5] = GO->GOtrans->matrix[5] * matrixBeforePhys[5];
-			//GO->GOtrans->matrix[10] = GO->GOtrans->matrix[10] * matrixBeforePhys[10];
-			//GO->GOtrans->matrix.scale(matrixBeforePhys[0], matrixBeforePhys[5], matrixBeforePhys[10]);
-			//GO->GOtrans->UpdateRot();
-			//GO->GOtrans->UpdateScl();
 
-			
-			
-			
-			
-			//GO->GOtrans->SetPos(GO->GOtrans->GetPos());
-			//GO->GOtrans->UpdatePos();
-			
+					}
+					//child->GOtrans->UpdatePos();
+				}
 
-			//for each (GameObject* child in GO->children)
-			//{
-			//		
-			//		child->GOtrans->matrix = glMat4x4;
-			//		child->GOtrans->matrix[12] += offsetMatrix[12];
-			//		child->GOtrans->matrix[13] += offsetMatrix[13];
-			//		child->GOtrans->matrix[14] += offsetMatrix[14];
-			//
-			//	
-			//	//child->GOtrans->UpdatePos();
-			//}
-			
+				//GO->GOtrans->matrix = GO->GOtrans->matrix *
+				//btVector3 rotated_scale = SCLscale.rotate(SCLrotAxis, SCLrotAngle);
+				//GO->GOtrans->matrix.scale(colScl.x* rotated_scale[0], colScl.y* rotated_scale[1], colScl.z* rotated_scale[2]);
+
+				//_________________
+
+
+				//GO->GOtrans->matrix.scale();
+				//GO->GOtrans->matrix[0] = GO->GOtrans->matrix[0] * rotated_scale[0];
+				//GO->GOtrans->matrix[5] = GO->GOtrans->matrix[5] * rotated_scale[1];
+				//GO->GOtrans->matrix[10] = GO->GOtrans->matrix[10] * rotated_scale[2];
+				//GO->GOtrans->matrix[0] = GO->GOtrans->matrix[0] * matrixBeforePhys[0];
+				//GO->GOtrans->matrix[5] = GO->GOtrans->matrix[5] * matrixBeforePhys[5];
+				//GO->GOtrans->matrix[10] = GO->GOtrans->matrix[10] * matrixBeforePhys[10];
+				//GO->GOtrans->matrix.scale(matrixBeforePhys[0], matrixBeforePhys[5], matrixBeforePhys[10]);
+				//GO->GOtrans->UpdateRot();
+				//GO->GOtrans->UpdateScl();
+
+
+
+
+
+				//GO->GOtrans->SetPos(GO->GOtrans->GetPos());
+				//GO->GOtrans->UpdatePos();
+
+
+				//for each (GameObject* child in GO->children)
+				//{
+				//		
+				//		child->GOtrans->matrix = glMat4x4;
+				//		child->GOtrans->matrix[12] += offsetMatrix[12];
+				//		child->GOtrans->matrix[13] += offsetMatrix[13];
+				//		child->GOtrans->matrix[14] += offsetMatrix[14];
+				//
+				//	
+				//	//child->GOtrans->UpdatePos();
+				//}
+
+			}
 		}
-		
 	}
 }
 
-void CPhysics::SaveMatrixBeforePhys() {
 
-	for (int j = 0; j < 16; j++) {
-		matrixBeforePhys[j] = GO->GOtrans->matrix[j];
-	}
-
-}
-
-void CPhysics::SaveOffsetMatrix() {
-
-	float glMat[16];
-	collider->body->getWorldTransform().getOpenGLMatrix(glMat);
-
-	for (int j = 0; j < 16; j++) {
-		offsetMatrix[j] = glMat[j] - GO->GOtrans->matrix[j];
-	}
-
-}
 
 void CPhysics::CheckShapes() {
 
@@ -377,6 +401,33 @@ void CPhysics::CallUpdateShape()
 		mass = 1.f;
 	}
 
+
+	for (int i = 0; i < GO->GOtrans->collidersAffecting.size(); i++) {
+
+		if (GO->GOtrans->collidersAffecting[i]->colliderAffected == collider) {
+
+			CTransform::CollidersRelation* colPtr = GO->GOtrans->collidersAffecting[i];
+			GO->GOtrans->collidersAffecting.erase(GO->GOtrans->collidersAffecting.begin() + i);
+			delete*& colPtr;
+			colPtr = nullptr;
+
+		}
+	}
+
+	for (int i = 0; i < GO->children.size(); i++) {
+
+		for (int j = 0; j < GO->children[i]->GOtrans->collidersAffecting.size(); j++) {
+
+			if (GO->children[i]->GOtrans->collidersAffecting[j]->colliderAffected == collider) {
+
+				CTransform::CollidersRelation* colPtr = GO->children[i]->GOtrans->collidersAffecting[j];
+				GO->children[i]->GOtrans->collidersAffecting.erase(GO->children[i]->GOtrans->collidersAffecting.begin() + j);
+				delete*& colPtr;
+				colPtr = nullptr;
+			}
+		}
+	}
+
 	switch (shapeSelected)
 	{
 	case CPhysics::ColliderShape::BOX:
@@ -392,7 +443,9 @@ void CPhysics::CallUpdateShape()
 		break;
 	}
 
-	SaveOffsetMatrix();
+	AddColliderRelations();
+
+	GO->GOtrans->SaveOffsetMatrix();
 	
 }
 
@@ -464,6 +517,7 @@ void CPhysics::CreateCollider()
 
 
 		collider = phys->AddBody(cube, mass);
+		AddColliderRelations();
 
 	}
 	break;
@@ -478,6 +532,7 @@ void CPhysics::CreateCollider()
 		sphere.color = Green;
 
 		collider = phys->AddBody(sphere, mass);
+		AddColliderRelations();
 	}
 	break;
 	case CPhysics::ColliderShape::CYLINDER:
@@ -492,12 +547,35 @@ void CPhysics::CreateCollider()
 
 		collider = phys->AddBody(cylinder, mass);
 		//collider->SetTransform(&GO->GOtrans->matrix);
-
+		AddColliderRelations();
 	}
 	break;
 	default:
 		break;
 	}
+}
+
+void CPhysics::AddColliderRelations()
+{
+	CTransform::CollidersRelation * newRelation = new CTransform::CollidersRelation();
+	newRelation->colliderAffected = collider;
+	mat4x4 newMat;
+	newRelation->offsetMatrix = newMat;
+	GO->GOtrans->collidersAffecting.push_back(newRelation);
+	GO->GOtrans->SaveOffsetMatrix();
+	
+
+	for (int i = 0; i < GO->children.size(); i++) {
+		CTransform::CollidersRelation* newRel = new CTransform::CollidersRelation();
+		newRel->colliderAffected = collider;
+		mat4x4 newMt;
+		newRelation->offsetMatrix = newMt;
+		GO->children[i]->GOtrans->collidersAffecting.push_back(newRel);
+		GO->children[i]->GOtrans->SaveOffsetMatrix();
+
+	}
+	
+	
 }
 
 void CPhysics::OnInspector()

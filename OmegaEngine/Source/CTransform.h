@@ -9,10 +9,20 @@
 //#include "MathGeoLib/include/Math/float4x4.h"
 
 #include "MathGeoLib/include/MathGeoLib.h"
+#include "PhysBody3D.h"
 
 class CTransform : public Component
 {
 public:
+
+	class CollidersRelation {
+	public:
+		CollidersRelation() {};
+		~CollidersRelation() {};
+		PhysBody3D* colliderAffected;
+		mat4x4 offsetMatrix;
+	};
+
 
 	CTransform(GameObject* obj);
 	void setIdentity(mat4x4 mat);
@@ -64,6 +74,9 @@ public:
 	float3 GetGRot() { return grot; }
 	float3 GetGScale() { return gscl; }
 
+	void SaveMatrixBeforePhys();
+	void SaveOffsetMatrix();
+
 	//float4x4 GetMatrix() { return matrix; }
 
 	/*float4x4 GetGlobal()
@@ -86,6 +99,10 @@ public:
 
 	mat4x4 glMatParent;
 
+	mat4x4 matrixBeforePhys;
+	std::vector<CollidersRelation*> collidersAffecting;
+
+
 private:
 	float3 ppos = { 0,0,0 };
 	float3 prot = { 0,0,0 };
@@ -94,5 +111,6 @@ private:
 	float3 gpos = { 0,0,0 };
 	float3 grot = { 0,0,0 };
 	float3 gscl = { 1,1,1 };
+
 };
 

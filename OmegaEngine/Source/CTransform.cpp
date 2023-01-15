@@ -157,13 +157,12 @@ void CTransform::SetGlobalTrans()
 	}
 
 	if (GO->GOphys != nullptr) {
-		if (GO->GOphys->collider != nullptr) {
-			//GO->GOphys->SaveOffsetMatrix();
-			GO->GOphys->colPos.x = matrix[12] + GO->GOphys->offsetMatrix[12];
-			GO->GOphys->colPos.y = matrix[13] + GO->GOphys->offsetMatrix[13];
-			GO->GOphys->colPos.z = matrix[14] + GO->GOphys->offsetMatrix[14];
-			GO->GOphys->CallUpdateShape();
+		for (int i = 0; i < collidersAffecting.size(); i++) {
 
+			GO->GOphys->colPos.x = matrix[12] + collidersAffecting[i]->offsetMatrix[12];
+			GO->GOphys->colPos.y = matrix[13] + collidersAffecting[i]->offsetMatrix[13];
+			GO->GOphys->colPos.z = matrix[14] + collidersAffecting[i]->offsetMatrix[14];
+			GO->GOphys->CallUpdateShape();
 		}
 	}
 }
@@ -188,7 +187,7 @@ void CTransform::OnInspector()
 			if (GO->GOphys != nullptr) {
 
 				if (GO->GOphys->collider != nullptr) {
-					GO->GOphys ->SaveOffsetMatrix();
+					SaveOffsetMatrix();
 				}
 			}
 				
@@ -205,7 +204,7 @@ void CTransform::OnInspector()
 			if (GO->GOphys != nullptr) {
 
 				if (GO->GOphys->collider != nullptr) {
-					GO->GOphys->SaveOffsetMatrix();
+					SaveOffsetMatrix();
 				}
 			}
 			SetRot(newrot);
@@ -222,7 +221,7 @@ void CTransform::OnInspector()
 			if (GO->GOphys != nullptr) {
 
 				if (GO->GOphys->collider != nullptr) {
-					GO->GOphys->SaveOffsetMatrix();
+					SaveOffsetMatrix();
 				}
 			}
 			SetScale(newScl);
@@ -232,6 +231,29 @@ void CTransform::OnInspector()
 
 	}
 	
+}
+
+void CTransform::SaveMatrixBeforePhys() {
+
+	for (int j = 0; j < 16; j++) {
+		matrixBeforePhys[j] = GO->GOtrans->matrix[j];
+	}
+
+}
+
+void CTransform::SaveOffsetMatrix() {
+
+
+	for (int i = 0; i < collidersAffecting.size(); i++) {
+		float glMat[16];
+		collidersAffecting[i]->colliderAffected->body->getWorldTransform().getOpenGLMatrix(glMat);
+
+		for (int j = 0; j < 16; j++) {
+			collidersAffecting[i]->offsetMatrix[j] = glMat[j] - GO->GOtrans->matrix[j];
+		}
+	}
+	
+
 }
 
 
