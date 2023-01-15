@@ -603,8 +603,13 @@ void ModulePhysics3D::SaveWorldTransforms()
 	}
 }
 
+ModuleScene* ModulePhysics3D::GetScene()
+{
+	return App->scene; 
+}
+
 // ---------------------------------------------------------
-void ModulePhysics3D::AddConstraintP2P(PhysBody3D& bodyA, PhysBody3D& bodyB, const vec3& anchorA, const vec3& anchorB)
+btTypedConstraint* ModulePhysics3D::AddConstraintP2P(PhysBody3D& bodyA, PhysBody3D& bodyB, const vec3& anchorA, const vec3& anchorB)
 {
 	btTypedConstraint* p2p = new btPoint2PointConstraint(
 		*(bodyA.body),
@@ -614,7 +619,25 @@ void ModulePhysics3D::AddConstraintP2P(PhysBody3D& bodyA, PhysBody3D& bodyB, con
 	world->addConstraint(p2p);
 	constraints.push_back(p2p);
 	p2p->setDbgDrawSize(2.0f);
+
+	return p2p;
 }
+
+void ModulePhysics3D::DeleteConstraintP2P(btTypedConstraint* constraint)
+{
+
+	for (int i = 0; i < constraints.size(); i++) {
+		if (constraints[i] == constraint) {
+			constraints.erase(constraints.begin() + i);
+		}
+	}
+	
+	world->removeConstraint(constraint);
+	
+	//constraints.push_back(p2p);
+	//p2p->setDbgDrawSize(2.0f);
+}
+
 
 void ModulePhysics3D::AddConstraintHinge(PhysBody3D& bodyA, PhysBody3D& bodyB, const vec3& anchorA, const vec3& anchorB, const vec3& axisA, const vec3& axisB, bool disable_collision)
 {

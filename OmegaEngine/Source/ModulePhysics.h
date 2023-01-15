@@ -34,7 +34,8 @@ public:
 	PhysBody3D* AddBody(const PrimCylinder& cylinder, float mass = 1.0f);
 	PhysVehicle3D* AddVehicle(const VehicleInfo& info);
 
-	void AddConstraintP2P(PhysBody3D& bodyA, PhysBody3D& bodyB, const vec3& anchorA, const vec3& anchorB);
+	btTypedConstraint* AddConstraintP2P(PhysBody3D& bodyA, PhysBody3D& bodyB, const vec3& anchorA, const vec3& anchorB);
+	void DeleteConstraintP2P(btTypedConstraint* constraint);
 	void AddConstraintHinge(PhysBody3D& bodyA, PhysBody3D& bodyB, const vec3& anchorA, const vec3& anchorB, const vec3& axisS, const vec3& axisB, bool disable_collision = false);
 
 	void DeleteVehicle();
@@ -48,6 +49,8 @@ public:
 	PhysBody3D* UpdateCylinderColliderSize(PhysBody3D*& collider,  float3 colPos, float3 colRot, float2 radiusHeight, float mass = 1.0f);
 
 	void SaveWorldTransforms();
+
+	ModuleScene* GetScene();
 	
 	//PhysBody3D* UpdateSphereColliderSize(PhysBody3D* collider, float mass = 1.0f);
 	//PhysBody3D* UpdateCylinderColliderSize(PhysBody3D* collider, float mass = 1.0f);

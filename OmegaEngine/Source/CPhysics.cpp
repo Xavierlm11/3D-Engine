@@ -8,6 +8,9 @@
 #include "MathGeoLib/include/Math/Quat.h"
 #include "glmath.h"
 #include "CTransform.h"
+#include <vector>
+#include "GameObject.h"
+#include "Application.h"
 
 CPhysics::CPhysics(GameObject* obj) :Component(obj, Types::PHYSICS)
 {
@@ -30,12 +33,16 @@ CPhysics::CPhysics(GameObject* obj) :Component(obj, Types::PHYSICS)
 
 	sphereRadius = 1.f;
 	cylRadiusHeight = {1.f, 1.f};
+
+	constraintGO = nullptr;
+	constraint = nullptr;
 }
 
 CPhysics::~CPhysics()
 {
 
 	RemoveCollider();
+	RemoveConstraint();
 	delete collider;
 
 	phys = nullptr;
@@ -613,6 +620,22 @@ void CPhysics::RemoveCollider()
 
 }
 
+void CPhysics::RemoveConstraint()
+{
+	if (constraint != nullptr && constraintGO != nullptr) {
+		phys->DeleteConstraintP2P(constraint);
+
+		constraint = nullptr;
+
+		constraintGO->GOphys->constraint = nullptr;
+		constraintGO->GOphys->constraintGO = nullptr;
+
+		constraintGO = nullptr;
+	}
+	
+
+}
+
 void CPhysics::OnInspector()
 {
 	if (ImGui::CollapsingHeader("Physics"))
@@ -783,6 +806,130 @@ void CPhysics::OnInspector()
 						RemoveCollider();
 
 					}
+
+					if (constraintGO == nullptr) {
+						vector<GameObject*> constraintTargs;
+						vector<const char*> constraintTargsStr;
+						vector<string> constraintTargsString;
+
+						for (int k = 0; k < phys->GetScene()->ListGO.size(); k++) {
+							if (phys->GetScene()->ListGO[k] != GO) {
+								if (phys->GetScene()->ListGO[k]->GOphys != nullptr) {
+								
+									if (phys->GetScene()->ListGO[k]->GOphys->collider != nullptr) {
+									
+										int count = 0;
+										for (int l = 0; l < k; l++) {
+											if (phys->GetScene()->ListGO[l]->GOphys != nullptr) {
+												if (phys->GetScene()->ListGO[l]->GOphys->collider != nullptr) {
+													if (phys->GetScene()->ListGO[l]->name == phys->GetScene()->ListGO[k]->name) {
+														count++;
+													}
+												}
+											}
+
+										}
+
+										if (count > 0) {
+											//const char* new_count = "(" + to_string(count);
+											std::string new_name = phys->GetScene()->ListGO[k]->name.c_str();
+											new_name += " (";
+											new_name += to_string(count);
+											new_name += ")";
+											const char* new_ch = new_name.c_str();
+											constraintTargsString.push_back(new_name);
+										}
+										else {
+											constraintTargsString.push_back(phys->GetScene()->ListGO[k]->name.c_str());
+										}
+										constraintTargs.push_back(phys->GetScene()->ListGO[k]);
+									}
+
+									
+
+								}
+							}
+						}
+
+
+
+						if (ImGui::Button("Add Constraint"))
+						{
+
+							ImGui::OpenPopup("ConstraintTargets");
+
+						}
+
+
+						if (ImGui::BeginPopup("ConstraintTargets"))
+						{
+
+							for (int j = 0; j < constraintTargsString.size(); j++) {
+								if (ImGui::Selectable(constraintTargsString[j].c_str())) {
+
+									constraintGO = constraintTargs[j];
+
+									vec3 anchor1 = (colPos.x, colPos.y, colPos.z);
+									vec3 anchor2 = (constraintGO->GOphys->colPos.x, constraintGO->GOphys->colPos.y, constraintGO->GOphys->colPos.z);
+									constraint = phys->AddConstraintP2P(*collider, *constraintGO->GOphys->collider, anchor1, anchor2);
+									
+									constraintGO->GOphys->constraint = constraint;
+									constraintGO->GOphys->constraintGO = GO;
+
+
+								}
+
+
+							}
+
+							ImGui::EndPopup();
+						}
+					}
+					else {
+						string constraintText = "Constraint attached: ";
+
+						for (int k = 0; k < phys->GetScene()->ListGO.size(); k++) {
+							if (phys->GetScene()->ListGO[k] == constraintGO) {
+								int count = 0;
+								for (int l = 0; l < k; l++) {
+									if (phys->GetScene()->ListGO[l]->GOphys != nullptr) {
+										if (phys->GetScene()->ListGO[l]->GOphys->collider != nullptr) {
+											if (phys->GetScene()->ListGO[l]->name == phys->GetScene()->ListGO[k]->name) {
+												count++;
+											}
+										}
+									}
+								}
+
+								if (count > 0) {
+									//const char* new_count = "(" + to_string(count);
+									std::string new_name = phys->GetScene()->ListGO[k]->name.c_str();
+									new_name += " (";
+									new_name += to_string(count);
+									new_name += ")";
+									
+									constraintText += new_name;
+								}
+								else {
+									constraintText += phys->GetScene()->ListGO[k]->name.c_str();
+								}
+							}
+							
+						}
+						ImGui::Text(constraintText.c_str());
+						ImGui::Text("");
+						if (ImGui::Button("Remove Constraint"))
+						{
+							
+							RemoveConstraint();
+							
+
+						}
+					}
+
+					
+
+					
 				
 			}
 			

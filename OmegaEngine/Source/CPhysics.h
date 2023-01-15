@@ -4,7 +4,10 @@
 #include "Application.h"
 #include "Globals.h"
 #include "External/MathGeoLib/include/Math/float4x4.h"
+//#include "Bullet/include/BulletDynamics/ConstraintSolver/btTypedConstraint.h"
+
 class Component;
+class btTypedConstraint;
 
 class CPhysics : public Component
 {
@@ -45,6 +48,8 @@ public:
 
 	void RemoveCollider();
 
+	void RemoveConstraint();
+
 public:
 
 	ModulePhysics3D* phys;
@@ -64,6 +69,9 @@ public:
 	float2 cylRadiusHeight;
 
 	mat4x4 glMat4x4;
+
+	GameObject* constraintGO;
+	btTypedConstraint* constraint;
 
 };
 
