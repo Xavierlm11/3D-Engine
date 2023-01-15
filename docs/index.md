@@ -59,6 +59,16 @@ You can also add new components there like the physics one. Then, you can select
 
 There is also a camera viewport which FOV and Near Plane Distance you can change.
 
+## About Us
+### Xavier Casadó Benítez
+[Github](https://github.com/Akage369)
+![xavi2](https://user-images.githubusercontent.com/79161102/212573462-64a9d3f8-461f-44fd-b158-d1f07d52e0bc.jpg)
+
+
+### Xavier López Martín
+[Github](https://github.com/Xavierlm11)
+![xavi1](https://user-images.githubusercontent.com/79161102/212573490-56890018-f2d4-488a-b05e-82755a155a55.jpeg)
+
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/4J9V1xe50Mg" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
 
