@@ -36,6 +36,7 @@ With F the camera is focused on the selected GameObject.
 
 Camera shoots with "1" key.
 You can disable the colliders wireframe lines in the Game viewport with "F2" key.
+Car moves with arrow keys.
 
 ## Performance
 When initializing the engine, all the assets in the Assets folder will be serialized into custom format files ".chad". 
