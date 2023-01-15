@@ -43,6 +43,8 @@ public:
 
 	void AddColliderRelations();
 
+	void RemoveCollider();
+
 public:
 
 	ModulePhysics3D* phys;

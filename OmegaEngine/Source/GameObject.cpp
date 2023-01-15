@@ -257,6 +257,12 @@ void GameObject::Remove()
 		parent = nullptr;
 		delete parent;
 
+		if (GOphys != nullptr) {
+			GOphys->~CPhysics();
+			GOphys = nullptr;
+		}
+		delete GOphys;
+
 		if (GOmat != nullptr) {
 			GOmat->~CMaterial();
 			GOmat = nullptr;
@@ -281,11 +287,7 @@ void GameObject::Remove()
 		}
 		delete GOcam;
 
-		if (GOphys != nullptr) {
-			GOphys->~CPhysics();
-			GOphys = nullptr;
-		}
-		delete GOphys;
+		
 	}
 
 }

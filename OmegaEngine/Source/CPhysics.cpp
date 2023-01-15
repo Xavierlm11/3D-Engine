@@ -35,11 +35,8 @@ CPhysics::CPhysics(GameObject* obj) :Component(obj, Types::PHYSICS)
 CPhysics::~CPhysics()
 {
 
-	if (collider!=nullptr) {
-		phys->RemoveBody(collider);
-		collider->~PhysBody3D();
-		collider = nullptr;
-	}
+	RemoveCollider();
+	delete collider;
 
 	phys = nullptr;
 	delete phys;
@@ -578,6 +575,44 @@ void CPhysics::AddColliderRelations()
 	
 }
 
+void CPhysics::RemoveCollider()
+{
+	if (collider == nullptr) {
+		return;
+	}
+	for (int i = 0; i < GO->GOtrans->collidersAffecting.size(); i++) {
+
+		if (GO->GOtrans->collidersAffecting[i]->colliderAffected == collider) {
+
+			CTransform::CollidersRelation* colPtr = GO->GOtrans->collidersAffecting[i];
+			GO->GOtrans->collidersAffecting.erase(GO->GOtrans->collidersAffecting.begin() + i);
+			delete*& colPtr;
+			colPtr = nullptr;
+
+		}
+	}
+
+	for (int i = 0; i < GO->children.size(); i++) {
+
+		for (int j = 0; j < GO->children[i]->GOtrans->collidersAffecting.size(); j++) {
+
+			if (GO->children[i]->GOtrans->collidersAffecting[j]->colliderAffected == collider) {
+
+				CTransform::CollidersRelation* colPtr = GO->children[i]->GOtrans->collidersAffecting[j];
+				GO->children[i]->GOtrans->collidersAffecting.erase(GO->children[i]->GOtrans->collidersAffecting.begin() + j);
+				delete*& colPtr;
+				colPtr = nullptr;
+			}
+		}
+	}
+
+	phys->RemoveBody(collider);
+	collider->~PhysBody3D();
+	collider = nullptr;
+
+
+}
+
 void CPhysics::OnInspector()
 {
 	if (ImGui::CollapsingHeader("Physics"))
@@ -745,11 +780,7 @@ void CPhysics::OnInspector()
 					if (ImGui::Button("Remove Collider"))
 					{
 						
-							phys->RemoveBody(collider);
-							collider->~PhysBody3D();
-							collider = nullptr;
-						
-
+						RemoveCollider();
 
 					}
 				
@@ -761,7 +792,17 @@ void CPhysics::OnInspector()
 
 		if (ImGui::Button("Remove Component", ImVec2(140, 20))) 
 		{
+			RemoveCollider();
 
+			for (int i = 0; i < GO->components.size(); i++) {
+				if (GO->components[i]->type == Component::Types::PHYSICS) {
+					GO->components.erase(GO->components.begin() + i);
+				}
+			}
+			
+			GO->GOphys = nullptr;
+			delete this;
+			
 		}
 
 	}
