@@ -7,6 +7,7 @@
 #include "Globals.h"
 #include "Application.h"
 #include "Component.h"
+#include "PhysBody3D.h"
 
 class Component;
 

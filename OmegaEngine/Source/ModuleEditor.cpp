@@ -1195,13 +1195,13 @@ void ModuleEditor::BarPause() {
 		if (pausePressed == true) {
 
 			pausePressed = false;
-			App->physics->isWorldOn = false;
+			App->physics->isWorldOn = true;
 
 		}
 		else {
 
 			pausePressed = true;
-			App->physics->isWorldOn = true;
+			App->physics->isWorldOn = false;
 
 		}
 	}
