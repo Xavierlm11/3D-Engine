@@ -8,6 +8,7 @@
 
 class Component;
 class btTypedConstraint;
+class btHingeConstraint;
 
 class CPhysics : public Component
 {
@@ -21,6 +22,15 @@ public:
 		Count,
 		NONE,
 		
+	};
+
+	enum class ConstraintType
+	{
+		P2P,
+		HINGE,
+		Count,
+		NONE,
+
 	};
 
 	CPhysics(GameObject* obj);
@@ -37,6 +47,7 @@ public:
 	void OnInspector()override;
 
 	void CheckShapes();
+	void CheckConstraints();
 
 	bool active = true;
 
@@ -70,8 +81,13 @@ public:
 
 	mat4x4 glMat4x4;
 
+	ConstraintType constraitTypeSelected;
+	bool isConstraitSelected[2];
+	bool isConstraitCreated[2];
+
 	GameObject* constraintGO;
-	btTypedConstraint* constraint;
+	btTypedConstraint* p2pConstraint;
+	btHingeConstraint* hingeConstraint;
 
 };
 

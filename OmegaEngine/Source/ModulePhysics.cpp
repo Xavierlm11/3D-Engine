@@ -633,13 +633,11 @@ void ModulePhysics3D::DeleteConstraintP2P(btTypedConstraint* constraint)
 	}
 	
 	world->removeConstraint(constraint);
-	
-	//constraints.push_back(p2p);
-	//p2p->setDbgDrawSize(2.0f);
+
 }
 
 
-void ModulePhysics3D::AddConstraintHinge(PhysBody3D& bodyA, PhysBody3D& bodyB, const vec3& anchorA, const vec3& anchorB, const vec3& axisA, const vec3& axisB, bool disable_collision)
+btHingeConstraint* ModulePhysics3D::AddConstraintHinge(PhysBody3D& bodyA, PhysBody3D& bodyB, const vec3& anchorA, const vec3& anchorB, const vec3& axisA, const vec3& axisB, bool disable_collision)
 {
 	btHingeConstraint* hinge = new btHingeConstraint(
 		*(bodyA.body),
@@ -652,6 +650,19 @@ void ModulePhysics3D::AddConstraintHinge(PhysBody3D& bodyA, PhysBody3D& bodyB, c
 	world->addConstraint(hinge, disable_collision);
 	constraints.push_back(hinge);
 	hinge->setDbgDrawSize(2.0f);
+
+	return hinge;
+}
+
+void ModulePhysics3D::DeleteConstraintHinge(btHingeConstraint* constraint)
+{
+	for (int i = 0; i < constraints.size(); i++) {
+		if (constraints[i] == constraint) {
+			constraints.erase(constraints.begin() + i);
+		}
+	}
+
+	world->removeConstraint(constraint);
 }
 
 void ModulePhysics3D::DeleteVehicle()

@@ -35,7 +35,17 @@ CPhysics::CPhysics(GameObject* obj) :Component(obj, Types::PHYSICS)
 	cylRadiusHeight = {1.f, 1.f};
 
 	constraintGO = nullptr;
-	constraint = nullptr;
+	p2pConstraint = nullptr;
+	hingeConstraint = nullptr;
+
+	constraitTypeSelected = ConstraintType::NONE;
+
+	isConstraitSelected[0] = false;
+	isConstraitSelected[1] = false;
+
+	isConstraitCreated[0] = false;
+	isConstraitCreated[1] = false;
+		
 }
 
 CPhysics::~CPhysics()
@@ -394,6 +404,74 @@ void CPhysics::CheckShapes() {
 	}
 }
 
+void CPhysics::CheckConstraints()
+{
+	for (int h = 0; h < static_cast<int>(ConstraintType::Count); h++) {
+
+		if (isConstraitSelected[h] == true) {
+			if (isConstraitCreated[h] == false)
+			{
+				if (constraitTypeSelected != ConstraintType::NONE && constraitTypeSelected != static_cast<ConstraintType>(h)) {
+
+				}
+				constraitTypeSelected = static_cast<ConstraintType>(h);
+				isConstraitCreated[h] = true;
+			}
+		}
+		else {
+			if (isConstraitCreated[h] == true) {
+				
+			}
+		}
+
+	}
+
+	int a = 0;
+	for (int i = 0; i < static_cast<int>(ConstraintType::Count); i++) {
+		if (isConstraitSelected[i] == true)
+		{
+			a++;
+		}
+	}
+
+	if (a == 0) {
+		constraitTypeSelected = ConstraintType::NONE;
+		for (int i = 0; i < static_cast<int>(ConstraintType::Count); i++) {
+			if (isConstraitCreated[i] == true)
+			{
+				isConstraitCreated[i] = false;
+			}
+		}
+	}
+
+	if (constraitTypeSelected == ConstraintType::NONE)
+	{
+		for (int i = 0; i < static_cast<int>(ConstraintType::Count); i++) {
+			if (isConstraitSelected[i] == true) {
+				isConstraitSelected[i] = false;
+				if (isConstraitCreated[i] == true) {
+					isConstraitCreated[i] = false;
+				}
+			}
+		}
+	}
+	else
+	{
+		for (int i = 0; i < static_cast<int>(ConstraintType::Count); i++) {
+
+			if (i != static_cast<int>(constraitTypeSelected)) {
+				if (isConstraitSelected[i] == true) {
+					isConstraitSelected[i] = false;
+					if (isConstraitCreated[i] == true) {
+						isConstraitCreated[i] = false;
+					}
+				}
+			}
+
+		}
+	}
+}
+
 void CPhysics::CallUpdateShape()
 {
 	float mass;
@@ -622,16 +700,39 @@ void CPhysics::RemoveCollider()
 
 void CPhysics::RemoveConstraint()
 {
-	if (constraint != nullptr && constraintGO != nullptr) {
-		phys->DeleteConstraintP2P(constraint);
+	if (p2pConstraint != nullptr) {
+		phys->DeleteConstraintP2P(p2pConstraint);
 
-		constraint = nullptr;
+		p2pConstraint = nullptr;
 
-		constraintGO->GOphys->constraint = nullptr;
-		constraintGO->GOphys->constraintGO = nullptr;
+	}
 
+	if (hingeConstraint != nullptr) {
+		phys->DeleteConstraintP2P(hingeConstraint);
+
+		hingeConstraint = nullptr;
+
+	}
+
+	if (constraintGO != nullptr) {
+		if (constraintGO->GOphys->p2pConstraint != nullptr) {
+			constraintGO->GOphys->p2pConstraint = nullptr;
+		}
+
+		if (constraintGO->GOphys->hingeConstraint != nullptr) {
+			constraintGO->GOphys->hingeConstraint = nullptr;
+		}
+
+		if (constraintGO->GOphys->constraintGO != nullptr) {
+			constraintGO->GOphys->constraintGO = nullptr;
+		}
+		
+	}
+	
+	if (constraintGO != nullptr) {
 		constraintGO = nullptr;
 	}
+	
 	
 
 }
@@ -807,86 +908,144 @@ void CPhysics::OnInspector()
 
 					}
 
-					if (constraintGO == nullptr) {
-						vector<GameObject*> constraintTargs;
-						vector<const char*> constraintTargsStr;
-						vector<string> constraintTargsString;
+					if (constraintGO == nullptr && p2pConstraint == nullptr && hingeConstraint == nullptr) {
 
-						for (int k = 0; k < phys->GetScene()->ListGO.size(); k++) {
-							if (phys->GetScene()->ListGO[k] != GO) {
-								if (phys->GetScene()->ListGO[k]->GOphys != nullptr) {
-								
-									if (phys->GetScene()->ListGO[k]->GOphys->collider != nullptr) {
-									
-										int count = 0;
-										for (int l = 0; l < k; l++) {
-											if (phys->GetScene()->ListGO[l]->GOphys != nullptr) {
-												if (phys->GetScene()->ListGO[l]->GOphys->collider != nullptr) {
-													if (phys->GetScene()->ListGO[l]->name == phys->GetScene()->ListGO[k]->name) {
-														count++;
+						ImGui::Checkbox("P2P", &isConstraitSelected[0]);
+
+						ImGui::Checkbox("Hinge", &isConstraitSelected[1]);
+
+						CheckConstraints();
+
+
+						if (constraitTypeSelected != ConstraintType::NONE && constraitTypeSelected != ConstraintType::Count) {
+							
+
+							vector<GameObject*> constraintTargs;
+							vector<const char*> constraintTargsStr;
+							vector<string> constraintTargsString;
+
+							for (int k = 0; k < phys->GetScene()->ListGO.size(); k++) {
+								if (phys->GetScene()->ListGO[k] != GO) {
+									if (phys->GetScene()->ListGO[k]->GOphys != nullptr) {
+
+										if (phys->GetScene()->ListGO[k]->GOphys->collider != nullptr) {
+
+											int count = 0;
+											for (int l = 0; l < k; l++) {
+												if (phys->GetScene()->ListGO[l]->GOphys != nullptr) {
+													if (phys->GetScene()->ListGO[l]->GOphys->collider != nullptr) {
+														if (phys->GetScene()->ListGO[l]->name == phys->GetScene()->ListGO[k]->name) {
+															count++;
+														}
 													}
 												}
+
 											}
 
+											if (count > 0) {
+												//const char* new_count = "(" + to_string(count);
+												std::string new_name = phys->GetScene()->ListGO[k]->name.c_str();
+												new_name += " (";
+												new_name += to_string(count);
+												new_name += ")";
+												const char* new_ch = new_name.c_str();
+												constraintTargsString.push_back(new_name);
+											}
+											else {
+												constraintTargsString.push_back(phys->GetScene()->ListGO[k]->name.c_str());
+											}
+											constraintTargs.push_back(phys->GetScene()->ListGO[k]);
 										}
 
-										if (count > 0) {
-											//const char* new_count = "(" + to_string(count);
-											std::string new_name = phys->GetScene()->ListGO[k]->name.c_str();
-											new_name += " (";
-											new_name += to_string(count);
-											new_name += ")";
-											const char* new_ch = new_name.c_str();
-											constraintTargsString.push_back(new_name);
+
+
+									}
+								}
+							}
+
+
+
+							if (ImGui::Button("Add Constraint"))
+							{
+
+								ImGui::OpenPopup("ConstraintTargets");
+
+							}
+
+
+							if (ImGui::BeginPopup("ConstraintTargets"))
+							{
+
+								for (int j = 0; j < constraintTargsString.size(); j++) {
+									if (ImGui::Selectable(constraintTargsString[j].c_str())) {
+
+										switch (constraitTypeSelected)
+										{
+										case CPhysics::ConstraintType::P2P:
+										{
+											constraintGO = constraintTargs[j];
+
+											vec3 anchor1 = (colPos.x, colPos.y, colPos.z);
+											vec3 anchor2 = (constraintGO->GOphys->colPos.x, constraintGO->GOphys->colPos.y, constraintGO->GOphys->colPos.z);
+											p2pConstraint = phys->AddConstraintP2P(*collider, *constraintGO->GOphys->collider, anchor1, anchor2);
+
+											constraintGO->GOphys->p2pConstraint = p2pConstraint;
+											constraintGO->GOphys->constraintGO = GO;
 										}
-										else {
-											constraintTargsString.push_back(phys->GetScene()->ListGO[k]->name.c_str());
+										break;
+										case CPhysics::ConstraintType::HINGE:
+										{
+											constraintGO = constraintTargs[j];
+
+											vec3 anchor1 = (colPos.x, colPos.y, colPos.z);
+											vec3 anchor2 = (constraintGO->GOphys->colPos.x, constraintGO->GOphys->colPos.y, constraintGO->GOphys->colPos.z);
+											//vec3 axis1 = (0, 1, 0);
+											//vec3 axis2 = (0, 1, 0);
+											
+											//hingeConstraint = phys->AddConstraintHinge(*collider, *constraintGO->GOphys->collider, anchor1, anchor2, axis1, axis2);
+											p2pConstraint = phys->AddConstraintP2P(*collider, *constraintGO->GOphys->collider, anchor1, anchor2);
+
+											constraintGO->GOphys->hingeConstraint = hingeConstraint;
+											constraintGO->GOphys->constraintGO = GO;
 										}
-										constraintTargs.push_back(phys->GetScene()->ListGO[k]);
+										break;
+										default:
+											break;
+										}
+
+										
+
+
 									}
 
-									
-
-								}
-							}
-						}
-
-
-
-						if (ImGui::Button("Add Constraint"))
-						{
-
-							ImGui::OpenPopup("ConstraintTargets");
-
-						}
-
-
-						if (ImGui::BeginPopup("ConstraintTargets"))
-						{
-
-							for (int j = 0; j < constraintTargsString.size(); j++) {
-								if (ImGui::Selectable(constraintTargsString[j].c_str())) {
-
-									constraintGO = constraintTargs[j];
-
-									vec3 anchor1 = (colPos.x, colPos.y, colPos.z);
-									vec3 anchor2 = (constraintGO->GOphys->colPos.x, constraintGO->GOphys->colPos.y, constraintGO->GOphys->colPos.z);
-									constraint = phys->AddConstraintP2P(*collider, *constraintGO->GOphys->collider, anchor1, anchor2);
-									
-									constraintGO->GOphys->constraint = constraint;
-									constraintGO->GOphys->constraintGO = GO;
-
 
 								}
 
-
+								ImGui::EndPopup();
 							}
-
-							ImGui::EndPopup();
 						}
+						
 					}
 					else {
-						string constraintText = "Constraint attached: ";
+
+						string constraintText;// = "Constraint attached: ";
+
+						switch (constraitTypeSelected)
+						{
+						case CPhysics::ConstraintType::P2P:
+						{
+							constraintText = "P2P Constraint attached: ";
+						}
+							break;
+						case CPhysics::ConstraintType::HINGE: 
+						{
+							constraintText = "Hinge Constraint attached: ";
+						}
+							break;
+						default:
+							break;
+						}
+						
 
 						for (int k = 0; k < phys->GetScene()->ListGO.size(); k++) {
 							if (phys->GetScene()->ListGO[k] == constraintGO) {
@@ -922,7 +1081,6 @@ void CPhysics::OnInspector()
 						{
 							
 							RemoveConstraint();
-							
 
 						}
 					}
