@@ -51,6 +51,9 @@ Keyboard Arrows:
 - Down -> Brakes
 - Right/Left -> Turns to the Left/Right
 
+![car](https://user-images.githubusercontent.com/79161102/212575133-9ac83152-dc60-4bd1-bb42-32663761d606.PNG)
+
+
 ## Performance
 When initializing the engine, all the assets in the Assets folder will be serialized into custom format files ".chad". 
 These can be located at Library/Meshes and Library/Materials folders, which are automatically generated too.
