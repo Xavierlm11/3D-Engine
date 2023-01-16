@@ -2,11 +2,12 @@
 
 
 ## About Omega Engine
-Omega Engine is a class project where the main goal was to create a game engine for learning pruposes, maybe has some bugs or not has the best optimization is a honest work
+Omega Engine is a class project where the main goal was to create a game engine for learning pruposes, maybe has some bugs or not has the best optimization is a honest work :D
 
 Repository ----->>[Omega Engine](https://github.com/Xavierlm11/Omega-Engine)
 
 ## Description
+
 There are 3 modes of rendering: Normal, with checkers view and Wireframe.
 Also, there are other settings in the view like fog.
 
@@ -24,14 +25,31 @@ When you have set up the scene correctly, you can save it and the next time you 
 
 
 ## Controls
-The camera uses WS to move front and backwards, AD to move laterally and EC to move up and down.
-Also, you can scroll the mouse wheel to zoom in or zoom out.
-Right click to rotate the camera and Alt + left click to rotate around the selecetd game object.
-With F the camera is focused on the selected GameObject.
+### Editor Camera 
+W/S -> To move front and backwards,
+A/D -> To move laterally 
+E/C -> To move up and down.
+Mouse wheel -> To zoom in or zoom out.
+Right click -> To rotate the camera 
+Alt + left -> Click to rotate around the selecetd game object.
+F -> Camera fouses on the selected GameObject in the hierarchy.
 
-Camera shoots with "1" key.
-You can disable the colliders wireframe lines in the Game viewport with "F2" key.
-Car moves with arrow keys.
+### Game Camera (Only if playing the game)
+W/S -> To move front and backwards,
+A/D -> To move laterally 
+E/C -> To move up and down.
+Mouse wheel -> To zoom in or zoom out.
+Right click -> To rotate the camera 
+Alt + left -> Click to rotate around the selecetd game object.
+F -> Camera fouses on the selected GameObject in the hierarchy.
+1 key -> Shoot balls
+F2 -> Enable/Disable the colliders wireframe lines in the Game viewport
+
+### Car (Only if playing the game)
+Keyboard Arrows:
+-UP -> Moves Forward
+-Down -> Brakes
+-Right/Left -> Turns to the Left/Right
 
 ## Performance
 When initializing the engine, all the assets in the Assets folder will be serialized into custom format files ".chad". 
