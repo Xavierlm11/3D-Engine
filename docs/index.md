@@ -78,12 +78,12 @@ There is also a camera viewport which FOV and Near Plane Distance you can change
 
 ## About Us
 ### Xavier Casadó Benítez
-[Github](https://github.com/Akage369)
+[(Akage369) Github](https://github.com/Akage369)
 ![xavi2](https://user-images.githubusercontent.com/79161102/212573462-64a9d3f8-461f-44fd-b158-d1f07d52e0bc.jpg)
 
 
 ### Xavier López Martín
-[Github](https://github.com/Xavierlm11)
+[(Xavierlm11) Github](https://github.com/Xavierlm11)
 ![xavi1](https://user-images.githubusercontent.com/79161102/212573490-56890018-f2d4-488a-b05e-82755a155a55.jpeg)
 
 
