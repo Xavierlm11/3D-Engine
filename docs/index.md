@@ -100,7 +100,7 @@ Xavi's contribution:
 - File Sytem
 - Save and load
 - Hierarchy
-- Bullet3D implemntation
+- Bullet3D implementation
 
 ### Xavier López Martín
 [(Xavierlm11) Github](https://github.com/Xavierlm11)
