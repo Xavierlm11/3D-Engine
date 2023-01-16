@@ -3,6 +3,7 @@
 
 ## About Omega Engine
 Omega Engine is a class project where the main goal was to create a game engine for learning pruposes, maybe has some bugs or not has the best optimization is a honest work :D
+![motor](https://user-images.githubusercontent.com/79161102/212575615-c0086f3d-6915-474a-9207-dda5b9995c55.PNG)
 
 [Repository ----->>Omega Engine](https://github.com/Xavierlm11/Omega-Engine)
 
