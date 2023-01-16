@@ -7,7 +7,7 @@ Omega Engine is a class project where the main goal was to create a game engine 
 
 [Repository ----->>Omega Engine](https://github.com/Xavierlm11/Omega-Engine)
 
-## Description
+## Core SubSystems
 
 There are 3 modes of rendering: Normal, with checkers view and Wireframe.
 Also, there are other settings in the view like fog.
@@ -17,12 +17,17 @@ Finally, if the file has attached a texture, the engine will automatically set a
 
 Omega Engine has an Assets Manager to set up the scene to your liking.
 
-Our last feature is Physics! You can add the Physics component to the GameOjects and add them a collider, static or not. Adjust it to fit the form which you like and press the Play button to see all the magic happening. If you press Pause, the game will stop and you can resume clicking again.
+## Physics core
+
+You can add the Physics component to the GameOjects and add them a collider, static or not. Adjust it to fit the form which you like and press the Play button to see all the magic happening. If you press Pause, the game will stop and you can resume clicking again.
 
 You can also add cosntraints and play with a vehicle, pushing the houses out of the scene, for instance.
 The Camera can shoot balls too.
 
 When you have set up the scene correctly, you can save it and the next time you open the engine, it will be restored, so don not worry about that.
+![fis1](https://user-images.githubusercontent.com/79161102/212576726-6051841c-d5a8-48f6-a3d9-6b5af09c835c.PNG)
+![fis2](https://user-images.githubusercontent.com/79161102/212576729-a0be2207-1f9d-419a-a03f-5a2b61646c83.PNG)
+
 
 
 ## Controls
