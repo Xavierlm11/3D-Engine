@@ -2,7 +2,7 @@
 
 
 ## About Omega Engine
-Omega Engine is a class project made by studens of CITM supervised by [Miquel Suau Gonzàlez](https://www.linkedin.com/in/miquel-suau-gonzalez/?originalSubdomain=es) , the main goal of this project was to create a game engine for learning pruposes, maybe has some bugs or not has the best optimization, but is a honest work :D
+Omega Engine is a class project made by studens of CITM supervised by [Miquel Suau Gonzàlez](https://www.linkedin.com/in/miquel-suau-gonzalez/?originalSubdomain=es) , the main goal of this project was to create a game engine for learning pruposes, maybe has some bugs or not has the best optimization, but it is honest work :D
 ![motor](https://user-images.githubusercontent.com/79161102/212575615-c0086f3d-6915-474a-9207-dda5b9995c55.PNG)
 
 [Repository ----->>Omega Engine](https://github.com/Xavierlm11/Omega-Engine)
@@ -94,12 +94,22 @@ There is also a camera viewport which FOV and Near Plane Distance you can change
 ### Xavier Casadó Benítez
 [(Akage369) Github](https://github.com/Akage369)
 ![xavi2](https://user-images.githubusercontent.com/79161102/212573462-64a9d3f8-461f-44fd-b158-d1f07d52e0bc.jpg)
-
+Xavi's contribution:
+- Resource management
+- Assets management
+- File Sytem
+- Save and load
+- Hierarchy
+- Bullet3D implemntation
 
 ### Xavier López Martín
 [(Xavierlm11) Github](https://github.com/Xavierlm11)
 ![xavi1](https://user-images.githubusercontent.com/79161102/212573490-56890018-f2d4-488a-b05e-82755a155a55.jpeg)
-
+Xavi's contribution:
+- UI
+- Game objects & components
+- Camera and Viewports
+- Objects transform
 
 ## Lincense
 
@@ -126,7 +136,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/4J9V1xe50Mg" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/40dMMCqrTDQ" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
 
 
 
