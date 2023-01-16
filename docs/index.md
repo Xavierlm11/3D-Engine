@@ -26,30 +26,30 @@ When you have set up the scene correctly, you can save it and the next time you 
 
 ## Controls
 ### Editor Camera 
-W/S -> To move front and backwards,
-A/D -> To move laterally 
-E/C -> To move up and down.
-Mouse wheel -> To zoom in or zoom out.
-Right click -> To rotate the camera 
-Alt + left -> Click to rotate around the selecetd game object.
-F -> Camera fouses on the selected GameObject in the hierarchy.
+- W/S -> To move front and backwards,
+- A/D -> To move laterally 
+- E/C -> To move up and down.
+- Mouse wheel -> To zoom in or zoom out.
+- Right click -> To rotate the camera 
+- Alt + left -> Click to rotate around the selecetd game object.
+- F -> Camera fouses on the selected GameObject in the hierarchy.
 
 ### Game Camera (Only if playing the game)
-W/S -> To move front and backwards,
-A/D -> To move laterally 
-E/C -> To move up and down.
-Mouse wheel -> To zoom in or zoom out.
-Right click -> To rotate the camera 
-Alt + left -> Click to rotate around the selecetd game object.
-F -> Camera fouses on the selected GameObject in the hierarchy.
-1 key -> Shoot balls
-F2 -> Enable/Disable the colliders wireframe lines in the Game viewport
+- W/S -> To move front and backwards,
+- A/D -> To move laterally 
+- E/C -> To move up and down.
+- Mouse wheel -> To zoom in or zoom out.
+- Right click -> To rotate the camera 
+- Alt + left -> Click to rotate around the selecetd game object.
+- F -> Camera fouses on the selected GameObject in the hierarchy.
+- 1 key -> Shoot balls
+- F2 -> Enable/Disable the colliders wireframe lines in the Game viewport
 
 ### Car (Only if playing the game)
 Keyboard Arrows:
--UP -> Moves Forward
--Down -> Brakes
--Right/Left -> Turns to the Left/Right
+- UP -> Moves Forward
+- Down -> Brakes
+- Right/Left -> Turns to the Left/Right
 
 ## Performance
 When initializing the engine, all the assets in the Assets folder will be serialized into custom format files ".chad". 
