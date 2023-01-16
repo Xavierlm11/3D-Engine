@@ -17,6 +17,8 @@ Finally, if the file has attached a texture, the engine will automatically set a
 
 Omega Engine has an Assets Manager to set up the scene to your liking.
 
+![Omega-Engine-Trailer-_online-video-cutter com_-_2_](https://user-images.githubusercontent.com/79161102/212581043-167f6350-f917-4da9-adc9-9c7e6f94a977.gif)
+
 ## Physics core
 
 You can add the Physics component to the GameOjects and add them a collider, static or not. Adjust it to fit the form which you like and press the Play button to see all the magic happening. If you press Pause, the game will stop and you can resume clicking again.
@@ -53,6 +55,9 @@ When you have set up the scene correctly, you can save it and the next time you 
 - 1 key -> Shoot balls
 - F2 -> Enable/Disable the colliders wireframe lines in the Game viewport
 
+![Omega-Engine-Trailer-_online-video-cutter com_](https://user-images.githubusercontent.com/79161102/212580919-845d2342-c02f-4938-9079-cb834f1ea95f.gif)
+
+
 ### Car (Only if playing the game)
 Keyboard Arrows:
 - UP -> Moves Forward
@@ -60,6 +65,8 @@ Keyboard Arrows:
 - Right/Left -> Turns to the Left/Right
 
 ![car](https://user-images.githubusercontent.com/79161102/212575133-9ac83152-dc60-4bd1-bb42-32663761d606.PNG)
+
+![Omega-Engine-Trailer-_online-video-cutter com_-_1_](https://user-images.githubusercontent.com/79161102/212580865-afe2c957-fdef-4fcc-9c8d-cad74532bb33.gif)
 
 
 ## Performance
